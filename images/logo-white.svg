@@ -2,7 +2,7 @@
   <defs>
     <style>
       .ftrl-c1 {
-        fill: #ffffff;
+        fill: url(#ftrl-lg3);
       }
 
       .ftrl-c2 {
