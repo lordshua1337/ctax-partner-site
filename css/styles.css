@@ -1116,10 +1116,34 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .cq-analysis{background:var(--off);border:1px solid var(--off2);border-radius:10px;padding:24px 28px;margin-bottom:16px}
 .cq-talking-points{background:var(--off);border:1px solid var(--off2);border-radius:10px;padding:24px 28px}
 
+/* ── Knowledge Base ──────────────────────────────────── */
+.kb-wrap{background:var(--white);border:1px solid var(--off2);border-radius:14px;padding:36px 40px}
+.kb-search-bar{display:flex;align-items:center;gap:12px;background:var(--off);border:1.5px solid var(--off2);border-radius:10px;padding:6px 8px 6px 16px;transition:border-color 0.2s}
+.kb-search-bar:focus-within{border-color:var(--blue)}
+.kb-search-icon{color:var(--slate);flex-shrink:0}
+.kb-search-bar input{flex:1;border:none;background:none;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--ink);outline:none;padding:8px 0}
+.kb-search-bar input::placeholder{color:var(--slate)}
+.kb-search-btn{background:var(--blue);color:#fff;border:none;border-radius:7px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:opacity 0.15s;flex-shrink:0}
+.kb-search-btn:hover{opacity:0.88}
+.kb-quick-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.kb-tag{background:var(--off);border:1px solid var(--off2);border-radius:20px;padding:7px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--body);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.kb-tag:hover{border-color:var(--blue);color:var(--blue);background:rgba(11,95,216,0.04)}
+.kb-answer-card{background:var(--off);border:1px solid var(--off2);border-radius:10px;padding:28px;margin-top:24px}
+.kb-answer-body{font-size:15px;color:var(--ink);line-height:1.72}
+.kb-answer-body b{color:var(--navy);font-weight:600}
+.kb-answer-footer{display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid var(--off2);gap:12px;flex-wrap:wrap}
+.kb-disclaimer{font-size:12px;color:var(--slate);line-height:1.4}
+.kb-history-item{background:var(--off);border:1px solid var(--off2);border-radius:10px;padding:20px 24px;margin-top:12px}
+.kb-history-q{font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--slate);margin-bottom:8px}
+.kb-history-a{font-size:14px;color:var(--body);line-height:1.65}
+
 @media(max-width:768px){
   .cq-wrap{padding:24px 20px}
   .cq-form-grid{grid-template-columns:1fr;gap:20px}
   .cq-details-grid{grid-template-columns:1fr;gap:10px}
+  .kb-wrap{padding:24px 20px}
+  .kb-quick-tags{gap:6px}
+  .kb-tag{font-size:12px;padding:6px 12px}
 }
 
 /* ── Universal Footer ─────────────────────────────────── */
@@ -1385,6 +1409,17 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 [data-theme="dark"] .cq-verdict-likely{background:rgba(11,95,216,0.08);border-color:rgba(11,95,216,0.15)}
 [data-theme="dark"] .cq-verdict-weak{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08)}
 [data-theme="dark"] .cq-verdict-no{background:rgba(220,38,38,0.08);border-color:rgba(220,38,38,0.15)}
+[data-theme="dark"] .kb-wrap{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .kb-search-bar{background:#111827;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .kb-search-bar input{color:#e0e4ec}
+[data-theme="dark"] .kb-tag{background:#111827;border-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6)}
+[data-theme="dark"] .kb-tag:hover{border-color:rgba(11,95,216,0.4);color:rgba(255,255,255,0.85);background:rgba(11,95,216,0.1)}
+[data-theme="dark"] .kb-answer-card{background:#111827;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .kb-answer-body{color:#e0e4ec}
+[data-theme="dark"] .kb-answer-body b{color:#fff}
+[data-theme="dark"] .kb-answer-footer{border-top-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .kb-history-item{background:#111827;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .kb-history-a{color:rgba(255,255,255,0.6)}
 [data-theme="dark"] #cq-error,
 [data-theme="dark"] #am-error,
 [data-theme="dark"] #rc-error,

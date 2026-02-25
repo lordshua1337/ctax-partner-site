@@ -931,13 +931,6 @@ function handleResourceDownload(btn, name) {
   btn.style.color = 'var(--teal)';
   btn.style.borderColor = 'rgba(0,229,204,0.3)';
 }
-function handleResourceNotify() {
-  var email = document.getElementById('res-notify-email').value;
-  if (!email) return;
-  document.getElementById('res-notify-msg').style.display = 'block';
-  document.getElementById('res-notify-email').disabled = true;
-  document.querySelector('.res-notify button').disabled = true;
-}
 
 // ── CLIENT QUALIFIER ──────────────────────────────────────
 var cqAnalysisText = '';
@@ -1072,6 +1065,146 @@ async function qualifyClient() {
       : 'Unable to qualify this client right now. Please try again in a moment.';
     errDiv.innerHTML = msg + ' <a href="#" onclick="document.getElementById(\'cq-error\').style.display=\'none\';return false" style="color:var(--blue);text-decoration:underline;margin-left:8px">Dismiss</a>';
     errDiv.style.display = 'block';
+  }
+}
+
+// ── PARTNER KNOWLEDGE BASE ──────────────────────────────────────
+var kbAnswerText = '';
+
+var KB_SYSTEM = 'You are the Community Tax Partner Program knowledge base assistant. Answer partner questions accurately and concisely based on the following program documentation.\n\n'
+  + 'ABOUT COMMUNITY TAX:\n'
+  + '- National IRS tax resolution firm, 15+ years in business\n'
+  + '- $2.3 billion in tax debt resolved for 120,000+ clients\n'
+  + '- Licensed in 48 states\n'
+  + '- Services: IRS representation, tax debt resolution, tax preparation\n'
+  + '- Staff: Licensed Enrolled Agents (EAs) and Tax Attorneys\n'
+  + '- Languages: English and Spanish\n'
+  + '- BBB Accredited\n\n'
+  + 'PARTNER PROGRAM OVERVIEW:\n'
+  + '- Partners refer clients with IRS tax debt ($7,000+ minimum)\n'
+  + '- Community Tax handles all resolution work behind the scenes\n'
+  + '- Partner keeps full client relationship\n'
+  + '- ~80% referral-to-consultation conversion rate\n'
+  + '- Typical referral-to-close timeline: 30-90 days\n\n'
+  + 'REVENUE SHARE TIERS:\n'
+  + '- Direct Tier: 8% revenue share, no minimum referrals, self-service portal\n'
+  + '- Enterprise Tier: 13% revenue share, 10+ referrals/quarter, dedicated account manager, co-branded materials\n'
+  + '- Strategic Tier: 18% revenue share, 25+ referrals/quarter, API integration, custom reporting, white-label options\n'
+  + '- Payout: Monthly, NET-30, via ACH or check\n'
+  + '- Partner revenue per closed case: $1,500-$4,000 depending on complexity\n'
+  + '- Average case value: $8,000-$80,000+\n\n'
+  + 'THE PROCESS:\n'
+  + '- Phase 1: Investigation ($295 fee, $500 for businesses) - review full IRS account, determine options\n'
+  + '- Phase 2: Resolution - negotiate with IRS, implement chosen program\n'
+  + '- Resolution options: Offer in Compromise (OIC), Installment Agreement (IA), Currently Not Collectible (CNC), Penalty Abatement, Innocent Spouse Relief, Lien/Levy Release, Audit Representation\n'
+  + '- Partners earn revenue share when resolution fees are collected\n\n'
+  + 'CLIENT QUALIFICATION:\n'
+  + '- Minimum tax debt: $7,000+ (single year or combined)\n'
+  + '- Can owe individual or business taxes\n'
+  + '- All states except those where not licensed\n'
+  + '- IRS notice types that indicate need: CP14 (Balance Due), CP501-CP504 (Collection), Letter 1058 (Intent to Levy), Letter 3172 (Federal Tax Lien)\n'
+  + '- Red flags: unfiled returns 2+ years, wage garnishment, bank levy, tax lien on credit report, refund offset\n\n'
+  + 'HOW TO SUBMIT A REFERRAL:\n'
+  + '- Log in to Partner Portal\n'
+  + '- Click "New Referral"\n'
+  + '- Enter: client name, phone, email, estimated debt\n'
+  + '- Community Tax calls the client within 24 hours\n'
+  + '- Track status in real-time through portal\n'
+  + '- Or contact partner support: partners@communitytax.com, 1-855-332-2873 (Mon-Fri, 8am-7pm CST)\n\n'
+  + 'COMPLIANCE:\n'
+  + '- Never guarantee specific outcomes to clients\n'
+  + '- Always disclose your referral relationship\n'
+  + '- Direct clients to communitytax.com for verification\n'
+  + '- Do not provide tax advice unless licensed\n\n'
+  + 'GETTING STARTED:\n'
+  + '1. Apply at the partner site\n'
+  + '2. 15-min intro call with partner manager\n'
+  + '3. Sign agreement, get portal access\n'
+  + '4. Submit first referral (can happen in < 1 week)\n\n'
+  + 'COMMON OBJECTIONS & RESPONSES:\n'
+  + '- "I can\'t afford it" → Investigation is only $295, resolution fees can be monthly payments, cost of NOT resolving is higher (penalties compound daily)\n'
+  + '- "I\'ll handle it myself" → IRS has professionals, CTAX EAs/attorneys negotiate daily, clients see 70-80% resolution of what they owe\n'
+  + '- "I don\'t trust tax resolution companies" → 15 years, $2.3B resolved, 120K clients, BBB accredited\n'
+  + '- "I\'ll wait and see" → Penalties and interest are daily, $20K becomes $30K in 18 months\n\n'
+  + 'INSTRUCTIONS:\n'
+  + '- Answer in 2-4 concise paragraphs\n'
+  + '- Use <b>bold</b> for key terms and numbers (no markdown, no asterisks)\n'
+  + '- Be specific and cite exact numbers when possible\n'
+  + '- If a question is outside program scope, say so and suggest contacting partners@communitytax.com\n'
+  + '- Tone: professional, helpful, direct — not salesy\n'
+  + '- Do NOT make up information not in the documentation above';
+
+function askKbQuick(btn) {
+  document.getElementById('kb-input').value = btn.textContent;
+  askKnowledgeBase();
+}
+
+function copyKbAnswer() {
+  navigator.clipboard.writeText(kbAnswerText).then(function(){
+    var btn = document.getElementById('kb-copy-btn');
+    if(btn){ var o=btn.innerHTML; btn.innerHTML='Copied'; setTimeout(function(){btn.innerHTML=o;},2000); }
+  });
+}
+
+async function askKnowledgeBase() {
+  var input = document.getElementById('kb-input');
+  var question = input.value.trim();
+  if (!question) return;
+  if (!CTAX_API_KEY) { if (!promptForApiKey()) return; }
+
+  // Move previous answer to history
+  var answerEl = document.getElementById('kb-answer');
+  if (answerEl.style.display === 'block') {
+    var prevQ = answerEl.getAttribute('data-question');
+    var prevA = document.getElementById('kb-answer-text').innerHTML;
+    if (prevQ && prevA) {
+      var histItem = document.createElement('div');
+      histItem.className = 'kb-history-item';
+      histItem.innerHTML = '<div class="kb-history-q">' + prevQ + '</div><div class="kb-history-a">' + prevA + '</div>';
+      var histContainer = document.getElementById('kb-history');
+      histContainer.insertBefore(histItem, histContainer.firstChild);
+      // Keep max 5 history items
+      while (histContainer.children.length > 5) histContainer.removeChild(histContainer.lastChild);
+    }
+  }
+
+  var kbSection = document.getElementById('kb-answer-section');
+  if (kbSection) kbSection.style.display = 'block';
+  document.getElementById('kb-loading').style.display = 'block';
+  answerEl.style.display = 'none';
+
+  try {
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: getApiHeaders(),
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        system: KB_SYSTEM,
+        messages: [{role: 'user', content: question}]
+      })
+    });
+    if(!resp.ok) throw new Error(resp.status === 401 ? '401' : 'API returned ' + resp.status);
+    var data = await resp.json();
+    if(data.error) throw new Error(data.error.message || 'API error');
+    var text = data.content && data.content[0] ? data.content[0].text : 'No answer found.';
+
+    kbAnswerText = text.replace(/<[^>]+>/g, '');
+    document.getElementById('kb-answer-text').innerHTML = text;
+    answerEl.setAttribute('data-question', question);
+    document.getElementById('kb-loading').style.display = 'none';
+    answerEl.style.display = 'block';
+    input.value = '';
+    input.focus();
+    if (kbSection) kbSection.scrollIntoView({behavior:'smooth',block:'start'});
+
+  } catch(err) {
+    document.getElementById('kb-loading').style.display = 'none';
+    var isAuth = err.message && err.message.indexOf('401') !== -1;
+    var msg = isAuth
+      ? 'Invalid API key. Please check your key and try again.'
+      : 'Unable to search right now. Please try again in a moment.';
+    alert(msg);
   }
 }
 

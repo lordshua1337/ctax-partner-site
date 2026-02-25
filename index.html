@@ -1239,11 +1239,210 @@
 
 <!-- RESOURCES PAGE -->
 <div class="page" id="page-resources">
-<div class="res-hero"><div class="con res-inner">
-  <span class="eyebrow eyebrow-ph">Partner Resources</span>
-  <h1 class="disp disp-lt mt8">Templates, guides &amp;<br>everything you need to refer.</h1>
-  <p class="lead lead-lt mt16" style="max-width:560px">Everything a Community Tax partner needs to identify clients, present the program, and start generating revenue — ready to use from day one.</p>
-</div></div>
+<div class="res-hero" style="padding:72px 0 56px">
+  <div class="con res-inner" style="text-align:center">
+    <span class="eyebrow eyebrow-ph">Partner Resources</span>
+    <h1 class="disp disp-lt mt8">How can we help?</h1>
+    <p class="lead lead-lt mt16" style="max-width:520px;margin-left:auto;margin-right:auto">Search the partner knowledge base, qualify a client, or browse templates and guides.</p>
+
+    <!-- KB Search — integrated into hero -->
+    <div class="kb-wrap" style="max-width:640px;margin:32px auto 0;border:none;padding:0;background:none">
+      <div class="kb-search-bar" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12)">
+        <svg aria-hidden="true" class="kb-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="kb-input" aria-label="Search the partner knowledge base" placeholder="Ask anything about the partner program..." style="color:rgba(255,255,255,0.9)" onkeydown="if(event.key==='Enter')askKnowledgeBase()">
+        <button class="kb-search-btn" onclick="askKnowledgeBase()">Ask</button>
+      </div>
+      <div class="kb-quick-tags" style="justify-content:center;margin-top:14px">
+        <button class="kb-tag" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)" onclick="askKbQuick(this)">How does revenue share work?</button>
+        <button class="kb-tag" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)" onclick="askKbQuick(this)">What is the investigation fee?</button>
+        <button class="kb-tag" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)" onclick="askKbQuick(this)">How do I submit a referral?</button>
+        <button class="kb-tag" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)" onclick="askKbQuick(this)">What IRS programs are available?</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KB Answer area (outside hero, in white section) -->
+<div id="kb-answer-section" style="display:none">
+<section class="sec bg-w" style="padding:40px 0"><div class="con" style="max-width:720px">
+  <div id="kb-loading" style="display:none;text-align:center;padding:32px 20px">
+    <div class="rl-spinner" style="margin:0 auto 16px"></div>
+    <div style="font-size:15px;color:var(--slate)">Searching knowledge base...</div>
+  </div>
+  <div id="kb-answer" style="display:none">
+    <div class="kb-answer-card">
+      <div class="kb-answer-body" id="kb-answer-text"></div>
+      <div class="kb-answer-footer">
+        <button class="btn btn-s" onclick="copyKbAnswer()" id="kb-copy-btn">
+          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy Answer
+        </button>
+        <span class="kb-disclaimer">AI-generated from program documentation. Verify with your partner manager for specific cases.</span>
+      </div>
+    </div>
+  </div>
+  <div id="kb-history"></div>
+</div></section>
+</div>
+
+<section class="sec bg-w"><div class="con">
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION 1: CLIENT QUALIFIER                     -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="res-section-hd">
+    <div class="res-cat-label">AI-Powered Tool</div>
+    <h3>Qualify a client in 30 seconds.</h3>
+    <p>Enter basic details about a client's tax situation. Get an instant assessment of referral strength, likely resolution path, estimated case value, and talking points for the conversation.</p>
+  </div>
+
+  <div class="cq-wrap">
+    <div id="cq-error" style="display:none;background:#fff0f0;border:1px solid #ffcccc;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:14px;color:#c0392b;font-weight:500"></div>
+    <div id="cq-form-wrap">
+      <div class="cq-form-grid">
+        <div class="cq-form-col">
+          <div class="f-sec-lbl" style="margin-bottom:18px">CLIENT SITUATION</div>
+          <div class="ff">
+            <label for="cq-debt" class="fl">Estimated tax debt</label>
+            <select id="cq-debt" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
+              <option value="">Select range...</option>
+              <option value="Under $7,000">Under $7,000</option>
+              <option value="$7,000 – $15,000">$7,000 - $15,000</option>
+              <option value="$15,000 – $30,000">$15,000 - $30,000</option>
+              <option value="$30,000 – $50,000">$30,000 - $50,000</option>
+              <option value="$50,000 – $100,000">$50,000 - $100,000</option>
+              <option value="$100,000+">$100,000+</option>
+              <option value="Not sure">Not sure</option>
+            </select>
+          </div>
+          <div class="ff">
+            <label for="cq-issue" class="fl">Type of tax issue</label>
+            <select id="cq-issue" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
+              <option value="">Select issue...</option>
+              <option value="Unpaid taxes / back taxes">Unpaid taxes / back taxes</option>
+              <option value="Unfiled returns">Unfiled returns</option>
+              <option value="Wage garnishment">Wage garnishment</option>
+              <option value="Tax lien on property">Tax lien on property</option>
+              <option value="Bank levy">Bank levy</option>
+              <option value="IRS audit or examination">IRS audit or examination</option>
+              <option value="Penalty assessments">Penalty assessments</option>
+              <option value="Multiple issues">Multiple issues</option>
+              <option value="Not sure">Not sure</option>
+            </select>
+          </div>
+          <div class="ff">
+            <label for="cq-years" class="fl">How many tax years affected?</label>
+            <select id="cq-years" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
+              <option value="">Select...</option>
+              <option value="1 year">1 year</option>
+              <option value="2-3 years">2-3 years</option>
+              <option value="4-6 years">4-6 years</option>
+              <option value="7+ years">7+ years</option>
+              <option value="Not sure">Not sure</option>
+            </select>
+          </div>
+        </div>
+        <div class="cq-form-col">
+          <div class="f-sec-lbl" style="margin-bottom:18px">CLIENT DETAILS</div>
+          <div class="ff">
+            <label for="cq-notices" class="fl">Has the client received IRS notices?</label>
+            <select id="cq-notices" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
+              <option value="">Select...</option>
+              <option value="Yes — recent notices">Yes -- recent notices</option>
+              <option value="Yes — but a while ago">Yes -- but a while ago</option>
+              <option value="No notices yet">No notices yet</option>
+              <option value="Not sure">Not sure</option>
+            </select>
+          </div>
+          <div class="ff">
+            <label for="cq-employment" class="fl">Employment type</label>
+            <select id="cq-employment" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
+              <option value="">Select...</option>
+              <option value="W-2 employee">W-2 employee</option>
+              <option value="Self-employed / 1099">Self-employed / 1099</option>
+              <option value="Business owner">Business owner</option>
+              <option value="Retired">Retired</option>
+              <option value="Unemployed">Unemployed</option>
+              <option value="Not sure">Not sure</option>
+            </select>
+          </div>
+          <div class="ff">
+            <label for="cq-notes" class="fl">Additional context <span style="font-weight:400;color:var(--slate)">(optional)</span></label>
+            <textarea id="cq-notes" rows="3" placeholder="e.g. Client mentioned owing $40k from a business that closed in 2021..." style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none;resize:vertical"></textarea>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:28px">
+        <button class="btn btn-p btn-lg" onclick="qualifyClient()">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Qualify This Client
+        </button>
+      </div>
+    </div>
+    <div id="cq-loading" style="display:none;text-align:center;padding:60px 20px">
+      <div class="rl-spinner" style="margin:0 auto 20px"></div>
+      <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy);margin-bottom:8px">Analyzing client profile...</div>
+      <div id="cq-loading-msg" style="font-size:15px;color:var(--slate)">Evaluating tax debt indicators...</div>
+    </div>
+    <div id="cq-output" style="display:none">
+      <div id="cq-verdict" class="cq-verdict"></div>
+      <div class="cq-details-grid">
+        <div class="cq-detail-card"><div class="cq-detail-label">Resolution Path</div><div id="cq-path" class="cq-detail-value"></div></div>
+        <div class="cq-detail-card"><div class="cq-detail-label">Estimated Case Value</div><div id="cq-value" class="cq-detail-value"></div></div>
+        <div class="cq-detail-card"><div class="cq-detail-label">Your Commission</div><div id="cq-commission" class="cq-detail-value"></div></div>
+      </div>
+      <div class="cq-analysis"><div class="f-sec-lbl" style="margin-bottom:12px">ANALYSIS</div><div id="cq-analysis-text" style="font-size:15px;color:var(--body);line-height:1.72"></div></div>
+      <div class="cq-talking-points"><div class="f-sec-lbl" style="margin-bottom:12px">TALKING POINTS FOR THE CONVERSATION</div><div id="cq-talking-text" style="font-size:15px;color:var(--body);line-height:1.72"></div></div>
+      <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap">
+        <button class="btn btn-p" onclick="showPage('contact')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Submit This Referral</button>
+        <button class="btn btn-s" onclick="resetQualifier()"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.33"/></svg> Qualify Another Client</button>
+        <button class="btn btn-s" onclick="copyCqAnalysis()"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Analysis</button>
+      </div>
+    </div>
+  </div>
+
+</div></section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 2: GETTING STARTED                      -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="sec" style="background:var(--off);border-top:1px solid var(--off2);border-bottom:1px solid var(--off2)"><div class="con" style="max-width:860px;text-align:center">
+  <div class="res-section-hd" style="margin-bottom:32px">
+    <div class="res-cat-label">Getting Started</div>
+    <h3>New partner? Start here.</h3>
+    <p>From application to first commission check — here's your roadmap.</p>
+  </div>
+  <div class="g4" style="margin-bottom:32px">
+    <div style="padding:24px 16px;background:var(--white);border:1px solid var(--off2);border-radius:10px;text-align:center">
+      <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--blue);margin-bottom:8px">1</div>
+      <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Apply</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.5">5-minute application form</div>
+    </div>
+    <div style="padding:24px 16px;background:var(--white);border:1px solid var(--off2);border-radius:10px;text-align:center">
+      <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--blue);margin-bottom:8px">2</div>
+      <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Intro Call</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.5">15 min with your partner manager</div>
+    </div>
+    <div style="padding:24px 16px;background:var(--white);border:1px solid var(--off2);border-radius:10px;text-align:center">
+      <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--blue);margin-bottom:8px">3</div>
+      <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Get Access</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.5">Portal, training, and tools</div>
+    </div>
+    <div style="padding:24px 16px;background:var(--white);border:1px solid var(--off2);border-radius:10px;text-align:center">
+      <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--blue);margin-bottom:8px">4</div>
+      <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Refer &amp; Earn</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.5">Submit referrals, track revenue</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <button class="btn btn-p" onclick="showPage('apply')">Apply Now</button>
+    <button class="btn btn-g" onclick="showPage('onboarding')">Full Onboarding Checklist</button>
+  </div>
+</div></section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 3: DOWNLOADS & TEMPLATES                -->
+<!-- ═══════════════════════════════════════════════ -->
 <section class="sec bg-w"><div class="con">
 
   <!-- Featured Download -->
@@ -1305,165 +1504,6 @@
       <div class="res-card-ft">
         <span class="res-type">PDF · 4 pages</span>
         <button class="res-dl-btn" onclick="handleResourceDownload(this,'Objection Handling Guide')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Client Qualifier Tool -->
-  <div class="res-section-hd">
-    <div class="res-cat-label">AI-Powered Tool</div>
-    <h3>Qualify a client in 30 seconds.</h3>
-    <p>Enter basic details about a client's tax situation. Get an instant assessment of referral strength, likely resolution path, estimated case value, and talking points for the conversation.</p>
-  </div>
-
-  <div class="cq-wrap">
-    <div id="cq-error" style="display:none;background:#fff0f0;border:1px solid #ffcccc;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:14px;color:#c0392b;font-weight:500"></div>
-
-    <!-- Form -->
-    <div id="cq-form-wrap">
-      <div class="cq-form-grid">
-        <div class="cq-form-col">
-          <div class="f-sec-lbl" style="margin-bottom:18px">CLIENT SITUATION</div>
-
-          <div class="ff">
-            <label class="fl">Estimated tax debt</label>
-            <select id="cq-debt" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
-              <option value="">Select range...</option>
-              <option value="Under $7,000">Under $7,000</option>
-              <option value="$7,000 – $15,000">$7,000 - $15,000</option>
-              <option value="$15,000 – $30,000">$15,000 - $30,000</option>
-              <option value="$30,000 – $50,000">$30,000 - $50,000</option>
-              <option value="$50,000 – $100,000">$50,000 - $100,000</option>
-              <option value="$100,000+">$100,000+</option>
-              <option value="Not sure">Not sure</option>
-            </select>
-          </div>
-
-          <div class="ff">
-            <label class="fl">Type of tax issue</label>
-            <select id="cq-issue" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
-              <option value="">Select issue...</option>
-              <option value="Unpaid taxes / back taxes">Unpaid taxes / back taxes</option>
-              <option value="Unfiled returns">Unfiled returns</option>
-              <option value="Wage garnishment">Wage garnishment</option>
-              <option value="Tax lien on property">Tax lien on property</option>
-              <option value="Bank levy">Bank levy</option>
-              <option value="IRS audit or examination">IRS audit or examination</option>
-              <option value="Penalty assessments">Penalty assessments</option>
-              <option value="Multiple issues">Multiple issues</option>
-              <option value="Not sure">Not sure</option>
-            </select>
-          </div>
-
-          <div class="ff">
-            <label class="fl">How many tax years affected?</label>
-            <select id="cq-years" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
-              <option value="">Select...</option>
-              <option value="1 year">1 year</option>
-              <option value="2-3 years">2-3 years</option>
-              <option value="4-6 years">4-6 years</option>
-              <option value="7+ years">7+ years</option>
-              <option value="Not sure">Not sure</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="cq-form-col">
-          <div class="f-sec-lbl" style="margin-bottom:18px">CLIENT DETAILS</div>
-
-          <div class="ff">
-            <label class="fl">Has the client received IRS notices?</label>
-            <select id="cq-notices" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
-              <option value="">Select...</option>
-              <option value="Yes — recent notices">Yes -- recent notices</option>
-              <option value="Yes — but a while ago">Yes -- but a while ago</option>
-              <option value="No notices yet">No notices yet</option>
-              <option value="Not sure">Not sure</option>
-            </select>
-          </div>
-
-          <div class="ff">
-            <label class="fl">Employment type</label>
-            <select id="cq-employment" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
-              <option value="">Select...</option>
-              <option value="W-2 employee">W-2 employee</option>
-              <option value="Self-employed / 1099">Self-employed / 1099</option>
-              <option value="Business owner">Business owner</option>
-              <option value="Retired">Retired</option>
-              <option value="Unemployed">Unemployed</option>
-              <option value="Not sure">Not sure</option>
-            </select>
-          </div>
-
-          <div class="ff">
-            <label class="fl">Additional context <span style="font-weight:400;color:var(--slate)">(optional)</span></label>
-            <textarea id="cq-notes" rows="3" placeholder="e.g. Client mentioned owing $40k from a business that closed in 2021..." style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none;resize:vertical"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div style="text-align:center;margin-top:28px">
-        <button class="btn btn-p btn-lg" onclick="qualifyClient()">
-          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          Qualify This Client
-        </button>
-      </div>
-    </div>
-
-    <!-- Loading -->
-    <div id="cq-loading" style="display:none;text-align:center;padding:60px 20px">
-      <div class="rl-spinner" style="margin:0 auto 20px"></div>
-      <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy);margin-bottom:8px">Analyzing client profile...</div>
-      <div id="cq-loading-msg" style="font-size:15px;color:var(--slate)">Evaluating tax debt indicators...</div>
-    </div>
-
-    <!-- Results -->
-    <div id="cq-output" style="display:none">
-      <!-- Verdict banner -->
-      <div id="cq-verdict" class="cq-verdict"></div>
-
-      <!-- Details grid -->
-      <div class="cq-details-grid">
-        <div class="cq-detail-card">
-          <div class="cq-detail-label">Resolution Path</div>
-          <div id="cq-path" class="cq-detail-value"></div>
-        </div>
-        <div class="cq-detail-card">
-          <div class="cq-detail-label">Estimated Case Value</div>
-          <div id="cq-value" class="cq-detail-value"></div>
-        </div>
-        <div class="cq-detail-card">
-          <div class="cq-detail-label">Your Commission</div>
-          <div id="cq-commission" class="cq-detail-value"></div>
-        </div>
-      </div>
-
-      <!-- Analysis -->
-      <div class="cq-analysis">
-        <div class="f-sec-lbl" style="margin-bottom:12px">ANALYSIS</div>
-        <div id="cq-analysis-text" style="font-size:15px;color:var(--body);line-height:1.72"></div>
-      </div>
-
-      <!-- Talking points -->
-      <div class="cq-talking-points">
-        <div class="f-sec-lbl" style="margin-bottom:12px">TALKING POINTS FOR THE CONVERSATION</div>
-        <div id="cq-talking-text" style="font-size:15px;color:var(--body);line-height:1.72"></div>
-      </div>
-
-      <!-- Actions -->
-      <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap">
-        <button class="btn btn-p" onclick="showPage('contact')">
-          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          Submit This Referral
-        </button>
-        <button class="btn btn-s" onclick="resetQualifier()">
-          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.33"/></svg>
-          Qualify Another Client
-        </button>
-        <button class="btn btn-s" onclick="copyCqAnalysis()">
-          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-          Copy Analysis
-        </button>
       </div>
     </div>
   </div>
@@ -1556,18 +1596,6 @@
         <button class="res-dl-btn" onclick="handleResourceDownload(this,'Spanish-Language Client Explainer')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
       </div>
     </div>
-  </div>
-
-  <!-- Coming Soon / Notify -->
-  <div style="background:var(--off);border:1px solid var(--off2);border-radius:13px;padding:36px;margin-top:56px;text-align:center">
-    <span class="eyebrow" style="margin-bottom:8px">Coming Soon</span>
-    <h3 class="sh mt8" style="margin-bottom:8px">Partner Portal &amp; Asset Library</h3>
-    <p style="font-size:15px;color:var(--body);line-height:1.7;max-width:500px;margin:0 auto 24px">Co-branded marketing materials, co-sell decks, webinar assets, and real-time referral tracking — all in one place. Get notified when it launches.</p>
-    <div class="res-notify" style="margin:0 auto;justify-content:center">
-      <input type="email" placeholder="your@email.com" id="res-notify-email">
-      <button onclick="handleResourceNotify()">Notify Me</button>
-    </div>
-    <p id="res-notify-msg" style="display:none;font-size:15px;color:#16a34a;margin-top:10px;font-weight:600">✓ You're on the list.</p>
   </div>
 
 </div></section>
