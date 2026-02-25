@@ -1146,6 +1146,12 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
   .kb-tag{font-size:12px;padding:6px 12px}
 }
 
+/* ── Dashboard Action Buttons ────────────────────────── */
+.dash-act-btn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:7px;border:1px solid var(--off2);background:var(--white);color:var(--slate);cursor:pointer;transition:all 0.15s;flex-shrink:0}
+.dash-act-btn:hover{border-color:var(--blue);color:var(--blue);background:rgba(11,95,216,0.04)}
+[data-theme="dark"] .dash-act-btn{background:#1a2234;border-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .dash-act-btn:hover{border-color:rgba(11,95,216,0.5);color:var(--cyan);background:rgba(11,95,216,0.12)}
+
 /* ── Universal Footer ─────────────────────────────────── */
 #site-footer{background:#07111f;padding:72px 0 48px;font-size:13px}
 .footer-inner{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;margin-bottom:56px}

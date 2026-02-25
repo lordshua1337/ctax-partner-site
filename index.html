@@ -155,6 +155,11 @@
         </div>
         <div class="dd-section">
           <div class="dd-label">Resources</div>
+          <a class="dd-item" onclick="showPage('dashboard')">
+            <span class="dd-icon-wrap dd-ic-navy"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></span>
+            <div><div class="dd-title">Dashboard Preview</div><div class="dd-desc">See your partner portal</div></div>
+            <span class="dd-arrow">&#8250;</span>
+          </a>
           <a class="dd-item" onclick="showPage('resources')">
             <span class="dd-icon-wrap dd-ic-blue"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
             <div><div class="dd-title">Partner Resources</div><div class="dd-desc">Guides, templates, collateral</div></div>
@@ -206,6 +211,7 @@
     <a class="mob-link" onclick="showPage('scripts');closeMobileNav()">Script Builder</a>
     <a class="mob-link" onclick="showPage('admaker');closeMobileNav()">Ad Maker</a>
     <a class="mob-link" onclick="showPage('resources');closeMobileNav()">Client Qualifier</a>
+    <a class="mob-link" onclick="showPage('dashboard');closeMobileNav()">Dashboard Preview</a>
     <a class="mob-link" onclick="showPage('resources');closeMobileNav()">Resources</a>
     <a class="mob-link" onclick="showPage('faq');closeMobileNav()">FAQ</a>
   </div>
@@ -2333,20 +2339,24 @@
             <div style="font-size:15px;font-weight:700;color:var(--navy)">Recent Referrals</div>
             <span style="font-size:12px;font-weight:600;color:var(--blue);cursor:pointer">View All</span>
           </div>
-          <div style="display:grid;grid-template-columns:2fr 1.2fr 1fr 1fr 0.8fr;gap:12px;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--slate);padding-bottom:10px;border-bottom:1px solid var(--off2)">
-            <div>Client</div><div>Submitted</div><div>Status</div><div>Tax Debt</div><div>Your Share</div>
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--slate);padding-bottom:10px;border-bottom:1px solid var(--off2);align-items:center">
+            <div>Client</div><div>Submitted</div><div>Status</div><div>Tax Debt</div><div>Your Share</div><div>Actions</div>
           </div>
-          <div style="display:grid;grid-template-columns:2fr 1.2fr 1fr 1fr 0.8fr;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;border-bottom:1px solid var(--off2)">
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;border-bottom:1px solid var(--off2);align-items:center">
             <div style="font-weight:600">J. Williams</div><div style="color:var(--slate)">Feb 20, 2026</div><div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:rgba(0,229,204,0.1);color:var(--teal);font-size:12px;font-weight:600">In Resolution</span></div><div>$34,200</div><div style="font-weight:600;color:var(--blue)">$2,736</div>
+            <div style="display:flex;gap:6px"><button class="dash-act-btn" title="Call client"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></button><button class="dash-act-btn" title="Email client"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></button></div>
           </div>
-          <div style="display:grid;grid-template-columns:2fr 1.2fr 1fr 1fr 0.8fr;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;border-bottom:1px solid var(--off2)">
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;border-bottom:1px solid var(--off2);align-items:center">
             <div style="font-weight:600">M. Garcia</div><div style="color:var(--slate)">Feb 18, 2026</div><div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:rgba(11,95,216,0.1);color:var(--blue);font-size:12px;font-weight:600">Investigation</span></div><div>$18,500</div><div style="font-weight:600;color:var(--slate)">Pending</div>
+            <div style="display:flex;gap:6px"><button class="dash-act-btn" title="Call client"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></button><button class="dash-act-btn" title="Email client"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></button></div>
           </div>
-          <div style="display:grid;grid-template-columns:2fr 1.2fr 1fr 1fr 0.8fr;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;border-bottom:1px solid var(--off2)">
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;border-bottom:1px solid var(--off2);align-items:center">
             <div style="font-weight:600">R. Thompson</div><div style="color:var(--slate)">Feb 14, 2026</div><div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:rgba(0,229,204,0.1);color:var(--teal);font-size:12px;font-weight:600">Resolved</span></div><div>$52,800</div><div style="font-weight:600;color:var(--teal)">$4,224 Paid</div>
+            <div style="display:flex;gap:6px"><button class="dash-act-btn" title="Call client"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></button><button class="dash-act-btn" title="Email client"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></button></div>
           </div>
-          <div style="display:grid;grid-template-columns:2fr 1.2fr 1fr 1fr 0.8fr;gap:12px;font-size:14px;color:var(--navy);padding:12px 0">
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;align-items:center">
             <div style="font-weight:600">K. Patel</div><div style="color:var(--slate)">Feb 10, 2026</div><div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:rgba(0,229,204,0.1);color:var(--teal);font-size:12px;font-weight:600">Resolved</span></div><div>$27,100</div><div style="font-weight:600;color:var(--teal)">$2,168 Paid</div>
+            <div style="display:flex;gap:6px"><button class="dash-act-btn" title="Call client"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></button><button class="dash-act-btn" title="Email client"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></button></div>
           </div>
         </div>
       </div>
