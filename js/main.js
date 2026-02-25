@@ -533,6 +533,9 @@ function showPage(id){
 function _activatePage(id){
   document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active');});
   var p=document.getElementById('page-'+id);
+  if(!p){
+    p=document.getElementById('page-404');
+  }
   if(p){
     p.style.display='block';
     p.classList.add('active','page-enter');
