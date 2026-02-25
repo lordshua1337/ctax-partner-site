@@ -1,10 +1,16 @@
 // --- API Configuration ---
-// Set your Anthropic API key here to enable AI tools (Revenue Lab, Script Builder)
-// In production, use a backend proxy instead of exposing the key in the browser
+// WARNING: Client-side API key usage is for DEMO/DEVELOPMENT only.
+// For production, route all AI requests through a backend proxy.
 var CTAX_API_KEY = localStorage.getItem('ctax_api_key') || '';
 
 function promptForApiKey() {
-  var key = prompt('Enter your Anthropic API key to use AI tools.\nThis is stored in your browser only (localStorage).\n\nGet a key at: console.anthropic.com');
+  var key = prompt(
+    'Enter your Anthropic API key to use AI tools.\n\n' +
+    'IMPORTANT: This key is stored in your browser (localStorage) ' +
+    'and is visible in network requests. Only use a development key ' +
+    'with spending limits enabled.\n\n' +
+    'Get a key at: console.anthropic.com'
+  );
   if (key && key.trim()) {
     CTAX_API_KEY = key.trim();
     localStorage.setItem('ctax_api_key', CTAX_API_KEY);
@@ -20,6 +26,11 @@ function getApiHeaders() {
     'anthropic-dangerous-direct-browser-access': 'true',
     'x-api-key': CTAX_API_KEY
   };
+}
+
+function clearApiKey() {
+  CTAX_API_KEY = '';
+  localStorage.removeItem('ctax_api_key');
 }
 // --- End API Configuration ---
 
@@ -113,7 +124,9 @@ async function generateProjection() {
         messages: [{role: 'user', content: prompt}]
       })
     });
+    if(!resp.ok) throw new Error(resp.status === 401 ? '401' : 'API returned ' + resp.status);
     var data = await resp.json();
+    if(data.error) throw new Error(data.error.message || 'API error');
     var text = data.content && data.content[0] ? data.content[0].text : '';
     clearInterval(mint);
 
@@ -181,8 +194,14 @@ async function generateProjection() {
     document.getElementById('rc-loading').style.display = 'none';
     document.getElementById('rc-form-wrap').style.display = 'block';
     var errDiv = document.getElementById('rc-error');
-    if(errDiv){errDiv.textContent='Something went wrong: '+(err.message||err);errDiv.style.display='block';}
-    console.error(err);
+    if(errDiv){
+      var isAuth = err.message && err.message.indexOf('401') !== -1;
+      var msg = isAuth
+        ? 'Invalid API key. Please check your key and try again.'
+        : 'Unable to generate projection right now. Please try again in a moment.';
+      errDiv.innerHTML = msg + ' <a href="#" onclick="this.parentElement.style.display=\'none\';return false" style="color:inherit;text-decoration:underline;margin-left:8px">Dismiss</a>';
+      errDiv.style.display='block';
+    }
   }
 }
 // ── END REVENUE CALCULATOR ───────────────────────────────────
@@ -420,11 +439,11 @@ async function generateScript() {
         messages: [{role: 'user', content: prompt}]
       })
     });
-
+    if(!response.ok) throw new Error(response.status === 401 ? '401' : 'API returned ' + response.status);
     var data = await response.json();
-    if(data.error) throw new Error('API error: ' + (data.error.message || JSON.stringify(data.error)));
+    if(data.error) throw new Error(data.error.message || 'API error');
     var text = data.content && data.content[0] ? data.content[0].text : '';
-    if(!text) throw new Error('Empty response from API. Raw: ' + JSON.stringify(data).slice(0,200));
+    if(!text) throw new Error('Empty response');
 
     clearInterval(msgInterval);
 
@@ -467,9 +486,15 @@ async function generateScript() {
     clearInterval(msgInterval);
     document.getElementById('sb-loading').style.display='none';
     document.getElementById('sb-form-wrap').style.display='block';
-    console.error('Script builder error:', err);
     var errEl = document.getElementById('sb-error');
-    if(errEl) { errEl.textContent = 'Error: ' + (err.message || 'Something went wrong. Try again.'); errEl.style.display='block'; }
+    if(errEl) {
+      var isAuth = err.message && (err.message.indexOf('401') !== -1 || err.message.indexOf('API key') !== -1);
+      var msg = isAuth
+        ? 'Invalid API key. Please check your key and try again.'
+        : 'Unable to generate scripts right now. Please try again in a moment.';
+      errEl.innerHTML = msg + ' <a href="#" onclick="this.parentElement.style.display=\'none\';return false" style="color:inherit;text-decoration:underline;margin-left:8px">Dismiss</a>';
+      errEl.style.display='block';
+    }
   }
 }
 // ── END SCRIPT BUILDER ───────────────────────────────────────
@@ -542,17 +567,22 @@ function toggleFaq(el){
 }
 function handleApply(e) {
   if(e) e.preventDefault();
-  var form = document.getElementById('apply-form') || e.target;
-  var inputs = form.querySelectorAll('input, select, textarea');
-  var data = [];
-  inputs.forEach(function(inp) {
-    if(inp.name && inp.value) data.push(inp.name + ': ' + inp.value);
-    else if(inp.type === 'radio' && inp.checked) data.push('Tier: ' + inp.value);
-  });
-  var body = 'New Partner Application\n\n' + data.join('\n');
-  window.location.href = 'mailto:partners@communitytax.com?subject=' + encodeURIComponent('New Partner Application') + '&body=' + encodeURIComponent(body);
-  var btn = form.querySelector('button[type=submit], .apply-submit');
-  if(btn){btn.textContent='Opening email client...';btn.style.background='var(--teal)';btn.style.color='#fff';}
+  var form = e.target;
+  var data = new FormData(form);
+  var lines = [];
+  lines.push('Name: ' + (data.get('first_name')||'') + ' ' + (data.get('last_name')||''));
+  lines.push('Email: ' + (data.get('email')||''));
+  lines.push('Phone: ' + (data.get('phone')||''));
+  lines.push('Company: ' + (data.get('company')||''));
+  lines.push('Business Type: ' + (data.get('business_type')||''));
+  lines.push('Client Volume: ' + (data.get('client_volume')||''));
+  lines.push('States: ' + (data.get('states')||''));
+  lines.push('Tier: ' + (data.get('tier')||'Not selected'));
+  lines.push('Notes: ' + (data.get('notes')||''));
+  var body = 'New Partner Application\n\n' + lines.join('\n');
+  window.location.href = 'mailto:partners@communitytax.com?subject=' + encodeURIComponent('New Partner Application — ' + (data.get('company')||'')) + '&body=' + encodeURIComponent(body);
+  var btn = form.querySelector('button[type="submit"], .f-submit');
+  if(btn){btn.textContent='Sent — check your email client';btn.disabled=true;btn.style.opacity='0.7';}
 }
 function initHowAnimations(){
   var hp=document.getElementById('page-how');if(!hp)return;
@@ -1408,17 +1438,17 @@ function toggleDarkMode(){
 function handleContactSubmit(e){
   if(e) e.preventDefault();
   var form = e.target;
-  var name = form.querySelector('input[placeholder="Your name"]');
-  var email = form.querySelector('input[type="email"]');
-  var subject = form.querySelector('input[placeholder="How can we help?"]');
-  var msg = form.querySelector('textarea');
-  if(!name||!email||!subject||!msg) return;
-  if(!name.value||!email.value||!msg.value){alert('Please fill in all required fields.');return;}
-  var body = 'Name: '+name.value+'\nEmail: '+email.value+'\n\n'+msg.value;
-  var mailto = 'mailto:partners@communitytax.com?subject='+encodeURIComponent(subject.value||'Partner Inquiry')+'&body='+encodeURIComponent(body);
+  var data = new FormData(form);
+  var name = data.get('name');
+  var email = data.get('email');
+  var subject = data.get('subject');
+  var message = data.get('message');
+  if(!name||!email||!message){alert('Please fill in all required fields.');return;}
+  var body = 'Name: '+name+'\nEmail: '+email+'\n\n'+message;
+  var mailto = 'mailto:partners@communitytax.com?subject='+encodeURIComponent(subject||'Partner Inquiry')+'&body='+encodeURIComponent(body);
   window.location.href = mailto;
-  var btn = form.querySelector('button');
-  if(btn){btn.textContent='Opening email client...';btn.style.background='var(--teal)';btn.style.color='#fff';}
+  var btn = form.querySelector('button[type="submit"]');
+  if(btn){btn.textContent='Sent — check your email client';btn.disabled=true;btn.style.opacity='0.7';}
 }
 
 
