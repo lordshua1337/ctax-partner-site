@@ -1674,6 +1674,23 @@ function toggleChat(){
   if(iconX) iconX.style.display = open ? 'none' : 'block';
 }
 
+// ── NOTIFICATIONS ──────────────────────────────────
+function toggleNotifPanel(evt){
+  var panels = document.querySelectorAll('.notif-panel');
+  var btn = evt ? evt.currentTarget : null;
+  var wrap = btn ? btn.closest('.notif-wrap') : null;
+  var target = wrap ? wrap.querySelector('.notif-panel') : null;
+  panels.forEach(function(p){ if(p !== target) p.classList.remove('active'); });
+  if(target) target.classList.toggle('active');
+}
+(function(){
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.notif-wrap')){
+      document.querySelectorAll('.notif-panel').forEach(function(p){ p.classList.remove('active'); });
+    }
+  });
+})();
+
 // ── DARK MODE ──────────────────────────────────────
 function toggleDarkMode(){
   var current = document.documentElement.getAttribute('data-theme');
