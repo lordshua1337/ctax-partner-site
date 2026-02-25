@@ -484,6 +484,12 @@ function toggleMobileNav(){
   btn.classList.toggle('open');
   drawer.classList.toggle('open');
 }
+function closeMobileNav(){
+  var btn=document.getElementById('navHamburger');
+  var drawer=document.getElementById('mobileNavDrawer');
+  if(btn) btn.classList.remove('open');
+  if(drawer) drawer.classList.remove('open');
+}
 
 function showPage(id){
   var current = document.querySelector('.page.active');
