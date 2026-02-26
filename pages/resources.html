@@ -1,0 +1,360 @@
+<div class="res-hero" style="padding:72px 0 56px">
+  <div class="con res-inner" style="text-align:center">
+    <span class="eyebrow eyebrow-ph">Partner Resources</span>
+    <h1 class="disp disp-lt mt8">How can we help?</h1>
+    <p class="lead lead-lt mt16" style="max-width:520px;margin-left:auto;margin-right:auto">Search the partner knowledge base, qualify a client, or browse templates and guides.</p>
+
+    <!-- KB Search — integrated into hero -->
+    <div class="kb-wrap" style="max-width:640px;margin:32px auto 0;border:none;padding:0;background:none">
+      <div class="kb-search-bar" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12)">
+        <svg aria-hidden="true" class="kb-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="kb-input" aria-label="Search the partner knowledge base" placeholder="Ask anything about the partner program..." style="color:rgba(255,255,255,0.9)" onkeydown="if(event.key==='Enter')askKnowledgeBase()">
+        <button class="kb-search-btn" onclick="askKnowledgeBase()">Ask</button>
+      </div>
+      <div class="kb-quick-tags" style="justify-content:center;margin-top:14px">
+        <button class="kb-tag" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)" onclick="askKbQuick(this)">How does revenue share work?</button>
+        <button class="kb-tag" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)" onclick="askKbQuick(this)">What is the investigation fee?</button>
+        <button class="kb-tag" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)" onclick="askKbQuick(this)">How do I submit a referral?</button>
+        <button class="kb-tag" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)" onclick="askKbQuick(this)">What IRS programs are available?</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KB Answer area (outside hero, in white section) -->
+<div id="kb-answer-section" style="display:none">
+<section class="sec bg-w" style="padding:40px 0"><div class="con" style="max-width:720px">
+  <div id="kb-loading" style="display:none;text-align:center;padding:32px 20px">
+    <div class="rl-spinner" style="margin:0 auto 16px"></div>
+    <div style="font-size:15px;color:var(--slate)">Searching knowledge base...</div>
+  </div>
+  <div id="kb-answer" style="display:none">
+    <div class="kb-answer-card">
+      <div class="kb-answer-body" id="kb-answer-text"></div>
+      <div class="kb-answer-footer">
+        <button class="btn btn-s" onclick="copyKbAnswer()" id="kb-copy-btn">
+          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy Answer
+        </button>
+        <span class="kb-disclaimer">AI-generated from program documentation. Verify with your partner manager for specific cases.</span>
+      </div>
+    </div>
+  </div>
+  <div id="kb-history"></div>
+</div></section>
+</div>
+
+<section class="sec bg-w"><div class="con">
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION 1: CLIENT QUALIFIER                     -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="res-section-hd">
+    <div class="res-cat-label">AI-Powered Tool</div>
+    <h3>Qualify a client in 30 seconds.</h3>
+    <p>Enter basic details about a client's tax situation. Get an instant assessment of referral strength, likely resolution path, estimated case value, and talking points for the conversation.</p>
+  </div>
+
+  <div class="cq-wrap">
+    <div id="cq-error" style="display:none;background:#fff0f0;border:1px solid #ffcccc;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:14px;color:#c0392b;font-weight:500"></div>
+    <div id="cq-form-wrap">
+      <div class="cq-form-grid">
+        <div class="cq-form-col">
+          <div class="f-sec-lbl" style="margin-bottom:18px">CLIENT SITUATION</div>
+          <div class="ff">
+            <label for="cq-debt" class="fl">Estimated tax debt</label>
+            <select id="cq-debt" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
+              <option value="">Select range...</option>
+              <option value="Under $7,000">Under $7,000</option>
+              <option value="$7,000 – $15,000">$7,000 - $15,000</option>
+              <option value="$15,000 – $30,000">$15,000 - $30,000</option>
+              <option value="$30,000 – $50,000">$30,000 - $50,000</option>
+              <option value="$50,000 – $100,000">$50,000 - $100,000</option>
+              <option value="$100,000+">$100,000+</option>
+              <option value="Not sure">Not sure</option>
+            </select>
+          </div>
+          <div class="ff">
+            <label for="cq-issue" class="fl">Type of tax issue</label>
+            <select id="cq-issue" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
+              <option value="">Select issue...</option>
+              <option value="Unpaid taxes / back taxes">Unpaid taxes / back taxes</option>
+              <option value="Unfiled returns">Unfiled returns</option>
+              <option value="Wage garnishment">Wage garnishment</option>
+              <option value="Tax lien on property">Tax lien on property</option>
+              <option value="Bank levy">Bank levy</option>
+              <option value="IRS audit or examination">IRS audit or examination</option>
+              <option value="Penalty assessments">Penalty assessments</option>
+              <option value="Multiple issues">Multiple issues</option>
+              <option value="Not sure">Not sure</option>
+            </select>
+          </div>
+          <div class="ff">
+            <label for="cq-years" class="fl">How many tax years affected?</label>
+            <select id="cq-years" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
+              <option value="">Select...</option>
+              <option value="1 year">1 year</option>
+              <option value="2-3 years">2-3 years</option>
+              <option value="4-6 years">4-6 years</option>
+              <option value="7+ years">7+ years</option>
+              <option value="Not sure">Not sure</option>
+            </select>
+          </div>
+        </div>
+        <div class="cq-form-col">
+          <div class="f-sec-lbl" style="margin-bottom:18px">CLIENT DETAILS</div>
+          <div class="ff">
+            <label for="cq-notices" class="fl">Has the client received IRS notices?</label>
+            <select id="cq-notices" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
+              <option value="">Select...</option>
+              <option value="Yes — recent notices">Yes -- recent notices</option>
+              <option value="Yes — but a while ago">Yes -- but a while ago</option>
+              <option value="No notices yet">No notices yet</option>
+              <option value="Not sure">Not sure</option>
+            </select>
+          </div>
+          <div class="ff">
+            <label for="cq-employment" class="fl">Employment type</label>
+            <select id="cq-employment" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none">
+              <option value="">Select...</option>
+              <option value="W-2 employee">W-2 employee</option>
+              <option value="Self-employed / 1099">Self-employed / 1099</option>
+              <option value="Business owner">Business owner</option>
+              <option value="Retired">Retired</option>
+              <option value="Unemployed">Unemployed</option>
+              <option value="Not sure">Not sure</option>
+            </select>
+          </div>
+          <div class="ff">
+            <label for="cq-notes" class="fl">Additional context <span style="font-weight:400;color:var(--slate)">(optional)</span></label>
+            <textarea id="cq-notes" rows="3" placeholder="e.g. Client mentioned owing $40k from a business that closed in 2021..." style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--white);color:var(--ink);outline:none;resize:vertical"></textarea>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:28px">
+        <button class="btn btn-p btn-lg" onclick="qualifyClient()">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Qualify This Client
+        </button>
+      </div>
+    </div>
+    <div id="cq-loading" style="display:none;text-align:center;padding:60px 20px">
+      <div class="rl-spinner" style="margin:0 auto 20px"></div>
+      <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy);margin-bottom:8px">Analyzing client profile...</div>
+      <div id="cq-loading-msg" style="font-size:15px;color:var(--slate)">Evaluating tax debt indicators...</div>
+    </div>
+    <div id="cq-output" style="display:none">
+      <div id="cq-verdict" class="cq-verdict"></div>
+      <div class="cq-details-grid">
+        <div class="cq-detail-card"><div class="cq-detail-label">Resolution Path</div><div id="cq-path" class="cq-detail-value"></div></div>
+        <div class="cq-detail-card"><div class="cq-detail-label">Estimated Case Value</div><div id="cq-value" class="cq-detail-value"></div></div>
+        <div class="cq-detail-card"><div class="cq-detail-label">Your Commission</div><div id="cq-commission" class="cq-detail-value"></div></div>
+      </div>
+      <div class="cq-analysis"><div class="f-sec-lbl" style="margin-bottom:12px">ANALYSIS</div><div id="cq-analysis-text" style="font-size:15px;color:var(--body);line-height:1.72"></div></div>
+      <div class="cq-talking-points"><div class="f-sec-lbl" style="margin-bottom:12px">TALKING POINTS FOR THE CONVERSATION</div><div id="cq-talking-text" style="font-size:15px;color:var(--body);line-height:1.72"></div></div>
+      <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap">
+        <button class="btn btn-p" onclick="showPage('contact')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Submit This Referral</button>
+        <button class="btn btn-s" onclick="resetQualifier()"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.33"/></svg> Qualify Another Client</button>
+        <button class="btn btn-s" onclick="copyCqAnalysis()"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Analysis</button>
+      </div>
+    </div>
+  </div>
+
+</div></section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 2: GETTING STARTED                      -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="sec" style="background:var(--off);border-top:1px solid var(--off2);border-bottom:1px solid var(--off2)"><div class="con" style="max-width:860px;text-align:center">
+  <div class="res-section-hd" style="margin-bottom:32px">
+    <div class="res-cat-label">Getting Started</div>
+    <h3>New partner? Start here.</h3>
+    <p>From application to first commission check — here's your roadmap.</p>
+  </div>
+  <div class="g4" style="margin-bottom:32px">
+    <div style="padding:24px 16px;background:var(--white);border:1px solid var(--off2);border-radius:10px;text-align:center">
+      <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--blue);margin-bottom:8px">1</div>
+      <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Apply</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.5">5-minute application form</div>
+    </div>
+    <div style="padding:24px 16px;background:var(--white);border:1px solid var(--off2);border-radius:10px;text-align:center">
+      <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--blue);margin-bottom:8px">2</div>
+      <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Intro Call</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.5">15 min with your partner manager</div>
+    </div>
+    <div style="padding:24px 16px;background:var(--white);border:1px solid var(--off2);border-radius:10px;text-align:center">
+      <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--blue);margin-bottom:8px">3</div>
+      <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Get Access</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.5">Portal, training, and tools</div>
+    </div>
+    <div style="padding:24px 16px;background:var(--white);border:1px solid var(--off2);border-radius:10px;text-align:center">
+      <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--blue);margin-bottom:8px">4</div>
+      <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Refer &amp; Earn</div>
+      <div style="font-size:13px;color:var(--body);line-height:1.5">Submit referrals, track revenue</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <button class="btn btn-p" onclick="showPage('apply')">Apply Now</button>
+    <button class="btn btn-g" onclick="showPage('onboarding')">Full Onboarding Checklist</button>
+  </div>
+</div></section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 3: DOWNLOADS & TEMPLATES                -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="sec bg-w"><div class="con">
+
+  <!-- Featured Download -->
+  <div class="res-featured">
+    <div>
+      <span class="badge badge-dk" style="margin-bottom:14px">New Partner Kit</span>
+      <h3>Complete Partner Onboarding Kit</h3>
+      <p>Everything in one place — program overview, client identification guide, referral scripts, objection handling, and revenue estimator spreadsheet. The full toolkit for getting your first referrals out the door fast.</p>
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:6px;font-size:15px;color:rgba(255,255,255,0.72)"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PDF + XLSX</span>
+        <span style="display:flex;align-items:center;gap:6px;font-size:15px;color:rgba(255,255,255,0.72)">· 12-page guide</span>
+        <span style="display:flex;align-items:center;gap:6px;font-size:15px;color:rgba(255,255,255,0.72)">· Updated quarterly</span>
+      </div>
+    </div>
+    <div class="res-featured-acts">
+      <button class="res-dl-btn" onclick="handleResourceDownload(this,'Partner Onboarding Kit')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download Kit</button>
+      <span style="font-size:15px;color:rgba(255,255,255,0.65);text-align:right">Requires partner account.<br>Contact Norm to access.</span>
+    </div>
+  </div>
+
+  <!-- Referral Templates -->
+  <div class="res-section-hd">
+    <div class="res-cat-label">Referral Scripts &amp; Templates</div>
+    <h3>Introduce Community Tax to your clients.</h3>
+    <p>Word-for-word scripts, email templates, and conversation guides — tested across thousands of successful referrals.</p>
+  </div>
+  <div class="res-grid">
+    <div class="res-card">
+      <div class="res-card-top">
+        <div class="res-icon-wrap res-icon-blue"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+        <div class="res-card-title">Client Introduction Script</div>
+        <p class="res-card-desc">The exact language to introduce Community Tax in a face-to-face or phone setting. Covers the warm handoff, how to frame the investigation fee, and how to handle initial hesitation.</p>
+        <div class="res-card-meta"><span class="res-tag">Script</span><span class="res-tag">Word-for-word</span><span class="res-tag">All segments</span></div>
+      </div>
+      <div class="res-card-ft">
+        <span class="res-type">PDF · 2 pages</span>
+        <button class="res-dl-btn" onclick="handleResourceDownload(this,'Client Introduction Script')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-top">
+        <div class="res-icon-wrap res-icon-blue"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div class="res-card-title">Email Referral Template Pack</div>
+        <p class="res-card-desc">Three email templates for different client situations: proactive outreach to existing clients, response to a client who mentioned IRS problems, and a warm introduction email to send alongside the referral.</p>
+        <div class="res-card-meta"><span class="res-tag">Email templates</span><span class="res-tag">3 variations</span></div>
+      </div>
+      <div class="res-card-ft">
+        <span class="res-type">DOCX · 3 templates</span>
+        <button class="res-dl-btn" onclick="handleResourceDownload(this,'Email Referral Template Pack')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-top">
+        <div class="res-icon-wrap res-icon-blue"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div class="res-card-title">Objection Handling Guide</div>
+        <p class="res-card-desc">Responses to the 12 most common client objections — "I can't afford it," "I've heard these companies are scams," "I'm handling it myself" — with language that builds trust instead of pressure.</p>
+        <div class="res-card-meta"><span class="res-tag">Sales enablement</span><span class="res-tag">12 objections</span></div>
+      </div>
+      <div class="res-card-ft">
+        <span class="res-type">PDF · 4 pages</span>
+        <button class="res-dl-btn" onclick="handleResourceDownload(this,'Objection Handling Guide')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client Identification -->
+  <div class="res-section-hd" style="margin-top:64px">
+    <div class="res-cat-label">Client Identification</div>
+    <h3>Find the clients already in your book.</h3>
+    <p>Tools and checklists to surface tax debt situations you may already have — without awkward conversations.</p>
+  </div>
+  <div class="res-grid">
+    <div class="res-card">
+      <div class="res-card-top">
+        <div class="res-icon-wrap res-icon-teal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div class="res-card-title">Tax Debt Indicator Checklist</div>
+        <p class="res-card-desc">A quick-reference checklist of behavioral and financial signals that indicate a client likely has unresolved tax debt — without requiring you to ask directly. Designed for CPAs, EROs, and financial advisors.</p>
+        <div class="res-card-meta"><span class="res-tag">Checklist</span><span class="res-tag">CPAs &amp; EROs</span><span class="res-tag">Advisors</span></div>
+      </div>
+      <div class="res-card-ft">
+        <span class="res-type">PDF · 1 page</span>
+        <button class="res-dl-btn" onclick="handleResourceDownload(this,'Tax Debt Indicator Checklist')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-top">
+        <div class="res-icon-wrap res-icon-teal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v7l3.5 7.5a1 1 0 0 1-.9 1.5H6.4a1 1 0 0 1-.9-1.5L9 10V3z"/><line x1="9" y1="3" x2="15" y2="3"/><line x1="6" y1="16" x2="18" y2="16"/></svg></div>
+        <div class="res-card-title">Revenue Opportunity Calculator</div>
+        <p class="res-card-desc">A spreadsheet model that lets you estimate referral revenue based on your client volume, estimated debt prevalence, and conversion assumptions. The same logic behind the calculator on our home page — in a shareable Excel format.</p>
+        <div class="res-card-meta"><span class="res-tag">Spreadsheet</span><span class="res-tag">Revenue model</span></div>
+      </div>
+      <div class="res-card-ft">
+        <span class="res-type">XLSX · Editable</span>
+        <button class="res-dl-btn" onclick="handleResourceDownload(this,'Revenue Opportunity Calculator')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-top">
+        <div class="res-icon-wrap res-icon-teal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div class="res-card-title">Discovery Question Bank</div>
+        <p class="res-card-desc">Twenty natural-language questions you can weave into client conversations to surface tax debt situations organically. Organized by segment — tax prep, lending, financial advisory, and law.</p>
+        <div class="res-card-meta"><span class="res-tag">Sales tool</span><span class="res-tag">All segments</span><span class="res-tag">20 questions</span></div>
+      </div>
+      <div class="res-card-ft">
+        <span class="res-type">PDF · 3 pages</span>
+        <button class="res-dl-btn" onclick="handleResourceDownload(this,'Discovery Question Bank')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Program Education -->
+  <div class="res-section-hd">
+    <div class="res-cat-label">Program Education</div>
+    <h3>Understand the product you're referring.</h3>
+    <p>Background materials so you can confidently explain what Community Tax does — without becoming a tax expert.</p>
+  </div>
+  <div class="res-grid">
+    <div class="res-card">
+      <div class="res-card-top">
+        <div class="res-icon-wrap res-icon-navy"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+        <div class="res-card-title">IRS Resolution Programs Overview</div>
+        <p class="res-card-desc">Plain-language explanations of Installment Agreements, Offer in Compromise, Currently Not Collectible status, Penalty Abatement, and more — so you can answer basic client questions before the handoff.</p>
+        <div class="res-card-meta"><span class="res-tag">Education</span><span class="res-tag">IRS programs</span><span class="res-tag">Plain language</span></div>
+      </div>
+      <div class="res-card-ft">
+        <span class="res-type">PDF · 5 pages</span>
+        <button class="res-dl-btn" onclick="handleResourceDownload(this,'IRS Resolution Programs Overview')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-top">
+        <div class="res-icon-wrap res-icon-navy"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+        <div class="res-card-title">Two-Phase Process Explainer</div>
+        <p class="res-card-desc">A visual walkthrough of the Investigation → Resolution process — timeline, what happens at each stage, what's expected of the client, and when you earn your revenue share. Great for team training.</p>
+        <div class="res-card-meta"><span class="res-tag">Visual guide</span><span class="res-tag">Team training</span></div>
+      </div>
+      <div class="res-card-ft">
+        <span class="res-type">PDF · 3 pages</span>
+        <button class="res-dl-btn" onclick="handleResourceDownload(this,'Two-Phase Process Explainer')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-top">
+        <div class="res-icon-wrap res-icon-navy"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+        <div class="res-card-title">Spanish-Language Client Explainer</div>
+        <p class="res-card-desc">A bilingual one-pager explaining the Community Tax investigation process and IRS resolution options — designed to share directly with Spanish-speaking clients. Professionally translated and culturally reviewed.</p>
+        <div class="res-card-meta"><span class="res-tag">Bilingual</span><span class="res-tag">Client-facing</span><span class="res-tag">Print-ready</span></div>
+      </div>
+      <div class="res-card-ft">
+        <span class="res-type">PDF · 1 page</span>
+        <button class="res-dl-btn" onclick="handleResourceDownload(this,'Spanish-Language Client Explainer')"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
+      </div>
+    </div>
+  </div>
+
+</div></section>

@@ -1,0 +1,141 @@
+
+<!-- Hero -->
+<div style="background:linear-gradient(155deg,var(--navy) 0%,var(--navy2) 60%,var(--navy3) 100%);padding:72px 0 56px;text-align:center;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 70% at 50% 100%,rgba(0,229,204,0.07) 0%,transparent 60%);pointer-events:none"></div>
+  <div class="con" style="position:relative;z-index:1">
+    <span class="eyebrow eyebrow-ph">AI-Powered Tool</span>
+    <h1 class="disp disp-lt mt8">Co-Brand Ad Maker.</h1>
+    <p class="lead lead-lt lead-c mt16" style="max-width:520px">Generate ready-to-post social ads co-branded with Community Tax. Two variants per platform, instantly personalized to your practice.</p>
+  </div>
+</div>
+
+<!-- Tool -->
+<section class="sec bg-off">
+<div class="con" style="max-width:960px">
+
+  <!-- Error -->
+  <div id="am-error" style="display:none;background:#fff0f0;border:1px solid #ffcccc;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:14px;color:#c0392b;font-weight:500"></div>
+
+  <!-- Step 1: Inputs -->
+  <div id="am-form-wrap">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-bottom:32px" class="sb-grid">
+
+      <!-- Left col -->
+      <div>
+        <div class="f-sec-lbl" style="margin-bottom:20px">YOUR PRACTICE</div>
+
+        <div class="ff">
+          <label class="fl">Firm / Practice name</label>
+          <input type="text" id="am-firm" placeholder="e.g. Agave Financial" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:#fff;color:var(--navy);outline:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--mist)'">
+        </div>
+
+        <div class="ff">
+          <label class="fl">Target platform</label>
+          <select id="am-platform" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:#fff;color:var(--navy);outline:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--mist)'">
+            <option value="Facebook">Facebook</option>
+            <option value="Instagram">Instagram</option>
+            <option value="LinkedIn">LinkedIn</option>
+          </select>
+        </div>
+
+        <div class="ff">
+          <label class="fl">Ad template</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:4px" id="am-template-picker">
+            <div class="am-tpl-opt am-tpl-selected" data-tpl="1" onclick="selectTemplate(1)">
+              <div style="height:52px;background:linear-gradient(135deg,#0A1628,#1a3160);border-radius:6px;margin-bottom:6px;display:flex;align-items:center;justify-content:center">
+                <div style="width:60%;height:4px;background:linear-gradient(90deg,#0B5FD8,#00C8E0);border-radius:2px"></div>
+              </div>
+              <div style="font-size:11px;font-weight:600;color:var(--navy)">Dark Navy</div>
+            </div>
+            <div class="am-tpl-opt" data-tpl="2" onclick="selectTemplate(2)">
+              <div style="height:52px;background:linear-gradient(135deg,#0B5FD8,#0099CC);border-radius:6px;margin-bottom:6px;display:flex;align-items:center;justify-content:center">
+                <div style="width:60%;height:4px;background:#fff;border-radius:2px;opacity:0.6"></div>
+              </div>
+              <div style="font-size:11px;font-weight:600;color:var(--navy)">Ocean Blue</div>
+            </div>
+            <div class="am-tpl-opt" data-tpl="3" onclick="selectTemplate(3)">
+              <div style="height:52px;background:#fff;border:1px solid rgba(10,22,40,0.1);border-radius:6px;margin-bottom:6px;display:flex;align-items:center;justify-content:center">
+                <div style="width:60%;height:4px;background:linear-gradient(90deg,#0B5FD8,#00C8E0);border-radius:2px"></div>
+              </div>
+              <div style="font-size:11px;font-weight:600;color:var(--navy)">Clean White</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right col -->
+      <div>
+        <div class="f-sec-lbl" style="margin-bottom:20px">CARD BRANDING</div>
+
+        <div class="ff">
+          <label class="fl">Your brand color</label>
+          <div style="display:flex;align-items:center;gap:12px">
+            <input type="color" id="am-color" value="#0B5FD8" style="width:48px;height:42px;border:1.5px solid var(--mist);border-radius:7px;cursor:pointer;padding:3px;background:#fff" oninput="document.getElementById('am-color-hex').value=this.value">
+            <input type="text" id="am-color-hex" value="#0B5FD8" placeholder="#0B5FD8" style="flex:1;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:#fff;color:var(--navy);outline:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--mist)'" oninput="document.getElementById('am-color').value=this.value">
+          </div>
+        </div>
+
+        <div class="ff">
+          <label class="fl">Upload your logo <span style="color:rgba(10,22,40,0.45);font-weight:400">(optional)</span></label>
+          <label for="am-logo-input" id="am-logo-drop" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--mist);border-radius:8px;padding:24px 16px;cursor:pointer;transition:border-color 0.15s;background:#fff" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--mist)'">
+            <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(10,22,40,0.3)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span id="am-logo-label" style="font-size:15px;color:rgba(10,22,40,0.45)">Click to upload PNG or SVG</span>
+          </label>
+          <input type="file" id="am-logo-input" accept="image/*" style="display:none">
+        </div>
+
+        <div class="ff">
+          <label class="fl">Tagline <span style="color:rgba(10,22,40,0.45);font-weight:400">(optional)</span></label>
+          <input type="text" id="am-tagline" placeholder="e.g. Your financial future, protected." style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:15px;background:#fff;color:var(--navy);outline:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--mist)'">
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center">
+      <button class="btn btn-p btn-lg" onclick="generateStaticAd()">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Build My Ad
+      </button>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div id="am-results" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <div style="font-family:DM Serif Display,serif;font-size:22px;color:var(--navy)">Your Co-Branded Ad</div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-s" onclick="resetAdMaker()">
+          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.33"/></svg>
+          Start Over
+        </button>
+        <button class="btn btn-p" onclick="downloadStaticAd()">
+          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PNG
+        </button>
+      </div>
+    </div>
+
+    <!-- Size picker -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:24px;flex-wrap:wrap">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-right:4px">Size:</span>
+      <button class="am-size-btn am-size-active" onclick="resizeAd('16:9',1200,628)" data-size="16:9">16:9 <span style="opacity:0.55;font-weight:400">Facebook/LinkedIn</span></button>
+      <button class="am-size-btn" onclick="resizeAd('1:1',1080,1080)" data-size="1:1">1:1 <span style="opacity:0.55;font-weight:400">Instagram Feed</span></button>
+      <button class="am-size-btn" onclick="resizeAd('4:5',1080,1350)" data-size="4:5">4:5 <span style="opacity:0.55;font-weight:400">Instagram Portrait</span></button>
+      <button class="am-size-btn" onclick="resizeAd('9:16',1080,1920)" data-size="9:16">9:16 <span style="opacity:0.55;font-weight:400">Story/Reel</span></button>
+      <button class="am-size-btn" onclick="resizeAd('5:4',1350,1080)" data-size="5:4">5:4 <span style="opacity:0.55;font-weight:400">Landscape</span></button>
+    </div>
+
+    <!-- Canvas wrapper — constrains display size, real dimensions tracked separately -->
+    <div style="display:flex;justify-content:center;margin-bottom:16px">
+      <div id="am-ad-outer" style="max-width:100%;overflow:hidden;border-radius:14px;box-shadow:0 16px 64px rgba(10,22,40,0.18)">
+        <div id="am-ad-canvas" style="position:relative;width:600px;height:314px;border-radius:14px;overflow:hidden;flex-shrink:0"></div>
+      </div>
+    </div>
+
+    <p id="am-size-label" style="text-align:center;font-size:13px;color:var(--slate);margin-bottom:8px">1200 × 628px · 16:9</p>
+    <p style="text-align:center;font-size:13px;color:var(--slate)"><a onclick="resetAdMaker()" style="color:var(--blue);cursor:pointer;text-decoration:none">← Make another</a></p>
+  </div>
+
+</div>
+</section>
+<!-- END AD MAKER PAGE -->

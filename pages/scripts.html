@@ -1,0 +1,169 @@
+
+<!-- Hero -->
+<div style="background:linear-gradient(155deg,var(--navy) 0%,var(--navy2) 60%,var(--navy3) 100%);padding:72px 0 56px;text-align:center;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 70% at 50% 100%,rgba(0,200,224,0.07) 0%,transparent 60%);pointer-events:none"></div>
+  <div class="con" style="position:relative;z-index:1">
+    <span class="eyebrow eyebrow-ph">AI-Powered Tool</span>
+    <h1 class="disp disp-lt mt8">Referral Script Builder.</h1>
+    <p class="lead lead-lt lead-c mt16" style="max-width:520px">Tell us about your practice and your client. We'll write a custom referral script, email template, and objection responses — ready to use in under 60 seconds.</p>
+  </div>
+</div>
+
+<!-- Tool -->
+<section class="sec bg-off">
+<div class="con" style="max-width:960px">
+
+  <!-- Step 1: Inputs -->
+  <div id="sb-form-wrap">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:32px" class="sb-grid">
+
+      <!-- Left col -->
+      <div>
+        <div class="f-sec-lbl" style="margin-bottom:20px">About Your Practice</div>
+
+        <div class="ff">
+          <label class="fl">What type of professional are you?</label>
+          <select id="sb-type">
+            <option value="">Select your role...</option>
+            <option value="CPA / Tax Preparer">CPA / Tax Preparer</option>
+            <option value="Mortgage Broker / Loan Officer">Mortgage Broker / Loan Officer</option>
+            <option value="Financial Advisor / Wealth Manager">Financial Advisor / Wealth Manager</option>
+            <option value="Insurance Agent / Broker">Insurance Agent / Broker</option>
+            <option value="Bookkeeper / Accountant">Bookkeeper / Accountant</option>
+            <option value="Debt Settlement / Credit Counselor">Debt Settlement / Credit Counselor</option>
+            <option value="Real Estate Agent / Broker">Real Estate Agent / Broker</option>
+            <option value="Attorney / Law Firm">Attorney / Law Firm</option>
+            <option value="Fintech / Lending Platform">Fintech / Lending Platform</option>
+            <option value="Other Financial Professional">Other Financial Professional</option>
+          </select>
+        </div>
+
+        <div class="ff">
+          <label class="fl">How do you typically communicate with clients?</label>
+          <select id="sb-style">
+            <option value="">Select style...</option>
+            <option value="formal and professional">Formal &amp; professional</option>
+            <option value="warm and conversational">Warm &amp; conversational</option>
+            <option value="direct and concise">Direct &amp; concise</option>
+            <option value="educational and detailed">Educational &amp; detailed</option>
+          </select>
+        </div>
+
+        <div class="ff">
+          <label class="fl">What channel do you use most with this client?</label>
+          <select id="sb-channel">
+            <option value="">Select channel...</option>
+            <option value="in-person conversation">In-person conversation</option>
+            <option value="phone call">Phone call</option>
+            <option value="email">Email</option>
+            <option value="text message">Text message</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Right col -->
+      <div>
+        <div class="f-sec-lbl" style="margin-bottom:20px">About This Client</div>
+
+        <div class="ff">
+          <label class="fl">What's their tax situation? (brief description)</label>
+          <textarea id="sb-situation" placeholder="e.g. Owes $35k to IRS from 2020-2022, self-employed contractor, hasn't filed in 2 years, getting wage garnishment notices..." style="min-height:100px"></textarea>
+        </div>
+
+        <div class="ff">
+          <label class="fl">What's your relationship with this client?</label>
+          <select id="sb-relationship">
+            <option value="">Select relationship...</option>
+            <option value="long-term client I know well">Long-term client I know well</option>
+            <option value="newer client, still building trust">Newer client, still building trust</option>
+            <option value="referred client I haven't met yet">Referred client I haven't met yet</option>
+            <option value="past client reconnecting">Past client reconnecting</option>
+          </select>
+        </div>
+
+        <div class="ff">
+          <label class="fl">Biggest concern or objection you expect?</label>
+          <select id="sb-objection">
+            <option value="">Select likely objection...</option>
+            <option value="cost — they think they can't afford it">Cost — can't afford it</option>
+            <option value="trust — skeptical about tax resolution firms">Trust — skeptical of resolution firms</option>
+            <option value="avoidance — not ready to face the problem">Avoidance — not ready to face it</option>
+            <option value="already tried — had a bad experience before">Already tried, had a bad experience</option>
+            <option value="minimizing — doesn't think it's that serious">Minimizing — doesn't think it's serious</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center">
+      <div id="sb-error" style="display:none;background:#fff0f0;border:1px solid #ffcccc;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:14px;color:#c0392b;font-weight:500"></div>
+    <button class="btn btn-p btn-lg" id="sb-generate-btn" onclick="generateScript()">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Generate My Script
+      </button>
+      <p style="font-size:15px;color:var(--slate);margin-top:12px">Takes about 15 seconds. Fully customized to your inputs.</p>
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  <div id="sb-loading" style="display:none;text-align:center;padding:80px 0">
+    <div class="sb-loader"></div>
+    <p id="sb-loading-msg" style="font-size:15px;color:var(--slate);margin-top:24px">Analyzing your client situation...</p>
+  </div>
+
+  <!-- Output -->
+  <div id="sb-output" style="display:none">
+
+    <!-- Regenerate bar -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--off2)">
+      <div>
+        <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy)">Your Custom Script Package</div>
+        <div style="font-size:15px;color:var(--slate);margin-top:3px" id="sb-output-meta"></div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-s" onclick="resetScriptBuilder()">
+          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.33"/></svg>
+          Start Over
+        </button>
+        <button class="btn btn-p" onclick="copyAllScripts()">
+          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy All
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div style="display:flex;gap:4px;border-bottom:1px solid var(--off2);margin-bottom:28px;overflow-x:auto" id="sb-tabs">
+      <button class="sb-tab active" onclick="switchSbTab('conversation')">Conversation Script</button>
+      <button class="sb-tab" onclick="switchSbTab('email')">Email Template</button>
+      <button class="sb-tab" onclick="switchSbTab('objections')">Objection Responses</button>
+      <button class="sb-tab" onclick="switchSbTab('followup')">Follow-Up Message</button>
+    </div>
+
+    <!-- Tab content -->
+    <div id="sbt-conversation" class="sb-tab-panel active">
+      <div class="sb-script-card" id="out-conversation"></div>
+      <div id="sb-tips-inner" style="margin-top:24px;background:rgba(11,95,216,0.04);border:1px solid rgba(11,95,216,0.12);border-radius:11px;padding:20px 24px"></div>
+    </div>
+    <div id="sbt-email" class="sb-tab-panel" style="display:none">
+      <div class="sb-script-card" id="out-email"></div>
+    </div>
+    <div id="sbt-objections" class="sb-tab-panel" style="display:none">
+      <div class="sb-script-card" id="out-objections"></div>
+    </div>
+    <div id="sbt-followup" class="sb-tab-panel" style="display:none">
+      <div class="sb-script-card" id="out-followup"></div>
+    </div>
+
+    <!-- Tips -->
+    <div id="sb-tips" style="margin-top:32px;background:rgba(11,95,216,0.04);border:1px solid rgba(11,95,216,0.12);border-radius:11px;padding:24px 28px"></div>
+
+    <!-- CTA -->
+    <div style="text-align:center;margin-top:40px;padding-top:32px;border-top:1px solid var(--off2)">
+      <p style="font-size:15px;color:var(--body);margin-bottom:16px">Ready to make this referral official?</p>
+      <button class="btn btn-p btn-lg" onclick="showPage('apply')">Apply to Become a Partner →</button>
+    </div>
+  </div>
+
+</div>
+</section>
