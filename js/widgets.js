@@ -221,3 +221,49 @@ function updateOnboardProgress() {
   }, {threshold:0.3});
   document.querySelectorAll('[data-count-to]').forEach(function(el){ obs.observe(el); });
 })();
+
+// ── NAV DROPDOWN HOVER WITH DELAY ──────────────────────────────────────
+(function(){
+  var closeTimer = null;
+  var openDrop = null;
+
+  function openDropdown(drop){
+    if(closeTimer){ clearTimeout(closeTimer); closeTimer = null; }
+    if(openDrop && openDrop !== drop){ openDrop.classList.remove('dd-open'); }
+    drop.classList.add('dd-open');
+    openDrop = drop;
+  }
+
+  function closeNow(){
+    if(closeTimer){ clearTimeout(closeTimer); closeTimer = null; }
+    if(openDrop){ openDrop.classList.remove('dd-open'); openDrop = null; }
+  }
+
+  function scheduleClose(){
+    if(closeTimer) clearTimeout(closeTimer);
+    closeTimer = setTimeout(closeNow, 500);
+  }
+
+  document.querySelectorAll('.nav-drop').forEach(function(drop){
+    var trigger = drop.querySelector('.nav-drop-trigger');
+    var dd = drop.querySelector('.dd');
+
+    // Trigger: open on enter, schedule close on leave
+    if(trigger){
+      trigger.addEventListener('mouseenter', function(){ openDropdown(drop); });
+      trigger.addEventListener('mouseleave', function(){ scheduleClose(); });
+    }
+
+    // Dropdown panel: cancel close on enter, schedule close on leave
+    if(dd){
+      dd.addEventListener('mouseenter', function(){
+        if(closeTimer){ clearTimeout(closeTimer); closeTimer = null; }
+      });
+      dd.addEventListener('mouseleave', function(e){
+        // If moving back to the trigger, don't close
+        if(trigger && trigger.contains(e.relatedTarget)) return;
+        scheduleClose();
+      });
+    }
+  });
+})();

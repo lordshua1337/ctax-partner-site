@@ -22,10 +22,12 @@
 .nav-links > li > a:hover{color:var(--navy);background:rgba(10,22,40,0.04)}
 .nav-links > li > a.active{color:var(--navy);background:rgba(10,22,40,0.04)}
 .nav-drop{position:relative}
+/* Invisible bridge fills the gap between trigger and full-width dropdown panel */
+.nav-drop.dd-open::after{content:'';position:fixed;top:55px;left:0;right:0;height:24px;z-index:9099}
 .nav-drop-trigger{display:flex!important;align-items:center;gap:6px;cursor:pointer}
 .nav-drop-label{cursor:default!important}
 .nav-caret{font-size:14px;opacity:0.35;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1),opacity 0.2s;margin-top:1px;display:inline-block}
-.nav-drop:hover .nav-caret{opacity:0.8;transform:rotate(180deg)}
+.nav-drop.dd-open .nav-caret{opacity:0.8;transform:rotate(180deg)}
 
 
 
@@ -39,21 +41,18 @@
   padding:0;
   display:flex;flex-direction:column;
   opacity:0;visibility:hidden;
-  transition:opacity 0.25s ease,visibility 0.25s,transform 0.25s cubic-bezier(0.16,1,0.3,1);
+  transition:opacity 0.2s ease,visibility 0.2s,transform 0.25s cubic-bezier(0.16,1,0.3,1);
   transform:translateY(-8px);
   pointer-events:none;z-index:9100
 }
-/* Gradient accent bar at top */
-.dd::before{
+/* Gradient accent bar at bottom */
+.dd::after{
   content:'';display:block;height:3px;
   background:linear-gradient(90deg,var(--teal),var(--cyan),var(--blue),var(--sky));
   flex-shrink:0
 }
 .dd-compact .dd-section{max-width:320px}
-.nav-drop:hover .dd{opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto}
-
-/* Bridge element to prevent hover gap */
-.nav-drop::after{content:'';position:absolute;bottom:-12px;left:0;right:0;height:16px}
+.nav-drop.dd-open .dd{opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto}
 
 /* ---- Inner grid ---- */
 .dd-inner{
@@ -102,8 +101,8 @@
 /* Icon color variants — brand only */
 .dd-ic-navy{background:rgba(10,22,40,0.06);color:var(--navy)}
 .dd-ic-blue{background:rgba(11,95,216,0.07);color:var(--blue)}
-.dd-ic-cyan{background:rgba(0,200,224,0.07);color:#0098ae}
-.dd-ic-teal{background:rgba(0,229,204,0.07);color:#009e8c}
+.dd-ic-cyan{background:rgba(61,138,154,0.07);color:#0098ae}
+.dd-ic-teal{background:rgba(61,145,127,0.07);color:#009e8c}
 
 .dd-icon{
   width:20px;height:20px;flex-shrink:0;
@@ -127,19 +126,19 @@
 
 /* ---- Staggered entrance ---- */
 .nav-drop .dd-section .dd-item{opacity:0;transform:translateY(8px)}
-.nav-drop:hover .dd-section .dd-item{animation:ddFadeIn 0.35s cubic-bezier(0.16,1,0.3,1) forwards}
-.nav-drop:hover .dd-section .dd-item:nth-child(2){animation-delay:0.04s}
-.nav-drop:hover .dd-section .dd-item:nth-child(3){animation-delay:0.08s}
-.nav-drop:hover .dd-section .dd-item:nth-child(4){animation-delay:0.12s}
-.nav-drop:hover .dd-section .dd-item:nth-child(5){animation-delay:0.16s}
+.nav-drop.dd-open .dd-section .dd-item{animation:ddFadeIn 0.35s cubic-bezier(0.16,1,0.3,1) forwards}
+.nav-drop.dd-open .dd-section .dd-item:nth-child(2){animation-delay:0.04s}
+.nav-drop.dd-open .dd-section .dd-item:nth-child(3){animation-delay:0.08s}
+.nav-drop.dd-open .dd-section .dd-item:nth-child(4){animation-delay:0.12s}
+.nav-drop.dd-open .dd-section .dd-item:nth-child(5){animation-delay:0.16s}
 .nav-drop .dd-label{opacity:0;transform:translateY(6px)}
-.nav-drop:hover .dd-label{animation:ddFadeIn 0.3s cubic-bezier(0.16,1,0.3,1) forwards}
+.nav-drop.dd-open .dd-label{animation:ddFadeIn 0.3s cubic-bezier(0.16,1,0.3,1) forwards}
 @keyframes ddFadeIn{to{opacity:1;transform:translateY(0)}}
 
 /* ---- Promo banner ---- */
 .dd-promo{
   border-top:1px solid rgba(10,22,40,0.06);
-  background:linear-gradient(90deg,rgba(0,200,224,0.04),rgba(11,95,216,0.04));
+  background:linear-gradient(90deg,rgba(61,138,154,0.04),rgba(11,95,216,0.04));
   padding:0
 }
 .dd-promo-inner{
@@ -196,7 +195,7 @@
 .notif-item:hover{background:rgba(11,95,216,0.03)}
 .notif-icon-wrap{flex-shrink:0;width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center}
 .notif-ic-warn{background:rgba(245,158,11,0.1);color:#d97706}
-.notif-ic-success{background:rgba(0,229,204,0.1);color:var(--teal)}
+.notif-ic-success{background:rgba(61,145,127,0.1);color:var(--teal)}
 .notif-msg{font-size:13px;color:var(--ink);line-height:1.5}
 .notif-msg strong{color:var(--navy);font-weight:600}
 .notif-time{font-size:11px;color:var(--slate);margin-top:3px}

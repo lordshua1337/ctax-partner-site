@@ -168,7 +168,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
         +'<div style="flex-shrink:0;display:flex;align-items:center;gap:8px">'+divider('20px')+ctaxLogo('22px')+'</div>'
       +'</div>'
       +'<div>'+eyebrow('9px')
-        +'<div style="font-family:DM Serif Display,serif;font-size:38px;line-height:1.08;color:'+t.text+';letter-spacing:-0.02em">Owe the IRS? <span style=\"background:linear-gradient(90deg,#0B5FD8,#00C8E0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">There’s a Way Out.</span></div>'
+        +'<div style="font-family:DM Serif Display,serif;font-size:38px;line-height:1.08;color:'+t.text+';letter-spacing:-0.02em">Owe the IRS? <span style=\"background:linear-gradient(90deg,#0B5FD8,#3D8A9A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">There’s a Way Out.</span></div>'
       +'</div>'
       +'<div>'
         +'<div style="font-size:13px;color:'+t.sub+';line-height:1.5;margin-bottom:10px">$2.3B resolved. Confidential consultations. Real relief for real people.</div>'
@@ -184,7 +184,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
         +'<div style="flex-shrink:0;display:flex;align-items:center;gap:10px">'+divider('24px')+ctaxLogo('26px')+'</div>'
       +'</div>'
       +'<div>'+eyebrow('11px')
-        +'<div style="font-family:DM Serif Display,serif;font-size:52px;line-height:1.06;color:'+t.text+';letter-spacing:-0.02em">You Don’t Have to<br>Face the <span style=\"background:linear-gradient(90deg,#0B5FD8,#00C8E0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">IRS Alone.</span></div>'
+        +'<div style="font-family:DM Serif Display,serif;font-size:52px;line-height:1.06;color:'+t.text+';letter-spacing:-0.02em">You Don’t Have to<br>Face the <span style=\"background:linear-gradient(90deg,#0B5FD8,#3D8A9A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">IRS Alone.</span></div>'
         +'<div style="font-size:16px;color:'+t.sub+';line-height:1.55;margin-top:20px;max-width:80%">120,000+ clients helped. No judgment. Real results.</div>'
       +'</div>'
       +ctaBlock('15px','13px')
@@ -198,7 +198,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
         +'<div style="flex-shrink:0">'+ctaxLogo('26px')+'</div>'
       +'</div>'
       +'<div>'+eyebrow('11px')
-        +'<div style="font-family:DM Serif Display,serif;font-size:58px;line-height:1.06;color:'+t.text+';letter-spacing:-0.025em">IRS Debt<br>Stealing Your<br><span style=\"background:linear-gradient(90deg,#0B5FD8,#00C8E0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">Peace of Mind?</span></div>'
+        +'<div style="font-family:DM Serif Display,serif;font-size:58px;line-height:1.06;color:'+t.text+';letter-spacing:-0.025em">IRS Debt<br>Stealing Your<br><span style=\"background:linear-gradient(90deg,#0B5FD8,#3D8A9A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">Peace of Mind?</span></div>'
         +'<div style="font-size:17px;color:'+t.sub+';line-height:1.6;margin-top:24px">We’ve helped 120,000+ clients resolve tax debt — quietly, legally, for less than you think.</div>'
       +'</div>'
       +ctaBlock('16px','14px')
@@ -212,7 +212,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
         +'<div style="flex-shrink:0">'+ctaxLogo('30px')+'</div>'
       +'</div>'
       +'<div>'+eyebrow('13px')
-        +'<div style="font-family:DM Serif Display,serif;font-size:80px;line-height:1.04;color:'+t.text+';letter-spacing:-0.025em">IRS Debt<br>Stealing<br>Your <span style=\"background:linear-gradient(90deg,#0B5FD8,#00C8E0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">Peace<br>of Mind?</span></div>'
+        +'<div style="font-family:DM Serif Display,serif;font-size:80px;line-height:1.04;color:'+t.text+';letter-spacing:-0.025em">IRS Debt<br>Stealing<br>Your <span style=\"background:linear-gradient(90deg,#0B5FD8,#3D8A9A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">Peace<br>of Mind?</span></div>'
         +'<div style="font-size:20px;color:'+t.sub+';line-height:1.65;margin-top:32px">We’ve helped 120,000+ clients resolve tax debt quietly and legally.</div>'
       +'</div>'
       +ctaBlock('20px','17px')
@@ -226,7 +226,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
       +'<div style="display:flex;align-items:center;gap:10px">'+divider('22px')+ctaxLogo('24px')+'</div>'
     +'</div>'
     +'<div>'+eyebrow('10px')
-      +'<div style="font-family:DM Serif Display,serif;font-size:52px;line-height:1.07;color:'+t.text+';letter-spacing:-0.02em">Owe the IRS?<br><span style=\"background:linear-gradient(90deg,#0B5FD8,#00C8E0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">There’s a Way Out.</span></div>'
+      +'<div style="font-family:DM Serif Display,serif;font-size:52px;line-height:1.07;color:'+t.text+';letter-spacing:-0.02em">Owe the IRS?<br><span style=\"background:linear-gradient(90deg,#0B5FD8,#3D8A9A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">There’s a Way Out.</span></div>'
     +'</div>'
     +'<div>'
       +'<div style="font-size:14px;color:'+t.sub+';line-height:1.5;margin-bottom:10px">$2.3B resolved. Confidential. Real relief for real people.</div>'
