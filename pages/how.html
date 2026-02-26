@@ -108,139 +108,118 @@
 <section class="sec bg-off"><div class="con">
   <div class="text-center mb48 reveal">
     <span class="eyebrow fade-up">Partner Selection Criteria</span>
-    <h2 class="disp mt8 fade-up" style="animation-delay:0.1s">How we evaluate<br>partnership fit.</h2>
-    <p class="lead lead-c mt16 fade-up" style="max-width:560px;animation-delay:0.2s">By selecting partners who deliver high value, pose minimal risk, are committed to collaboration, and can drive effective referral growth, CTAX optimizes for sustained success.</p>
+    <h2 class="disp mt8 fade-up" style="animation-delay:0.1s">Are we a fit?<br>Find out in 60 seconds.</h2>
+    <p class="lead lead-c mt16 fade-up" style="max-width:560px;animation-delay:0.2s">Four quick questions about your organization. No account needed, no email required -- just an honest self-assessment and a clear answer.</p>
   </div>
   <div class="crit-wrap">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
-      <div>
-        <h3 class="sh sh-lt">The Four Dimensions of Partner Fit</h3>
-        <p style="font-size:15px;color:rgba(255,255,255,0.72);margin-top:6px">How Community Tax assesses each potential partnership before moving forward.</p>
+    <div class="fq-header">
+      <h3 class="sh sh-lt">Partner Fit Assessment</h3>
+      <div class="fq-progress">
+        <div class="fq-progress-bar" id="fqProgressBar"></div>
       </div>
-      <div class="crit-mode-toggle">
-        <button class="crit-mode-btn active" id="modeExplore" onclick="setCritMode('explore')">Explore</button>
-        <button class="crit-mode-btn" id="modeAssess" onclick="setCritMode('assess')">Rate Yourself</button>
+      <div class="fq-step-row">
+        <div class="fq-step-dots" id="fqDots">
+          <div class="fq-dot fq-dot-active"></div>
+          <div class="fq-dot"></div>
+          <div class="fq-dot"></div>
+          <div class="fq-dot"></div>
+        </div>
+        <div class="fq-step-label" id="fqStepLabel">Question 1 of 4</div>
       </div>
     </div>
 
-    <div class="crit-radar-svg-wrap" style="margin-top:32px">
-      <svg aria-hidden="true" id="radarSvg" viewBox="-60 -20 540 480" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="glowBlue"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <filter id="glowRed"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <filter id="glowTeal"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <filter id="glowPurple"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <filter id="glowCenter"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-
-        <!-- Grid rings -->
-        <polygon points="210,130 290,210 210,290 130,210" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-        <polygon points="210,100 310,210 210,320 110,210" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-        <polygon points="210,70  330,210 210,350  90,210" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-
-        <!-- Axis spokes -->
-        <line id="spoke-v" x1="210" y1="210" x2="210" y2="50"  stroke="rgba(75,163,255,0.2)"  stroke-width="1" class="crit-spoke"/>
-        <line id="spoke-r" x1="210" y1="210" x2="370" y2="210" stroke="rgba(248,113,113,0.2)" stroke-width="1" class="crit-spoke"/>
-        <line id="spoke-c" x1="210" y1="210" x2="210" y2="370" stroke="rgba(0,229,204,0.2)"   stroke-width="1" class="crit-spoke"/>
-        <line id="spoke-e" x1="210" y1="210" x2="50"  y2="210" stroke="rgba(196,160,255,0.2)" stroke-width="1" class="crit-spoke"/>
-
-        <!-- User score polygon (assess mode) -->
-        <polygon id="radarScorePoly"
-          points="210,210 210,210 210,210 210,210"
-          fill="rgba(255,255,255,0.04)"
-          stroke="rgba(255,255,255,0.2)"
-          stroke-width="1"
-          stroke-dasharray="4 3"
-          style="display:none;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1)"/>
-
-        <!-- Main polygon -->
-        <polygon id="radarPoly"
-          points="210,100 310,210 210,320 110,210"
-          fill="rgba(11,95,216,0.12)"
-          stroke="rgba(75,163,255,0.4)"
-          stroke-width="1.5"
-          class="crit-polygon"/>
-
-        <!-- Sonar ping container -->
-        <g id="sonarGroup"></g>
-
-        <!-- Center pulse rings -->
-        <circle cx="210" cy="210" r="16" fill="rgba(11,95,216,0.08)" style="animation:radarPulse2 3s ease-in-out infinite"/>
-        <circle cx="210" cy="210" r="8"  fill="rgba(11,95,216,0.18)" style="animation:radarPulse 3s ease-in-out infinite"/>
-        <circle cx="210" cy="210" r="5" fill="#1470f0" filter="url(#glowCenter)"/>
-        <circle cx="210" cy="210" r="3" fill="#4BA3FF"/>
-
-        <!-- Axis endpoint dots -->
-        <circle id="dot-v" cx="210" cy="50"  r="5" fill="#4BA3FF" class="crit-axis-dot" style="filter:url(#glowBlue)"/>
-        <circle id="dot-r" cx="370" cy="210" r="5" fill="#f87171" class="crit-axis-dot" style="filter:url(#glowRed)"/>
-        <circle id="dot-c" cx="210" cy="370" r="5" fill="#00E5CC" class="crit-axis-dot" style="filter:url(#glowTeal)"/>
-        <circle id="dot-e" cx="50"  cy="210" r="5" fill="#c4a0ff" class="crit-axis-dot" style="filter:url(#glowPurple)"/>
-
-        <!-- Axis Labels -->
-        <text x="210" y="30"  text-anchor="middle" class="crit-axis-label" fill="#4BA3FF"  id="lbl-v">VALUE</text>
-        <text x="388" y="215" text-anchor="start"  class="crit-axis-label" fill="#f87171"  id="lbl-r">RISKS</text>
-        <text x="210" y="402" text-anchor="middle" class="crit-axis-label" fill="#00E5CC"  id="lbl-c">COMMITMENT</text>
-        <text x="32"  y="215" text-anchor="end"    class="crit-axis-label" fill="#c4a0ff"  id="lbl-e">EFFECTIVENESS</text>
-      </svg>
-
-      <!-- Floating tooltip (explore mode) -->
-      <div class="crit-tooltip-float" id="critTooltip">
-        <div class="crit-tooltip-float-label" id="ctLabel"></div>
-        <div class="crit-tooltip-float-quote" id="ctQuote"></div>
-        <div class="crit-tooltip-float-body" id="ctBody"></div>
-        <ul class="crit-tooltip-float-list" id="ctList"></ul>
+    <div class="fq-cards" id="fqCards">
+      <!-- Card 1: Shared Opportunity -->
+      <div class="fq-card fq-card-active" data-step="0">
+        <div class="fq-card-dim" style="color:#4BA3FF">Shared Opportunity</div>
+        <div class="fq-card-q">How often do your clients face unresolved tax debt?</div>
+        <div class="fq-options">
+          <button class="fq-opt" data-score="1.5" onclick="fqPick(this)">
+            <span class="fq-opt-content"><span class="fq-opt-label">Rarely</span>
+            </span><span class="fq-opt-desc">Tax debt doesn't come up much. We'd be starting from scratch together.</span></span>
+          </button>
+          <button class="fq-opt" data-score="3" onclick="fqPick(this)">
+            <span class="fq-opt-content"><span class="fq-opt-label">Sometimes</span>
+            </span><span class="fq-opt-desc">We see it regularly but don't have a formal process for addressing it yet.</span></span>
+          </button>
+          <button class="fq-opt" data-score="4.5" onclick="fqPick(this)">
+            <span class="fq-opt-content"><span class="fq-opt-label">Frequently</span>
+            </span><span class="fq-opt-desc">Tax debt is a consistent issue across our client base. We already have workflows for it.</span></span>
+          </button>
+        </div>
       </div>
 
-      <p class="crit-radar-hint" id="critHint">Hover an axis to explore each dimension</p>
-    </div>
-
-    <!-- Self-Assessment Panel -->
-    <div class="crit-assess-wrap" id="critAssessWrap">
-      <p class="crit-assess-intro">Move the sliders to reflect where your organization is today — not where you want to be. The chart updates as you go, and we'll share what we think the fit looks like at the end. No right answers, just honest ones.</p>
-      <div class="crit-assess-grid">
-
-        <div class="crit-assess-row">
-          <div class="crit-assess-label">
-            <span class="crit-assess-name" style="color:#4BA3FF">Shared Opportunity</span>
-            <span class="crit-assess-val" id="scoreVal-v">3</span>
-          </div>
-          <p class="crit-assess-desc" id="desc-v">A meaningful portion of your clients carry unresolved tax debt, and you have some structure for introducing third-party services — though it's not yet a formal process.</p>
-          <input type="range" min="1" max="5" value="3" class="crit-slider crit-slider-v" id="slider-v" oninput="onSlider('v',this.value)">
+      <!-- Card 2: Operational Alignment -->
+      <div class="fq-card" data-step="1">
+        <div class="fq-card-dim" style="color:#f87171">Operational Alignment</div>
+        <div class="fq-card-q">How ready is your organization for a partner integration?</div>
+        <div class="fq-options">
+          <button class="fq-opt" data-score="1.5" onclick="fqPick(this)">
+            <span class="fq-opt-content"><span class="fq-opt-label">Early stage</span>
+            </span><span class="fq-opt-desc">Our systems are still maturing -- legacy tech, limited compliance docs, or potential vendor conflicts.</span></span>
+          </button>
+          <button class="fq-opt" data-score="3" onclick="fqPick(this)">
+            <span class="fq-opt-content"><span class="fq-opt-label">Mostly ready</span>
+            </span><span class="fq-opt-desc">Modern infrastructure, solid compliance, no major conflicts. Some documentation gaps.</span></span>
+          </button>
+          <button class="fq-opt" data-score="4.5" onclick="fqPick(this)">
+            <span class="fq-opt-content"><span class="fq-opt-label">Fully prepared</span>
+            </span><span class="fq-opt-desc">Enterprise-grade compliance, clean vendor relationships, ready for deep integration.</span></span>
+          </button>
         </div>
-
-        <div class="crit-assess-row">
-          <div class="crit-assess-label">
-            <span class="crit-assess-name" style="color:#f87171">Operational Alignment</span>
-            <span class="crit-assess-val" id="scoreVal-r">3</span>
-          </div>
-          <p class="crit-assess-desc" id="desc-r">Your tech infrastructure is reasonably current, there are no major competitive conflicts, and your compliance posture is generally solid — though not fully documented at a partner level.</p>
-          <input type="range" min="1" max="5" value="3" class="crit-slider crit-slider-r" id="slider-r" oninput="onSlider('r',this.value)">
-        </div>
-
-        <div class="crit-assess-row">
-          <div class="crit-assess-label">
-            <span class="crit-assess-name" style="color:var(--teal-text)">Mutual Investment</span>
-            <span class="crit-assess-val" id="scoreVal-c">3</span>
-          </div>
-          <p class="crit-assess-desc" id="desc-c">You're open to co-promoting the program and can assign someone to manage the relationship, but internal bandwidth is limited and you'd need a light-touch integration.</p>
-          <input type="range" min="1" max="5" value="3" class="crit-slider crit-slider-c" id="slider-c" oninput="onSlider('c',this.value)">
-        </div>
-
-        <div class="crit-assess-row">
-          <div class="crit-assess-label">
-            <span class="crit-assess-name" style="color:#c4a0ff">Execution Capability</span>
-            <span class="crit-assess-val" id="scoreVal-e">3</span>
-          </div>
-          <p class="crit-assess-desc" id="desc-e">Your team understands the space and has a working referral or cross-sell motion — you've done something like this before, even if not at full scale.</p>
-          <input type="range" min="1" max="5" value="3" class="crit-slider crit-slider-e" id="slider-e" oninput="onSlider('e',this.value)">
-        </div>
-
       </div>
 
-      <!-- Result panel -->
-      <div class="crit-result" id="critResult"></div>
+      <!-- Card 3: Commitment -->
+      <div class="fq-card" data-step="2">
+        <div class="fq-card-dim" style="color:#00E5CC">Mutual Investment</div>
+        <div class="fq-card-q">What level of commitment can your team bring?</div>
+        <div class="fq-options">
+          <button class="fq-opt" data-score="1.5" onclick="fqPick(this)">
+            <span class="fq-opt-content"><span class="fq-opt-label">Light touch</span>
+            </span><span class="fq-opt-desc">Limited bandwidth right now. We'd need a very low-maintenance structure to start.</span></span>
+          </button>
+          <button class="fq-opt" data-score="3" onclick="fqPick(this)">
+            <span class="fq-opt-content"><span class="fq-opt-label">Moderate</span>
+            </span><span class="fq-opt-desc">We can assign someone to manage it and co-promote, but capacity is limited.</span></span>
+          </button>
+          <button class="fq-opt" data-score="4.5" onclick="fqPick(this)">
+            <span class="fq-opt-content"><span class="fq-opt-label">All in</span>
+            </span><span class="fq-opt-desc">Dedicated internal champion, executive buy-in, ready to deeply integrate this.</span></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 4: Execution Capability -->
+      <div class="fq-card" data-step="3">
+        <div class="fq-card-dim" style="color:#c4a0ff">Execution Capability</div>
+        <div class="fq-card-q">How experienced is your team with referral programs?</div>
+        <div class="fq-options">
+          <button class="fq-opt" data-score="1.5" onclick="fqPick(this)">
+            <span class="fq-opt-content"><span class="fq-opt-label">New to it</span>
+            </span><span class="fq-opt-desc">We haven't done much referral or cross-sell work. Would need onboarding support.</span></span>
+          </button>
+          <button class="fq-opt" data-score="3" onclick="fqPick(this)">
+            <span class="fq-opt-content"><span class="fq-opt-label">Some experience</span>
+            </span><span class="fq-opt-desc">We have a working referral motion and understand the space, just haven't scaled it.</span></span>
+          </button>
+          <button class="fq-opt" data-score="4.5" onclick="fqPick(this)">
+            <span class="fq-opt-content"><span class="fq-opt-label">Proven track record</span>
+            </span><span class="fq-opt-desc">Deep domain expertise, high-conversion referral engine, and strong client trust.</span></span>
+          </button>
+        </div>
+      </div>
     </div>
 
+    <!-- Result panel -->
+    <div class="fq-result" id="fqResult"></div>
+
+    <!-- Back / restart -->
+    <div class="fq-nav" id="fqNav">
+      <button class="fq-back-btn" id="fqBackBtn" onclick="fqBack()" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+    </div>
   </div>
 </div></section>
 

@@ -61,6 +61,10 @@ function onPageLoaded(id) {
       });
     }
   }
+  // Initialize dashboard performance hub
+  if (id === 'dashboard' && typeof window.initDashboardHub === 'function') {
+    setTimeout(window.initDashboardHub, 80);
+  }
   // Initialize data-count-to counters on any newly loaded page
   var el = document.getElementById('page-' + id);
   if (el) {

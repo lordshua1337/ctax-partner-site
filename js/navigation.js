@@ -149,268 +149,152 @@ document.addEventListener('keydown',function(e){
   if(e.key==='ArrowLeft')shiftCard(-1);
 });
 
-// Radar Chart
+// Partner Fit Quiz
 (function(){
-  var dims = {
-    v: {
-      color:'#4BA3FF', spokeId:'spoke-v', dotId:'dot-v', lblId:'lbl-v',
-      cx:210, cy:50,
-      polyPoints: function(s){ return '210,'+(210-s)+' 370,210 210,370 50,210'; },
-      tipAnchor: function(w,h){ return {x:w/2-124, y:40}; },
-      eyebrow:'Value', quote:'"There\'s a gap in how most financial organizations serve clients with tax problems. We built a program to close it together."',
-      body:'Every client you\'ve lost to a tax debt situation was money that didn\'t have to walk out the door. Partners who bring this program in unlock a revenue line nobody else saw coming.',
-      items:['Do we solve a critical customer problem?','Total addressable market opportunity','Short-term SAM/SOM revenue potential','Company report card: customers, growth, sales']
-    },
-    r: {
-      color:'#f87171', spokeId:'spoke-r', dotId:'dot-r', lblId:'lbl-r',
-      cx:370, cy:210,
-      polyPoints: function(s){ return '210,50 '+(210+s)+',210 210,370 50,210'; },
-      tipAnchor: function(w,h){ return {x:w-268, y:h/2-110}; },
-      eyebrow:'Risks', quote:'"We ask hard questions upfront so neither of us is surprised six months in."',
-      body:'The compliance, security, and integration criteria aren\'t bureaucracy. They\'re how we make sure nothing surfaces six months in to embarrass either of us.',
-      items:['Modern tech stack & integration capability','Competing products or competitor relationships','Support capabilities as we scale together','Privacy, security & compliance posture']
-    },
-    c: {
-      color:'var(--teal-text)', spokeId:'spoke-c', dotId:'dot-c', lblId:'lbl-c',
-      cx:210, cy:370,
-      polyPoints: function(s){ return '210,50 370,210 210,'+(210+s)+' 50,210'; },
-      tipAnchor: function(w,h){ return {x:w/2-124, y:h-290}; },
-      eyebrow:'Commitment', quote:'"We\'re clear about what we need from you — and equally clear about what we handle ourselves."',
-      body:'Everything we ask of you is finite and documented. A point of contact, a data agreement, a shared revenue structure. What we don\'t ask for is your team\'s bandwidth.',
-      items:['Revenue share alignment and margin structure','Willingness to market and position CTAX','Dedicated primary point of contact','Standard data sharing agreement']
-    },
-    e: {
-      color:'#c4a0ff', spokeId:'spoke-e', dotId:'dot-e', lblId:'lbl-e',
-      cx:50, cy:210,
-      polyPoints: function(s){ return '210,50 370,210 210,370 '+(210-s)+',210'; },
-      tipAnchor: function(w,h){ return {x:20, y:h/2-110}; },
-      eyebrow:'Effectiveness', quote:'"The partnerships that perform best are the ones where both sides bring real capability to the table."',
-      body:'Most referral programs fail because there\'s no infrastructure for execution — no tracking, no accountability. We measure conversion at every stage.',
-      items:['Industry expertise and vertical knowledge','Sales cycle and historical conversion rate','SSO integration willingness and timeline','Referral volume capacity']
-    }
-  };
-  var fillMap={v:'rgba(75,163,255,0.13)',r:'rgba(248,113,113,0.1)',c:'rgba(0,229,204,0.09)',e:'rgba(196,160,255,0.1)'};
-  var defaultPoly='210,100 310,210 210,320 110,210';
-  var active=null, mode='explore', scores={v:3,r:3,c:3,e:3};
+  var step = 0;
+  var scores = []; // scores[0..3] filled as user answers
+  var dimKeys = ['v','r','c','e'];
 
-  function scoreToPoint(k,score){
-    var d=dims[k],maxR=160,r=maxR*(score/5);
-    var dx=d.cx-210,dy=d.cy-210,len=Math.sqrt(dx*dx+dy*dy);
-    return {x:210+(dx/len)*r,y:210+(dy/len)*r};
-  }
-
-  function updateScorePoly(){
-    var v=scoreToPoint('v',scores.v),r=scoreToPoint('r',scores.r),c=scoreToPoint('c',scores.c),e=scoreToPoint('e',scores.e);
-    var poly=document.getElementById('radarScorePoly');
-    if(poly)poly.setAttribute('points',v.x+','+v.y+' '+r.x+','+r.y+' '+c.x+','+c.y+' '+e.x+','+e.y);
-    var avg=(scores.v+scores.r+scores.c+scores.e)/4;
-    var stroke=avg>=4?'rgba(75,163,255,0.7)':avg>=3?'rgba(75,163,255,0.45)':'rgba(248,113,113,0.5)';
-    var fill=avg>=4?'rgba(75,163,255,0.08)':avg>=3?'rgba(75,163,255,0.04)':'rgba(248,113,113,0.05)';
-    if(poly){poly.setAttribute('stroke',stroke);poly.setAttribute('fill',fill);}
-  }
-
-  var descriptors={
-    v:{
-      1:"Tax debt situations rarely come up in your client relationships, and there's no established process for introducing outside services. That's okay — it just means we'd be building from zero together.",
-      2:"You encounter tax debt issues occasionally but haven't formalized a way to address them. There's latent opportunity here that a light referral structure could start to unlock.",
-      3:"A meaningful portion of your clients carry unresolved tax debt, and you have some structure for introducing third-party services — though it's not yet a formal process.",
-      4:"Tax-related financial distress is a recurring theme in your book, and you already have some muscle memory for cross-referring or co-servicing clients who need outside help.",
-      5:"Tax debt is a consistent, high-volume issue across your client base, and you have established workflows for connecting clients with specialized services. The opportunity here is immediate and significant."
-    },
-    r:{
-      1:"Your infrastructure is still maturing — legacy systems, limited compliance documentation, or existing vendor relationships that could create conflicts. Nothing insurmountable, but worth addressing before we go deeper.",
-      2:"You have some operational gaps that would need to be resolved before a formal partnership — whether that's tech stack limitations, compliance gray areas, or competing arrangements that need to be clarified.",
-      3:"Your tech infrastructure is reasonably current, there are no major competitive conflicts, and your compliance posture is generally solid — though not fully documented at a partner level.",
-      4:"You're operationally clean: modern stack, documented compliance practices, no meaningful conflicts, and a clear path to data-sharing agreements if needed.",
-      5:"You have a mature, well-documented operational environment — enterprise-grade compliance, clean vendor relationships, and the infrastructure to support a deep integration with confidence on both sides."
-    },
-    c:{
-      1:"Right now, bandwidth for a new program is limited and there's no clear internal owner. A partnership would be difficult to activate without someone to carry it forward on your side.",
-      2:"There's genuine interest but limited capacity — you'd want a very lightweight structure with minimal asks on your team, and co-promotion isn't realistic in the near term.",
-      3:"You're open to co-promoting the program and can assign someone to manage the relationship, but internal bandwidth is limited and you'd need a light-touch integration to get started.",
-      4:"You have a designated person who can own this, organizational appetite to actively promote it, and a clear picture of how revenue share aligns with your existing model.",
-      5:"You're fully bought in — dedicated internal champion, executive alignment, and a willingness to deeply integrate this into how you serve clients. This is a strategic partnership, not a side arrangement."
-    },
-    e:{
-      1:"Your team doesn't yet have much familiarity with tax resolution services or referral-based revenue models, and there's no existing motion to build from. A partnership would require significant onboarding.",
-      2:"You have some relevant expertise and a loose cross-sell process, but conversion of referrals has been inconsistent. The capability is there — it just needs structure.",
-      3:"Your team understands the space and has a working referral or cross-sell motion — you've done something like this before, even if not at full scale.",
-      4:"You have strong industry expertise, a proven referral process, and a track record of converting these opportunities. Your clients trust your recommendations and act on them.",
-      5:"You're operating at the highest level — deep domain knowledge, a high-conversion referral engine, and the volume to make a Strategic-tier partnership the obvious structure for both sides."
-    }
-  };
-
-  var resultTiers=[
-    {test:function(s,a){return a<2.2||Math.min(s.v,s.r,s.c,s.e)<=1;},
-     bg:'rgba(248,113,113,0.06)',border:'rgba(248,113,113,0.18)',icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
-     title:"The timing might not be right — and that's worth knowing.",
-     text:"Based on where you're landing, at least one dimension needs more foundation before a partnership would create real value for either of us. That's not a door closing — it's useful information. The organizations that work best with us tend to have a clear internal owner, some baseline client volume with tax exposure, and the operational footing to move quickly once they're in. If you're building toward that, we're happy to reconnect.",
-     cta:null},
-    {test:function(s,a){return a<3.0;},
-     bg:'rgba(255,190,50,0.05)',border:'rgba(255,190,50,0.18)',icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16 8 12 12 8"/></svg>',
-     title:"There's something here — a few things to sort out first.",
-     text:"You're showing up strong in some areas and lighter in others. That's actually pretty common at this stage — a lot of our best partners looked exactly like this when they first reached out. The FAQ walks through what the early partnership structure looks like and what we ask for on each side. Worth a read before we talk.",
-     cta:'faq',ctaText:'See what the program actually asks for →',ctaStyle:'background:rgba(255,190,50,0.1);color:#f5c842;border:1px solid rgba(255,190,50,0.18)'},
-    {test:function(s,a){return a<3.8&&Math.min(s.v,s.r,s.c,s.e)>=2;},
-     bg:'rgba(11,95,216,0.06)',border:'rgba(75,163,255,0.18)',icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
-     title:"This looks like a real fit.",
-     text:"Across the dimensions that matter most for getting started, you're in a good place. A Direct partnership is probably the right structure — low overhead on your end, clear economics, and a path to deepening the relationship as volume grows. The intake form takes about five minutes and gets a conversation started.",
-     cta:'apply',ctaText:'Start the conversation →',ctaStyle:'background:rgba(75,163,255,0.12);color:#4BA3FF;border:1px solid rgba(75,163,255,0.22)'},
-    {test:function(s,a){return a>=3.8&&Math.min(s.v,s.r,s.c,s.e)>=3;},
-     bg:'rgba(0,229,204,0.05)',border:'rgba(0,229,204,0.2)',icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16 8 12 12 8"/></svg>',
-     title:"Strong alignment across the board.",
-     text:"You're scoring well on every dimension — which usually means an Enterprise or Strategic structure is worth exploring. Those tiers come with meaningfully higher revenue share, a dedicated account relationship, and a more tailored integration. Norm handles these conversations directly and can walk you through what that looks like for your specific situation.",
-     cta:'apply',ctaText:'Let\'s talk about a deeper structure →',ctaStyle:'background:rgba(0,229,204,0.1);color:var(--teal-text);border:1px solid rgba(0,229,204,0.18)'}
+  var resultTiers = [
+    { test: function(s,a){ return a < 2.2 || Math.min.apply(null,s) <= 1.5; },
+      bg:'rgba(248,113,113,0.06)', border:'rgba(248,113,113,0.18)',
+      icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+      title:"The timing might not be right -- and that's worth knowing.",
+      text:"Based on your answers, at least one area needs more foundation before a partnership would create real value for either side. That's not a door closing -- it's useful information. The organizations that work best with us tend to have a clear internal owner, some baseline client volume with tax exposure, and the operational footing to move quickly once they're in. If you're building toward that, we're happy to reconnect.",
+      cta:null },
+    { test: function(s,a){ return a < 3.0; },
+      bg:'rgba(255,190,50,0.05)', border:'rgba(255,190,50,0.18)',
+      icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16 8 12 12 8"/></svg>',
+      title:"There's something here -- a few things to sort out first.",
+      text:"You're showing up strong in some areas and lighter in others. That's actually pretty common at this stage -- a lot of our best partners looked exactly like this when they first reached out. The FAQ walks through what the early partnership structure looks like and what we ask for on each side. Worth a read before we talk.",
+      cta:'faq', ctaText:'See what the program actually asks for', ctaStyle:'background:rgba(255,190,50,0.1);color:#f5c842;border:1px solid rgba(255,190,50,0.18)' },
+    { test: function(s,a){ return a < 3.8 && Math.min.apply(null,s) >= 2; },
+      bg:'rgba(11,95,216,0.06)', border:'rgba(75,163,255,0.18)',
+      icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+      title:"This looks like a real fit.",
+      text:"Across the dimensions that matter most, you're in a good place. A Direct partnership is probably the right structure -- low overhead on your end, clear economics, and a path to deepening the relationship as volume grows. The intake form takes about five minutes.",
+      cta:'apply', ctaText:'Start the conversation', ctaStyle:'background:rgba(75,163,255,0.12);color:#4BA3FF;border:1px solid rgba(75,163,255,0.22)' },
+    { test: function(s,a){ return a >= 3.8 && Math.min.apply(null,s) >= 3; },
+      bg:'rgba(0,229,204,0.05)', border:'rgba(0,229,204,0.2)',
+      icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+      title:"Strong alignment across the board.",
+      text:"You're scoring well on every dimension -- which usually means an Enterprise or Strategic structure is worth exploring. Those tiers come with meaningfully higher revenue share, a dedicated account relationship, and a more tailored integration.",
+      cta:'apply', ctaText:'Let\'s talk about a deeper structure', ctaStyle:'background:rgba(0,229,204,0.1);color:var(--teal-text);border:1px solid rgba(0,229,204,0.18)' }
   ];
 
-  function updateResult(){
-    var avg=(scores.v+scores.r+scores.c+scores.e)/4;
-    var tier=resultTiers[0];
-    for(var i=resultTiers.length-1;i>=0;i--){if(resultTiers[i].test(scores,avg)){tier=resultTiers[i];break;}}
-    var el=document.getElementById('critResult');
-    if(!el)return;
-    el.style.background=tier.bg;el.style.borderColor=tier.border;
-    var ctaHtml=tier.cta?['<button class="crit-result-cta" style="',tier.ctaStyle,'" onclick="showPage(&quot;',tier.cta,'&quot;">',(tier.ctaText||'Apply'),'</button>'].join(''):['<p style="font-size:15px;color:rgba(255,255,255,0.65);margin-top:4px">Address the low-scoring dimensions first, then revisit.</p>'].join('');
-    el.innerHTML='<div class="crit-result-icon">'+tier.icon+'</div><div class="crit-result-body"><div class="crit-result-title">'+tier.title+'</div><p class="crit-result-text">'+tier.text+'</p>'+ctaHtml+'</div>';
-    el.classList.add('show');
-  }
+  function updateUI(){
+    var cards = document.querySelectorAll('.fq-card');
+    var bar = document.getElementById('fqProgressBar');
+    var label = document.getElementById('fqStepLabel');
+    var backBtn = document.getElementById('fqBackBtn');
+    var result = document.getElementById('fqResult');
+    if(!cards.length) return;
 
-  function fireSonar(k){
-    var d=dims[k],g=document.getElementById('sonarGroup');
-    if(!g)return;
-    var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    c.setAttribute('cx',d.cx);c.setAttribute('cy',d.cy);c.setAttribute('r','6');
-    c.setAttribute('fill','none');c.setAttribute('stroke',d.color);c.setAttribute('stroke-width','1.5');c.setAttribute('opacity','0.9');
-    g.appendChild(c);
-    var start=null,dur=1100;
-    function step(ts){
-      if(!start)start=ts;var p=Math.min((ts-start)/dur,1);
-      c.setAttribute('r',6+p*88);c.setAttribute('opacity',0.85*(1-p));
-      if(p<1)requestAnimationFrame(step);else if(c.parentNode)c.parentNode.removeChild(c);
+    var showResult = step >= 4;
+
+    // Progress
+    var pct = showResult ? 100 : (step / 4) * 100;
+    if(bar) bar.style.width = pct + '%';
+    if(label) label.textContent = showResult ? 'Complete' : 'Question ' + (step + 1) + ' of 4';
+
+    // Dots
+    var dots = document.querySelectorAll('.fq-dot');
+    dots.forEach(function(dot, i){
+      dot.classList.remove('fq-dot-active','fq-dot-done');
+      if(showResult || i < step) dot.classList.add('fq-dot-done');
+      else if(i === step) dot.classList.add('fq-dot-active');
+    });
+
+    // Cards
+    cards.forEach(function(card, i){
+      card.classList.remove('fq-card-active', 'fq-card-done', 'fq-card-next');
+      if(i < step) card.classList.add('fq-card-done');
+      else if(i === step && !showResult) card.classList.add('fq-card-active');
+      else card.classList.add('fq-card-next');
+    });
+
+    // Hide all cards when showing result
+    if(showResult){
+      cards.forEach(function(card){ card.classList.add('fq-card-done'); });
     }
-    requestAnimationFrame(step);
+
+    // Back button
+    if(backBtn) backBtn.style.display = step > 0 ? '' : 'none';
+
+    // Result
+    if(showResult && result){
+      showFqResult();
+    } else if(result){
+      result.classList.remove('fq-result-show');
+      result.innerHTML = '';
+    }
   }
 
-  function hideTooltip(){var t=document.getElementById('critTooltip');if(t)t.classList.remove('visible');}
-
-  function showTooltip(k){
-    var d=dims[k],wrap=document.querySelector('.crit-radar-svg-wrap'),t=document.getElementById('critTooltip');
-    if(!t||!wrap)return;
-    document.getElementById('ctLabel').textContent=d.eyebrow;
-    document.getElementById('ctLabel').style.color=d.color;
-    document.getElementById('ctQuote').textContent=d.quote;
-    document.getElementById('ctBody').textContent=d.body;
-    var list=document.getElementById('ctList');list.innerHTML='';
-    d.items.forEach(function(item){var li=document.createElement('li');li.textContent=item;list.appendChild(li);});
-    var bmap={v:'rgba(75,163,255,0.3)',r:'rgba(248,113,113,0.3)',c:'rgba(0,229,204,0.25)',e:'rgba(196,160,255,0.25)'};
-    t.style.borderColor=bmap[k];
-    var w=wrap.offsetWidth,h=wrap.offsetHeight,pos=d.tipAnchor(w,h);
-    t.style.left=Math.max(0,Math.min(pos.x,w-258))+'px';
-    t.style.top=Math.max(0,Math.min(pos.y,h-300))+'px';
-    t.classList.add('visible');
+  function showFqResult(){
+    var el = document.getElementById('fqResult');
+    if(!el) return;
+    var avg = (scores[0] + scores[1] + scores[2] + scores[3]) / 4;
+    var tier = resultTiers[0];
+    for(var i = resultTiers.length - 1; i >= 0; i--){
+      if(resultTiers[i].test(scores, avg)){ tier = resultTiers[i]; break; }
+    }
+    var ctaHtml = tier.cta
+      ? '<button class="fq-result-cta" style="' + tier.ctaStyle + '" onclick="showPage(\'' + tier.cta + '\')">' + tier.ctaText + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>'
+      : '<p style="font-size:14px;color:rgba(255,255,255,0.55);margin-top:8px">Build toward those areas first, then come back and retake the assessment.</p>';
+    var restartHtml = '<button class="fq-restart-btn" onclick="fqRestart()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 105.64-11.36L1 10"/></svg> Retake</button>';
+    el.style.background = tier.bg;
+    el.style.borderColor = tier.border;
+    el.innerHTML = '<div class="fq-result-icon">' + tier.icon + '</div><div class="fq-result-body"><div class="fq-result-title">' + tier.title + '</div><p class="fq-result-text">' + tier.text + '</p><div class="fq-result-actions">' + ctaHtml + restartHtml + '</div></div>';
+    el.classList.add('fq-result-show');
   }
 
-  function resetExplore(){
-    Object.keys(dims).forEach(function(k){
-      var d=dims[k];
-      var spoke=document.getElementById(d.spokeId),dot=document.getElementById(d.dotId),lbl=document.getElementById(d.lblId);
-      if(spoke){spoke.setAttribute('stroke-width','1');spoke.style.opacity='0.5';}
-      if(dot){dot.setAttribute('r','5');dot.style.opacity='1';}
-      if(lbl)lbl.style.opacity='0.55';
-    });
-    var poly=document.getElementById('radarPoly');
-    if(poly){poly.setAttribute('points',defaultPoly);poly.setAttribute('stroke','rgba(75,163,255,0.4)');poly.setAttribute('fill','rgba(11,95,216,0.12)');}
-    hideTooltip();active=null;
-  }
+  window.fqPick = function(btn){
+    var score = parseFloat(btn.getAttribute('data-score'));
+    scores[step] = score;
 
-  function activateDim(k){
-    if(mode!=='explore')return;
-    if(active===k){resetExplore();return;}
-    Object.keys(dims).forEach(function(j){
-      if(j===k)return;
-      var dj=dims[j];
-      var spoke=document.getElementById(dj.spokeId),dot=document.getElementById(dj.dotId),lbl=document.getElementById(dj.lblId);
-      if(spoke){spoke.setAttribute('stroke-width','1');spoke.style.opacity='0.18';}
-      if(dot){dot.setAttribute('r','4');dot.style.opacity='0.35';}
-      if(lbl)lbl.style.opacity='0.18';
-    });
-    active=k;
-    var d=dims[k];
-    var spoke=document.getElementById(d.spokeId),dot=document.getElementById(d.dotId),lbl=document.getElementById(d.lblId);
-    if(spoke){spoke.setAttribute('stroke',d.color);spoke.setAttribute('stroke-width','2.5');spoke.style.opacity='1';}
-    if(dot){dot.setAttribute('r','8');dot.setAttribute('fill',d.color);dot.style.opacity='1';}
-    if(lbl)lbl.style.opacity='1';
-    var poly=document.getElementById('radarPoly');
-    if(poly){poly.setAttribute('points',d.polyPoints(165));poly.setAttribute('stroke',d.color);poly.setAttribute('fill',fillMap[k]);}
-    fireSonar(k);showTooltip(k);
-  }
+    // Highlight selected option
+    var siblings = btn.parentElement.querySelectorAll('.fq-opt');
+    siblings.forEach(function(s){ s.classList.remove('fq-opt-selected'); });
+    btn.classList.add('fq-opt-selected');
 
-  window.onSlider=function(k,val){
-    scores[k]=parseInt(val);
-    document.getElementById('scoreVal-'+k).textContent=val;
-    var sl=document.getElementById('slider-'+k);
-    if(sl)sl.style.setProperty('--pct',((val-1)/4*100)+'%');
-    var desc=document.getElementById('desc-'+k);
-    if(desc&&descriptors[k])desc.textContent=descriptors[k][parseInt(val)];
-    updateScorePoly();updateResult();fireSonar(k);
+    // Advance after brief delay so user sees their selection
+    setTimeout(function(){
+      step++;
+      updateUI();
+    }, 300);
   };
 
-  window.setCritMode=function(m){
-    mode=m;
-    document.getElementById('modeExplore').classList.toggle('active',m==='explore');
-    document.getElementById('modeAssess').classList.toggle('active',m==='assess');
-    var aw=document.getElementById('critAssessWrap'),hint=document.getElementById('critHint'),
-        tt=document.getElementById('critTooltip'),sp=document.getElementById('radarScorePoly'),mp=document.getElementById('radarPoly');
-    if(m==='explore'){
-      if(aw)aw.classList.remove('show');if(hint)hint.style.display='';
-      if(sp)sp.style.display='none';if(mp)mp.style.display='';
-      resetExplore();
-    } else {
-      hideTooltip();
-      if(aw)aw.classList.add('show');if(hint)hint.style.display='none';
-      if(sp){sp.style.display='';updateScorePoly();}if(mp)mp.style.display='none';
-      Object.keys(dims).forEach(function(k){
-        var d=dims[k];
-        var spoke=document.getElementById(d.spokeId),dot=document.getElementById(d.dotId),lbl=document.getElementById(d.lblId);
-        if(spoke){spoke.setAttribute('stroke',d.color);spoke.setAttribute('stroke-width','1.5');spoke.style.opacity='0.55';}
-        if(dot){dot.setAttribute('r','5');dot.style.opacity='0.8';}
-        if(lbl)lbl.style.opacity='0.65';
-      });
-      updateResult();
-      ['v','r','c','e'].forEach(function(k){
-        var sl=document.getElementById('slider-'+k);
-        if(sl)sl.style.setProperty('--pct',((scores[k]-1)/4*100)+'%');
-        var desc=document.getElementById('desc-'+k);
-        if(desc&&descriptors[k])desc.textContent=descriptors[k][scores[k]];
-      });
+  window.fqBack = function(){
+    if(step <= 0) return;
+    step--;
+    scores.length = step; // discard answer for this step
+    // Clear selection on the card we're going back to
+    var cards = document.querySelectorAll('.fq-card');
+    if(cards[step]){
+      cards[step].querySelectorAll('.fq-opt').forEach(function(o){ o.classList.remove('fq-opt-selected'); });
     }
+    updateUI();
   };
 
-  function initRadar(){
-    Object.keys(dims).forEach(function(k){
-      ['dot-'+k,'lbl-'+k,'spoke-'+k].forEach(function(id){
-        var el=document.getElementById(id);if(!el)return;
-        el.style.cursor='pointer';
-        el.addEventListener('mouseenter',function(){if(mode==='explore')activateDim(k);});
-        el.addEventListener('touchstart',function(e){e.preventDefault();if(mode==='explore')activateDim(k);},{passive:false});
-      });
+  window.fqRestart = function(){
+    step = 0;
+    scores = [];
+    var cards = document.querySelectorAll('.fq-card');
+    cards.forEach(function(card){
+      card.querySelectorAll('.fq-opt').forEach(function(o){ o.classList.remove('fq-opt-selected'); });
     });
-    var wrap=document.querySelector('.crit-radar-svg-wrap');
-    if(wrap)wrap.addEventListener('mouseleave',function(){if(mode==='explore')resetExplore();});
-    document.addEventListener('touchstart',function(e){
-      var w=document.querySelector('.crit-radar-svg-wrap');
-      if(w&&!w.contains(e.target)&&active&&mode==='explore')resetExplore();
-    },{passive:true});
-    var poly=document.getElementById('radarPoly');
-    if(poly){poly.setAttribute('points','210,210 210,210 210,210 210,210');setTimeout(function(){poly.setAttribute('points',defaultPoly);},80);}
-    Object.keys(dims).forEach(function(k){
-      var lbl=document.getElementById('lbl-'+k);if(lbl)lbl.style.opacity='0.55';
-      var spoke=document.getElementById(dims[k].spokeId);if(spoke)spoke.style.opacity='0.5';
-    });
+    updateUI();
+  };
+
+  function initQuiz(){
+    step = 0;
+    scores = [];
+    updateUI();
   }
 
-  var origShowPage3=window.showPage;
-  window.showPage=function(id){origShowPage3(id);if(id==='how')setTimeout(initRadar,120);};
+  // Init on SPA navigation
+  var origShowPage3 = window.showPage;
+  window.showPage = function(id){ origShowPage3(id); if(id === 'how') setTimeout(initQuiz, 120); };
 })();
 
 function handleResourceDownload(btn, name) {
