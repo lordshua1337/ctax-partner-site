@@ -197,6 +197,7 @@ function handleContactSubmit(e){
   window.location.href = mailto;
   var btn = form.querySelector('button[type="submit"]');
   if(btn){btn.textContent='Sent — check your email client';btn.disabled=true;btn.style.opacity='0.7';}
+  showToast('Message opened in email client', 'success');
 }
 
 
@@ -204,6 +205,13 @@ function handleContactSubmit(e){
 function toggleOnboardStep(el) {
   var step = el.closest('.ob-step');
   if (!step) return;
+  var check = step.querySelector('.ob-check');
+  // Force reflow to restart animation on re-check
+  if (check && !step.classList.contains('ob-done')) {
+    check.style.animation = 'none';
+    check.offsetHeight;
+    check.style.animation = '';
+  }
   step.classList.toggle('ob-done');
   updateOnboardProgress();
 }
@@ -214,7 +222,15 @@ function updateOnboardProgress() {
   var bar = document.getElementById('onboard-bar');
   if (bar) bar.style.width = pct + '%';
   var complete = document.getElementById('onboard-complete');
-  if (complete) complete.style.display = pct === 100 ? 'block' : 'none';
+  if (complete) {
+    if (pct === 100) {
+      complete.style.display = 'block';
+      complete.classList.add('ob-complete-show');
+    } else {
+      complete.style.display = 'none';
+      complete.classList.remove('ob-complete-show');
+    }
+  }
 }
 
 
@@ -278,7 +294,7 @@ function updateOnboardProgress() {
 
 // ── STAGGERED CARD ENTRANCE ──────────────────────────────────────
 (function(){
-  var staggerSelectors = '.g2,.g3,.g4,.testi-grid,.vcols,.srow,.cta-acts';
+  var staggerSelectors = '.g2,.g3,.g4,.testi-grid,.vcols,.srow,.cta-acts,.cmp-rows';
   var staggerObs = new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
       if(!entry.isIntersecting) return;
@@ -348,6 +364,59 @@ function updateOnboardProgress() {
     }
   }, {passive: true});
 })();
+
+// ── TOAST NOTIFICATIONS ──────────────────────────────────────
+function showToast(message, type) {
+  type = type || 'info';
+  var container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  var toast = document.createElement('div');
+  toast.className = 'toast toast-' + type;
+
+  var icons = {
+    success: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    copied: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>',
+    info: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+  };
+
+  toast.innerHTML = '<span class="toast-icon">' + (icons[type] || icons.info) + '</span><span class="toast-msg">' + message + '</span>';
+
+  // Click to dismiss
+  toast.addEventListener('click', function() { dismissToast(toast); });
+
+  // Respect reduced motion
+  if (prefersReducedMotion) {
+    toast.style.animation = 'none';
+    toast.style.opacity = '1';
+    toast.style.transform = 'none';
+  }
+
+  container.appendChild(toast);
+
+  // Max 3 visible — remove oldest if 4th arrives
+  var toasts = container.querySelectorAll('.toast:not(.toast-exit)');
+  if (toasts.length > 3) {
+    dismissToast(toasts[0]);
+  }
+
+  // Auto-dismiss after 3s
+  setTimeout(function() { dismissToast(toast); }, 3000);
+}
+
+function dismissToast(toast) {
+  if (!toast || toast.classList.contains('toast-exit')) return;
+  if (prefersReducedMotion) {
+    toast.remove();
+    return;
+  }
+  toast.classList.add('toast-exit');
+  toast.addEventListener('animationend', function() { toast.remove(); });
+}
 
 // ── NAV DROPDOWN HOVER WITH DELAY ──────────────────────────────────────
 (function(){

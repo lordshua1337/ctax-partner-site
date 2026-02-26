@@ -1,16 +1,64 @@
 // ── SCRIPT BUILDER ──────────────────────────────────────────
 var sbResults = {};
+var _sbCurrentTab = -1;
+var _sbAnimating = false;
+var _sbTabNames = ['conversation','email','objections','followup'];
 
 function switchSbTab(tab) {
-  document.querySelectorAll('.sb-tab').forEach(function(t){t.classList.remove('active');});
-  document.querySelectorAll('.sb-tab-panel').forEach(function(p){p.style.display='none';p.classList.remove('active');});
-  var panels = document.querySelectorAll('.sb-tab-panel');
+  var newIdx = _sbTabNames.indexOf(tab);
+  if (newIdx < 0 || _sbAnimating) return;
+
   var tabs = document.querySelectorAll('.sb-tab');
-  var tabNames = ['conversation','email','objections','followup'];
-  var idx = tabNames.indexOf(tab);
-  if(idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
-  var panel = document.getElementById('sbt-'+tab);
-  if(panel){panel.style.display='block';panel.classList.add('active');}
+  var oldIdx = _sbCurrentTab;
+  var oldPanel = oldIdx >= 0 ? document.getElementById('sbt-' + _sbTabNames[oldIdx]) : null;
+  var newPanel = document.getElementById('sbt-' + tab);
+  if (!newPanel) return;
+
+  // Update tab buttons
+  tabs.forEach(function(t) { t.classList.remove('active'); });
+  if (tabs[newIdx]) tabs[newIdx].classList.add('active');
+
+  // No animation for initial display or same tab or reduced motion
+  if (oldIdx < 0 || oldIdx === newIdx || prefersReducedMotion) {
+    if (oldPanel && oldPanel !== newPanel) {
+      oldPanel.style.display = 'none';
+      oldPanel.classList.remove('active', 'sb-slide-out-left', 'sb-slide-out-right', 'sb-slide-in-left', 'sb-slide-in-right');
+    }
+    newPanel.style.display = 'block';
+    newPanel.classList.add('active');
+    newPanel.classList.remove('sb-slide-out-left', 'sb-slide-out-right', 'sb-slide-in-left', 'sb-slide-in-right');
+    _sbCurrentTab = newIdx;
+    return;
+  }
+
+  // Determine direction: moving right (newIdx > oldIdx) or left
+  var goingRight = newIdx > oldIdx;
+  var outClass = goingRight ? 'sb-slide-out-left' : 'sb-slide-out-right';
+  var inClass = goingRight ? 'sb-slide-in-right' : 'sb-slide-in-left';
+
+  _sbAnimating = true;
+
+  // Slide out old panel
+  if (oldPanel) {
+    oldPanel.classList.remove('sb-slide-out-left', 'sb-slide-out-right', 'sb-slide-in-left', 'sb-slide-in-right');
+    oldPanel.classList.add(outClass);
+    oldPanel.addEventListener('animationend', function handler() {
+      oldPanel.removeEventListener('animationend', handler);
+      oldPanel.style.display = 'none';
+      oldPanel.classList.remove('active', outClass);
+
+      // Slide in new panel
+      newPanel.style.display = 'block';
+      newPanel.classList.add('active', inClass);
+      newPanel.addEventListener('animationend', function handler2() {
+        newPanel.removeEventListener('animationend', handler2);
+        newPanel.classList.remove(inClass);
+        _sbAnimating = false;
+      });
+    });
+  }
+
+  _sbCurrentTab = newIdx;
 }
 
 function resetScriptBuilder() {
@@ -18,6 +66,8 @@ function resetScriptBuilder() {
   document.getElementById('sb-output').style.display='none';
   document.getElementById('sb-loading').style.display='none';
   sbResults = {};
+  _sbCurrentTab = -1;
+  _sbAnimating = false;
 }
 
 function copyText(text, btn) {
@@ -25,6 +75,7 @@ function copyText(text, btn) {
     var orig = btn.textContent;
     btn.textContent = '✓ Copied';
     setTimeout(function(){btn.textContent=orig;}, 2000);
+    if (typeof showToast === 'function') showToast('Copied to clipboard', 'copied');
   });
 }
 
@@ -35,6 +86,7 @@ function copyAllScripts() {
     var orig = btn.innerHTML;
     btn.textContent = '✓ Copied All';
     setTimeout(function(){btn.innerHTML=orig;}, 2000);
+    if (typeof showToast === 'function') showToast('All scripts copied', 'copied');
   });
 }
 

@@ -15,6 +15,7 @@ function copyRcNarrative() {
   navigator.clipboard.writeText(rcNarrativeText).then(function(){
     var btn = document.querySelector('#rc-output .sb-copy-btn');
     if(btn){ var o=btn.textContent; btn.textContent='✓ Copied'; setTimeout(function(){btn.textContent=o;},2000); }
+    if(typeof showToast === 'function') showToast('Projection copied to clipboard', 'copied');
   });
 }
 

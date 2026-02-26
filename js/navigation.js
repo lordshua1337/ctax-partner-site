@@ -95,6 +95,7 @@ function handleApply(e) {
   window.location.href = 'mailto:partners@communitytax.com?subject=' + encodeURIComponent('New Partner Application — ' + (data.get('company')||'')) + '&body=' + encodeURIComponent(body);
   var btn = form.querySelector('button[type="submit"], .f-submit');
   if(btn){btn.textContent='Sent — check your email client';btn.disabled=true;btn.style.opacity='0.7';}
+  if(typeof showToast === 'function') showToast('Application opened in email client', 'success');
 }
 function initHowAnimations(){
   var hp=document.getElementById('page-how');if(!hp)return;
@@ -225,7 +226,7 @@ document.addEventListener('keydown',function(e){
     if(showResult && result){
       showFqResult();
     } else if(result){
-      result.classList.remove('fq-result-show');
+      result.classList.remove('fq-result-show', 'fq-result-glow');
       result.innerHTML = '';
     }
   }
@@ -235,8 +236,9 @@ document.addEventListener('keydown',function(e){
     if(!el) return;
     var avg = (scores[0] + scores[1] + scores[2] + scores[3]) / 4;
     var tier = resultTiers[0];
+    var tierIdx = 0;
     for(var i = resultTiers.length - 1; i >= 0; i--){
-      if(resultTiers[i].test(scores, avg)){ tier = resultTiers[i]; break; }
+      if(resultTiers[i].test(scores, avg)){ tier = resultTiers[i]; tierIdx = i; break; }
     }
     var ctaHtml = tier.cta
       ? '<button class="fq-result-cta" style="' + tier.ctaStyle + '" onclick="showPage(\'' + tier.cta + '\')">' + tier.ctaText + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>'
@@ -245,7 +247,13 @@ document.addEventListener('keydown',function(e){
     el.style.background = tier.bg;
     el.style.borderColor = tier.border;
     el.innerHTML = '<div class="fq-result-icon">' + tier.icon + '</div><div class="fq-result-body"><div class="fq-result-title">' + tier.title + '</div><p class="fq-result-text">' + tier.text + '</p><div class="fq-result-actions">' + ctaHtml + restartHtml + '</div></div>';
+    el.classList.remove('fq-result-glow');
     el.classList.add('fq-result-show');
+    // Add glow for good fit (tier 2) and strong alignment (tier 3)
+    if (tierIdx >= 2) {
+      el.style.setProperty('--fq-glow-color', tierIdx === 3 ? 'rgba(0,229,204,0.3)' : 'rgba(75,163,255,0.3)');
+      el.classList.add('fq-result-glow');
+    }
   }
 
   window.fqPick = function(btn){

@@ -129,7 +129,9 @@
 .fq-card{display:none;animation:fqFadeIn 0.4s cubic-bezier(0.4,0,0.2,1)}
 .fq-card-active{display:block}
 .fq-card-done,.fq-card-next{display:none}
-@keyframes fqFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fqFadeIn{from{opacity:0;transform:translateY(16px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fqResultGlow{0%{box-shadow:0 0 0 0 var(--fq-glow-color,rgba(75,163,255,0.3))}40%{box-shadow:0 0 20px 6px var(--fq-glow-color,rgba(75,163,255,0.15))}70%{box-shadow:0 0 0 0 var(--fq-glow-color,rgba(75,163,255,0.05))}100%{box-shadow:0 0 12px 3px var(--fq-glow-color,rgba(75,163,255,0))}}
+.fq-result-glow{animation:fqFadeIn 0.5s cubic-bezier(0.4,0,0.2,1),fqResultGlow 2s ease-out 0.5s}
 .fq-card-dim{font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:12px}
 .fq-card-q{font-family:'DM Serif Display',serif;font-size:24px;color:#fff;line-height:1.28;margin-bottom:28px;max-width:520px}
 .fq-options{display:flex;flex-direction:column;gap:12px;max-width:600px}
@@ -157,6 +159,10 @@
 .fq-result-cta:hover{opacity:0.85;transform:translateY(-1px)}
 .fq-restart-btn{display:inline-flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;cursor:pointer;padding:7px 14px;transition:all 0.15s}
 .fq-restart-btn:hover{color:rgba(255,255,255,0.75);border-color:rgba(255,255,255,0.15)}
+/* ── Compare Table Rows ──────────────────────────────── */
+.cmp-rows > div{transition:background 0.15s ease}
+.cmp-rows > div:hover{background:rgba(11,95,216,0.04)}
+
 .nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;margin-left:auto}
 .nav-hamburger span{display:block;width:22px;height:2px;background:var(--navy);border-radius:2px;transition:all 0.2s}
 .nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
@@ -323,6 +329,14 @@
 .sb-tab:hover:not(.active){color:var(--ink)}
 .sb-tab-panel{display:none}
 .sb-tab-panel.active{display:block}
+@keyframes sbSlideOutLeft{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-30px)}}
+@keyframes sbSlideOutRight{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(30px)}}
+@keyframes sbSlideInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes sbSlideInRight{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+.sb-slide-out-left{animation:sbSlideOutLeft 0.22s cubic-bezier(0.4,0,1,1) forwards}
+.sb-slide-out-right{animation:sbSlideOutRight 0.22s cubic-bezier(0.4,0,1,1) forwards}
+.sb-slide-in-left{animation:sbSlideInLeft 0.22s cubic-bezier(0,0,0.2,1) forwards}
+.sb-slide-in-right{animation:sbSlideInRight 0.22s cubic-bezier(0,0,0.2,1) forwards}
 .sb-script-card{background:var(--white);border:1px solid var(--off2);border-radius:11px;padding:28px 32px;position:relative;font-size:15px;color:var(--body);line-height:1.85;white-space:pre-wrap;font-family:'DM Sans',sans-serif}
 .sb-copy-btn{position:absolute;top:14px;right:14px;background:var(--off);border:1px solid var(--off2);border-radius:6px;padding:6px 12px;font-size:15px;font-weight:600;color:var(--slate);cursor:pointer;transition:all 0.13s;font-family:'DM Sans',sans-serif}
 .sb-copy-btn:hover{background:var(--navy);color:var(--white);border-color:var(--navy)}
