@@ -1,11 +1,20 @@
-<div class="ph"><div class="con ph-inner">
+<div class="ph" data-parallax="0.12"><div class="con ph-inner">
   <span class="eyebrow eyebrow-ph">Partner Tiers</span>
   <h1 class="disp disp-lt mt8">Three tiers. One program.<br>Engineered for your model.</h1>
   <p class="lead lead-lt mt16">From enterprise fintech integrations to individual referral relationships, we have a structure built to match your business.</p>
 </div></div>
 <section class="sec bg-w"><div class="con">
+  <div class="tier-finder">
+    <div class="tier-finder-label">Find Your Tier</div>
+    <div class="tier-finder-pills">
+      <button class="tier-vol-pill" data-tier-match="direct" onclick="selectVolumePill(this)">< 10 referrals / quarter</button>
+      <button class="tier-vol-pill" data-tier-match="enterprise" onclick="selectVolumePill(this)">10 - 25 referrals / quarter</button>
+      <button class="tier-vol-pill" data-tier-match="strategic" onclick="selectVolumePill(this)">25+ referrals / quarter</button>
+    </div>
+  </div>
   <div class="tg">
-    <div class="tc">
+    <div class="tc" data-tier="direct">
+      <div class="tc-rec-badge">Recommended</div>
       <div class="tc-hd">
         <div class="tc-name tc-name-lt">Direct</div>
         <p class="tc-desc tc-desc-lt">For individual professionals ready to start referring clients immediately with minimal setup requirements.</p>
@@ -28,7 +37,8 @@
       </div>
       <div class="tc-ft"><button class="tc-btn tc-btn-s" onclick="showPage('apply')">Get Started</button></div>
     </div>
-    <div class="tc feat">
+    <div class="tc feat" data-tier="enterprise">
+      <div class="tc-rec-badge">Recommended</div>
       <div class="tc-hd tc-hd-dk">
         <div class="tc-pop">Most Popular</div>
         <div class="tc-name tc-name-dk">Enterprise</div>
@@ -51,7 +61,8 @@
       </div>
       <div class="tc-ft"><button class="tc-btn tc-btn-p" onclick="showPage('apply')">Become a Partner</button></div>
     </div>
-    <div class="tc">
+    <div class="tc" data-tier="strategic">
+      <div class="tc-rec-badge">Recommended</div>
       <div class="tc-hd">
         <div class="tc-name tc-name-lt">Strategic</div>
         <p class="tc-desc tc-desc-lt">Our highest-commitment tier for enterprise organizations requiring a dedicated channel manager, MDF funding, and executive partnership.</p>
@@ -155,7 +166,7 @@
   </div>
 </section>
 
-<div class="cta-band"><div class="con cta-inner tc">
+<div class="cta-band" data-parallax="0.1"><div class="con cta-inner tc">
   <h2 class="disp disp-lt" style="margin-bottom:14px">Not sure which tier fits?</h2>
   <p class="lead lead-lt lead-c mt16" style="max-width:480px">Apply and we'll evaluate your business during intake and recommend the right tier.</p>
   <div class="cta-acts"><button class="btn btn-p btn-lg" onclick="showPage('apply')">Become a Partner</button></div>

@@ -37,6 +37,14 @@ function onPageLoaded(id) {
   if (id === 'tiers' && typeof calcUpdate === 'function') {
     calcUpdate();
   }
+  // Initialize tier volume selector
+  if (id === 'tiers') {
+    initTierFinder();
+  }
+  // Initialize form progress on apply page
+  if (id === 'apply') {
+    initFormProgress();
+  }
   // Initialize How It Works animations
   if (id === 'how' && typeof initHowAnimations === 'function') {
     setTimeout(initHowAnimations, 60);
@@ -101,4 +109,119 @@ function onPageLoaded(id) {
       }
     });
   }
+}
+
+// ── TIER VOLUME SELECTOR ──────────────────────────────────────
+function initTierFinder() {
+  // Reset state on page load
+  var pills = document.querySelectorAll('.tier-vol-pill');
+  pills.forEach(function(p) { p.classList.remove('tvp-active'); });
+  var cards = document.querySelectorAll('.tg .tc');
+  cards.forEach(function(c) {
+    c.classList.remove('tc-recommended', 'tc-dimmed');
+  });
+}
+
+// ── FORM PROGRESS OBSERVER ──────────────────────────────────────
+function initFormProgress() {
+  var sections = document.querySelectorAll('[data-form-step]');
+  var steps = document.querySelectorAll('.fp-step');
+  var fills = [document.getElementById('fp-fill-1'), document.getElementById('fp-fill-2')];
+  if (!sections.length || !steps.length) return;
+
+  var observer = new IntersectionObserver(function(entries) {
+    // Find the highest visible step
+    var highestVisible = 0;
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var stepNum = parseInt(entry.target.getAttribute('data-form-step'));
+        if (stepNum > highestVisible) highestVisible = stepNum;
+      }
+    });
+    // Also check all section labels to find current
+    sections.forEach(function(sec) {
+      var rect = sec.getBoundingClientRect();
+      var stepNum = parseInt(sec.getAttribute('data-form-step'));
+      if (rect.top < window.innerHeight * 0.6 && rect.bottom > 0) {
+        if (stepNum > highestVisible) highestVisible = stepNum;
+      }
+    });
+    if (highestVisible === 0) return;
+    updateFormProgress(highestVisible, steps, fills);
+  }, { threshold: 0.1, rootMargin: '0px 0px -40% 0px' });
+
+  sections.forEach(function(sec) { observer.observe(sec); });
+
+  // Also update on scroll for more precise tracking
+  var scrollEl = document.getElementById('page-apply');
+  if (scrollEl) {
+    var scrollTicking = false;
+    window.addEventListener('scroll', function() {
+      if (!scrollTicking) {
+        requestAnimationFrame(function() {
+          var current = 1;
+          sections.forEach(function(sec) {
+            var rect = sec.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.5) {
+              current = parseInt(sec.getAttribute('data-form-step'));
+            }
+          });
+          updateFormProgress(current, steps, fills);
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    }, { passive: true });
+  }
+}
+
+function updateFormProgress(currentStep, steps, fills) {
+  steps.forEach(function(step, i) {
+    var num = i + 1;
+    step.classList.remove('fp-active', 'fp-done');
+    if (num < currentStep) {
+      step.classList.add('fp-done');
+    } else if (num === currentStep) {
+      step.classList.add('fp-active');
+    }
+  });
+  // Fill connecting lines
+  fills.forEach(function(fill, i) {
+    if (!fill) return;
+    var lineStep = i + 1; // line after step 1, line after step 2
+    fill.style.width = currentStep > lineStep ? '100%' : '0';
+  });
+}
+
+function selectVolumePill(btn) {
+  var pills = document.querySelectorAll('.tier-vol-pill');
+  var wasActive = btn.classList.contains('tvp-active');
+
+  // Clear all pills
+  pills.forEach(function(p) { p.classList.remove('tvp-active'); });
+
+  var cards = document.querySelectorAll('.tg .tc');
+
+  if (wasActive) {
+    // Deselect: reset all cards to default
+    cards.forEach(function(c) {
+      c.classList.remove('tc-recommended', 'tc-dimmed');
+    });
+    return;
+  }
+
+  // Activate this pill
+  btn.classList.add('tvp-active');
+  var matchTier = btn.getAttribute('data-tier-match');
+
+  cards.forEach(function(c) {
+    var tier = c.getAttribute('data-tier');
+    if (tier === matchTier) {
+      c.classList.add('tc-recommended');
+      c.classList.remove('tc-dimmed');
+    } else {
+      c.classList.remove('tc-recommended');
+      c.classList.add('tc-dimmed');
+    }
+  });
 }

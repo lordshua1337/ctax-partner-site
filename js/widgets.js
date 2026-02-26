@@ -32,17 +32,30 @@ var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-redu
   function fireHeroCounters(){document.querySelectorAll('#page-home .hero-counter').forEach(function(el){el.textContent=(el.getAttribute('data-prefix')||'')+'0'+(el.getAttribute('data-suffix')||'');animCount(el);});}
 
 
-  window.addEventListener('load',function(){initReveal();initScrollCounters();setTimeout(fireHeroCounters,2300);});
+  // Lock opacity after hero entrance animations complete so theme toggle can't reset them
+  function lockHeroOpacity(){
+    ['.h-title','.h-sub','.h-cta-row','.h-stats'].forEach(function(sel){
+      var el=document.querySelector(sel);
+      if(el){
+        el.addEventListener('animationend',function handler(){
+          el.style.opacity='1';
+          el.removeEventListener('animationend',handler);
+        });
+      }
+    });
+  }
+
+  window.addEventListener('load',function(){initReveal();initScrollCounters();setTimeout(fireHeroCounters,2300);lockHeroOpacity();});
   var _orig=window.showPage;
   window.showPage=function(id){
     _orig(id);
     if(id==='home'){
-      var s=document.querySelector('.h-stats');if(s){s.style.animation='none';s.offsetHeight;s.style.animation='';}
       // Reset hero text animations on revisit
-      ['.h-badge','.h-title','.h-sub','.h-cta-row'].forEach(function(sel){
+      ['.h-badge','.h-title','.h-sub','.h-cta-row','.h-stats'].forEach(function(sel){
         var el=document.querySelector(sel);if(!el)return;
         el.style.opacity='';el.style.animation='none';el.offsetHeight;el.style.animation='';
       });
+      lockHeroOpacity();
       setTimeout(function(){initReveal();document.querySelectorAll('#page-home .counter').forEach(function(el){var p=el.getAttribute('data-prefix')||'';el.textContent=p+'0';co.observe(el);});},80);
       setTimeout(fireHeroCounters,2380);
     }
@@ -137,6 +150,14 @@ function toggleDarkMode(){
   localStorage.setItem('ctax_theme', next);
   var btn = document.getElementById('dark-mode-icon');
   if(btn) btn.textContent = next === 'dark' ? '\u2600' : '\u263E';
+  // Preserve hero text visibility — animation fill-mode can reset on theme change
+  var homePage = document.getElementById('page-home');
+  if(homePage && homePage.classList.contains('active')){
+    ['.h-title','.h-sub','.h-cta-row','.h-stats'].forEach(function(sel){
+      var el = document.querySelector(sel);
+      if(el) el.style.opacity = '1';
+    });
+  }
 }
 (function(){
   var saved = localStorage.getItem('ctax_theme');
@@ -296,6 +317,36 @@ function updateOnboardProgress() {
 
   // Hook into page navigation for lazy-loaded pages
   window.initStagger = initStagger;
+})();
+
+// ── PARALLAX ON KEY SECTIONS ──────────────────────────────────────
+(function(){
+  if(prefersReducedMotion) return;
+  var ticking = false;
+
+  function updateParallax(){
+    var els = document.querySelectorAll('[data-parallax]');
+    var scrollY = window.scrollY;
+    var winH = window.innerHeight;
+    for(var i = 0; i < els.length; i++){
+      var el = els[i];
+      var rect = el.getBoundingClientRect();
+      // Only process if in or near viewport
+      if(rect.bottom < -100 || rect.top > winH + 100) continue;
+      var speed = parseFloat(el.getAttribute('data-parallax')) || 0.15;
+      var center = rect.top + rect.height / 2;
+      var offset = (center - winH / 2) * speed;
+      el.style.transform = 'translateY(' + offset.toFixed(1) + 'px)';
+    }
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function(){
+    if(!ticking){
+      requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  }, {passive: true});
 })();
 
 // ── NAV DROPDOWN HOVER WITH DELAY ──────────────────────────────────────

@@ -113,12 +113,12 @@ async function generateProjection() {
     document.getElementById('rc-numbers').innerHTML =
       '<div style="background:var(--white);border:1px solid var(--off2);border-radius:11px;padding:24px;text-align:center">' +
         '<div style="font-size:15px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--slate);margin-bottom:8px">Qualified Referrals / Year</div>' +
-        '<div style="font-family:\'DM Serif Display\',serif;font-size:36px;letter-spacing:-0.02em;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">' + nums.referrals_low + '–' + nums.referrals_high + '</div>' +
+        '<div style="font-family:\'DM Serif Display\',serif;font-size:36px;letter-spacing:-0.02em;background:linear-gradient(135deg,var(--blue),var(--cyan));background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">' + nums.referrals_low + '–' + nums.referrals_high + '</div>' +
         '<div style="font-size:15px;color:var(--slate);margin-top:4px">estimated annually</div>' +
       '</div>' +
       '<div style="background:var(--white);border:1px solid var(--off2);border-radius:11px;padding:24px;text-align:center">' +
         '<div style="font-size:15px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--slate);margin-bottom:8px">Closed Cases / Year</div>' +
-        '<div style="font-family:\'DM Serif Display\',serif;font-size:36px;letter-spacing:-0.02em;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">' + nums.cases_low + '–' + nums.cases_high + '</div>' +
+        '<div style="font-family:\'DM Serif Display\',serif;font-size:36px;letter-spacing:-0.02em;background:linear-gradient(135deg,var(--blue),var(--cyan));background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">' + nums.cases_low + '–' + nums.cases_high + '</div>' +
         '<div style="font-size:15px;color:var(--slate);margin-top:4px">at ~80% conversion</div>' +
       '</div>' +
       '<div style="background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:11px;padding:24px;text-align:center">' +

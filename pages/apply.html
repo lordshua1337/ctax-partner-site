@@ -28,28 +28,35 @@
   </div>
   <div class="form-layout" style="display:grid;grid-template-columns:1fr 300px;gap:56px;align-items:start">
     <form id="apply-form" aria-label="Partner application form" onsubmit="handleApply(event)">
+      <div class="form-progress" id="form-progress">
+        <div class="fp-step fp-active" data-step="1"><div class="fp-num">1</div><div class="fp-label">Your Info</div></div>
+        <div class="fp-line"><div class="fp-line-fill" id="fp-fill-1"></div></div>
+        <div class="fp-step" data-step="2"><div class="fp-num">2</div><div class="fp-label">Your Business</div></div>
+        <div class="fp-line"><div class="fp-line-fill" id="fp-fill-2"></div></div>
+        <div class="fp-step" data-step="3"><div class="fp-num">3</div><div class="fp-label">Partnership</div></div>
+      </div>
       <div style="margin-bottom:32px">
-        <div class="f-sec-lbl">Your Information</div>
+        <div class="f-sec-lbl" data-form-step="1">Your Information</div>
         <div class="fg2">
-          <div class="ff"><label class="fl" for="apply-first">First Name</label><input type="text" id="apply-first" name="first_name" required placeholder="Josh"></div>
-          <div class="ff"><label class="fl" for="apply-last">Last Name</label><input type="text" id="apply-last" name="last_name" required placeholder="Johnson"></div>
+          <div class="ff"><input type="text" id="apply-first" name="first_name" required placeholder=" "><label class="fl" for="apply-first">First Name</label></div>
+          <div class="ff"><input type="text" id="apply-last" name="last_name" required placeholder=" "><label class="fl" for="apply-last">Last Name</label></div>
         </div>
-        <div class="ff"><label class="fl" for="apply-email">Business Email</label><input type="email" id="apply-email" name="email" required placeholder="you@yourfirm.com"></div>
+        <div class="ff"><input type="email" id="apply-email" name="email" required placeholder=" "><label class="fl" for="apply-email">Business Email</label></div>
         <div class="fg2">
-          <div class="ff"><label class="fl" for="apply-phone">Phone</label><input type="tel" id="apply-phone" name="phone" placeholder="(555) 555-5555"></div>
-          <div class="ff"><label class="fl" for="apply-company">Company Name</label><input type="text" id="apply-company" name="company" required placeholder="Your Firm Name"></div>
+          <div class="ff"><input type="tel" id="apply-phone" name="phone" placeholder=" "><label class="fl" for="apply-phone">Phone</label></div>
+          <div class="ff"><input type="text" id="apply-company" name="company" required placeholder=" "><label class="fl" for="apply-company">Company Name</label></div>
         </div>
       </div>
       <div style="margin-bottom:32px">
-        <div class="f-sec-lbl">Your Business</div>
-        <div class="ff"><label class="fl" for="apply-biz-type">Business Type</label><select id="apply-biz-type" name="business_type" required><option value="">Select your business type...</option><option>Fintech / Neobank / Lending Platform</option><option>CPA / Accounting Firm</option><option>Tax Preparer / ERO</option><option>Financial Advisor / RIA</option><option>Law Firm</option><option>Other Financial Services</option></select></div>
-        <div class="ff"><label class="fl" for="apply-volume">Estimated Annual Client Volume</label><select id="apply-volume" name="client_volume" required><option value="">Select range...</option><option>Under 100 clients</option><option>100-500 clients</option><option>500-2,000 clients</option><option>2,000-10,000 clients</option><option>10,000+ clients</option></select></div>
-        <div class="ff"><label class="fl" for="apply-states">State(s) of Operation</label><input type="text" id="apply-states" name="states" placeholder="e.g. Illinois, Texas, California"></div>
+        <div class="f-sec-lbl" data-form-step="2">Your Business</div>
+        <div class="ff"><select id="apply-biz-type" name="business_type" required><option value="">Select your business type...</option><option>Fintech / Neobank / Lending Platform</option><option>CPA / Accounting Firm</option><option>Tax Preparer / ERO</option><option>Financial Advisor / RIA</option><option>Law Firm</option><option>Other Financial Services</option></select><label class="fl" for="apply-biz-type">Business Type</label></div>
+        <div class="ff"><select id="apply-volume" name="client_volume" required><option value="">Select range...</option><option>Under 100 clients</option><option>100-500 clients</option><option>500-2,000 clients</option><option>2,000-10,000 clients</option><option>10,000+ clients</option></select><label class="fl" for="apply-volume">Estimated Annual Client Volume</label></div>
+        <div class="ff"><input type="text" id="apply-states" name="states" placeholder=" "><label class="fl" for="apply-states">State(s) of Operation</label></div>
       </div>
       <div style="margin-bottom:32px">
-        <div class="f-sec-lbl">Partnership Interest</div>
-        <div class="ff">
-          <label class="fl" style="margin-bottom:10px">Which tier best fits your needs?</label>
+        <div class="f-sec-lbl" data-form-step="3">Partnership Interest</div>
+        <div class="ff ff-static">
+          <label class="fl fl-static" style="position:static;transform:none;margin-bottom:10px">Which tier best fits your needs?</label>
           <div class="radio-grp" role="radiogroup" aria-label="Partner tier selection">
             <label class="ro"><input type="radio" name="tier" value="direct"><span>Direct — Simple referral, minimal requirements</span></label>
             <label class="ro"><input type="radio" name="tier" value="enterprise"><span>Enterprise — API integration, co-marketing, revenue share</span></label>
@@ -57,7 +64,7 @@
             <label class="ro"><input type="radio" name="tier" value="unsure"><span>Not sure — help me decide</span></label>
           </div>
         </div>
-        <div class="ff"><label class="fl" for="apply-notes">Anything else we should know?</label><textarea id="apply-notes" name="notes" placeholder="Tell us about your client base, existing referral relationships, or specific questions..."></textarea></div>
+        <div class="ff"><textarea id="apply-notes" name="notes" placeholder=" "></textarea><label class="fl" for="apply-notes">Anything else we should know?</label></div>
       </div>
       <button type="submit" class="f-submit">Submit Application</button>
       <p style="font-size:15px;color:var(--slate);text-align:center;margin-top:12px;line-height:1.6">By submitting, you agree to be contacted by a Community Tax partner representative. We do not sell your information.</p>

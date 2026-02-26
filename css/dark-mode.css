@@ -167,7 +167,7 @@
 
 /* ── Gradient text → plain white in dark mode ── */
 [data-theme="dark"] .eyebrow,[data-theme="dark"] .eyebrow-lt,[data-theme="dark"] .eyebrow-md{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:rgba(255,255,255,0.4);background-clip:unset}
-[data-theme="dark"] .eyebrow-ph{background:linear-gradient(90deg,#c8d8e8,#ffffff,#dde8f0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+[data-theme="dark"] .eyebrow-ph{background:linear-gradient(90deg,#c8d8e8,#ffffff,#dde8f0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 [data-theme="dark"] .h-title-gradient{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:#fff;background-clip:unset}
 [data-theme="dark"] .h-marquee-label{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:rgba(255,255,255,0.35);background-clip:unset}
 [data-theme="dark"] .ft-col-lbl{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:rgba(255,255,255,0.4);background-clip:unset}
@@ -186,10 +186,20 @@
 [data-theme="dark"] .pc-amt{color:#e0e4ec}
 [data-theme="dark"] .am-size-btn{background:#141e30;color:#e0e4ec;border-color:rgba(255,255,255,0.12)}
 [data-theme="dark"] .sb-objection-q{color:#e0e4ec}
-[data-theme="dark"] label.fl{color:rgba(255,255,255,0.7)}
+[data-theme="dark"] label.fl{color:rgba(255,255,255,0.45)}
+[data-theme="dark"] .ff:focus-within label.fl{color:#4BA3FF}
+[data-theme="dark"] .fp-num{border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .fp-label{color:rgba(255,255,255,0.4)}
+[data-theme="dark"] .fp-line{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .fp-step.fp-active .fp-label{color:#4BA3FF}
+[data-theme="dark"] .fp-step.fp-done .fp-label{color:var(--teal-text)}
 [data-theme="dark"] .ai-card h5{color:#e0e4ec}
 [data-theme="dark"] .ai-card{background:#141e30;border-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .tc-btn-s{background:#1a2234;color:#e0e4ec;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .tier-vol-pill{background:#141e30;border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)}
+[data-theme="dark"] .tier-vol-pill:hover{border-color:rgba(75,163,255,0.4);color:#4BA3FF;background:rgba(11,95,216,0.08)}
+[data-theme="dark"] .tier-vol-pill.tvp-active{background:rgba(11,95,216,0.15);border-color:rgba(75,163,255,0.5);color:#4BA3FF}
+[data-theme="dark"] .tier-finder-label{color:rgba(255,255,255,0.4)}
 [data-theme="dark"] .sb-copy-btn{background:#141e30;color:#e0e4ec;border-color:rgba(255,255,255,0.1)}
 /* ── Ad maker, modals, misc white backgrounds ── */
 [data-theme="dark"] .am-tpl-opt{background:#141e30;border-color:rgba(255,255,255,0.1)}

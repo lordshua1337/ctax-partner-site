@@ -172,6 +172,22 @@
     ].join('\n');
 
     container.innerHTML = svg;
+
+    // Animate chart lines drawing in
+    if (!prefersReducedMotion) {
+      var paths = container.querySelectorAll('path[stroke][fill="none"]');
+      var areaPath = container.querySelector('path[fill="url(#vel-user-grad)"]');
+      paths.forEach(function(path, i) {
+        var length = path.getTotalLength();
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+        path.classList.add('vel-draw');
+        path.style.animationDelay = (i * 0.3) + 's';
+      });
+      if (areaPath) {
+        areaPath.classList.add('vel-area-fade');
+      }
+    }
   }
 
 
@@ -242,6 +258,40 @@
     ].join('\n');
 
     container.innerHTML = svg;
+
+    // Animate bonus ring from 0
+    if (!prefersReducedMotion && count > 0) {
+      var ring = container.querySelector('circle[stroke-dasharray]');
+      if (ring) {
+        var finalDash = ring.getAttribute('stroke-dasharray');
+        var circ = 2 * Math.PI * r;
+        ring.setAttribute('stroke-dasharray', '0 ' + circ.toFixed(1));
+        ring.classList.add('bonus-ring-anim');
+        // Use rAF to set final value after browser paints initial state
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            ring.setAttribute('stroke-dasharray', finalDash);
+          });
+        });
+      }
+      // Animate center count from 0
+      var countText = container.querySelector('text[font-size="38"]');
+      if (countText && !isFull) {
+        var targetCount = count;
+        var duration = 1000;
+        var start = performance.now();
+        function tickCount(now) {
+          var elapsed = now - start;
+          var progress = Math.min(elapsed / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          var current = Math.round(eased * targetCount);
+          // Update just the main number, preserving the /4 tspan
+          countText.innerHTML = current + '<tspan font-size="20" fill="' + colors.bonusSub + '">/4</tspan>';
+          if (progress < 1) requestAnimationFrame(tickCount);
+        }
+        requestAnimationFrame(tickCount);
+      }
+    }
   }
 
 

@@ -21,16 +21,12 @@
 
     <div style="background:var(--off);border:1px solid var(--off2);border-radius:16px;padding:36px 40px">
       <form id="contact-form" aria-label="Contact form" onsubmit="handleContactSubmit(event)"><div style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:24px">Send a message</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-        <div><label for="contact-name" style="font-size:13px;font-weight:600;color:var(--slate);display:block;margin-bottom:6px">Name</label>
-        <input type="text" id="contact-name" name="name" required placeholder="Your name" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;color:var(--navy)" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--mist)'"></div>
-        <div><label for="contact-email" style="font-size:13px;font-weight:600;color:var(--slate);display:block;margin-bottom:6px">Email</label>
-        <input type="email" id="contact-email" name="email" required placeholder="your@email.com" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;color:var(--navy)" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--mist)'"></div>
+      <div class="fg2" style="margin-bottom:2px">
+        <div class="ff"><input type="text" id="contact-name" name="name" required placeholder=" "><label class="fl" for="contact-name">Name</label></div>
+        <div class="ff"><input type="email" id="contact-email" name="email" required placeholder=" "><label class="fl" for="contact-email">Email</label></div>
       </div>
-      <div style="margin-bottom:16px"><label for="contact-subject" style="font-size:13px;font-weight:600;color:var(--slate);display:block;margin-bottom:6px">Subject</label>
-      <input type="text" id="contact-subject" name="subject" required placeholder="How can we help?" style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;color:var(--navy)" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--mist)'"></div>
-      <div style="margin-bottom:24px"><label for="contact-message" style="font-size:13px;font-weight:600;color:var(--slate);display:block;margin-bottom:6px">Message</label>
-      <textarea id="contact-message" name="message" rows="4" required placeholder="Tell us more..." style="width:100%;padding:11px 14px;border:1.5px solid var(--mist);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;color:var(--navy);resize:vertical" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--mist)'"></textarea></div>
+      <div class="ff"><input type="text" id="contact-subject" name="subject" required placeholder=" "><label class="fl" for="contact-subject">Subject</label></div>
+      <div class="ff" style="margin-bottom:24px"><textarea id="contact-message" name="message" rows="4" required placeholder=" "></textarea><label class="fl" for="contact-message">Message</label></div>
       <button type="submit" class="btn btn-p btn-lg" style="width:100%">Send Message</button>
     </form>
     </div>
