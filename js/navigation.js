@@ -171,7 +171,7 @@ document.addEventListener('keydown',function(e){
       items:['Modern tech stack & integration capability','Competing products or competitor relationships','Support capabilities as we scale together','Privacy, security & compliance posture']
     },
     c: {
-      color:'#3D917F', spokeId:'spoke-c', dotId:'dot-c', lblId:'lbl-c',
+      color:'var(--teal-text)', spokeId:'spoke-c', dotId:'dot-c', lblId:'lbl-c',
       cx:210, cy:370,
       polyPoints: function(s){ return '210,50 370,210 210,'+(210+s)+' 50,210'; },
       tipAnchor: function(w,h){ return {x:w/2-124, y:h-290}; },
@@ -189,7 +189,7 @@ document.addEventListener('keydown',function(e){
       items:['Industry expertise and vertical knowledge','Sales cycle and historical conversion rate','SSO integration willingness and timeline','Referral volume capacity']
     }
   };
-  var fillMap={v:'rgba(75,163,255,0.13)',r:'rgba(248,113,113,0.1)',c:'rgba(61,145,127,0.09)',e:'rgba(196,160,255,0.1)'};
+  var fillMap={v:'rgba(75,163,255,0.13)',r:'rgba(248,113,113,0.1)',c:'rgba(0,229,204,0.09)',e:'rgba(196,160,255,0.1)'};
   var defaultPoly='210,100 310,210 210,320 110,210';
   var active=null, mode='explore', scores={v:3,r:3,c:3,e:3};
 
@@ -257,10 +257,10 @@ document.addEventListener('keydown',function(e){
      text:"Across the dimensions that matter most for getting started, you're in a good place. A Direct partnership is probably the right structure — low overhead on your end, clear economics, and a path to deepening the relationship as volume grows. The intake form takes about five minutes and gets a conversation started.",
      cta:'apply',ctaText:'Start the conversation →',ctaStyle:'background:rgba(75,163,255,0.12);color:#4BA3FF;border:1px solid rgba(75,163,255,0.22)'},
     {test:function(s,a){return a>=3.8&&Math.min(s.v,s.r,s.c,s.e)>=3;},
-     bg:'rgba(61,145,127,0.05)',border:'rgba(61,145,127,0.2)',icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16 8 12 12 8"/></svg>',
+     bg:'rgba(0,229,204,0.05)',border:'rgba(0,229,204,0.2)',icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16 8 12 12 8"/></svg>',
      title:"Strong alignment across the board.",
      text:"You're scoring well on every dimension — which usually means an Enterprise or Strategic structure is worth exploring. Those tiers come with meaningfully higher revenue share, a dedicated account relationship, and a more tailored integration. Norm handles these conversations directly and can walk you through what that looks like for your specific situation.",
-     cta:'apply',ctaText:'Let\'s talk about a deeper structure →',ctaStyle:'background:rgba(61,145,127,0.1);color:#3D917F;border:1px solid rgba(61,145,127,0.18)'}
+     cta:'apply',ctaText:'Let\'s talk about a deeper structure →',ctaStyle:'background:rgba(0,229,204,0.1);color:var(--teal-text);border:1px solid rgba(0,229,204,0.18)'}
   ];
 
   function updateResult(){
@@ -302,7 +302,7 @@ document.addEventListener('keydown',function(e){
     document.getElementById('ctBody').textContent=d.body;
     var list=document.getElementById('ctList');list.innerHTML='';
     d.items.forEach(function(item){var li=document.createElement('li');li.textContent=item;list.appendChild(li);});
-    var bmap={v:'rgba(75,163,255,0.3)',r:'rgba(248,113,113,0.3)',c:'rgba(61,145,127,0.25)',e:'rgba(196,160,255,0.25)'};
+    var bmap={v:'rgba(75,163,255,0.3)',r:'rgba(248,113,113,0.3)',c:'rgba(0,229,204,0.25)',e:'rgba(196,160,255,0.25)'};
     t.style.borderColor=bmap[k];
     var w=wrap.offsetWidth,h=wrap.offsetHeight,pos=d.tipAnchor(w,h);
     t.style.left=Math.max(0,Math.min(pos.x,w-258))+'px';
@@ -436,8 +436,8 @@ function handleResourceDownload(btn, name) {
   URL.revokeObjectURL(url);
   
   btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Downloaded';
-  btn.style.background = 'rgba(61,145,127,0.1)';
-  btn.style.color = 'var(--teal)';
-  btn.style.borderColor = 'rgba(61,145,127,0.3)';
+  btn.style.background = 'rgba(0,229,204,0.1)';
+  btn.style.color = 'var(--teal-text)';
+  btn.style.borderColor = 'rgba(0,229,204,0.3)';
 }
 

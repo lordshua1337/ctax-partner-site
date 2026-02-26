@@ -123,7 +123,7 @@ async function generateProjection() {
       '</div>' +
       '<div style="background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:11px;padding:24px;text-align:center">' +
         '<div style="font-size:15px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.72);margin-bottom:8px">Estimated Revenue Share</div>' +
-        '<div style="font-family:\'DM Serif Display\',serif;font-size:30px;letter-spacing:-0.02em;color:var(--teal)">' + nums.revenue_low + '–' + nums.revenue_high + '</div>' +
+        '<div style="font-family:\'DM Serif Display\',serif;font-size:30px;letter-spacing:-0.02em;color:var(--teal-text)">' + nums.revenue_low + '–' + nums.revenue_high + '</div>' +
         '<div style="font-size:15px;color:rgba(255,255,255,0.72);margin-top:4px">year one projection</div>' +
       '</div>';
 

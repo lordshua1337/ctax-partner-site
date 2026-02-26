@@ -6,7 +6,7 @@
 [data-theme="dark"]{
   --white:#0c1220;--off:#111827;--off2:#1a2234;
   --mist:#2a3650;--slate:#7889a4;--ink:#e8ecf2;--body:#b0b8cc;
-  --cyan:#00C8E0;--teal:#00E5CC;
+  --cyan-text:#00C8E0;--teal-text:#00E5CC;
 }
 
 /* ── Body & page backgrounds ── */
