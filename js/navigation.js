@@ -24,7 +24,7 @@ function showPage(id){
       current.style.display='none';
       setTimeout(function(){ current.style.display=''; }, 50);
       _activatePage(id);
-    }, 200);
+    }, 180);
   } else {
     _activatePage(id);
   }
@@ -42,7 +42,7 @@ function _activatePage(id){
     if(p){
       p.style.display='block';
       p.classList.add('active','page-enter');
-      setTimeout(function(){ p.classList.remove('page-enter'); p.style.display=''; }, 460);
+      setTimeout(function(){ p.classList.remove('page-enter'); p.style.display=''; }, 1100);
       setTimeout(function(){ revealInView(p); }, 80);
     }
     var n=document.getElementById('nav-'+id);if(n)n.classList.add('active');

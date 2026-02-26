@@ -1,6 +1,6 @@
 /* CARDS */
-.card{background:var(--white);border:1px solid var(--off2);border-radius:13px;padding:28px;transition:box-shadow 0.2s,transform 0.2s}
-.card:hover{box-shadow:0 8px 40px rgba(10,22,40,0.13);transform:translateY(-2px)}
+.card{background:var(--white);border:1px solid var(--off2);border-radius:13px;padding:28px;transition:box-shadow 0.28s ease,transform 0.28s cubic-bezier(0.22,1,0.36,1),border-color 0.28s ease}
+.card:hover{box-shadow:0 12px 40px rgba(10,22,40,0.13);transform:translateY(-4px);border-color:rgba(11,95,216,0.12)}
 .card-dk{background:var(--navy2);border:1px solid rgba(255,255,255,0.07)}
 .card-off{background:var(--off);border:1px solid var(--off2)}
 
@@ -118,8 +118,8 @@
 
 /* TESTIMONIALS */
 .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.testi-card{background:var(--white);border:1px solid var(--off2);border-radius:13px;padding:28px;display:flex;flex-direction:column;gap:16px;transition:box-shadow 0.2s,transform 0.2s}
-.testi-card:hover{box-shadow:0 8px 40px rgba(10,22,40,0.1);transform:translateY(-2px)}
+.testi-card{background:var(--white);border:1px solid var(--off2);border-radius:13px;padding:28px;display:flex;flex-direction:column;gap:16px;transition:box-shadow 0.28s ease,transform 0.28s cubic-bezier(0.22,1,0.36,1),border-color 0.28s ease}
+.testi-card:hover{box-shadow:0 12px 40px rgba(10,22,40,0.1);transform:translateY(-4px);border-color:rgba(11,95,216,0.12)}
 .testi-quote{font-size:15px;color:var(--body);line-height:1.75;font-style:italic;flex:1}
 .testi-quote::before{content:'\201C';color:var(--blue);font-size:28px;font-family:'DM Serif Display',serif;line-height:0;vertical-align:-10px;margin-right:3px}
 .testi-attr{display:flex;gap:12px;align-items:center;padding-top:14px;border-top:1px solid var(--off2)}
@@ -128,6 +128,10 @@
 .testi-role{font-size:15px;color:var(--slate)}
 .testi-stat{display:inline-flex;align-items:center;gap:6px;background:rgba(11,95,216,0.07);border:1px solid rgba(11,95,216,0.12);border-radius:20px;padding:4px 11px;font-size:15px;font-weight:600;color:var(--blue);letter-spacing:0.05em;margin-top:10px}
 
+
+/* ── Staggered Card Entrance ──────────────────────────── */
+.stagger-child{opacity:0;transform:translateY(18px);transition:opacity 0.45s cubic-bezier(0.22,1,0.36,1),transform 0.45s cubic-bezier(0.22,1,0.36,1)}
+.stagger-child.stagger-visible{opacity:1;transform:translateY(0)}
 
 /* ── Scroll Reveal ────────────────────────────────────── */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.55s cubic-bezier(0.22,1,0.36,1),transform 0.55s cubic-bezier(0.22,1,0.36,1)}

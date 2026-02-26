@@ -1,3 +1,5 @@
+var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 (function(){
   var ro=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in-view');ro.unobserve(e.target);}});},{threshold:0.12});
   var rv=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');rv.unobserve(e.target);}});},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
@@ -14,6 +16,7 @@
     var tgt=parseFloat(el.getAttribute('data-target'));
     var pre=el.getAttribute('data-prefix')||'',suf=el.getAttribute('data-suffix')||'';
     var isF=(tgt%1!==0),dur=1800,t0=null;
+    if(prefersReducedMotion){el.textContent=pre+(isF?tgt.toFixed(1):Math.floor(tgt))+suf;return;}
     el.classList.add('counting');
     function step(ts){
       if(!t0)t0=ts;
@@ -202,17 +205,19 @@ function updateOnboardProgress() {
       if(entry.isIntersecting && !counted.has(entry.target)){
         counted.add(entry.target);
         var el = entry.target;
-        var target = parseInt(el.getAttribute('data-count-to')) || 0;
+        var target = parseFloat(el.getAttribute('data-count-to')) || 0;
         var prefix = el.getAttribute('data-count-prefix') || '';
         var suffix = el.getAttribute('data-count-suffix') || '';
+        var decimals = parseInt(el.getAttribute('data-count-decimals')) || 0;
         var duration = 1500;
         var start = performance.now();
         function tick(now){
           var elapsed = now - start;
           var progress = Math.min(elapsed / duration, 1);
           var eased = 1 - Math.pow(1 - progress, 3);
-          var current = Math.round(target * eased);
-          el.textContent = prefix + current.toLocaleString() + suffix;
+          var current = target * eased;
+          var display = decimals > 0 ? current.toFixed(decimals) : Math.round(current).toLocaleString();
+          el.textContent = prefix + display + suffix;
           if(progress < 1) requestAnimationFrame(tick);
         }
         requestAnimationFrame(tick);
@@ -220,6 +225,77 @@ function updateOnboardProgress() {
     });
   }, {threshold:0.3});
   document.querySelectorAll('[data-count-to]').forEach(function(el){ obs.observe(el); });
+})();
+
+// ── SCROLL PROGRESS BAR ──────────────────────────────────────
+(function(){
+  var bar = null;
+  var ticking = false;
+
+  function updateProgress(){
+    if(!bar) bar = document.getElementById('scroll-progress');
+    if(!bar) return;
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if(docHeight <= 0){
+      bar.classList.remove('visible');
+      return;
+    }
+    var pct = Math.min((scrollTop / docHeight) * 100, 100);
+    bar.style.width = pct + '%';
+    bar.classList.toggle('visible', scrollTop > 80);
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function(){
+    if(!ticking){
+      requestAnimationFrame(updateProgress);
+      ticking = true;
+    }
+  }, {passive: true});
+})();
+
+// ── STAGGERED CARD ENTRANCE ──────────────────────────────────────
+(function(){
+  var staggerSelectors = '.g2,.g3,.g4,.testi-grid,.vcols,.srow,.cta-acts';
+  var staggerObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(!entry.isIntersecting) return;
+      var children = entry.target.children;
+      for(var i = 0; i < children.length; i++){
+        if(prefersReducedMotion){
+          children[i].classList.add('stagger-visible');
+        } else {
+          (function(child, delay){
+            setTimeout(function(){
+              child.classList.add('stagger-visible');
+            }, delay);
+          })(children[i], i * 60);
+        }
+      }
+      staggerObs.unobserve(entry.target);
+    });
+  }, {threshold: 0.08, rootMargin: '0px 0px -30px 0px'});
+
+  function initStagger(root){
+    var containers = (root || document).querySelectorAll(staggerSelectors);
+    containers.forEach(function(container){
+      // Skip if already observed or all children visible
+      if(container.dataset.staggerInit) return;
+      container.dataset.staggerInit = '1';
+      var children = container.children;
+      for(var i = 0; i < children.length; i++){
+        children[i].classList.add('stagger-child');
+      }
+      staggerObs.observe(container);
+    });
+  }
+
+  // Run on load for home page
+  window.addEventListener('load', function(){ initStagger(); });
+
+  // Hook into page navigation for lazy-loaded pages
+  window.initStagger = initStagger;
 })();
 
 // ── NAV DROPDOWN HOVER WITH DELAY ──────────────────────────────────────
@@ -243,6 +319,11 @@ function updateOnboardProgress() {
     if(closeTimer) clearTimeout(closeTimer);
     closeTimer = setTimeout(closeNow, 500);
   }
+
+  // Close dropdown when any menu item or promo is clicked
+  document.querySelectorAll('.dd-item, .dd-promo-inner').forEach(function(item){
+    item.addEventListener('click', function(){ closeNow(); });
+  });
 
   document.querySelectorAll('.nav-drop').forEach(function(drop){
     var trigger = drop.querySelector('.nav-drop-trigger');

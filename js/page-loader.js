@@ -65,25 +65,31 @@ function onPageLoaded(id) {
   if (id === 'dashboard' && typeof window.initDashboardHub === 'function') {
     setTimeout(window.initDashboardHub, 80);
   }
-  // Initialize data-count-to counters on any newly loaded page
+  // Initialize staggered card entrances on newly loaded page
   var el = document.getElementById('page-' + id);
+  if (el && typeof window.initStagger === 'function') {
+    window.initStagger(el);
+  }
+  // Initialize data-count-to counters on any newly loaded page
   if (el) {
     el.querySelectorAll('[data-count-to]').forEach(function(counter) {
       if (typeof IntersectionObserver !== 'undefined') {
         var obs = new IntersectionObserver(function(entries) {
           entries.forEach(function(entry) {
             if (entry.isIntersecting) {
-              var target = parseInt(entry.target.getAttribute('data-count-to')) || 0;
+              var target = parseFloat(entry.target.getAttribute('data-count-to')) || 0;
               var prefix = entry.target.getAttribute('data-count-prefix') || '';
               var suffix = entry.target.getAttribute('data-count-suffix') || '';
+              var decimals = parseInt(entry.target.getAttribute('data-count-decimals')) || 0;
               var duration = 1500;
               var start = performance.now();
               function tick(now) {
                 var elapsed = now - start;
                 var progress = Math.min(elapsed / duration, 1);
                 var eased = 1 - Math.pow(1 - progress, 3);
-                var current = Math.round(target * eased);
-                entry.target.textContent = prefix + current.toLocaleString() + suffix;
+                var current = target * eased;
+                var display = decimals > 0 ? current.toFixed(decimals) : Math.round(current).toLocaleString();
+                entry.target.textContent = prefix + display + suffix;
                 if (progress < 1) requestAnimationFrame(tick);
               }
               requestAnimationFrame(tick);

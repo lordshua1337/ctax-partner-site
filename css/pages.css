@@ -664,7 +664,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 
 /* ── Page Transitions ─────────────────────────────────── */
 .page.page-enter{animation:pageEnter 0.42s cubic-bezier(0.22,1,0.36,1) forwards}
-.page.page-exit{animation:pageExit 0.22s cubic-bezier(0.4,0,1,1) forwards}
+.page.page-exit{animation:pageExit 0.18s cubic-bezier(0.4,0,1,1) forwards}
 @keyframes pageEnter{
   0%{opacity:0;transform:translateY(22px)}
   100%{opacity:1;transform:translateY(0)}
@@ -672,6 +672,25 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 @keyframes pageExit{
   0%{opacity:1;transform:translateY(0)}
   100%{opacity:0;transform:translateY(-10px)}
+}
+
+/* ── Section Stagger on Page Enter ─────────────────────── */
+.page.page-enter > section,
+.page.page-enter > .ph,
+.page.page-enter > .hero-wrap,
+.page.page-enter > footer{opacity:0;transform:translateY(20px);animation:secStagger 0.5s cubic-bezier(0.22,1,0.36,1) forwards}
+.page.page-enter > :nth-child(1){animation-delay:0.05s}
+.page.page-enter > :nth-child(2){animation-delay:0.12s}
+.page.page-enter > :nth-child(3){animation-delay:0.19s}
+.page.page-enter > :nth-child(4){animation-delay:0.26s}
+.page.page-enter > :nth-child(5){animation-delay:0.33s}
+.page.page-enter > :nth-child(6){animation-delay:0.38s}
+.page.page-enter > :nth-child(7){animation-delay:0.43s}
+.page.page-enter > :nth-child(8){animation-delay:0.48s}
+.page.page-enter > :nth-child(n+9){animation-delay:0.50s}
+@keyframes secStagger{
+  0%{opacity:0;transform:translateY(20px)}
+  100%{opacity:1;transform:translateY(0)}
 }
 
 
