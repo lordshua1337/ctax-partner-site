@@ -8,7 +8,7 @@ html{scroll-behavior:smooth}
   --white:#FFFFFF;--off:#F5F7FA;--off2:#EEF1F7;
   --mist:#D8DDE8;--slate:#8A95AA;--ink:#1C2333;--body:#3D4760;
 }
-body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);line-height:1.6;overflow-x:hidden}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);line-height:1.6;overflow-x:hidden;padding-bottom:56px}
 
 
 /* PAGES */
