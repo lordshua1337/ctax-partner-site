@@ -967,11 +967,120 @@
 
     <!-- ═══ DOCUMENTS SECTION ═══ -->
     <div class="portal-section" id="portal-sec-documents">
-      <div class="portal-sec-header">
-        <h2 class="portal-sec-title">Documents</h2>
-        <p class="portal-sec-desc">Shared document vault for client files, signed authorizations, IRS correspondence, and agreements.</p>
+      <div class="portal-sec-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
+        <div>
+          <h2 class="portal-sec-title">Documents</h2>
+          <p class="portal-sec-desc">Shared document vault for client files, signed authorizations, IRS correspondence, and agreements.</p>
+        </div>
+        <button class="doc-upload-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Upload Files</button>
       </div>
-      <div class="portal-placeholder">Coming soon</div>
+
+      <!-- Stats Bar -->
+      <div class="doc-stats">
+        <div class="doc-stat"><span class="doc-stat-val">24</span><span class="doc-stat-label">Total Files</span></div>
+        <div class="doc-stat-sep"></div>
+        <div class="doc-stat"><span class="doc-stat-val">12.4 MB</span><span class="doc-stat-label">Storage Used</span></div>
+        <div class="doc-stat-sep"></div>
+        <div class="doc-stat"><span class="doc-stat-val">3</span><span class="doc-stat-label">Uploaded This Week</span></div>
+      </div>
+
+      <!-- Folder Tabs -->
+      <div class="doc-tabs">
+        <button class="doc-tab doc-tab-active" onclick="docFilter(this,'all')">All Files <span class="doc-tab-count">24</span></button>
+        <button class="doc-tab" onclick="docFilter(this,'client')">By Client <span class="doc-tab-count">18</span></button>
+        <button class="doc-tab" onclick="docFilter(this,'template')">Templates <span class="doc-tab-count">4</span></button>
+        <button class="doc-tab" onclick="docFilter(this,'irs')">IRS Correspondence <span class="doc-tab-count">2</span></button>
+      </div>
+
+      <!-- Upload Dropzone -->
+      <div class="doc-dropzone">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>Drop files here to upload</span>
+      </div>
+
+      <!-- File Table -->
+      <div class="doc-table-wrap">
+        <div class="doc-table-head">
+          <div class="doc-th-check"><input type="checkbox"></div>
+          <div>Name</div>
+          <div>Client</div>
+          <div>Date</div>
+          <div>Size</div>
+          <div>Actions</div>
+        </div>
+
+        <div class="doc-row" data-cat="client">
+          <div class="doc-td-check"><input type="checkbox"></div>
+          <div class="doc-td-name"><div class="doc-icon doc-icon-pdf"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span>Form_2848_POA_Williams.pdf</span></div>
+          <div class="doc-td-client">James Williams</div>
+          <div>Feb 20, 2026</div>
+          <div>245 KB</div>
+          <div class="doc-td-acts"><button class="doc-act" title="Download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button><button class="doc-act" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div>
+        </div>
+
+        <div class="doc-row" data-cat="client">
+          <div class="doc-td-check"><input type="checkbox"></div>
+          <div class="doc-td-name"><div class="doc-icon doc-icon-pdf"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span>IRS_Transcripts_2021-23_Williams.pdf</span></div>
+          <div class="doc-td-client">James Williams</div>
+          <div>Feb 22, 2026</div>
+          <div>1.2 MB</div>
+          <div class="doc-td-acts"><button class="doc-act" title="Download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button><button class="doc-act" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div>
+        </div>
+
+        <div class="doc-row" data-cat="client">
+          <div class="doc-td-check"><input type="checkbox"></div>
+          <div class="doc-td-name"><div class="doc-icon doc-icon-pdf"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span>OIC_Application_656_Williams.pdf</span></div>
+          <div class="doc-td-client">James Williams</div>
+          <div>Feb 26, 2026</div>
+          <div>890 KB</div>
+          <div class="doc-td-acts"><button class="doc-act" title="Download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button><button class="doc-act" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div>
+        </div>
+
+        <div class="doc-row" data-cat="irs">
+          <div class="doc-td-check"><input type="checkbox"></div>
+          <div class="doc-td-name"><div class="doc-icon doc-icon-pdf"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span>CP504_Notice_Williams.pdf</span></div>
+          <div class="doc-td-client">James Williams</div>
+          <div>Feb 18, 2026</div>
+          <div>340 KB</div>
+          <div class="doc-td-acts"><button class="doc-act" title="Download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button><button class="doc-act" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div>
+        </div>
+
+        <div class="doc-row" data-cat="client">
+          <div class="doc-td-check"><input type="checkbox"></div>
+          <div class="doc-td-name"><div class="doc-icon doc-icon-pdf"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span>Form_2848_POA_Garcia.pdf</span></div>
+          <div class="doc-td-client">Maria Garcia</div>
+          <div>Feb 18, 2026</div>
+          <div>198 KB</div>
+          <div class="doc-td-acts"><button class="doc-act" title="Download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button><button class="doc-act" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div>
+        </div>
+
+        <div class="doc-row" data-cat="template">
+          <div class="doc-td-check"><input type="checkbox"></div>
+          <div class="doc-td-name"><div class="doc-icon doc-icon-doc"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><span>Partner_Agreement_Template.docx</span></div>
+          <div class="doc-td-client">--</div>
+          <div>Jan 5, 2026</div>
+          <div>78 KB</div>
+          <div class="doc-td-acts"><button class="doc-act" title="Download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button><button class="doc-act" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div>
+        </div>
+
+        <div class="doc-row" data-cat="template">
+          <div class="doc-td-check"><input type="checkbox"></div>
+          <div class="doc-td-name"><div class="doc-icon doc-icon-pdf"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span>Blank_Form_2848.pdf</span></div>
+          <div class="doc-td-client">--</div>
+          <div>Jan 5, 2026</div>
+          <div>142 KB</div>
+          <div class="doc-td-acts"><button class="doc-act" title="Download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button><button class="doc-act" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div>
+        </div>
+
+        <div class="doc-row" data-cat="irs">
+          <div class="doc-td-check"><input type="checkbox"></div>
+          <div class="doc-td-name"><div class="doc-icon doc-icon-pdf"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span>IRS_Acceptance_Letter_Thompson.pdf</span></div>
+          <div class="doc-td-client">Robert Thompson</div>
+          <div>Feb 21, 2026</div>
+          <div>156 KB</div>
+          <div class="doc-td-acts"><button class="doc-act" title="Download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button><button class="doc-act" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div>
+        </div>
+      </div>
     </div>
 
     <!-- ═══ CALCULATOR SECTION ═══ -->

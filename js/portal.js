@@ -241,3 +241,16 @@ function subFormNav(dir) {
   var formWrap = document.querySelector('.sub-form-wrap');
   if (formWrap) formWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+// --- Documents tab filter ---
+function docFilter(btn, cat) {
+  document.querySelectorAll('.doc-tab').forEach(function(t) { t.classList.remove('doc-tab-active'); });
+  btn.classList.add('doc-tab-active');
+  document.querySelectorAll('.doc-row').forEach(function(row) {
+    if (cat === 'all' || row.getAttribute('data-cat') === cat) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
