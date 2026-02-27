@@ -84,19 +84,8 @@ window.addEventListener('popstate', function(e) {
   _activatePage(pageId, true);
 });
 
-// Set initial history state on page load
-(function() {
-  var hash = window.location.hash.replace('#', '');
-  if (hash) {
-    // If URL has a hash, navigate to that page
-    history.replaceState({ page: hash }, '', '#' + hash);
-    // Delay so all scripts are loaded
-    setTimeout(function(){ showPage(hash, true); }, 0);
-  } else {
-    // Default to home
-    history.replaceState({ page: 'home' }, '', '');
-  }
-})();
+// Set initial history state — always start on home, clear any stale hash
+history.replaceState({ page: 'home' }, '', window.location.pathname);
 function switchSeg(id,btn){
   document.querySelectorAll('.seg-panel').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.seg-tab').forEach(function(t){t.classList.remove('active');});
