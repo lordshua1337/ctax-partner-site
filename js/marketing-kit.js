@@ -45,6 +45,15 @@ function mkInitDownloadCounts() {
 }
 
 
+// ── CLOSE ALL BUILDERS ───────────────────────────────────────
+function mkCloseAllBuilders() {
+  var ids = ['mk-email-builder', 'mk-social-builder', 'mk-onepager-builder'];
+  ids.forEach(function(id) {
+    var panel = document.getElementById(id);
+    if (panel) panel.style.display = 'none';
+  });
+}
+
 // ── EMAIL BUILDER ──────────────────────────────────────────
 var mkEmailCurrentTpl = 'outreach';
 
@@ -103,6 +112,7 @@ var MK_EMAIL_TEMPLATES = {
 };
 
 function mkShowEmailBuilder() {
+  mkCloseAllBuilders();
   var panel = document.getElementById('mk-email-builder');
   if (panel) {
     panel.style.display = 'block';
@@ -174,6 +184,7 @@ var mkSocialH = 628;
 var mkSocialLogoUrl = null;
 
 function mkShowSocialBuilder() {
+  mkCloseAllBuilders();
   var panel = document.getElementById('mk-social-builder');
   if (panel) {
     panel.style.display = 'block';
@@ -288,6 +299,7 @@ function mkDownloadSocialPng() {
 var mkOnePagerLogoUrl = null;
 
 function mkShowOnePagerBuilder() {
+  mkCloseAllBuilders();
   var panel = document.getElementById('mk-onepager-builder');
   if (panel) {
     panel.style.display = 'block';
