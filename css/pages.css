@@ -321,6 +321,8 @@
   #page-dashboard [style*="grid-template-columns:1fr 1fr 1fr 1fr"] > div [style*="font-size:32px"]{font-size:24px!important}
 }
 
+.am-back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.55);cursor:pointer;text-decoration:none;margin-bottom:20px;transition:color 0.15s;background:none;border:none;font-family:inherit;padding:8px 16px;border-radius:8px}
+.am-back-btn:hover{color:rgba(255,255,255,0.95);background:rgba(255,255,255,0.08)}
 .am-tpl-opt{padding:10px;border:2px solid var(--mist);border-radius:10px;cursor:pointer;transition:all 0.15s;background:#fff}
 .am-tpl-opt:hover{border-color:var(--blue);background:rgba(11,95,216,0.03)}
 .am-tpl-selected{border-color:var(--blue)!important;background:rgba(11,95,216,0.05)!important}
@@ -2529,11 +2531,90 @@ body.portal-mode{padding-bottom:0}
 /* ═══ Marketing: Hover zoom, new badge, download counter ═══ */
 .mk-card{transition:transform 0.2s ease,box-shadow 0.2s ease}
 .mk-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,0.1)}
-.mk-new-badge{position:absolute;top:10px;right:10px;background:var(--cyan-text);color:#fff;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;z-index:2}
-.mk-dl-count{font-size:11px;color:var(--slate);margin-top:4px}
+.mk-new-badge{display:inline-block;background:var(--cyan-text);color:#fff;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-left:6px;vertical-align:middle}
+.mk-popular-badge{display:inline-block;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-left:6px;vertical-align:middle}
+.mk-dl-count{font-size:10px;color:var(--mist);margin-bottom:2px}
+.mk-dl-group{display:flex;flex-direction:column;align-items:flex-end}
 .mk-preview{position:relative;overflow:hidden}
 .mk-cobrand-active{background:rgba(14,127,148,0.06)!important;border-color:rgba(14,127,148,0.2)!important}
 .mk-cobrand-active strong{color:var(--cyan-text)}
+
+/* ═══ Marketing: Builder Panels ═══ */
+.mk-builder-panel{margin-top:24px;background:var(--white);border:1px solid var(--off2);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.06)}
+.mk-builder-header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--off2)}
+.mk-builder-title{font-size:16px;font-weight:700;color:var(--navy)}
+.mk-builder-subtitle{font-size:13px;color:var(--slate);margin-top:2px}
+.mk-builder-close{background:none;border:none;font-size:24px;color:var(--slate);cursor:pointer;padding:4px 8px;border-radius:6px;transition:all 0.15s;line-height:1}
+.mk-builder-close:hover{background:rgba(10,22,40,0.06);color:var(--navy)}
+.mk-builder-layout{display:grid;grid-template-columns:340px 1fr;min-height:400px}
+.mk-builder-controls{padding:24px;border-right:1px solid var(--off2);display:flex;flex-direction:column;gap:4px}
+.mk-builder-label{font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--slate);margin-top:12px}
+.mk-builder-label:first-child{margin-top:0}
+.mk-builder-input{width:100%;padding:9px 14px;border:1px solid var(--off2);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--navy);background:var(--white);transition:border-color 0.15s}
+.mk-builder-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,95,216,0.08)}
+.mk-builder-color{width:100%;height:38px;padding:2px;border:1px solid var(--off2);border-radius:8px;cursor:pointer;background:var(--white)}
+.mk-builder-upload{display:block;padding:10px 14px;border:1px dashed var(--off2);border-radius:8px;font-size:13px;color:var(--slate);cursor:pointer;text-align:center;transition:all 0.15s}
+.mk-builder-upload:hover{border-color:var(--blue);color:var(--blue);background:rgba(11,95,216,0.03)}
+.mk-builder-export-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:16px}
+.mk-builder-export-btn:hover{background:#0948a8;box-shadow:0 4px 12px rgba(11,95,216,0.3)}
+.mk-builder-link{font-size:12px;color:var(--blue);text-align:center;margin-top:10px;cursor:pointer;text-decoration:underline}
+.mk-builder-link:hover{color:#0948a8}
+.mk-builder-preview{padding:24px;display:flex;flex-direction:column;gap:12px;background:var(--off);overflow:auto}
+
+/* Email template picker */
+.mk-email-tpl-picker{display:flex;gap:8px}
+.mk-email-tpl-opt,.mk-social-tpl-opt{flex:1;padding:10px;border:1px solid var(--off2);border-radius:8px;cursor:pointer;transition:all 0.15s;background:var(--white)}
+.mk-email-tpl-opt:hover,.mk-social-tpl-opt:hover{border-color:var(--blue)}
+.mk-tpl-selected{border-color:var(--blue)!important;background:rgba(11,95,216,0.04)!important;box-shadow:0 0 0 2px rgba(11,95,216,0.12)}
+.mk-tpl-name{font-size:12px;font-weight:600;color:var(--navy)}
+.mk-tpl-desc{font-size:11px;color:var(--slate);margin-top:2px}
+
+/* Social template picker */
+.mk-social-tpl-picker{display:flex;gap:8px}
+.mk-tpl-swatch{width:100%;height:24px;border-radius:4px;margin-bottom:6px}
+
+/* Social size picker */
+.mk-social-sizes{display:flex;gap:4px;flex-wrap:wrap}
+.mk-social-size-btn{padding:6px 12px;border:1px solid var(--off2);border-radius:6px;background:var(--white);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--slate);cursor:pointer;transition:all 0.15s}
+.mk-social-size-btn:hover{border-color:var(--blue);color:var(--blue)}
+.mk-size-active{background:var(--blue)!important;color:#fff!important;border-color:var(--blue)!important}
+.mk-size-label{font-size:11px;color:var(--mist);margin-top:2px}
+
+/* Email preview frame */
+.mk-email-preview-frame{width:100%;flex:1;min-height:450px;border:1px solid var(--off2);border-radius:8px;background:#fff}
+
+/* Social preview canvas */
+.mk-social-preview-canvas{border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);align-self:center}
+
+/* One-pager preview */
+.mk-op-preview-wrap{border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,0.08);background:#fff;align-self:center}
+
+/* ── Builder dark mode ── */
+[data-theme="dark"] .mk-builder-panel{background:#0f1824;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .mk-builder-header{border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .mk-builder-title{color:#e0e4ec}
+[data-theme="dark"] .mk-builder-close{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .mk-builder-close:hover{background:rgba(255,255,255,0.06);color:#e0e4ec}
+[data-theme="dark"] .mk-builder-controls{border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .mk-builder-input{background:#141e30;border-color:rgba(255,255,255,0.08);color:#e0e4ec}
+[data-theme="dark"] .mk-builder-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(75,163,255,0.12)}
+[data-theme="dark"] .mk-builder-color{background:#141e30;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .mk-builder-upload{border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .mk-builder-upload:hover{border-color:rgba(75,163,255,0.4);color:rgba(75,163,255,0.8)}
+[data-theme="dark"] .mk-builder-preview{background:#0a1018}
+[data-theme="dark"] .mk-email-tpl-opt,[data-theme="dark"] .mk-social-tpl-opt{background:#141e30;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .mk-tpl-name{color:#e0e4ec}
+[data-theme="dark"] .mk-social-size-btn{background:#141e30;border-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .mk-email-preview-frame{border-color:rgba(255,255,255,0.06)}
+
+/* ── Builder mobile ── */
+@media(max-width:768px){
+  .mk-builder-layout{grid-template-columns:1fr;min-height:auto}
+  .mk-builder-controls{border-right:none;border-bottom:1px solid var(--off2)}
+  .mk-builder-preview{min-height:300px}
+  .mk-email-tpl-picker,.mk-social-tpl-picker{flex-direction:column}
+  .mk-social-sizes{gap:4px}
+}
 
 /* ═══ Training: Clickable checklist, progress bars, time est ═══ */
 .trn-check-item-clickable{cursor:pointer;transition:background 0.15s}

@@ -89,6 +89,10 @@ function onPageLoaded(id) {
   if (id === 'portal' && typeof initPayCountdown === 'function') {
     setTimeout(initPayCountdown, 80);
   }
+  // Initialize marketing kit builders
+  if (id === 'portal' && typeof mkInitBuilders === 'function') {
+    setTimeout(mkInitBuilders, 80);
+  }
   // Initialize staggered card entrances on newly loaded page
   var el = document.getElementById('page-' + id);
   if (el && typeof window.initStagger === 'function') {

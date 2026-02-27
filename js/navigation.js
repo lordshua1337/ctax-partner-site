@@ -15,7 +15,7 @@ function closeMobileNav(){
   if(drawer) drawer.classList.remove('open');
 }
 
-function showPage(id){
+function showPage(id, skipHistory){
   var current = document.querySelector('.page.active');
   if(current){
     current.classList.add('page-exit');
@@ -23,13 +23,13 @@ function showPage(id){
       current.classList.remove('active','page-exit');
       current.style.display='none';
       setTimeout(function(){ current.style.display=''; }, 50);
-      _activatePage(id);
+      _activatePage(id, skipHistory);
     }, 180);
   } else {
-    _activatePage(id);
+    _activatePage(id, skipHistory);
   }
 }
-function _activatePage(id){
+function _activatePage(id, skipHistory){
   document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active');});
   var targetId = id;
   var p=document.getElementById('page-'+id);
@@ -59,6 +59,10 @@ function _activatePage(id){
     } else {
       document.body.classList.remove('portal-mode');
     }
+    // Push browser history so back/forward buttons work
+    if (!skipHistory) {
+      history.pushState({ page: targetId }, '', '#' + targetId);
+    }
   };
   if(typeof loadPageContent === 'function') {
     loadPageContent(targetId).then(show);
@@ -66,6 +70,33 @@ function _activatePage(id){
     show();
   }
 }
+
+// Browser back/forward button support
+window.addEventListener('popstate', function(e) {
+  var pageId = (e.state && e.state.page) ? e.state.page : 'home';
+  // Skip history push since we're restoring from history
+  var current = document.querySelector('.page.active');
+  if (current) {
+    current.classList.remove('active', 'page-exit');
+    current.style.display = 'none';
+    setTimeout(function(){ current.style.display = ''; }, 50);
+  }
+  _activatePage(pageId, true);
+});
+
+// Set initial history state on page load
+(function() {
+  var hash = window.location.hash.replace('#', '');
+  if (hash) {
+    // If URL has a hash, navigate to that page
+    history.replaceState({ page: hash }, '', '#' + hash);
+    // Delay so all scripts are loaded
+    setTimeout(function(){ showPage(hash, true); }, 0);
+  } else {
+    // Default to home
+    history.replaceState({ page: 'home' }, '', '');
+  }
+})();
 function switchSeg(id,btn){
   document.querySelectorAll('.seg-panel').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.seg-tab').forEach(function(t){t.classList.remove('active');});
