@@ -64,39 +64,210 @@ var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-redu
 })();
 
 
-// ── SOCIAL PROOF TICKER ──────────────────────────────────────
+// ── YTD REFERRAL PAYMENTS COUNTER ──────────────────────────────────────
 (function(){
-  var proofs = [
-    {text:'A CPA in Houston just submitted a referral', time:'2 minutes ago'},
-    {text:'Partner in Phoenix earned $2,400 this month', time:'15 minutes ago'},
-    {text:'New Enterprise partner joined from Dallas', time:'28 minutes ago'},
-    {text:'$34,200 in tax debt resolved for a referred client', time:'1 hour ago'},
-    {text:'Mortgage broker in Atlanta saved 3 loans this week', time:'2 hours ago'},
-    {text:'Strategic partner hit $50K quarterly earnings', time:'3 hours ago'},
-    {text:'Financial advisor in NYC referred 5 clients today', time:'4 hours ago'},
-    {text:'Law firm partner earned $4,800 on one referral', time:'5 hours ago'}
-  ];
-  var idx = 0;
-  function showProof(){
-    var ticker = document.getElementById('social-proof-ticker');
-    var textEl = document.getElementById('proof-text');
-    var timeEl = document.getElementById('proof-time');
-    if(!ticker||!textEl||!timeEl) return;
-    textEl.textContent = proofs[idx].text;
-    timeEl.textContent = proofs[idx].time;
-    ticker.style.display = 'block';
-    ticker.style.animation = 'slideInUp 0.4s ease';
-    idx = (idx + 1) % proofs.length;
-    setTimeout(function(){
-      ticker.style.animation = 'slideOutDown 0.4s ease forwards';
-      setTimeout(function(){ ticker.style.display = 'none'; }, 400);
-    }, 5000);
+  var BASE_AMOUNT = 936722;
+  var currentAmount = 0;
+  var dripTimer = null;
+  var paused = false;
+  var animating = false;
+  var digitSlots = [];
+
+  function formatDollars(n){
+    return '$' + Math.floor(n).toLocaleString('en-US');
   }
-  // Start after 8 seconds, repeat every 25 seconds
-  setTimeout(function(){
-    showProof();
-    setInterval(showProof, 25000);
-  }, 8000);
+
+  function randInt(min, max){
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function isHomePage(){
+    var home = document.getElementById('page-home');
+    return home && home.classList.contains('active');
+  }
+
+  // -- Odometer: build digit slot elements from a formatted string --
+  function buildOdometer(){
+    var el = document.getElementById('ytd-amount');
+    if(!el) return;
+    var formatted = formatDollars(currentAmount);
+    el.innerHTML = '';
+    digitSlots = [];
+
+    for(var i = 0; i < formatted.length; i++){
+      var ch = formatted[i];
+      if(ch >= '0' && ch <= '9'){
+        var slot = document.createElement('span');
+        slot.className = 'ytd-slot';
+        var strip = document.createElement('span');
+        strip.className = 'ytd-strip';
+        for(var d = 0; d <= 9; d++){
+          var digitSpan = document.createElement('span');
+          digitSpan.textContent = String(d);
+          strip.appendChild(digitSpan);
+        }
+        var n = parseInt(ch, 10);
+        strip.style.transform = 'translateY(' + (-n) + 'em)';
+        slot.appendChild(strip);
+        el.appendChild(slot);
+        digitSlots.push({ strip: strip, value: n, isDigit: true });
+      } else {
+        var staticEl = document.createElement('span');
+        staticEl.className = 'ytd-static';
+        staticEl.textContent = ch;
+        el.appendChild(staticEl);
+        digitSlots.push({ isDigit: false });
+      }
+    }
+  }
+
+  // -- Odometer: update digit positions for a new value --
+  function updateOdometer(newValue){
+    var el = document.getElementById('ytd-amount');
+    if(!el) return;
+    var oldFormatted = formatDollars(currentAmount);
+    var newFormatted = formatDollars(newValue);
+
+    // If string length changed (e.g. crossed $1M), rebuild from scratch
+    if(newFormatted.length !== oldFormatted.length){
+      currentAmount = newValue;
+      buildOdometer();
+      return;
+    }
+
+    // Animate individual digits that changed
+    for(var i = 0; i < newFormatted.length; i++){
+      var ch = newFormatted[i];
+      var slotData = digitSlots[i];
+      if(ch >= '0' && ch <= '9' && slotData && slotData.isDigit){
+        var n = parseInt(ch, 10);
+        if(n !== slotData.value){
+          slotData.strip.style.transform = 'translateY(' + (-n) + 'em)';
+          slotData.value = n;
+        }
+      }
+    }
+    currentAmount = newValue;
+  }
+
+  // -- Bump flash: show "+$N" next to the amount --
+  function showBump(amount){
+    var bumpEl = document.getElementById('ytd-bump');
+    if(!bumpEl) return;
+    bumpEl.textContent = '+$' + amount;
+    bumpEl.classList.remove('ytd-bump-show');
+    void bumpEl.offsetHeight;
+    bumpEl.classList.add('ytd-bump-show');
+
+    // Pulse the live dot brighter
+    var dot = document.querySelector('.ytd-live');
+    if(dot){
+      dot.classList.add('ytd-live-flash');
+      setTimeout(function(){ dot.classList.remove('ytd-live-flash'); }, 600);
+    }
+  }
+
+  // -- Text-based count-up (used only for initial animation) --
+  function animateValue(from, to, duration, onDone){
+    var el = document.getElementById('ytd-amount');
+    if(!el) return;
+    animating = true;
+    var t0 = null;
+    function step(ts){
+      if(!t0) t0 = ts;
+      var p = Math.min((ts - t0) / duration, 1);
+      var ease = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+      var cur = from + (to - from) * ease;
+      el.textContent = formatDollars(cur);
+      if(p < 1){
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = formatDollars(to);
+        animating = false;
+        if(onDone) onDone();
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // -- Drip: schedule and execute random increments --
+  function scheduleDrip(){
+    if(dripTimer) clearTimeout(dripTimer);
+    if(paused) return;
+    var delay = randInt(3000, 8000);
+    dripTimer = setTimeout(doDrip, delay);
+  }
+
+  function doDrip(){
+    if(!isHomePage() || paused){ scheduleDrip(); return; }
+    if(animating){ scheduleDrip(); return; }
+
+    var increment = randInt(12, 247);
+    var newAmount = currentAmount + increment;
+
+    showBump(increment);
+    updateOdometer(newAmount);
+    scheduleDrip();
+  }
+
+  // -- Show/hide the bar --
+  function showCounter(){
+    var counter = document.getElementById('ytd-counter');
+    if(!counter) return;
+    if(!isHomePage()){
+      counter.classList.remove('ytd-visible');
+      return;
+    }
+    counter.classList.add('ytd-visible');
+  }
+
+  // -- Init: text count-up, then switch to odometer for drips --
+  function initCounter(){
+    var el = document.getElementById('ytd-amount');
+    if(!el) return;
+    showCounter();
+
+    if(prefersReducedMotion){
+      currentAmount = BASE_AMOUNT;
+      el.textContent = formatDollars(BASE_AMOUNT);
+      buildOdometer();
+      scheduleDrip();
+    } else {
+      animateValue(0, BASE_AMOUNT, 1800, function(){
+        currentAmount = BASE_AMOUNT;
+        buildOdometer();
+        scheduleDrip();
+      });
+    }
+  }
+
+  // -- Pause/resume on tab visibility --
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){
+      paused = true;
+      if(dripTimer){ clearTimeout(dripTimer); dripTimer = null; }
+    } else {
+      paused = false;
+      if(!animating) scheduleDrip();
+    }
+  });
+
+  // -- Show/hide on page navigation --
+  var _origShowPage = window.showPage;
+  window.showPage = function(id){
+    _origShowPage(id);
+    var counter = document.getElementById('ytd-counter');
+    if(!counter) return;
+    if(id === 'home'){
+      counter.classList.add('ytd-visible');
+      if(!animating && !dripTimer) scheduleDrip();
+    } else {
+      counter.classList.remove('ytd-visible');
+      if(dripTimer){ clearTimeout(dripTimer); dripTimer = null; }
+    }
+  };
+
+  setTimeout(initCounter, 2000);
 })();
 
 // ── COOKIE CONSENT ──────────────────────────────────────
