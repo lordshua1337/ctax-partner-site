@@ -102,7 +102,7 @@
 .dd-ic-navy{background:rgba(10,22,40,0.06);color:var(--navy)}
 .dd-ic-blue{background:rgba(11,95,216,0.07);color:var(--blue)}
 .dd-ic-cyan{background:rgba(0,200,224,0.07);color:var(--cyan-text)}
-.dd-ic-teal{background:rgba(0,229,204,0.07);color:var(--teal-text)}
+.dd-ic-teal{background:rgba(0,229,204,0.07);color:var(--cyan-text)}
 
 .dd-icon{
   width:20px;height:20px;flex-shrink:0;
@@ -198,7 +198,7 @@
 .notif-item:hover{background:rgba(11,95,216,0.03)}
 .notif-icon-wrap{flex-shrink:0;width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center}
 .notif-ic-warn{background:rgba(245,158,11,0.1);color:#d97706}
-.notif-ic-success{background:rgba(0,229,204,0.1);color:var(--teal-text)}
+.notif-ic-success{background:rgba(0,229,204,0.1);color:var(--cyan-text)}
 .notif-msg{font-size:13px;color:var(--ink);line-height:1.5}
 .notif-msg strong{color:var(--navy);font-weight:600}
 .notif-time{font-size:11px;color:var(--slate);margin-top:3px}

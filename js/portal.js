@@ -47,6 +47,29 @@ function clearRefFilters() {
   if (allPill) setRefFilter(allPill, 'all');
 }
 
+// --- KPI card detail expand ---
+function toggleKpiDetail(card, panelId) {
+  var panel = document.getElementById(panelId);
+  if (!panel) return;
+  var allCards = document.querySelectorAll('.ref-kpi');
+  var allPanels = document.querySelectorAll('.ref-kpi-detail');
+  var isOpen = card.classList.contains('ref-kpi-active');
+
+  // Close all
+  allCards.forEach(function(c) { c.classList.remove('ref-kpi-active'); });
+  allPanels.forEach(function(p) {
+    p.style.maxHeight = '0';
+    p.classList.remove('ref-kpi-detail-open');
+  });
+
+  // Toggle open if wasn't already
+  if (!isOpen) {
+    card.classList.add('ref-kpi-active');
+    panel.classList.add('ref-kpi-detail-open');
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+  }
+}
+
 // --- Referral pipeline click filter ---
 function pipelineFilter(status) {
   var pills = document.querySelectorAll('.ref-filter-pill');

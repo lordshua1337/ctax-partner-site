@@ -256,45 +256,204 @@
 
       <!-- KPI Row -->
       <div class="ref-kpi-row">
-        <div class="ref-kpi">
-          <div class="ref-kpi-icon ref-kpi-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div class="ref-kpi" onclick="toggleKpiDetail(this,'ref-kpi-panel-total')">
+          <div class="ref-kpi-icon ref-kpi-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
           <div>
-            <div class="ref-kpi-val">42</div>
+            <div class="ref-kpi-val" data-count-to="42">42</div>
             <div class="ref-kpi-label">Total Referrals</div>
+            <div class="ref-kpi-trend ref-kpi-trend-up"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +6 this month</div>
           </div>
         </div>
-        <div class="ref-kpi">
-          <div class="ref-kpi-icon ref-kpi-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="ref-kpi" onclick="toggleKpiDetail(this,'ref-kpi-panel-active')">
+          <div class="ref-kpi-icon ref-kpi-amber"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
           <div>
-            <div class="ref-kpi-val">18</div>
+            <div class="ref-kpi-val" data-count-to="18">18</div>
             <div class="ref-kpi-label">Active Cases</div>
+            <div class="ref-kpi-trend ref-kpi-trend-up"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +3 vs last month</div>
           </div>
         </div>
-        <div class="ref-kpi">
-          <div class="ref-kpi-icon ref-kpi-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="ref-kpi" onclick="toggleKpiDetail(this,'ref-kpi-panel-resolved')">
+          <div class="ref-kpi-icon ref-kpi-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
           <div>
-            <div class="ref-kpi-val">7</div>
+            <div class="ref-kpi-val" data-count-to="7">7</div>
             <div class="ref-kpi-label">Resolved This Month</div>
+            <div class="ref-kpi-trend ref-kpi-trend-up"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +2 vs last month</div>
           </div>
         </div>
-        <div class="ref-kpi">
-          <div class="ref-kpi-icon ref-kpi-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        <div class="ref-kpi" onclick="toggleKpiDetail(this,'ref-kpi-panel-avg')">
+          <div class="ref-kpi-icon ref-kpi-purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
           <div>
             <div class="ref-kpi-val">34 days</div>
             <div class="ref-kpi-label">Avg Resolution</div>
+            <div class="ref-kpi-trend ref-kpi-trend-up"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/></svg> 4 days faster</div>
+          </div>
+        </div>
+
+        <!-- Total Referrals Detail -->
+        <div class="ref-kpi-detail" id="ref-kpi-panel-total">
+          <div class="ref-kpi-detail-inner">
+            <div>
+              <div class="ref-kpi-detail-title">Referral Breakdown</div>
+              <div class="ref-kpi-detail-subtitle">Status distribution across all 42 referrals</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+              <div class="ref-kpi-breakdown">
+                <div class="ref-kpi-breakdown-row"><span class="ref-kpi-breakdown-label"><span class="ref-kpi-breakdown-dot" style="background:var(--sky)"></span>New</span><span class="ref-kpi-breakdown-val">3</span></div>
+                <div class="ref-kpi-breakdown-row"><span class="ref-kpi-breakdown-label"><span class="ref-kpi-breakdown-dot" style="background:var(--blue)"></span>Investigation</span><span class="ref-kpi-breakdown-val">7</span></div>
+                <div class="ref-kpi-breakdown-row"><span class="ref-kpi-breakdown-label"><span class="ref-kpi-breakdown-dot" style="background:var(--cyan-text)"></span>Resolution</span><span class="ref-kpi-breakdown-val">8</span></div>
+                <div class="ref-kpi-breakdown-row"><span class="ref-kpi-breakdown-label"><span class="ref-kpi-breakdown-dot" style="background:var(--cyan)"></span>Resolved</span><span class="ref-kpi-breakdown-val">17</span></div>
+                <div class="ref-kpi-breakdown-row"><span class="ref-kpi-breakdown-label"><span class="ref-kpi-breakdown-dot" style="background:var(--navy3)"></span>Paid</span><span class="ref-kpi-breakdown-val">7</span></div>
+              </div>
+              <div>
+                <div class="ref-kpi-detail-subtitle" style="margin-bottom:8px">Monthly referrals (last 6 months)</div>
+                <div class="ref-kpi-mini-bar">
+                  <div class="ref-kpi-mini-col" style="height:45%;background:var(--sky)"></div>
+                  <div class="ref-kpi-mini-col" style="height:60%;background:var(--sky)"></div>
+                  <div class="ref-kpi-mini-col" style="height:55%;background:var(--sky)"></div>
+                  <div class="ref-kpi-mini-col" style="height:75%;background:var(--sky)"></div>
+                  <div class="ref-kpi-mini-col" style="height:85%;background:var(--blue)"></div>
+                  <div class="ref-kpi-mini-col" style="height:100%;background:var(--blue)"></div>
+                </div>
+                <div class="ref-kpi-mini-bar-labels"><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Cases Detail -->
+        <div class="ref-kpi-detail" id="ref-kpi-panel-active">
+          <div class="ref-kpi-detail-inner">
+            <div>
+              <div class="ref-kpi-detail-title">Active Case Breakdown</div>
+              <div class="ref-kpi-detail-subtitle">18 cases currently in progress by stage</div>
+            </div>
+            <div class="ref-kpi-detail-grid">
+              <div class="ref-kpi-detail-stat">
+                <div class="ref-kpi-detail-stat-val">3</div>
+                <div class="ref-kpi-detail-stat-label">New (awaiting review)</div>
+              </div>
+              <div class="ref-kpi-detail-stat">
+                <div class="ref-kpi-detail-stat-val">7</div>
+                <div class="ref-kpi-detail-stat-label">Under investigation</div>
+              </div>
+              <div class="ref-kpi-detail-stat">
+                <div class="ref-kpi-detail-stat-val">8</div>
+                <div class="ref-kpi-detail-stat-label">In resolution</div>
+              </div>
+              <div class="ref-kpi-detail-stat">
+                <div class="ref-kpi-detail-stat-val">$467K</div>
+                <div class="ref-kpi-detail-stat-label">Total debt in pipeline</div>
+              </div>
+              <div class="ref-kpi-detail-stat">
+                <div class="ref-kpi-detail-stat-val">$25.9K</div>
+                <div class="ref-kpi-detail-stat-label">Avg debt per case</div>
+              </div>
+              <div class="ref-kpi-detail-stat">
+                <div class="ref-kpi-detail-stat-val">~$37K</div>
+                <div class="ref-kpi-detail-stat-label">Est. pending commissions</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resolved This Month Detail -->
+        <div class="ref-kpi-detail" id="ref-kpi-panel-resolved">
+          <div class="ref-kpi-detail-inner">
+            <div>
+              <div class="ref-kpi-detail-title">Resolved This Month</div>
+              <div class="ref-kpi-detail-subtitle">7 cases resolved in February 2026</div>
+            </div>
+            <div class="ref-kpi-detail-grid">
+              <div class="ref-kpi-detail-stat">
+                <div class="ref-kpi-detail-stat-val" style="color:var(--cyan-text)">$9,128</div>
+                <div class="ref-kpi-detail-stat-label">Commissions earned</div>
+              </div>
+              <div class="ref-kpi-detail-stat">
+                <div class="ref-kpi-detail-stat-val">$186K</div>
+                <div class="ref-kpi-detail-stat-label">Total debt resolved</div>
+              </div>
+              <div class="ref-kpi-detail-stat">
+                <div class="ref-kpi-detail-stat-val">$26.6K</div>
+                <div class="ref-kpi-detail-stat-label">Avg debt per case</div>
+              </div>
+              <div class="ref-kpi-detail-stat">
+                <div class="ref-kpi-detail-stat-val">31 days</div>
+                <div class="ref-kpi-detail-stat-label">Avg time to resolve</div>
+              </div>
+              <div class="ref-kpi-detail-stat">
+                <div class="ref-kpi-detail-stat-val">5 of 7</div>
+                <div class="ref-kpi-detail-stat-label">Already paid out</div>
+              </div>
+              <div class="ref-kpi-detail-stat">
+                <div class="ref-kpi-detail-stat-val">$2,736</div>
+                <div class="ref-kpi-detail-stat-label">Pending payout</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Avg Resolution Detail -->
+        <div class="ref-kpi-detail" id="ref-kpi-panel-avg">
+          <div class="ref-kpi-detail-inner">
+            <div>
+              <div class="ref-kpi-detail-title">Resolution Time Trend</div>
+              <div class="ref-kpi-detail-subtitle">Average days from submission to resolution</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+              <div class="ref-kpi-detail-grid" style="grid-template-columns:1fr 1fr">
+                <div class="ref-kpi-detail-stat">
+                  <div class="ref-kpi-detail-stat-val">34 days</div>
+                  <div class="ref-kpi-detail-stat-label">Current average</div>
+                </div>
+                <div class="ref-kpi-detail-stat">
+                  <div class="ref-kpi-detail-stat-val">38 days</div>
+                  <div class="ref-kpi-detail-stat-label">Last month</div>
+                </div>
+                <div class="ref-kpi-detail-stat">
+                  <div class="ref-kpi-detail-stat-val">45 days</div>
+                  <div class="ref-kpi-detail-stat-label">Network average</div>
+                </div>
+                <div class="ref-kpi-detail-stat">
+                  <div class="ref-kpi-detail-stat-val" style="color:var(--cyan-text)">11 days</div>
+                  <div class="ref-kpi-detail-stat-label">Faster than network</div>
+                </div>
+              </div>
+              <div>
+                <div class="ref-kpi-detail-subtitle" style="margin-bottom:8px">Avg days to resolve (last 6 months)</div>
+                <div class="ref-kpi-mini-bar">
+                  <div class="ref-kpi-mini-col" style="height:95%;background:var(--sky)"></div>
+                  <div class="ref-kpi-mini-col" style="height:85%;background:var(--sky)"></div>
+                  <div class="ref-kpi-mini-col" style="height:80%;background:var(--sky)"></div>
+                  <div class="ref-kpi-mini-col" style="height:75%;background:var(--blue)"></div>
+                  <div class="ref-kpi-mini-col" style="height:65%;background:var(--blue)"></div>
+                  <div class="ref-kpi-mini-col" style="height:55%;background:var(--cyan)"></div>
+                </div>
+                <div class="ref-kpi-mini-bar-labels"><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Pipeline (clickable segments filter table) -->
       <div class="ref-pipeline">
-        <div class="ref-pipe-label">Pipeline</div>
+        <div class="ref-pipe-header">
+          <div class="ref-pipe-label">Pipeline</div>
+          <div class="ref-pipe-total"><strong>42</strong> total referrals</div>
+        </div>
         <div class="ref-pipe-bar">
-          <div class="ref-pipe-seg ref-pipe-new" style="flex:3;cursor:pointer" title="New: 3" onclick="pipelineFilter('new')"><span>3</span>New</div>
-          <div class="ref-pipe-seg ref-pipe-invest" style="flex:7;cursor:pointer" title="Investigation: 7" onclick="pipelineFilter('investigation')"><span>7</span>Investigation</div>
-          <div class="ref-pipe-seg ref-pipe-resolve" style="flex:8;cursor:pointer" title="Resolution: 8" onclick="pipelineFilter('resolution')"><span>8</span>Resolution</div>
-          <div class="ref-pipe-seg ref-pipe-done" style="flex:17;cursor:pointer" title="Resolved: 17" onclick="pipelineFilter('resolved')"><span>17</span>Resolved</div>
-          <div class="ref-pipe-seg ref-pipe-paid" style="flex:7;cursor:pointer" title="Paid: 7" onclick="pipelineFilter('paid')"><span>7</span>Paid</div>
+          <div class="ref-pipe-seg ref-pipe-new" style="flex:3" title="New: 3" onclick="pipelineFilter('new')"><span>3</span> New</div>
+          <div class="ref-pipe-seg ref-pipe-invest" style="flex:7" title="Investigation: 7" onclick="pipelineFilter('investigation')"><span>7</span> Investigation</div>
+          <div class="ref-pipe-seg ref-pipe-resolve" style="flex:8" title="Resolution: 8" onclick="pipelineFilter('resolution')"><span>8</span> Resolution</div>
+          <div class="ref-pipe-seg ref-pipe-done" style="flex:17" title="Resolved: 17" onclick="pipelineFilter('resolved')"><span>17</span> Resolved</div>
+          <div class="ref-pipe-seg ref-pipe-paid" style="flex:7" title="Paid: 7" onclick="pipelineFilter('paid')"><span>7</span> Paid</div>
+        </div>
+        <div class="ref-pipe-legend">
+          <div class="ref-pipe-legend-item"><div class="ref-pipe-legend-dot" style="background:var(--sky)"></div>New</div>
+          <div class="ref-pipe-legend-item"><div class="ref-pipe-legend-dot" style="background:var(--blue)"></div>Investigation</div>
+          <div class="ref-pipe-legend-item"><div class="ref-pipe-legend-dot" style="background:var(--cyan-text)"></div>Resolution</div>
+          <div class="ref-pipe-legend-item"><div class="ref-pipe-legend-dot" style="background:var(--cyan)"></div>Resolved</div>
+          <div class="ref-pipe-legend-item"><div class="ref-pipe-legend-dot" style="background:var(--navy3)"></div>Paid</div>
         </div>
       </div>
 
@@ -386,7 +545,7 @@
 
         <!-- Row 2 -->
         <div class="ref-row" data-status="investigation" onclick="toggleRefDetail(this)">
-          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:#7C3AED">MG</div><div><div class="ref-name">Maria Garcia</div><div class="ref-id">#REF-2026-0041</div></div></div>
+          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:var(--cyan-text)">MG</div><div><div class="ref-name">Maria Garcia</div><div class="ref-id">#REF-2026-0041</div></div></div>
           <div class="ref-td">Feb 18, 2026</div>
           <div class="ref-td"><span class="ref-badge ref-b-investigation">Investigation</span></div>
           <div class="ref-td ref-td-money">$18,500</div>
@@ -427,7 +586,7 @@
 
         <!-- Row 3 -->
         <div class="ref-row" data-status="resolved" onclick="toggleRefDetail(this)">
-          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:#059669">RT</div><div><div class="ref-name">Robert Thompson</div><div class="ref-id">#REF-2026-0038</div></div></div>
+          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:var(--cyan-text)">RT</div><div><div class="ref-name">Robert Thompson</div><div class="ref-id">#REF-2026-0038</div></div></div>
           <div class="ref-td">Feb 14, 2026</div>
           <div class="ref-td"><span class="ref-badge ref-b-resolved">Resolved</span></div>
           <div class="ref-td ref-td-money">$52,800</div>
@@ -463,7 +622,7 @@
                 <div class="ref-detail-row"><span>Total Debt</span><span style="font-weight:700">$52,800</span></div>
                 <div class="ref-detail-row"><span>Resolution Type</span><span>Installment Agreement</span></div>
                 <div class="ref-detail-row"><span>Monthly Payment</span><span>$880/mo (60 months)</span></div>
-                <div class="ref-detail-row"><span>Your Commission</span><span style="font-weight:700;color:#059669">$4,224 Paid</span></div>
+                <div class="ref-detail-row"><span>Your Commission</span><span style="font-weight:700;color:var(--cyan-text)">$4,224 Paid</span></div>
                 <div class="ref-detail-row"><span>Paid On</span><span>Feb 21, 2026</span></div>
               </div>
             </div>
@@ -472,7 +631,7 @@
 
         <!-- Row 4 -->
         <div class="ref-row" data-status="new" onclick="toggleRefDetail(this)">
-          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:#D97706">KP</div><div><div class="ref-name">Karen Patel</div><div class="ref-id">#REF-2026-0043</div></div></div>
+          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:var(--sky)">KP</div><div><div class="ref-name">Karen Patel</div><div class="ref-id">#REF-2026-0043</div></div></div>
           <div class="ref-td">Feb 25, 2026</div>
           <div class="ref-td"><span class="ref-badge ref-b-new">New</span></div>
           <div class="ref-td ref-td-money">$12,400</div>
@@ -512,7 +671,7 @@
 
         <!-- Row 5 -->
         <div class="ref-row" data-status="paid" onclick="toggleRefDetail(this)">
-          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:#0891B2">DL</div><div><div class="ref-name">David Lee</div><div class="ref-id">#REF-2026-0031</div></div></div>
+          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:var(--cyan-text)">DL</div><div><div class="ref-name">David Lee</div><div class="ref-id">#REF-2026-0031</div></div></div>
           <div class="ref-td">Jan 28, 2026</div>
           <div class="ref-td"><span class="ref-badge ref-b-paid">Paid</span></div>
           <div class="ref-td ref-td-money">$27,100</div>
@@ -546,8 +705,8 @@
                 <div class="ref-detail-label">Financials</div>
                 <div class="ref-detail-row"><span>Total Debt</span><span style="font-weight:700">$27,100</span></div>
                 <div class="ref-detail-row"><span>Resolution Type</span><span>Penalty Abatement + Filing</span></div>
-                <div class="ref-detail-row"><span>Final Balance</span><span style="color:#059669;font-weight:700">$0.00</span></div>
-                <div class="ref-detail-row"><span>Your Commission</span><span style="font-weight:700;color:#059669">$2,168 Paid</span></div>
+                <div class="ref-detail-row"><span>Final Balance</span><span style="color:var(--cyan-text);font-weight:700">$0.00</span></div>
+                <div class="ref-detail-row"><span>Your Commission</span><span style="font-weight:700;color:var(--cyan-text)">$2,168 Paid</span></div>
                 <div class="ref-detail-row"><span>Paid On</span><span>Feb 14, 2026</span></div>
               </div>
             </div>
@@ -602,7 +761,7 @@
             <div class="earn-kpi-label">Total Earned</div>
           </div>
           <div class="earn-kpi-trend earn-kpi-up">+12.4%</div>
-          <div class="earn-kpi-spark"><svg width="80" height="24" viewBox="0 0 80 24"><polyline fill="none" stroke="#059669" stroke-width="2" points="0,20 15,16 30,18 45,12 60,8 75,4"/></svg></div>
+          <div class="earn-kpi-spark"><svg width="80" height="24" viewBox="0 0 80 24"><polyline fill="none" stroke="var(--cyan-text)" stroke-width="2" points="0,20 15,16 30,18 45,12 60,8 75,4"/></svg></div>
         </div>
         <div class="earn-kpi">
           <div class="earn-kpi-icon earn-kpi-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
@@ -678,18 +837,18 @@
           <div>Status</div>
         </div>
         <div class="earn-table-row">
-          <div class="earn-td-client"><div class="earn-avatar" style="background:#059669">RT</div><span>Robert Thompson</span></div>
+          <div class="earn-td-client"><div class="earn-avatar" style="background:var(--cyan-text)">RT</div><span>Robert Thompson</span></div>
           <div>Installment Agreement</div>
           <div style="font-weight:600">$52,800</div>
-          <div style="font-weight:700;color:#059669">$4,224</div>
+          <div style="font-weight:700;color:var(--cyan-text)">$4,224</div>
           <div>Feb 21, 2026</div>
           <div><span class="earn-badge earn-b-paid">Paid</span></div>
         </div>
         <div class="earn-table-row">
-          <div class="earn-td-client"><div class="earn-avatar" style="background:#0891B2">DL</div><span>David Lee</span></div>
+          <div class="earn-td-client"><div class="earn-avatar" style="background:var(--cyan-text)">DL</div><span>David Lee</span></div>
           <div>Penalty Abatement</div>
           <div style="font-weight:600">$27,100</div>
-          <div style="font-weight:700;color:#059669">$2,168</div>
+          <div style="font-weight:700;color:var(--cyan-text)">$2,168</div>
           <div>Feb 14, 2026</div>
           <div><span class="earn-badge earn-b-paid">Paid</span></div>
         </div>
@@ -702,7 +861,7 @@
           <div><span class="earn-badge earn-b-pending">Pending</span></div>
         </div>
         <div class="earn-table-row">
-          <div class="earn-td-client"><div class="earn-avatar" style="background:#7C3AED">MG</div><span>Maria Garcia</span></div>
+          <div class="earn-td-client"><div class="earn-avatar" style="background:var(--cyan-text)">MG</div><span>Maria Garcia</span></div>
           <div>Under Investigation</div>
           <div style="font-weight:600">$18,500</div>
           <div style="color:var(--slate)">TBD</div>
@@ -710,7 +869,7 @@
           <div><span class="earn-badge earn-b-investigation">In Progress</span></div>
         </div>
         <div class="earn-table-row">
-          <div class="earn-td-client"><div class="earn-avatar" style="background:#D97706">KP</div><span>Karen Patel</span></div>
+          <div class="earn-td-client"><div class="earn-avatar" style="background:var(--sky)">KP</div><span>Karen Patel</span></div>
           <div>TBD</div>
           <div style="font-weight:600">$12,400</div>
           <div style="color:var(--slate)">TBD</div>
@@ -755,17 +914,19 @@
       <!-- Payout Schedule Notice -->
       <div class="pay-schedule-notice">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        Payouts are processed on the <strong>1st</strong> and <strong>15th</strong> of each month. Commissions are released once a case reaches "Resolved" status. Allow 2-3 business days for ACH transfers.
+        <span>Payouts are processed on the <strong>1st</strong> and <strong>15th</strong> of each month. Commissions are released once a case reaches "Resolved" status. Allow 2&#8211;3 business days for ACH transfers.</span>
       </div>
 
       <!-- Transaction Ledger -->
       <div class="pay-ledger-wrap">
-        <div class="pay-ledger-title">Transaction History</div>
-        <div class="pay-year-pills">
-          <button class="pay-year-pill pay-year-active" onclick="payYearFilter(this,'all')">All</button>
-          <button class="pay-year-pill" onclick="payYearFilter(this,'2026')">2026</button>
-          <button class="pay-year-pill" onclick="payYearFilter(this,'2025')">2025</button>
-          <button class="pay-year-pill" onclick="payYearFilter(this,'2024')">2024</button>
+        <div class="pay-ledger-header">
+          <div class="pay-ledger-title">Transaction History</div>
+          <div class="pay-year-pills">
+            <button class="pay-year-pill pay-year-active" onclick="payYearFilter(this,'all')">All</button>
+            <button class="pay-year-pill" onclick="payYearFilter(this,'2026')">2026</button>
+            <button class="pay-year-pill" onclick="payYearFilter(this,'2025')">2025</button>
+            <button class="pay-year-pill" onclick="payYearFilter(this,'2024')">2024</button>
+          </div>
         </div>
         <div class="pay-ledger-head">
           <div>Date</div>
@@ -777,7 +938,7 @@
         </div>
         <div class="pay-ledger-row" data-year="2026" data-amount="4224">
           <div>Feb 15, 2026</div>
-          <div style="font-weight:700;color:#059669">+$4,224.00</div>
+          <div style="font-weight:700;color:var(--cyan-text)">+$4,224.00</div>
           <div class="pay-ref-id">#REF-2026-0038</div>
           <div>Robert Thompson</div>
           <div>ACH</div>
@@ -785,7 +946,7 @@
         </div>
         <div class="pay-ledger-row" data-year="2026" data-amount="2168">
           <div>Feb 15, 2026</div>
-          <div style="font-weight:700;color:#059669">+$2,168.00</div>
+          <div style="font-weight:700;color:var(--cyan-text)">+$2,168.00</div>
           <div class="pay-ref-id">#REF-2026-0031</div>
           <div>David Lee</div>
           <div>ACH</div>
@@ -793,7 +954,7 @@
         </div>
         <div class="pay-ledger-row" data-year="2026" data-amount="3840">
           <div>Jan 15, 2026</div>
-          <div style="font-weight:700;color:#059669">+$3,840.00</div>
+          <div style="font-weight:700;color:var(--cyan-text)">+$3,840.00</div>
           <div class="pay-ref-id">#REF-2026-0022</div>
           <div>Sandra Mitchell</div>
           <div>ACH</div>
@@ -801,7 +962,7 @@
         </div>
         <div class="pay-ledger-row" data-year="2026" data-amount="1920">
           <div>Jan 1, 2026</div>
-          <div style="font-weight:700;color:#059669">+$1,920.00</div>
+          <div style="font-weight:700;color:var(--cyan-text)">+$1,920.00</div>
           <div class="pay-ref-id">#REF-2025-0189</div>
           <div>Thomas Nguyen</div>
           <div>ACH</div>
@@ -809,7 +970,7 @@
         </div>
         <div class="pay-ledger-row" data-year="2025" data-amount="3600">
           <div>Dec 15, 2025</div>
-          <div style="font-weight:700;color:#059669">+$3,600.00</div>
+          <div style="font-weight:700;color:var(--cyan-text)">+$3,600.00</div>
           <div class="pay-ref-id">#REF-2025-0172</div>
           <div>Angela Foster</div>
           <div>Check</div>
@@ -1762,7 +1923,7 @@
             <div></div>
           </div>
           <div class="set-team-row">
-            <div class="set-team-name"><div class="set-team-avatar" style="background:#7C3AED">SR</div>Sarah Rodriguez</div>
+            <div class="set-team-name"><div class="set-team-avatar" style="background:var(--cyan-text)">SR</div>Sarah Rodriguez</div>
             <div>Admin</div>
             <div>sarah@partnerllc.com</div>
             <div><span class="set-badge set-b-active">Active</span></div>

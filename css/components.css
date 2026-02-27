@@ -70,7 +70,7 @@
 .hcard-div{background:rgba(255,255,255,0.08)}
 .hcard-lbl{font-size:15px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px}
 .lbl-sky{color:var(--sky)}
-.lbl-teal{color:var(--teal-text)}
+.lbl-teal{color:var(--cyan-text)}
 .hcard-item{display:flex;align-items:center;gap:9px;font-size:15px;color:rgba(255,255,255,0.78);margin-bottom:9px}
 .dot-sky{width:5px;height:5px;border-radius:50%;background:var(--sky);flex-shrink:0}
 .dot-teal{width:5px;height:5px;border-radius:50%;background:var(--teal);flex-shrink:0}

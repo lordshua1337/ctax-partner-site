@@ -193,7 +193,7 @@ document.addEventListener('keydown',function(e){
       icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
       title:"Strong alignment across the board.",
       text:"You're scoring well on every dimension -- which usually means an Enterprise or Strategic structure is worth exploring. Those tiers come with meaningfully higher revenue share, a dedicated account relationship, and a more tailored integration.",
-      cta:'apply', ctaText:'Let\'s talk about a deeper structure', ctaStyle:'background:rgba(0,229,204,0.1);color:var(--teal-text);border:1px solid rgba(0,229,204,0.18)' }
+      cta:'apply', ctaText:'Let\'s talk about a deeper structure', ctaStyle:'background:rgba(0,229,204,0.1);color:var(--cyan-text);border:1px solid rgba(0,229,204,0.18)' }
   ];
 
   function updateUI(){
@@ -342,7 +342,7 @@ function handleResourceDownload(btn, name) {
   
   btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Downloaded';
   btn.style.background = 'rgba(0,229,204,0.1)';
-  btn.style.color = 'var(--teal-text)';
+  btn.style.color = 'var(--cyan-text)';
   btn.style.borderColor = 'rgba(0,229,204,0.3)';
 }
 

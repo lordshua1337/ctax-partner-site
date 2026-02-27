@@ -223,7 +223,7 @@
 [data-theme="dark"] .fp-label{color:rgba(255,255,255,0.4)}
 [data-theme="dark"] .fp-line{background:rgba(255,255,255,0.06)}
 [data-theme="dark"] .fp-step.fp-active .fp-label{color:#4BA3FF}
-[data-theme="dark"] .fp-step.fp-done .fp-label{color:var(--teal-text)}
+[data-theme="dark"] .fp-step.fp-done .fp-label{color:var(--cyan-text)}
 [data-theme="dark"] .ai-card h5{color:#e0e4ec}
 [data-theme="dark"] .ai-card{background:#141e30;border-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .tc-btn-s{background:#1a2234;color:#e0e4ec;border-color:rgba(255,255,255,0.08)}
