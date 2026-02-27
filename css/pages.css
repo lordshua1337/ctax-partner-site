@@ -1862,6 +1862,104 @@ body.portal-mode{padding-bottom:0}
   .calc-tier-arrow{transform:rotate(90deg)}
 }
 
+/* ── CE WEBINARS SECTION ── */
+.ce-progress-row{display:flex;align-items:center;gap:28px;background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:24px;margin-bottom:20px}
+.ce-progress-ring-wrap{position:relative;width:100px;height:100px;flex-shrink:0}
+.ce-ring{width:100%;height:100%}
+.ce-ring-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ce-ring-val{font-family:'DM Serif Display',serif;font-size:28px;color:var(--navy);line-height:1}
+.ce-ring-of{font-size:11px;color:var(--slate)}
+.ce-progress-info{flex:1}
+.ce-progress-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.ce-progress-stat{font-size:13px;color:var(--slate);margin-bottom:10px}
+.ce-progress-bar{height:6px;background:var(--off2);border-radius:4px;overflow:hidden;margin-bottom:8px}
+.ce-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),#4BA3FF);border-radius:4px;transition:width 0.5s ease}
+.ce-progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--mist)}
+
+.ce-filters{display:flex;gap:6px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
+.ce-filter{background:var(--off);border:none;padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;color:var(--slate);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.ce-filter:hover{background:rgba(11,95,216,0.06);color:var(--blue)}
+.ce-filter-active{background:var(--blue);color:white}
+
+.ce-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+.ce-card{background:var(--white);border:1px solid var(--off2);border-radius:12px;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s}
+.ce-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.ce-thumb{position:relative;padding-top:56.25%;overflow:hidden}
+.ce-thumb-1{background:linear-gradient(135deg,#0B2545,#13315C)}
+.ce-thumb-2{background:linear-gradient(135deg,#1a1a2e,#16213e)}
+.ce-thumb-3{background:linear-gradient(135deg,#0d2137,#1a3a5c)}
+.ce-thumb-4{background:linear-gradient(135deg,#1b2838,#2a475e)}
+.ce-thumb-5{background:linear-gradient(135deg,#0f2027,#203a43)}
+.ce-thumb-6{background:linear-gradient(135deg,#232526,#414345)}
+.ce-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,0.6);background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;transition:all 0.2s;cursor:pointer}
+.ce-card:hover .ce-play{background:rgba(255,255,255,0.2);transform:translate(-50%,-50%) scale(1.08)}
+.ce-badge-dur{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.6);color:white;font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px}
+.ce-badge-credits{position:absolute;top:10px;left:10px;background:var(--blue);color:white;font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px}
+.ce-done-overlay{position:absolute;inset:0;background:rgba(5,150,105,0.4);display:flex;align-items:center;justify-content:center}
+.ce-card-body{padding:16px}
+.ce-cat{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.ce-cat-resolution{background:rgba(11,95,216,0.08);color:var(--blue)}
+.ce-cat-irs{background:rgba(124,58,237,0.08);color:#7C3AED}
+.ce-cat-ethics{background:rgba(217,119,6,0.08);color:#D97706}
+.ce-cat-federal{background:rgba(5,150,105,0.08);color:#059669}
+.ce-cat-state{background:rgba(8,145,178,0.08);color:#0891B2}
+.ce-cat-growth{background:rgba(220,38,38,0.08);color:#DC2626}
+.ce-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px;line-height:1.4}
+.ce-instructor{font-size:12px;color:var(--slate);margin-bottom:12px}
+.ce-card-prog{height:4px;background:var(--off2);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.ce-card-prog-fill{height:100%;background:var(--blue);border-radius:3px}
+.ce-card-foot{display:flex;justify-content:space-between;align-items:center}
+.ce-status{font-size:11px;font-weight:600}
+.ce-s-done{color:#059669}
+.ce-s-progress{color:var(--blue)}
+.ce-s-new{color:var(--slate)}
+.ce-cert-btn,.ce-resume-btn,.ce-enroll-btn{background:none;border:1px solid var(--off2);padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s}
+.ce-cert-btn{color:#059669;border-color:rgba(5,150,105,0.2)}
+.ce-cert-btn:hover{background:rgba(5,150,105,0.06)}
+.ce-resume-btn{color:var(--blue);border-color:rgba(11,95,216,0.2)}
+.ce-resume-btn:hover{background:rgba(11,95,216,0.06)}
+.ce-enroll-btn{color:var(--navy);border-color:var(--off2)}
+.ce-enroll-btn:hover{border-color:var(--blue);color:var(--blue)}
+
+.ce-certs-section{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:20px}
+.ce-certs-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px}
+.ce-certs-grid{display:flex;flex-direction:column;gap:10px}
+.ce-cert-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--off2);border-radius:10px;transition:background 0.12s}
+.ce-cert-card:hover{background:rgba(11,95,216,0.015)}
+.ce-cert-card svg{stroke:#D97706;flex-shrink:0}
+.ce-cert-name{font-size:13px;font-weight:600;color:var(--navy)}
+.ce-cert-date{font-size:11px;color:var(--slate)}
+.ce-cert-dl{margin-left:auto;background:none;border:1px solid var(--off2);padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;color:var(--blue);cursor:pointer;transition:all 0.15s}
+.ce-cert-dl:hover{background:rgba(11,95,216,0.06);border-color:var(--blue)}
+
+/* CE dark mode */
+[data-theme="dark"] .ce-progress-row{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ce-ring-val{color:#e0e4ec}
+[data-theme="dark"] .ce-ring circle:first-child{stroke:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ce-progress-title{color:#e0e4ec}
+[data-theme="dark"] .ce-progress-bar{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ce-filter{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .ce-filter:hover{background:rgba(75,163,255,0.08);color:rgba(75,163,255,0.8)}
+[data-theme="dark"] .ce-card{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ce-card:hover{box-shadow:0 8px 24px rgba(0,0,0,0.2)}
+[data-theme="dark"] .ce-title{color:#e0e4ec}
+[data-theme="dark"] .ce-card-prog{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ce-enroll-btn{color:#e0e4ec;border-color:rgba(255,255,255,0.1)}
+[data-theme="dark"] .ce-enroll-btn:hover{color:rgba(75,163,255,0.8);border-color:rgba(75,163,255,0.3)}
+[data-theme="dark"] .ce-certs-section{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ce-certs-title{color:#e0e4ec}
+[data-theme="dark"] .ce-cert-card{border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ce-cert-card:hover{background:rgba(75,163,255,0.03)}
+[data-theme="dark"] .ce-cert-name{color:#e0e4ec}
+[data-theme="dark"] .ce-cert-dl{border-color:rgba(255,255,255,0.1);color:rgba(75,163,255,0.8)}
+
+/* CE mobile */
+@media(max-width:768px){
+  .ce-progress-row{flex-direction:column;text-align:center}
+  .ce-progress-meta{flex-direction:column;gap:4px;align-items:center}
+  .ce-grid{grid-template-columns:1fr}
+}
+
 /* Mobile portal */
 @media(max-width:768px){
   .portal-sidebar{left:-260px;transition:left 0.25s ease}

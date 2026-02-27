@@ -1183,7 +1183,152 @@
         <h2 class="portal-sec-title">CE Webinars</h2>
         <p class="portal-sec-desc">IRS-approved continuing education library with on-demand webinars and credit tracking.</p>
       </div>
-      <div class="portal-placeholder">Coming soon</div>
+
+      <!-- Credit Progress -->
+      <div class="ce-progress-row">
+        <div class="ce-progress-ring-wrap">
+          <svg class="ce-ring" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--off2)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--blue)" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="130.69" transform="rotate(-90 60 60)"/>
+          </svg>
+          <div class="ce-ring-text">
+            <div class="ce-ring-val">12</div>
+            <div class="ce-ring-of">of 20</div>
+          </div>
+        </div>
+        <div class="ce-progress-info">
+          <div class="ce-progress-title">CE Credits Earned</div>
+          <div class="ce-progress-stat">12 of 20 credits completed (60%)</div>
+          <div class="ce-progress-bar"><div class="ce-progress-fill" style="width:60%"></div></div>
+          <div class="ce-progress-meta">
+            <span>8 credits remaining</span>
+            <span>Deadline: Dec 31, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Filters -->
+      <div class="ce-filters">
+        <button class="ce-filter ce-filter-active">All</button>
+        <button class="ce-filter">Tax Resolution</button>
+        <button class="ce-filter">IRS Procedures</button>
+        <button class="ce-filter">Ethics</button>
+        <button class="ce-filter">Federal Tax Law</button>
+        <button class="ce-filter">Practice Growth</button>
+      </div>
+
+      <!-- Webinar Grid -->
+      <div class="ce-grid">
+        <div class="ce-card ce-card-done">
+          <div class="ce-thumb ce-thumb-1">
+            <div class="ce-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21"/></svg></div>
+            <span class="ce-badge-dur">1h 30m</span>
+            <span class="ce-badge-credits">2 CE</span>
+            <div class="ce-done-overlay"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+          <div class="ce-card-body">
+            <span class="ce-cat ce-cat-resolution">Tax Resolution</span>
+            <div class="ce-title">Tax Resolution Fundamentals: OIC, IA, and CNC</div>
+            <div class="ce-instructor">Michael Torres, EA -- Jan 10, 2026</div>
+            <div class="ce-card-foot"><span class="ce-status ce-s-done">Completed</span><button class="ce-cert-btn">Certificate</button></div>
+          </div>
+        </div>
+
+        <div class="ce-card ce-card-done">
+          <div class="ce-thumb ce-thumb-2">
+            <div class="ce-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21"/></svg></div>
+            <span class="ce-badge-dur">1h 45m</span>
+            <span class="ce-badge-credits">2 CE</span>
+            <div class="ce-done-overlay"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+          <div class="ce-card-body">
+            <span class="ce-cat ce-cat-ethics">Ethics</span>
+            <div class="ce-title">Circular 230: Ethics for Tax Practitioners</div>
+            <div class="ce-instructor">Dr. Sarah Kim, CPA -- Jan 18, 2026</div>
+            <div class="ce-card-foot"><span class="ce-status ce-s-done">Completed</span><button class="ce-cert-btn">Certificate</button></div>
+          </div>
+        </div>
+
+        <div class="ce-card ce-card-done">
+          <div class="ce-thumb ce-thumb-3">
+            <div class="ce-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21"/></svg></div>
+            <span class="ce-badge-dur">2h 00m</span>
+            <span class="ce-badge-credits">3 CE</span>
+            <div class="ce-done-overlay"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+          <div class="ce-card-body">
+            <span class="ce-cat ce-cat-federal">Federal Tax Law</span>
+            <div class="ce-title">2026 Federal Tax Law Updates and Planning</div>
+            <div class="ce-instructor">Robert Chen, JD, LLM -- Feb 2, 2026</div>
+            <div class="ce-card-foot"><span class="ce-status ce-s-done">Completed</span><button class="ce-cert-btn">Certificate</button></div>
+          </div>
+        </div>
+
+        <div class="ce-card ce-card-progress">
+          <div class="ce-thumb ce-thumb-4">
+            <div class="ce-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21"/></svg></div>
+            <span class="ce-badge-dur">1h 15m</span>
+            <span class="ce-badge-credits">2 CE</span>
+          </div>
+          <div class="ce-card-body">
+            <span class="ce-cat ce-cat-irs">IRS Procedures</span>
+            <div class="ce-title">IRS Collections Process: From Notice to Levy</div>
+            <div class="ce-instructor">Angela Rivera, EA -- Feb 12, 2026</div>
+            <div class="ce-card-prog"><div class="ce-card-prog-fill" style="width:65%"></div></div>
+            <div class="ce-card-foot"><span class="ce-status ce-s-progress">65% Complete</span><button class="ce-resume-btn">Resume</button></div>
+          </div>
+        </div>
+
+        <div class="ce-card">
+          <div class="ce-thumb ce-thumb-5">
+            <div class="ce-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21"/></svg></div>
+            <span class="ce-badge-dur">1h 30m</span>
+            <span class="ce-badge-credits">2 CE</span>
+          </div>
+          <div class="ce-card-body">
+            <span class="ce-cat ce-cat-state">State Compliance</span>
+            <div class="ce-title">State Tax Compliance: Multi-State Filing Strategies</div>
+            <div class="ce-instructor">Lisa Chang, CPA -- Mar 5, 2026</div>
+            <div class="ce-card-foot"><span class="ce-status ce-s-new">Not Started</span><button class="ce-enroll-btn">Enroll Free</button></div>
+          </div>
+        </div>
+
+        <div class="ce-card">
+          <div class="ce-thumb ce-thumb-6">
+            <div class="ce-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21"/></svg></div>
+            <span class="ce-badge-dur">55m</span>
+            <span class="ce-badge-credits">1 CE</span>
+          </div>
+          <div class="ce-card-body">
+            <span class="ce-cat ce-cat-growth">Practice Growth</span>
+            <div class="ce-title">Building a Tax Resolution Revenue Stream</div>
+            <div class="ce-instructor">David Park, MBA -- Mar 12, 2026</div>
+            <div class="ce-card-foot"><span class="ce-status ce-s-new">Not Started</span><button class="ce-enroll-btn">Enroll Free</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certificates -->
+      <div class="ce-certs-section">
+        <div class="ce-certs-title">Your Certificates</div>
+        <div class="ce-certs-grid">
+          <div class="ce-cert-card">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+            <div><div class="ce-cert-name">Tax Resolution Fundamentals</div><div class="ce-cert-date">Earned Jan 10, 2026 -- 2 CE Credits</div></div>
+            <button class="ce-cert-dl">Download</button>
+          </div>
+          <div class="ce-cert-card">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+            <div><div class="ce-cert-name">Circular 230: Ethics</div><div class="ce-cert-date">Earned Jan 18, 2026 -- 2 CE Credits</div></div>
+            <button class="ce-cert-dl">Download</button>
+          </div>
+          <div class="ce-cert-card">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+            <div><div class="ce-cert-name">2026 Federal Tax Law Updates</div><div class="ce-cert-date">Earned Feb 2, 2026 -- 3 CE Credits</div></div>
+            <button class="ce-cert-dl">Download</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ═══ MARKETING KIT SECTION ═══ -->
