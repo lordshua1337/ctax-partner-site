@@ -2025,6 +2025,93 @@ body.portal-mode{padding-bottom:0}
   .mk-preview{height:110px}
 }
 
+/* ── TRAINING SECTION ── */
+.trn-onboard{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:24px;margin-bottom:24px}
+.trn-onboard-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.trn-onboard-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.trn-onboard-stat{font-size:13px;color:var(--slate)}
+.trn-onboard-pct{font-family:'DM Serif Display',serif;font-size:28px;color:#059669}
+.trn-onboard-bar{height:6px;background:var(--off2);border-radius:4px;overflow:hidden;margin-bottom:20px}
+.trn-onboard-fill{height:100%;background:linear-gradient(90deg,#059669,#34d399);border-radius:4px;transition:width 0.5s ease}
+.trn-checklist{display:flex;flex-direction:column;gap:12px}
+.trn-check-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--off2)}
+.trn-check-item:last-child{border-bottom:none;padding-bottom:0}
+.trn-check-box{width:24px;height:24px;border-radius:50%;border:2px solid var(--off2);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.trn-check-done .trn-check-box{background:#059669;border-color:#059669}
+.trn-check-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:2px}
+.trn-check-done .trn-check-title{text-decoration:line-through;color:var(--slate)}
+.trn-check-desc{font-size:12px;color:var(--mist);line-height:1.4}
+.trn-check-done .trn-check-desc{color:var(--mist)}
+
+.trn-modules-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:16px}
+.trn-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+.trn-mod{background:var(--white);border:1px solid var(--off2);border-radius:12px;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s}
+.trn-mod:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.trn-mod-thumb{position:relative;padding-top:50%;overflow:hidden}
+.trn-thumb-1{background:linear-gradient(135deg,#0B2545,#1a3a5c)}
+.trn-thumb-2{background:linear-gradient(135deg,#1b2838,#2a475e)}
+.trn-thumb-3{background:linear-gradient(135deg,#13315C,#0d2137)}
+.trn-thumb-4{background:linear-gradient(135deg,#0f2027,#203a43)}
+.trn-thumb-5{background:linear-gradient(135deg,#232526,#414345)}
+.trn-thumb-6{background:linear-gradient(135deg,#1a1a2e,#16213e)}
+.trn-mod-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s}
+.trn-mod:hover .trn-mod-play{background:rgba(255,255,255,0.2);transform:translate(-50%,-50%) scale(1.08)}
+.trn-mod-dur{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.6);color:white;font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px}
+.trn-mod-done-badge{position:absolute;top:8px;left:8px;width:24px;height:24px;border-radius:50%;background:#059669;display:flex;align-items:center;justify-content:center}
+.trn-mod-body{padding:14px}
+.trn-mod-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px;line-height:1.4}
+.trn-mod-desc{font-size:12px;color:var(--slate);line-height:1.5;margin-bottom:8px}
+.trn-mod-status{font-size:11px;font-weight:600}
+.trn-ms-done{color:#059669}
+.trn-ms-new{color:var(--slate)}
+
+.trn-bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.trn-playbook{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
+.trn-playbook-icon{width:56px;height:56px;border-radius:14px;background:rgba(11,95,216,0.06);display:flex;align-items:center;justify-content:center}
+.trn-playbook-icon svg{stroke:var(--blue)}
+.trn-playbook-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.trn-playbook-desc{font-size:13px;color:var(--slate);line-height:1.5}
+.trn-playbook-dl{display:flex;align-items:center;gap:6px;background:var(--blue);color:white;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background 0.15s;margin-top:auto}
+.trn-playbook-dl:hover{background:var(--blue2)}
+
+.trn-faq{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:24px}
+.trn-faq-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px}
+.trn-accordion{display:flex;flex-direction:column}
+.trn-acc-item{border-bottom:1px solid var(--off2);cursor:pointer}
+.trn-acc-item:last-child{border-bottom:none}
+.trn-acc-q{display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:13px;font-weight:600;color:var(--navy);gap:8px}
+.trn-acc-q svg{flex-shrink:0;stroke:var(--mist);transition:transform 0.2s}
+.trn-acc-open .trn-acc-q svg{transform:rotate(180deg)}
+.trn-acc-a{max-height:0;overflow:hidden;font-size:13px;color:var(--slate);line-height:1.6;transition:max-height 0.3s ease,padding 0.3s ease;padding:0 0 0 0}
+.trn-acc-open .trn-acc-a{max-height:200px;padding:0 0 12px 0}
+
+/* Training dark mode */
+[data-theme="dark"] .trn-onboard{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .trn-onboard-title{color:#e0e4ec}
+[data-theme="dark"] .trn-onboard-bar{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .trn-check-item{border-color:rgba(255,255,255,0.04)}
+[data-theme="dark"] .trn-check-box{border-color:rgba(255,255,255,0.1)}
+[data-theme="dark"] .trn-check-title{color:#e0e4ec}
+[data-theme="dark"] .trn-check-done .trn-check-title{color:rgba(255,255,255,0.4)}
+[data-theme="dark"] .trn-modules-title{color:#e0e4ec}
+[data-theme="dark"] .trn-mod{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .trn-mod:hover{box-shadow:0 8px 24px rgba(0,0,0,0.2)}
+[data-theme="dark"] .trn-mod-title{color:#e0e4ec}
+[data-theme="dark"] .trn-playbook{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .trn-playbook-icon{background:rgba(75,163,255,0.1)}
+[data-theme="dark"] .trn-playbook-title{color:#e0e4ec}
+[data-theme="dark"] .trn-faq{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .trn-faq-title{color:#e0e4ec}
+[data-theme="dark"] .trn-acc-item{border-color:rgba(255,255,255,0.04)}
+[data-theme="dark"] .trn-acc-q{color:#e0e4ec}
+[data-theme="dark"] .trn-acc-a{color:rgba(255,255,255,0.5)}
+
+/* Training mobile */
+@media(max-width:768px){
+  .trn-grid{grid-template-columns:1fr}
+  .trn-bottom-row{grid-template-columns:1fr}
+}
+
 /* Mobile portal */
 @media(max-width:768px){
   .portal-sidebar{left:-260px;transition:left 0.25s ease}
