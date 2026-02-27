@@ -1,0 +1,306 @@
+<div class="portal-layout">
+  <!-- Sidebar -->
+  <aside class="portal-sidebar">
+    <div class="portal-logo">
+      <img class="portal-logo-white" src="images/logo-white.svg" alt="CTAX" height="18">
+      <img class="portal-logo-dark" src="images/logo.svg" alt="CTAX" height="18">
+      <span class="portal-logo-label">PARTNER PORTAL</span>
+    </div>
+
+    <div class="portal-brand-upload">
+      <label class="portal-brand-drop" id="portal-brand-drop">
+        <input type="file" accept="image/*" id="portal-logo-input" style="display:none">
+        <div class="portal-brand-preview" id="portal-brand-preview">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <span class="portal-brand-text" id="portal-brand-text">Upload your logo</span>
+      </label>
+    </div>
+
+    <nav class="portal-nav">
+      <div class="portal-nav-group">
+        <div class="portal-nav-heading">Overview</div>
+        <a class="portal-nav-item pni-active" onclick="portalNav(this,'portal-sec-dashboard')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-referrals')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          Referrals
+        </a>
+      </div>
+
+      <div class="portal-nav-group">
+        <div class="portal-nav-heading">Financials</div>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-earnings')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg>
+          Earnings
+        </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-payouts')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Payouts
+        </a>
+      </div>
+
+      <div class="portal-nav-group">
+        <div class="portal-nav-heading">Tools</div>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-submit')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          Submit Referral
+        </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-documents')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+          Documents
+        </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-calculator')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+          Revenue Calculator
+        </a>
+      </div>
+
+      <div class="portal-nav-group">
+        <div class="portal-nav-heading">Resources</div>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-ce')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          CE Webinars
+        </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-marketing')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Marketing Kit
+        </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-training')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          Training
+        </a>
+      </div>
+
+      <div class="portal-nav-group">
+        <div class="portal-nav-heading">Account</div>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-settings')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          Settings
+        </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-support')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Support
+        </a>
+      </div>
+    </nav>
+
+    <div class="portal-sidebar-footer">
+      <a class="portal-nav-item" onclick="showPage('home')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Back to Site
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="portal-main">
+
+    <!-- Portal Top Bar -->
+    <div class="portal-topbar">
+      <button class="portal-hamburger" onclick="document.querySelector('.portal-sidebar').classList.toggle('portal-sb-open')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="portal-topbar-right">
+        <span class="portal-demo-badge">Demo Mode</span>
+        <div class="portal-avatar">JH</div>
+      </div>
+    </div>
+
+    <!-- ═══ DASHBOARD SECTION ═══ -->
+    <div class="portal-section portal-sec-active" id="portal-sec-dashboard">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Dashboard</h2>
+        <p class="portal-sec-desc">Real-time overview of your referral performance, earnings, and activity.</p>
+      </div>
+
+      <!-- Performance Hub -->
+      <div id="dash-performance-hub">
+        <div class="dash-vel-wrap">
+          <div class="dash-vel-header">
+            <div>
+              <div class="dash-hub-label">REFERRAL VELOCITY</div>
+              <div class="dash-hub-title">Your Performance vs. Network</div>
+            </div>
+            <div class="dash-vel-legend">
+              <span class="dash-leg"><span class="dash-leg-line dash-leg-you"></span> You</span>
+              <span class="dash-leg"><span class="dash-leg-line dash-leg-group"></span> Your Group</span>
+              <span class="dash-leg"><span class="dash-leg-line dash-leg-network"></span> Network Avg</span>
+              <span class="dash-live-badge"><span class="dash-live-dot-sm"></span> LIVE</span>
+            </div>
+          </div>
+          <div id="dash-velocity-chart" class="dash-vel-chart"></div>
+        </div>
+
+        <div class="dash-hub-row">
+          <div class="dash-bonus-wrap">
+            <div class="dash-hub-label">MONTHLY BONUS TRACKER</div>
+            <div class="dash-hub-subtitle">4 referrals this month unlocks your bonus tier</div>
+            <div class="dash-bonus-center">
+              <div id="dash-bonus-tracker"></div>
+            </div>
+          </div>
+          <div class="dash-insights-wrap">
+            <div class="dash-hub-label">COMPETITIVE INSIGHTS</div>
+            <div class="dash-hub-subtitle">How you stack up against your peers</div>
+            <div id="dash-peer-insights" class="dash-insights-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;margin-bottom:24px">
+        <div style="background:linear-gradient(135deg,rgba(11,95,216,0.06),rgba(75,163,255,0.06));border:1px solid rgba(11,95,216,0.12);border-radius:12px;padding:20px">
+          <div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin-bottom:8px">Total Earnings</div>
+          <div style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--navy)" data-count-to="24850" data-count-prefix="$">0</div>
+          <div style="font-size:13px;color:var(--teal-text);font-weight:600;margin-top:4px">+12.4% vs last month</div>
+        </div>
+        <div style="background:var(--off);border:1px solid var(--off2);border-radius:12px;padding:20px">
+          <div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-bottom:8px">Active Referrals</div>
+          <div style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--navy)" data-count-to="18">0</div>
+          <div style="font-size:13px;color:var(--slate);margin-top:4px">7 in investigation, 11 in resolution</div>
+        </div>
+        <div style="background:var(--off);border:1px solid var(--off2);border-radius:12px;padding:20px">
+          <div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-bottom:8px">Conversion Rate</div>
+          <div style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--navy)" data-count-to="84" data-count-suffix="%">0</div>
+          <div style="font-size:13px;color:var(--teal-text);font-weight:600;margin-top:4px">Above 80% benchmark</div>
+        </div>
+        <div style="background:var(--off);border:1px solid var(--off2);border-radius:12px;padding:20px">
+          <div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-bottom:8px">Next Payout</div>
+          <div style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--navy)" data-count-to="3200" data-count-prefix="$">0</div>
+          <div style="font-size:13px;color:var(--slate);margin-top:4px">Scheduled: Mar 1, 2026</div>
+        </div>
+      </div>
+
+      <!-- Recent Referrals Table -->
+      <div style="background:var(--off);border-radius:14px;padding:24px;border:1px solid var(--off2)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div style="font-size:15px;font-weight:700;color:var(--navy)">Recent Referrals</div>
+          <span style="font-size:12px;font-weight:600;color:var(--blue);cursor:pointer">View All</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--slate);padding-bottom:10px;border-bottom:1px solid var(--off2);align-items:center">
+          <div>Client</div><div>Submitted</div><div>Status</div><div>Tax Debt</div><div>Your Share</div><div>Actions</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;border-bottom:1px solid var(--off2);align-items:center">
+          <div style="font-weight:600">J. Williams</div><div style="color:var(--slate)">Feb 20, 2026</div><div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:rgba(0,229,204,0.1);color:var(--teal-text);font-size:12px;font-weight:600">In Resolution</span></div><div>$34,200</div><div style="font-weight:600;color:var(--blue)">$2,736</div>
+          <div style="display:flex;gap:6px"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;border-bottom:1px solid var(--off2);align-items:center">
+          <div style="font-weight:600">M. Garcia</div><div style="color:var(--slate)">Feb 18, 2026</div><div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:rgba(11,95,216,0.1);color:var(--blue);font-size:12px;font-weight:600">Investigation</span></div><div>$18,500</div><div style="font-weight:600;color:var(--slate)">Pending</div>
+          <div style="display:flex;gap:6px"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;border-bottom:1px solid var(--off2);align-items:center">
+          <div style="font-weight:600">R. Thompson</div><div style="color:var(--slate)">Feb 14, 2026</div><div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:rgba(0,229,204,0.1);color:var(--teal-text);font-size:12px;font-weight:600">Resolved</span></div><div>$52,800</div><div style="font-weight:600;color:var(--teal-text)">$4,224 Paid</div>
+          <div style="display:flex;gap:6px"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;align-items:center">
+          <div style="font-weight:600">K. Patel</div><div style="color:var(--slate)">Feb 10, 2026</div><div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:rgba(0,229,204,0.1);color:var(--teal-text);font-size:12px;font-weight:600">Resolved</span></div><div>$27,100</div><div style="font-weight:600;color:var(--teal-text)">$2,168 Paid</div>
+          <div style="display:flex;gap:6px"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ REFERRALS SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-referrals">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Referrals</h2>
+        <p class="portal-sec-desc">Full list of all submitted referrals with status tracking, filters, and client detail views.</p>
+      </div>
+      <div class="portal-placeholder">Coming soon</div>
+    </div>
+
+    <!-- ═══ EARNINGS SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-earnings">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Earnings</h2>
+        <p class="portal-sec-desc">Detailed commission breakdown by referral, monthly trends, and lifetime earnings history.</p>
+      </div>
+      <div class="portal-placeholder">Coming soon</div>
+    </div>
+
+    <!-- ═══ PAYOUTS SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-payouts">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Payouts</h2>
+        <p class="portal-sec-desc">Payout schedule, payment method management, tax documents (1099), and transaction ledger.</p>
+      </div>
+      <div class="portal-placeholder">Coming soon</div>
+    </div>
+
+    <!-- ═══ SUBMIT REFERRAL SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-submit">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Submit Referral</h2>
+        <p class="portal-sec-desc">Quick-submit form for new client referrals with tax debt details, contact info, and file uploads.</p>
+      </div>
+      <div class="portal-placeholder">Coming soon</div>
+    </div>
+
+    <!-- ═══ DOCUMENTS SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-documents">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Documents</h2>
+        <p class="portal-sec-desc">Shared document vault for client files, signed authorizations, IRS correspondence, and agreements.</p>
+      </div>
+      <div class="portal-placeholder">Coming soon</div>
+    </div>
+
+    <!-- ═══ CALCULATOR SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-calculator">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Revenue Calculator</h2>
+        <p class="portal-sec-desc">Model projected earnings based on referral volume, average debt size, and your commission tier.</p>
+      </div>
+      <div class="portal-placeholder">Coming soon</div>
+    </div>
+
+    <!-- ═══ CE WEBINARS SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-ce">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">CE Webinars</h2>
+        <p class="portal-sec-desc">IRS-approved continuing education library with on-demand webinars and credit tracking.</p>
+      </div>
+      <div class="portal-placeholder">Coming soon</div>
+    </div>
+
+    <!-- ═══ MARKETING KIT SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-marketing">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Marketing Kit</h2>
+        <p class="portal-sec-desc">Co-branded collateral, email templates, social assets, and the ad builder tool.</p>
+      </div>
+      <div class="portal-placeholder">Coming soon</div>
+    </div>
+
+    <!-- ═══ TRAINING SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-training">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Training</h2>
+        <p class="portal-sec-desc">Onboarding guides, partner playbook, objection handling scripts, and best practice videos.</p>
+      </div>
+      <div class="portal-placeholder">Coming soon</div>
+    </div>
+
+    <!-- ═══ SETTINGS SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-settings">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Settings</h2>
+        <p class="portal-sec-desc">Profile details, notification preferences, API keys, team member management, and tier info.</p>
+      </div>
+      <div class="portal-placeholder">Coming soon</div>
+    </div>
+
+    <!-- ═══ SUPPORT SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-support">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Support</h2>
+        <p class="portal-sec-desc">Dedicated partner support channel, ticket history, knowledge base, and your account manager contact.</p>
+      </div>
+      <div class="portal-placeholder">Coming soon</div>
+    </div>
+
+  </main>
+</div>
+

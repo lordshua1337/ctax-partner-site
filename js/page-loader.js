@@ -70,8 +70,12 @@ function onPageLoaded(id) {
     }
   }
   // Initialize dashboard performance hub
-  if (id === 'dashboard' && typeof window.initDashboardHub === 'function') {
+  if ((id === 'dashboard' || id === 'portal') && typeof window.initDashboardHub === 'function') {
     setTimeout(window.initDashboardHub, 80);
+  }
+  // Initialize portal brand upload
+  if (id === 'portal' && typeof initPortalBrand === 'function') {
+    setTimeout(initPortalBrand, 80);
   }
   // Initialize staggered card entrances on newly loaded page
   var el = document.getElementById('page-' + id);

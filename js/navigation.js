@@ -53,6 +53,12 @@ function _activatePage(id){
     var btn=document.getElementById('navHamburger');
     if(drawer)drawer.classList.remove('open');
     if(btn)btn.classList.remove('open');
+    // Toggle site chrome for portal
+    if(targetId==='portal'){
+      document.body.classList.add('portal-mode');
+    } else {
+      document.body.classList.remove('portal-mode');
+    }
   };
   if(typeof loadPageContent === 'function') {
     loadPageContent(targetId).then(show);
