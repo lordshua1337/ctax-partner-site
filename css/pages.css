@@ -857,6 +857,22 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 /* ── CHAT WIDGET ── */
 #chat-bubble{animation:slideInUp 0.3s ease}
 
+/* ── WEBINARS ── */
+.wbn-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.wbn-card{background:var(--white);border:1px solid var(--off2);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow 0.2s,transform 0.2s}
+.wbn-card:hover{box-shadow:0 12px 48px rgba(10,22,40,0.12);transform:translateY(-3px)}
+.wbn-thumb{aspect-ratio:16/9;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.wbn-thumb-pattern{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+.wbn-play{width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,0.7);background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;transition:transform 0.2s,background 0.2s}
+.wbn-card:hover .wbn-play{transform:scale(1.1);background:rgba(255,255,255,0.2)}
+.wbn-badge{position:absolute;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:0.06em;z-index:1;backdrop-filter:blur(8px)}
+.wbn-badge-ce{top:12px;left:12px;background:rgba(11,95,216,0.85);color:#fff}
+.wbn-badge-dur{top:12px;right:12px;background:rgba(10,22,40,0.7);color:rgba(255,255,255,0.9)}
+.wbn-filter{position:sticky;top:52px;z-index:10;background:var(--white);border-bottom:1px solid var(--off2);padding:14px 0;overflow-x:auto}
+.wbn-pill{display:inline-block;padding:7px 18px;border-radius:24px;font-size:13px;font-weight:600;color:var(--slate);background:var(--off);border:1px solid var(--off2);cursor:pointer;white-space:nowrap;transition:all 0.15s}
+.wbn-pill:hover{border-color:var(--blue);color:var(--blue);background:rgba(11,95,216,0.03)}
+.wbn-pill-active{background:rgba(11,95,216,0.08);color:var(--blue);border-color:rgba(11,95,216,0.2)}
+
 /* ── PAGE TRANSITIONS ── */
 .page{transition:opacity 0.35s ease,transform 0.35s ease}
 .page:not(.active){opacity:0;pointer-events:none}
@@ -875,6 +891,10 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
   #page-dashboard [style*="grid-template-columns:1.6fr"] > div:nth-child(4){display:none!important}
   #page-compare [style*="grid-template-columns:2fr 1fr 1fr 1fr"]{grid-template-columns:2fr 1fr 1fr!important}
   #page-compare [style*="grid-template-columns:2fr 1fr 1fr 1fr"] > div:last-child{display:none!important}
+  .wbn-grid{grid-template-columns:1fr}
+  .wbn-filter .con{gap:6px}
+  #page-webinars [style*="display:flex;justify-content:center;gap:0"]{flex-direction:column!important;align-items:center!important}
+  #page-webinars [style*="border-right:1px solid rgba(255,255,255,0.08)"]{border-right:none!important;border-bottom:1px solid rgba(255,255,255,0.08)!important}
   .ytd-bar{bottom:64px}
   .ytd-date,.ytd-sep{display:none}
   #chat-widget{bottom:16px;right:16px}

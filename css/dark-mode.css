@@ -79,7 +79,9 @@
 
 /* ── Headings & text ── */
 [data-theme="dark"] h1.disp,[data-theme="dark"] h2.disp,[data-theme="dark"] h3.sh{color:#e8ecf2}
+[data-theme="dark"] h1.disp-lt,[data-theme="dark"] h2.disp-lt,[data-theme="dark"] h3.sh-lt{color:#fff}
 [data-theme="dark"] .lead{color:rgba(255,255,255,0.6)}
+[data-theme="dark"] .lead-lt{color:rgba(255,255,255,0.75)}
 [data-theme="dark"] p.bc{color:rgba(255,255,255,0.6)}
 [data-theme="dark"] .pill{color:rgba(255,255,255,0.45);border-color:rgba(255,255,255,0.08)}
 [data-theme="dark"] .kicker{color:rgba(255,255,255,0.5)}
@@ -151,6 +153,7 @@
 [data-theme="dark"] [style*="color:var(--body)"]{color:rgba(255,255,255,0.6)!important}
 [data-theme="dark"] [style*="color:#0A1628"]{color:#e0e4ec!important}
 [data-theme="dark"] [style*="color:#1C2333"]{color:#e0e4ec!important}
+[data-theme="dark"] [style*="color:var(--white)"]{color:#fff!important}
 [data-theme="dark"] [style*="background:var(--white)"]{background:#141e30!important}
 [data-theme="dark"] [style*="background:var(--off)"]{background:#111827!important}
 [data-theme="dark"] [style*="background:#f"]{background:#111827!important}
@@ -184,6 +187,15 @@
 [data-theme="dark"] .ft-col-lbl{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:rgba(255,255,255,0.4);background-clip:unset}
 [data-theme="dark"] .footer-col-title{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:rgba(255,255,255,0.4);background-clip:unset}
 [data-theme="dark"] .footer-copyright{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:rgba(255,255,255,0.3);background-clip:unset}
+
+/* ── Webinars ── */
+[data-theme="dark"] .wbn-card{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .wbn-card:hover{box-shadow:0 12px 48px rgba(0,0,0,0.35)}
+[data-theme="dark"] .wbn-thumb{opacity:0.9}
+[data-theme="dark"] .wbn-filter{background:#0c1220;border-bottom-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .wbn-pill{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.55)}
+[data-theme="dark"] .wbn-pill:hover{border-color:rgba(75,163,255,0.4);color:#4BA3FF;background:rgba(11,95,216,0.08)}
+[data-theme="dark"] .wbn-pill-active{background:rgba(11,95,216,0.15);border-color:rgba(75,163,255,0.4);color:#4BA3FF}
 
 /* ── Footer — already dark, just soften ── */
 [data-theme="dark"] footer{background:#080e1a}
