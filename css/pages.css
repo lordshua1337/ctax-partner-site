@@ -626,6 +626,8 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .exp-arrow{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--off2);background:#fff;color:var(--navy);font-size:16px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;font-family:inherit}
 .exp-arrow:hover:not(:disabled){border-color:var(--navy);background:var(--navy);color:#fff}
 .exp-arrow:disabled{opacity:0.28;cursor:default}
+.exp-hint-cta{background:linear-gradient(90deg,var(--blue),var(--sky),var(--cyan));background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;font-size:14px;letter-spacing:0.02em;transition:opacity 0.15s}
+.exp-hint-cta:hover{opacity:0.8}
 
 
 .fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease}.fade-up.in-view{opacity:1;transform:translateY(0)}

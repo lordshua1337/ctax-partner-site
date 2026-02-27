@@ -521,6 +521,78 @@
 
 </main>
 
+<!-- EXPLORE MODAL -->
+<div class="exp-overlay" id="exploreModal" onclick="closeExploreModalBg(event)">
+  <div class="exp-modal">
+    <button class="exp-close" onclick="closeExploreModal()" aria-label="Close">&times;</button>
+    <div class="exp-modal-top">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--blue)">Premium Capabilities</div>
+    </div>
+    <div class="exp-dots">
+      <div class="exp-dot active" onclick="goToCard(0)"></div>
+      <div class="exp-dot" onclick="goToCard(1)"></div>
+      <div class="exp-dot" onclick="goToCard(2)"></div>
+      <div class="exp-dot" onclick="goToCard(3)"></div>
+    </div>
+    <div class="exp-track-wrap">
+      <div class="exp-track" id="expTrack">
+
+        <!-- Card 1: Live Dashboard & Reporting -->
+        <div class="exp-card">
+          <div class="exp-card-img">
+            <img src="images/explore-dashboard.svg" alt="Partner Dashboard" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,var(--off),var(--off2))';this.parentElement.style.borderRadius='12px'">
+          </div>
+          <div class="exp-card-num">01 / 04</div>
+          <div class="exp-card-title">Live Dashboard &amp; Reporting</div>
+          <div class="exp-card-desc">Real-time case tracking, pipeline velocity, commission accruals, and conversion metrics. Filterable by date range, case type, and referral source. Your data, your way.</div>
+          <button class="exp-card-btn" onclick="closeAndNav('dashboard')">Preview Dashboard &rarr;</button>
+        </div>
+
+        <!-- Card 2: Revenue Intelligence -->
+        <div class="exp-card">
+          <div class="exp-card-img">
+            <img src="images/explore-revenue.svg" alt="Revenue Intelligence" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,var(--off),var(--off2))';this.parentElement.style.borderRadius='12px'">
+          </div>
+          <div class="exp-card-num">02 / 04</div>
+          <div class="exp-card-title">Revenue Forecasting &amp; Analytics</div>
+          <div class="exp-card-desc">AI-powered revenue projections based on your referral volume, case mix, and historical conversion data. Model scenarios, track YTD performance, and forecast quarterly payouts.</div>
+          <button class="exp-card-btn" onclick="closeAndNav('calculator')">Open Revenue Lab &rarr;</button>
+        </div>
+
+        <!-- Card 3: CE / Compliance -->
+        <div class="exp-card">
+          <div class="exp-card-img">
+            <img src="images/explore-ce.svg" alt="CE Webinars" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,var(--off),var(--off2))';this.parentElement.style.borderRadius='12px'">
+          </div>
+          <div class="exp-card-num">03 / 04</div>
+          <div class="exp-card-title">IRS-Approved CE Library</div>
+          <div class="exp-card-desc">500+ hours of on-demand continuing education. Tax resolution, ethics, federal law updates, and practice growth — all free for active partners. Stay compliant, stay sharp.</div>
+          <button class="exp-card-btn" onclick="closeAndNav('webinars')">Browse Webinars &rarr;</button>
+        </div>
+
+        <!-- Card 4: AI Tooling -->
+        <div class="exp-card">
+          <div class="exp-card-img">
+            <img src="images/explore-tools.svg" alt="AI Tools" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,var(--off),var(--off2))';this.parentElement.style.borderRadius='12px'">
+          </div>
+          <div class="exp-card-num">04 / 04</div>
+          <div class="exp-card-title">AI-Powered Partner Tools</div>
+          <div class="exp-card-desc">Custom referral scripts, co-branded ad generation, client qualification scoring, and automated outreach templates. Built on Claude — tuned for tax resolution.</div>
+          <button class="exp-card-btn" onclick="closeAndNav('scripts')">Try Script Builder &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    <div class="exp-nav">
+      <span class="exp-nav-hint" id="expHint">Swipe or use arrows to explore</span>
+      <div class="exp-arrows">
+        <button class="exp-arrow" id="expPrev" onclick="shiftCard(-1)" disabled aria-label="Previous">&#8249;</button>
+        <button class="exp-arrow" id="expNext" onclick="shiftCard(1)" aria-label="Next">&#8250;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer class="ft">
   <div class="con">
     <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:72px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,0.06)">

@@ -140,8 +140,15 @@ function updateExp(){
   document.querySelectorAll('.exp-dot').forEach(function(d,i){d.classList.toggle('active',i===expCurrent);});
   document.getElementById('expPrev').disabled=expCurrent===0;
   document.getElementById('expNext').disabled=expCurrent===expTotal-1;
-  var hints=['Swipe or use arrows to explore','Keep going →','Almost there →','Ready to dive in?'];
-  var hint=document.getElementById('expHint');if(hint)hint.textContent=hints[expCurrent];
+  var hints=['See what you get as a partner','Keep going — it gets better','Almost there',''];
+  var hint=document.getElementById('expHint');
+  if(hint){
+    if(expCurrent===expTotal-1){
+      hint.innerHTML='<a class="exp-hint-cta" onclick="closeAndNav(\'apply\')" style="cursor:pointer">Ready to get started? &rarr;</a>';
+    }else{
+      hint.textContent=hints[expCurrent];
+    }
+  }
 }
 document.addEventListener('keydown',function(e){
   if(!document.getElementById('exploreModal').classList.contains('open'))return;
