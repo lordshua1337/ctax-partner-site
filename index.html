@@ -33,35 +33,18 @@
   </div>
 </div>
 
-<div id="cookie-consent" role="dialog" aria-label="Cookie consent" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--navy);padding:16px 32px;align-items:center;justify-content:space-between;gap:24px">
-  <p style="font-size:14px;color:rgba(255,255,255,0.8);margin:0;line-height:1.5">We use cookies to improve your experience. By continuing to browse, you agree to our <a onclick="showPage('privacy')" style="color:var(--cyan-text);cursor:pointer;text-decoration:underline">Privacy Policy</a>.</p>
-  <div style="display:flex;gap:10px;flex-shrink:0">
-    <button onclick="acceptCookies()" style="background:var(--blue);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Accept</button>
-    <button onclick="document.getElementById('cookie-consent').style.display='none'" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.15);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Dismiss</button>
+<div id="cookie-consent" role="dialog" aria-label="Cookie consent" class="cc-banner">
+  <div class="cc-card">
+    <div class="cc-left">
+      <img src="images/ctax-cookie.webp" alt="" class="cc-img" aria-hidden="true">
+    </div>
+    <div class="cc-right">
+      <p class="cc-text">Hey, we use cookies to improve your experience. By browsing this site you agree to our <a onclick="showPage('privacy')" class="cc-link">Privacy Policy</a>.</p>
+      <button onclick="acceptCookies()" class="cc-btn">Okay</button>
+    </div>
   </div>
 </div>
 
-<div id="chat-widget" style="position:fixed;bottom:24px;right:24px;z-index:8500">
-  <div id="chat-bubble" style="display:none;background:var(--white);border:1px solid var(--off2);border-radius:16px;box-shadow:0 8px 40px rgba(10,22,40,0.15);width:340px;max-width:calc(100vw - 48px);margin-bottom:12px;overflow:hidden">
-    <div style="background:var(--navy);padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
-      <div style="display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:var(--teal)"></div><span style="color:#fff;font-size:14px;font-weight:600">Partner Support</span></div>
-      <button onclick="toggleChat()" style="background:none;border:none;color:rgba(255,255,255,0.6);cursor:pointer;font-size:18px">&times;</button>
-    </div>
-    <div style="padding:20px">
-      <div style="background:var(--off);border-radius:12px;padding:14px 16px;margin-bottom:12px"><p style="font-size:14px;color:var(--navy);margin:0;line-height:1.5">Hi! Have questions about the partner program? We typically respond within a few minutes during business hours (Mon-Fri, 8am-7pm CST).</p></div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <button onclick="showPage('apply');toggleChat()" style="background:var(--off);border:1px solid var(--off2);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--navy);cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif">I want to become a partner</button>
-        <button onclick="showPage('calculator');toggleChat()" style="background:var(--off);border:1px solid var(--off2);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--navy);cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif">How much can I earn?</button>
-        <button onclick="showPage('contact');toggleChat()" style="background:var(--off);border:1px solid var(--off2);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--navy);cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif">I need to talk to someone</button>
-      </div>
-      <div style="margin-top:12px;text-align:center"><a href="mailto:partners@communitytax.com" style="font-size:13px;color:var(--blue);text-decoration:none;font-weight:600">Or email us directly</a></div>
-    </div>
-  </div>
-  <button id="chat-toggle-btn" onclick="toggleChat()" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));border:none;cursor:pointer;box-shadow:0 4px 20px rgba(11,95,216,0.3);display:flex;align-items:center;justify-content:center;margin-left:auto;transition:transform 0.2s" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-    <svg aria-hidden="true" id="chat-icon-msg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-    <svg aria-hidden="true" id="chat-icon-x" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </button>
-</div>
 
 <div id="scroll-progress" aria-hidden="true"></div>
 <nav id="site-nav" role="navigation" aria-label="Main navigation">

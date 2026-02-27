@@ -839,7 +839,20 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 @keyframes slideOutDown{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(20px)}}
 
 /* ── COOKIE CONSENT ── */
-#cookie-consent{animation:slideInUp 0.4s ease}
+.cc-banner{display:none;position:fixed;bottom:24px;right:24px;z-index:9999;animation:ccSlideIn 0.45s cubic-bezier(0.22,1,0.36,1)}
+.cc-banner.cc-visible{display:block}
+.cc-card{display:flex;align-items:stretch;background:#fff;border:1px solid var(--off2);border-radius:16px;box-shadow:0 12px 40px rgba(10,22,40,0.12),0 2px 6px rgba(0,0,0,0.04);overflow:hidden;max-width:400px}
+.cc-left{display:flex;align-items:center;justify-content:center;padding:16px 8px 16px 18px;flex-shrink:0}
+.cc-img{width:80px;height:80px;filter:drop-shadow(0 4px 12px rgba(11,95,216,0.18));transform:rotate(-8deg);border-radius:50%}
+.cc-right{display:flex;flex-direction:column;gap:12px;padding:18px 22px 18px 12px;justify-content:center}
+.cc-text{font-size:13px;color:var(--body);line-height:1.55;margin:0}
+.cc-link{color:var(--blue);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.cc-link:hover{color:var(--navy)}
+.cc-btn{align-self:flex-start;background:var(--navy);color:#fff;border:none;padding:7px 20px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:background 0.15s,transform 0.15s}
+.cc-btn:hover{background:var(--blue);transform:translateY(-1px)}
+.cc-exit{animation:ccSlideOut 0.3s cubic-bezier(0.4,0,1,1) forwards}
+@keyframes ccSlideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes ccSlideOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(40px)}}
 
 /* ── CHAT WIDGET ── */
 #chat-bubble{animation:slideInUp 0.3s ease}
@@ -869,6 +882,9 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
   .dash-bonus-wrap{flex:none!important;min-width:0!important}
   .dash-insights-wrap{min-width:0!important}
   .dash-vel-header{flex-direction:column;gap:12px}
+  .cc-banner{right:12px;left:12px;bottom:12px}
+  .cc-card{max-width:none}
+  .cc-img{width:60px;height:60px}
 }
 
 

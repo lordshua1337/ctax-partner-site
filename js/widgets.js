@@ -102,13 +102,16 @@ var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-redu
 // ── COOKIE CONSENT ──────────────────────────────────────
 function acceptCookies(){
   localStorage.setItem('ctax_cookies_accepted','1');
-  document.getElementById('cookie-consent').style.display='none';
+  var el = document.getElementById('cookie-consent');
+  if(!el) return;
+  el.classList.add('cc-exit');
+  el.addEventListener('animationend', function(){ el.classList.remove('cc-visible','cc-exit'); });
 }
 (function(){
   if(!localStorage.getItem('ctax_cookies_accepted')){
     setTimeout(function(){
       var el = document.getElementById('cookie-consent');
-      if(el) el.style.display='flex';
+      if(el) el.classList.add('cc-visible');
     }, 3000);
   }
 })();
