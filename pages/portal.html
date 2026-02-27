@@ -103,7 +103,31 @@
       <button class="portal-hamburger" onclick="document.querySelector('.portal-sidebar').classList.toggle('portal-sb-open')">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
+      <div class="portal-search-wrap">
+        <div class="portal-search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="portal-search-input" id="portal-global-search" placeholder="Search referrals, documents, tickets..." oninput="portalGlobalSearch(this.value)">
+        </div>
+        <div class="portal-search-results" id="portal-search-results"></div>
+      </div>
       <div class="portal-topbar-right">
+        <div class="portal-notif-wrap">
+          <button class="portal-notif-btn" onclick="toggleNotifPanel()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            <span class="portal-notif-badge" id="portal-notif-badge">3</span>
+          </button>
+          <div class="portal-notif-panel" id="portal-notif-panel">
+            <div class="portal-notif-header">
+              <span>Notifications</span>
+              <button class="portal-notif-mark" onclick="markAllRead()">Mark all read</button>
+            </div>
+            <div class="portal-notif-item portal-notif-item-unread">Williams case moved to Resolution -- your $2,736 commission is on track.<div class="portal-notif-time">2 hours ago</div></div>
+            <div class="portal-notif-item portal-notif-item-unread">New payout scheduled: $2,736 on March 1, 2026.<div class="portal-notif-time">5 hours ago</div></div>
+            <div class="portal-notif-item portal-notif-item-unread">Garcia referral assigned to S. Patel for investigation.<div class="portal-notif-time">1 day ago</div></div>
+            <div class="portal-notif-item">Thompson case resolved -- $4,224 commission paid.<div class="portal-notif-time">5 days ago</div></div>
+            <div class="portal-notif-item">New CE webinar available: State Tax Compliance.<div class="portal-notif-time">1 week ago</div></div>
+          </div>
+        </div>
         <span class="portal-demo-badge">Demo Mode</span>
         <div class="portal-avatar">JH</div>
       </div>
@@ -112,7 +136,13 @@
     <!-- ═══ DASHBOARD SECTION ═══ -->
     <div class="portal-section portal-sec-active" id="portal-sec-dashboard">
       <div class="portal-sec-header">
-        <h2 class="portal-sec-title">Dashboard</h2>
+        <div class="dash-welcome-row">
+          <h2 class="dash-greeting" id="dash-greeting">Dashboard</h2>
+          <button class="dash-quick-submit" onclick="portalNav(document.querySelector('[onclick*=portal-sec-submit]'),'portal-sec-submit')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Submit New Referral
+          </button>
+        </div>
         <p class="portal-sec-desc">Real-time overview of your referral performance, earnings, and activity.</p>
       </div>
 
@@ -151,54 +181,63 @@
       </div>
 
       <!-- KPI Cards -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;margin-bottom:24px">
-        <div style="background:linear-gradient(135deg,rgba(11,95,216,0.06),rgba(75,163,255,0.06));border:1px solid rgba(11,95,216,0.12);border-radius:12px;padding:20px">
-          <div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin-bottom:8px">Total Earnings</div>
-          <div style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--navy)" data-count-to="24850" data-count-prefix="$">0</div>
-          <div style="font-size:13px;color:var(--teal-text);font-weight:600;margin-top:4px">+12.4% vs last month</div>
+      <div class="dash-kpi-row">
+        <div class="dash-kpi-card dash-kpi-card-primary">
+          <div class="dash-kpi-label">Total Earnings</div>
+          <div class="dash-kpi-val" data-count-to="24850" data-count-prefix="$">0</div>
+          <div class="dash-kpi-trend dash-kpi-trend-up">+12.4% vs last month</div>
         </div>
-        <div style="background:var(--off);border:1px solid var(--off2);border-radius:12px;padding:20px">
-          <div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-bottom:8px">Active Referrals</div>
-          <div style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--navy)" data-count-to="18">0</div>
-          <div style="font-size:13px;color:var(--slate);margin-top:4px">7 in investigation, 11 in resolution</div>
+        <div class="dash-kpi-card">
+          <div class="dash-kpi-label">Active Referrals</div>
+          <div class="dash-kpi-val" data-count-to="18">0</div>
+          <div class="dash-kpi-trend dash-kpi-trend-neutral">7 in investigation, 11 in resolution</div>
         </div>
-        <div style="background:var(--off);border:1px solid var(--off2);border-radius:12px;padding:20px">
-          <div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-bottom:8px">Conversion Rate</div>
-          <div style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--navy)" data-count-to="84" data-count-suffix="%">0</div>
-          <div style="font-size:13px;color:var(--teal-text);font-weight:600;margin-top:4px">Above 80% benchmark</div>
+        <div class="dash-kpi-card">
+          <div class="dash-kpi-label">Conversion Rate</div>
+          <div class="dash-kpi-val" data-count-to="84" data-count-suffix="%">0</div>
+          <div class="dash-kpi-trend dash-kpi-trend-up">Above 80% benchmark</div>
         </div>
-        <div style="background:var(--off);border:1px solid var(--off2);border-radius:12px;padding:20px">
-          <div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-bottom:8px">Next Payout</div>
-          <div style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--navy)" data-count-to="3200" data-count-prefix="$">0</div>
-          <div style="font-size:13px;color:var(--slate);margin-top:4px">Scheduled: Mar 1, 2026</div>
+        <div class="dash-kpi-card">
+          <div class="dash-kpi-label">Next Payout</div>
+          <div class="dash-kpi-val" data-count-to="3200" data-count-prefix="$">0</div>
+          <div class="dash-kpi-trend dash-kpi-trend-neutral">Scheduled: Mar 1, 2026</div>
         </div>
       </div>
 
       <!-- Recent Referrals Table -->
-      <div style="background:var(--off);border-radius:14px;padding:24px;border:1px solid var(--off2)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-          <div style="font-size:15px;font-weight:700;color:var(--navy)">Recent Referrals</div>
-          <span style="font-size:12px;font-weight:600;color:var(--blue);cursor:pointer">View All</span>
+      <div class="dash-table">
+        <div class="dash-table-header">
+          <div class="dash-table-title">Recent Referrals</div>
+          <button class="dash-table-link" onclick="portalNav(document.querySelector('[onclick*=portal-sec-referrals]'),'portal-sec-referrals')">View All</button>
         </div>
-        <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--slate);padding-bottom:10px;border-bottom:1px solid var(--off2);align-items:center">
+        <div class="dash-table-head">
           <div>Client</div><div>Submitted</div><div>Status</div><div>Tax Debt</div><div>Your Share</div><div>Actions</div>
         </div>
-        <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;border-bottom:1px solid var(--off2);align-items:center">
-          <div style="font-weight:600">J. Williams</div><div style="color:var(--slate)">Feb 20, 2026</div><div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:rgba(0,229,204,0.1);color:var(--teal-text);font-size:12px;font-weight:600">In Resolution</span></div><div>$34,200</div><div style="font-weight:600;color:var(--blue)">$2,736</div>
-          <div style="display:flex;gap:6px"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
+        <div class="dash-table-row">
+          <div class="dash-td-name">J. Williams</div><div class="dash-td-date">Feb 20, 2026</div><div><span class="dash-td-badge dash-td-badge-resolution">In Resolution</span></div><div>$34,200</div><div class="dash-td-share">$2,736</div>
+          <div class="dash-td-acts"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
         </div>
-        <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;border-bottom:1px solid var(--off2);align-items:center">
-          <div style="font-weight:600">M. Garcia</div><div style="color:var(--slate)">Feb 18, 2026</div><div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:rgba(11,95,216,0.1);color:var(--blue);font-size:12px;font-weight:600">Investigation</span></div><div>$18,500</div><div style="font-weight:600;color:var(--slate)">Pending</div>
-          <div style="display:flex;gap:6px"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
+        <div class="dash-table-row">
+          <div class="dash-td-name">M. Garcia</div><div class="dash-td-date">Feb 18, 2026</div><div><span class="dash-td-badge dash-td-badge-investigation">Investigation</span></div><div>$18,500</div><div class="dash-td-share" style="color:var(--slate)">Pending</div>
+          <div class="dash-td-acts"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
         </div>
-        <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;border-bottom:1px solid var(--off2);align-items:center">
-          <div style="font-weight:600">R. Thompson</div><div style="color:var(--slate)">Feb 14, 2026</div><div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:rgba(0,229,204,0.1);color:var(--teal-text);font-size:12px;font-weight:600">Resolved</span></div><div>$52,800</div><div style="font-weight:600;color:var(--teal-text)">$4,224 Paid</div>
-          <div style="display:flex;gap:6px"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
+        <div class="dash-table-row">
+          <div class="dash-td-name">R. Thompson</div><div class="dash-td-date">Feb 14, 2026</div><div><span class="dash-td-badge dash-td-badge-resolved">Resolved</span></div><div>$52,800</div><div class="dash-td-share dash-td-share-paid">$4,224 Paid</div>
+          <div class="dash-td-acts"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
         </div>
-        <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr auto;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;align-items:center">
-          <div style="font-weight:600">K. Patel</div><div style="color:var(--slate)">Feb 10, 2026</div><div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:rgba(0,229,204,0.1);color:var(--teal-text);font-size:12px;font-weight:600">Resolved</span></div><div>$27,100</div><div style="font-weight:600;color:var(--teal-text)">$2,168 Paid</div>
-          <div style="display:flex;gap:6px"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
+        <div class="dash-table-row">
+          <div class="dash-td-name">K. Patel</div><div class="dash-td-date">Feb 10, 2026</div><div><span class="dash-td-badge dash-td-badge-resolved">Resolved</span></div><div>$27,100</div><div class="dash-td-share dash-td-share-paid">$2,168 Paid</div>
+          <div class="dash-td-acts"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
         </div>
+      </div>
+
+      <!-- Activity Feed -->
+      <div class="dash-activity-feed">
+        <div class="dash-activity-title">Recent Activity</div>
+        <div class="dash-activity-item"><div class="dash-activity-dot dash-activity-dot-green"></div><span>You earned <strong>$2,736</strong> from the Williams case commission.</span><span class="dash-activity-time">2h ago</span></div>
+        <div class="dash-activity-item"><div class="dash-activity-dot dash-activity-dot-blue"></div><span>Garcia referral moved to <strong>Investigation</strong> status.</span><span class="dash-activity-time">1d ago</span></div>
+        <div class="dash-activity-item"><div class="dash-activity-dot dash-activity-dot-amber"></div><span>New payout scheduled: <strong>$2,736</strong> on March 1, 2026.</span><span class="dash-activity-time">2d ago</span></div>
+        <div class="dash-activity-item"><div class="dash-activity-dot dash-activity-dot-green"></div><span>Thompson case resolved -- $4,224 commission <strong>paid</strong>.</span><span class="dash-activity-time">5d ago</span></div>
       </div>
     </div>
 
@@ -247,15 +286,15 @@
         </div>
       </div>
 
-      <!-- Pipeline -->
+      <!-- Pipeline (clickable segments filter table) -->
       <div class="ref-pipeline">
         <div class="ref-pipe-label">Pipeline</div>
         <div class="ref-pipe-bar">
-          <div class="ref-pipe-seg ref-pipe-new" style="flex:3" title="New: 3"><span>3</span>New</div>
-          <div class="ref-pipe-seg ref-pipe-invest" style="flex:7" title="Investigation: 7"><span>7</span>Investigation</div>
-          <div class="ref-pipe-seg ref-pipe-resolve" style="flex:8" title="Resolution: 8"><span>8</span>Resolution</div>
-          <div class="ref-pipe-seg ref-pipe-done" style="flex:17" title="Resolved: 17"><span>17</span>Resolved</div>
-          <div class="ref-pipe-seg ref-pipe-paid" style="flex:7" title="Paid: 7"><span>7</span>Paid</div>
+          <div class="ref-pipe-seg ref-pipe-new" style="flex:3;cursor:pointer" title="New: 3" onclick="pipelineFilter('new')"><span>3</span>New</div>
+          <div class="ref-pipe-seg ref-pipe-invest" style="flex:7;cursor:pointer" title="Investigation: 7" onclick="pipelineFilter('investigation')"><span>7</span>Investigation</div>
+          <div class="ref-pipe-seg ref-pipe-resolve" style="flex:8;cursor:pointer" title="Resolution: 8" onclick="pipelineFilter('resolution')"><span>8</span>Resolution</div>
+          <div class="ref-pipe-seg ref-pipe-done" style="flex:17;cursor:pointer" title="Resolved: 17" onclick="pipelineFilter('resolved')"><span>17</span>Resolved</div>
+          <div class="ref-pipe-seg ref-pipe-paid" style="flex:7;cursor:pointer" title="Paid: 7" onclick="pipelineFilter('paid')"><span>7</span>Paid</div>
         </div>
       </div>
 
@@ -275,13 +314,20 @@
         </div>
       </div>
 
+      <!-- Bulk Actions Bar -->
+      <div class="ref-bulk-bar" id="ref-bulk-bar">
+        <span id="ref-bulk-count">0 selected</span>
+        <button class="ref-bulk-btn" onclick="refBulkExport()">Export Selected</button>
+        <button class="ref-bulk-btn" onclick="showToast('Selected referrals flagged for review','info')">Flag Selected</button>
+      </div>
+
       <!-- Referrals Table -->
       <div class="ref-table-wrap">
         <div class="ref-table-head">
-          <div class="ref-th ref-th-client">Client</div>
-          <div class="ref-th">Submitted</div>
+          <div class="ref-th ref-th-client"><input type="checkbox" class="ref-cb" id="ref-select-all" onchange="refToggleAll(this)"> Client</div>
+          <div class="ref-th ref-th-sort" onclick="refSort('date')">Submitted <span class="ref-sort-arrow">&#9650;</span></div>
           <div class="ref-th">Status</div>
-          <div class="ref-th">Tax Debt</div>
+          <div class="ref-th ref-th-sort" onclick="refSort('debt')">Tax Debt <span class="ref-sort-arrow">&#9650;</span></div>
           <div class="ref-th">Your Share</div>
           <div class="ref-th">Rep</div>
           <div class="ref-th">Last Activity</div>
@@ -290,7 +336,7 @@
 
         <!-- Row 1 -->
         <div class="ref-row" data-status="resolution" onclick="toggleRefDetail(this)">
-          <div class="ref-td ref-td-client"><div class="ref-avatar" style="background:#0B5FD8">JW</div><div><div class="ref-name">James Williams</div><div class="ref-id">#REF-2026-0042</div></div></div>
+          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:#0B5FD8">JW</div><div><div class="ref-name">James Williams</div><div class="ref-id">#REF-2026-0042</div></div></div>
           <div class="ref-td">Feb 20, 2026</div>
           <div class="ref-td"><span class="ref-badge ref-b-resolution">In Resolution</span></div>
           <div class="ref-td ref-td-money">$34,200</div>
@@ -340,7 +386,7 @@
 
         <!-- Row 2 -->
         <div class="ref-row" data-status="investigation" onclick="toggleRefDetail(this)">
-          <div class="ref-td ref-td-client"><div class="ref-avatar" style="background:#7C3AED">MG</div><div><div class="ref-name">Maria Garcia</div><div class="ref-id">#REF-2026-0041</div></div></div>
+          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:#7C3AED">MG</div><div><div class="ref-name">Maria Garcia</div><div class="ref-id">#REF-2026-0041</div></div></div>
           <div class="ref-td">Feb 18, 2026</div>
           <div class="ref-td"><span class="ref-badge ref-b-investigation">Investigation</span></div>
           <div class="ref-td ref-td-money">$18,500</div>
@@ -381,7 +427,7 @@
 
         <!-- Row 3 -->
         <div class="ref-row" data-status="resolved" onclick="toggleRefDetail(this)">
-          <div class="ref-td ref-td-client"><div class="ref-avatar" style="background:#059669">RT</div><div><div class="ref-name">Robert Thompson</div><div class="ref-id">#REF-2026-0038</div></div></div>
+          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:#059669">RT</div><div><div class="ref-name">Robert Thompson</div><div class="ref-id">#REF-2026-0038</div></div></div>
           <div class="ref-td">Feb 14, 2026</div>
           <div class="ref-td"><span class="ref-badge ref-b-resolved">Resolved</span></div>
           <div class="ref-td ref-td-money">$52,800</div>
@@ -426,7 +472,7 @@
 
         <!-- Row 4 -->
         <div class="ref-row" data-status="new" onclick="toggleRefDetail(this)">
-          <div class="ref-td ref-td-client"><div class="ref-avatar" style="background:#D97706">KP</div><div><div class="ref-name">Karen Patel</div><div class="ref-id">#REF-2026-0043</div></div></div>
+          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:#D97706">KP</div><div><div class="ref-name">Karen Patel</div><div class="ref-id">#REF-2026-0043</div></div></div>
           <div class="ref-td">Feb 25, 2026</div>
           <div class="ref-td"><span class="ref-badge ref-b-new">New</span></div>
           <div class="ref-td ref-td-money">$12,400</div>
@@ -466,7 +512,7 @@
 
         <!-- Row 5 -->
         <div class="ref-row" data-status="paid" onclick="toggleRefDetail(this)">
-          <div class="ref-td ref-td-client"><div class="ref-avatar" style="background:#0891B2">DL</div><div><div class="ref-name">David Lee</div><div class="ref-id">#REF-2026-0031</div></div></div>
+          <div class="ref-td ref-td-client"><input type="checkbox" class="ref-cb ref-row-cb" onclick="event.stopPropagation();refUpdateBulk()" style="margin-right:8px"><div class="ref-avatar" style="background:#0891B2">DL</div><div><div class="ref-name">David Lee</div><div class="ref-id">#REF-2026-0031</div></div></div>
           <div class="ref-td">Jan 28, 2026</div>
           <div class="ref-td"><span class="ref-badge ref-b-paid">Paid</span></div>
           <div class="ref-td ref-td-money">$27,100</div>
@@ -508,6 +554,13 @@
           </div>
         </div>
 
+        <!-- Empty State -->
+        <div class="portal-empty-state" id="ref-empty-state" style="display:none">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <div class="portal-empty-state-title">No referrals match your search</div>
+          <div class="portal-empty-state-desc">Try a different search term or clear your filters.</div>
+          <button class="portal-empty-state-btn" onclick="clearRefFilters()">Clear Filters</button>
+        </div>
       </div>
       <!-- Table footer -->
       <div class="ref-table-footer">
@@ -531,12 +584,12 @@
         </div>
         <div style="display:flex;gap:8px;align-items:center">
           <div class="earn-period-pills">
-            <button class="earn-period earn-period-active">This Month</button>
-            <button class="earn-period">This Quarter</button>
-            <button class="earn-period">This Year</button>
-            <button class="earn-period">All Time</button>
+            <button class="earn-period earn-period-active" onclick="setEarnPeriod(this,'month')">This Month</button>
+            <button class="earn-period" onclick="setEarnPeriod(this,'quarter')">This Quarter</button>
+            <button class="earn-period" onclick="setEarnPeriod(this,'year')">This Year</button>
+            <button class="earn-period" onclick="setEarnPeriod(this,'all')">All Time</button>
           </div>
-          <button class="earn-export"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export</button>
+          <button class="earn-export" onclick="exportEarningsCSV()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export</button>
         </div>
       </div>
 
@@ -549,6 +602,7 @@
             <div class="earn-kpi-label">Total Earned</div>
           </div>
           <div class="earn-kpi-trend earn-kpi-up">+12.4%</div>
+          <div class="earn-kpi-spark"><svg width="80" height="24" viewBox="0 0 80 24"><polyline fill="none" stroke="#059669" stroke-width="2" points="0,20 15,16 30,18 45,12 60,8 75,4"/></svg></div>
         </div>
         <div class="earn-kpi">
           <div class="earn-kpi-icon earn-kpi-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
@@ -682,7 +736,7 @@
             <div class="pay-next-detail"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> March 1, 2026</div>
             <div class="pay-next-detail"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H3a2 2 0 00-2 2v12a2 2 0 002 2h18a2 2 0 002-2V6a2 2 0 00-2-2z"/><line x1="1" y1="10" x2="23" y2="10"/></svg> ACH Direct Deposit</div>
           </div>
-          <div class="pay-next-countdown">3 days away</div>
+          <div class="pay-next-countdown pay-countdown-live" id="pay-countdown">3 days away</div>
         </div>
         <div class="pay-method">
           <div class="pay-method-label">Payment Method on File</div>
@@ -694,7 +748,7 @@
               <div class="pay-bank-routing">Routing: ****0021</div>
             </div>
           </div>
-          <button class="pay-method-btn">Change Payment Method</button>
+          <button class="pay-method-btn" onclick="showToast('Contact support to update your payment method.','info')">Change Payment Method</button>
         </div>
       </div>
 
@@ -707,6 +761,12 @@
       <!-- Transaction Ledger -->
       <div class="pay-ledger-wrap">
         <div class="pay-ledger-title">Transaction History</div>
+        <div class="pay-year-pills">
+          <button class="pay-year-pill pay-year-active" onclick="payYearFilter(this,'all')">All</button>
+          <button class="pay-year-pill" onclick="payYearFilter(this,'2026')">2026</button>
+          <button class="pay-year-pill" onclick="payYearFilter(this,'2025')">2025</button>
+          <button class="pay-year-pill" onclick="payYearFilter(this,'2024')">2024</button>
+        </div>
         <div class="pay-ledger-head">
           <div>Date</div>
           <div>Amount</div>
@@ -715,7 +775,7 @@
           <div>Method</div>
           <div>Status</div>
         </div>
-        <div class="pay-ledger-row">
+        <div class="pay-ledger-row" data-year="2026" data-amount="4224">
           <div>Feb 15, 2026</div>
           <div style="font-weight:700;color:#059669">+$4,224.00</div>
           <div class="pay-ref-id">#REF-2026-0038</div>
@@ -723,7 +783,7 @@
           <div>ACH</div>
           <div><span class="pay-badge pay-b-complete">Complete</span></div>
         </div>
-        <div class="pay-ledger-row">
+        <div class="pay-ledger-row" data-year="2026" data-amount="2168">
           <div>Feb 15, 2026</div>
           <div style="font-weight:700;color:#059669">+$2,168.00</div>
           <div class="pay-ref-id">#REF-2026-0031</div>
@@ -731,7 +791,7 @@
           <div>ACH</div>
           <div><span class="pay-badge pay-b-complete">Complete</span></div>
         </div>
-        <div class="pay-ledger-row">
+        <div class="pay-ledger-row" data-year="2026" data-amount="3840">
           <div>Jan 15, 2026</div>
           <div style="font-weight:700;color:#059669">+$3,840.00</div>
           <div class="pay-ref-id">#REF-2026-0022</div>
@@ -739,7 +799,7 @@
           <div>ACH</div>
           <div><span class="pay-badge pay-b-complete">Complete</span></div>
         </div>
-        <div class="pay-ledger-row">
+        <div class="pay-ledger-row" data-year="2026" data-amount="1920">
           <div>Jan 1, 2026</div>
           <div style="font-weight:700;color:#059669">+$1,920.00</div>
           <div class="pay-ref-id">#REF-2025-0189</div>
@@ -747,7 +807,7 @@
           <div>ACH</div>
           <div><span class="pay-badge pay-b-complete">Complete</span></div>
         </div>
-        <div class="pay-ledger-row">
+        <div class="pay-ledger-row" data-year="2025" data-amount="3600">
           <div>Dec 15, 2025</div>
           <div style="font-weight:700;color:#059669">+$3,600.00</div>
           <div class="pay-ref-id">#REF-2025-0172</div>
@@ -755,7 +815,7 @@
           <div>Check</div>
           <div><span class="pay-badge pay-b-complete">Complete</span></div>
         </div>
-        <div class="pay-ledger-row pay-ledger-pending">
+        <div class="pay-ledger-row pay-ledger-pending" data-year="2026" data-amount="2736">
           <div>Mar 1, 2026</div>
           <div style="font-weight:700;color:var(--blue)">+$2,736.00</div>
           <div class="pay-ref-id">#REF-2026-0042</div>
@@ -763,6 +823,7 @@
           <div>ACH</div>
           <div><span class="pay-badge pay-b-scheduled">Scheduled</span></div>
         </div>
+        <div class="pay-running-total" id="pay-running-total">Total Paid to Date: $15,752.00</div>
       </div>
 
       <!-- Tax Documents -->
@@ -815,21 +876,25 @@
         <div class="sub-panel sub-panel-active" id="sub-panel-1">
           <div class="sub-panel-title">Client Contact Information</div>
           <div class="sub-field-grid">
-            <div class="sub-field">
+            <div class="sub-field" data-required>
               <label class="sub-label">First Name *</label>
-              <input type="text" class="sub-input" placeholder="John">
+              <input type="text" class="sub-input" id="sub-first-name" placeholder="John">
+              <div class="sub-error-msg">Required</div>
             </div>
-            <div class="sub-field">
+            <div class="sub-field" data-required>
               <label class="sub-label">Last Name *</label>
-              <input type="text" class="sub-input" placeholder="Doe">
+              <input type="text" class="sub-input" id="sub-last-name" placeholder="Doe">
+              <div class="sub-error-msg">Required</div>
             </div>
-            <div class="sub-field">
+            <div class="sub-field" data-required>
               <label class="sub-label">Phone Number *</label>
-              <input type="tel" class="sub-input" placeholder="(312) 555-0100">
+              <input type="tel" class="sub-input" id="sub-phone" placeholder="(312) 555-0100" oninput="formatPhone(this)">
+              <div class="sub-error-msg">Required</div>
             </div>
-            <div class="sub-field">
+            <div class="sub-field" data-required>
               <label class="sub-label">Email Address *</label>
-              <input type="email" class="sub-input" placeholder="john@example.com">
+              <input type="email" class="sub-input" id="sub-email" placeholder="john@example.com">
+              <div class="sub-error-msg">Required</div>
             </div>
             <div class="sub-field sub-field-full">
               <label class="sub-label">Street Address</label>
@@ -854,13 +919,14 @@
         <div class="sub-panel" id="sub-panel-2">
           <div class="sub-panel-title">Tax Debt Details</div>
           <div class="sub-field-grid">
-            <div class="sub-field">
+            <div class="sub-field" data-required>
               <label class="sub-label">Estimated Tax Debt *</label>
-              <div class="sub-input-prefix"><span>$</span><input type="text" class="sub-input" placeholder="25,000"></div>
+              <div class="sub-input-prefix"><span>$</span><input type="text" class="sub-input" id="sub-debt" placeholder="25,000"></div>
+              <div class="sub-error-msg">Required</div>
             </div>
-            <div class="sub-field">
+            <div class="sub-field" data-required>
               <label class="sub-label">Debt Type *</label>
-              <select class="sub-input sub-select">
+              <select class="sub-input sub-select" id="sub-debt-type">
                 <option value="">Select type...</option>
                 <option>Unpaid Income Tax</option>
                 <option>Payroll Tax</option>
@@ -928,23 +994,23 @@
         <div class="sub-panel" id="sub-panel-4">
           <div class="sub-panel-title">Review and Submit</div>
           <p class="sub-panel-desc">Please review the referral details below before submitting.</p>
-          <div class="sub-review">
+          <div class="sub-review" id="sub-review-content">
             <div class="sub-review-section">
               <div class="sub-review-label">Client Information</div>
               <div class="sub-review-grid">
-                <div class="sub-review-item"><span>Name</span><strong>John Doe</strong></div>
-                <div class="sub-review-item"><span>Phone</span><strong>(312) 555-0100</strong></div>
-                <div class="sub-review-item"><span>Email</span><strong>john@example.com</strong></div>
-                <div class="sub-review-item"><span>Location</span><strong>Chicago, IL 60601</strong></div>
+                <div class="sub-review-item"><span>Name</span><strong id="sub-rev-name">--</strong></div>
+                <div class="sub-review-item"><span>Phone</span><strong id="sub-rev-phone">--</strong></div>
+                <div class="sub-review-item"><span>Email</span><strong id="sub-rev-email">--</strong></div>
+                <div class="sub-review-item"><span>Location</span><strong id="sub-rev-location">--</strong></div>
               </div>
             </div>
             <div class="sub-review-section">
               <div class="sub-review-label">Tax Situation</div>
               <div class="sub-review-grid">
-                <div class="sub-review-item"><span>Estimated Debt</span><strong>$25,000</strong></div>
-                <div class="sub-review-item"><span>Debt Type</span><strong>Unpaid Income Tax</strong></div>
-                <div class="sub-review-item"><span>Tax Years</span><strong>2022, 2023</strong></div>
-                <div class="sub-review-item"><span>IRS Notices</span><strong>CP501-504</strong></div>
+                <div class="sub-review-item"><span>Estimated Debt</span><strong id="sub-rev-debt">--</strong></div>
+                <div class="sub-review-item"><span>Debt Type</span><strong id="sub-rev-type">--</strong></div>
+                <div class="sub-review-item"><span>Tax Years</span><strong id="sub-rev-years">--</strong></div>
+                <div class="sub-review-item"><span>IRS Notices</span><strong id="sub-rev-notices">--</strong></div>
               </div>
             </div>
             <div class="sub-review-section">
@@ -959,9 +1025,17 @@
       </div>
 
       <!-- Navigation -->
-      <div class="sub-nav">
+      <div class="sub-nav" id="sub-nav">
         <button class="sub-btn-back" id="sub-btn-back" onclick="subFormNav(-1)" style="visibility:hidden">Back</button>
         <button class="sub-btn-next" id="sub-btn-next" onclick="subFormNav(1)">Continue</button>
+      </div>
+
+      <!-- Success State -->
+      <div class="sub-success" id="sub-success">
+        <div class="sub-success-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="sub-success-title">Referral Submitted</div>
+        <div class="sub-success-id" id="sub-success-id">Referral #REF-2026-0044 submitted successfully.</div>
+        <button class="sub-success-btn" onclick="resetSubForm()">Submit Another Referral</button>
       </div>
     </div>
 
@@ -992,8 +1066,20 @@
         <button class="doc-tab" onclick="docFilter(this,'irs')">IRS Correspondence <span class="doc-tab-count">2</span></button>
       </div>
 
+      <!-- Search -->
+      <div class="doc-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="doc-search-input" id="doc-search" placeholder="Search by filename..." oninput="docSearch(this.value)">
+      </div>
+
+      <!-- Bulk Actions Bar -->
+      <div class="doc-bulk-bar" id="doc-bulk-bar">
+        <span id="doc-bulk-count">0 selected</span>
+        <button class="ref-bulk-btn" onclick="showToast('Selected files exported','success')">Download Selected</button>
+      </div>
+
       <!-- Upload Dropzone -->
-      <div class="doc-dropzone">
+      <div class="doc-dropzone" id="doc-dropzone">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         <span>Drop files here to upload</span>
       </div>
@@ -1001,11 +1087,11 @@
       <!-- File Table -->
       <div class="doc-table-wrap">
         <div class="doc-table-head">
-          <div class="doc-th-check"><input type="checkbox"></div>
-          <div>Name</div>
+          <div class="doc-th-check"><input type="checkbox" id="doc-select-all" onchange="docToggleAll(this)"></div>
+          <div class="doc-th-sort" onclick="docSort('name')">Name <span class="ref-sort-arrow">&#9650;</span></div>
           <div>Client</div>
-          <div>Date</div>
-          <div>Size</div>
+          <div class="doc-th-sort" onclick="docSort('date')">Date <span class="ref-sort-arrow">&#9650;</span></div>
+          <div class="doc-th-sort" onclick="docSort('size')">Size <span class="ref-sort-arrow">&#9650;</span></div>
           <div>Actions</div>
         </div>
 
@@ -1169,10 +1255,18 @@
             </div>
           </div>
 
+          <div class="calc-breakeven" id="calc-breakeven">
+            At <strong id="calc-breakeven-val">7</strong> referrals/month, this replaces a <strong>$75k salary</strong>.
+          </div>
+
           <div class="calc-callout">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             Partners referring 10+ clients/month earn an average of <strong>$28,800</strong> annually
           </div>
+          <button class="calc-share-btn" onclick="showToast('Projection link copied to clipboard!','success')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share Projection
+          </button>
         </div>
       </div>
     </div>
@@ -1207,19 +1301,35 @@
         </div>
       </div>
 
+      <!-- Continue Banner -->
+      <div class="ce-continue-banner" onclick="showToast('Resuming IRS Collections Process webinar','info')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+        <div>
+          <div class="ce-continue-title">Continue Where You Left Off</div>
+          <div class="ce-continue-sub">IRS Collections Process: From Notice to Levy -- 65% complete</div>
+        </div>
+        <button class="ce-continue-btn">Resume</button>
+      </div>
+
+      <!-- Search -->
+      <div class="ce-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="ce-search-input" id="ce-search" placeholder="Search webinars..." oninput="ceSearch(this.value)">
+      </div>
+
       <!-- Category Filters -->
       <div class="ce-filters">
-        <button class="ce-filter ce-filter-active">All</button>
-        <button class="ce-filter">Tax Resolution</button>
-        <button class="ce-filter">IRS Procedures</button>
-        <button class="ce-filter">Ethics</button>
-        <button class="ce-filter">Federal Tax Law</button>
-        <button class="ce-filter">Practice Growth</button>
+        <button class="ce-filter ce-filter-active" onclick="ceFilter(this,'all')">All</button>
+        <button class="ce-filter" onclick="ceFilter(this,'resolution')">Tax Resolution</button>
+        <button class="ce-filter" onclick="ceFilter(this,'irs')">IRS Procedures</button>
+        <button class="ce-filter" onclick="ceFilter(this,'ethics')">Ethics</button>
+        <button class="ce-filter" onclick="ceFilter(this,'federal')">Federal Tax Law</button>
+        <button class="ce-filter" onclick="ceFilter(this,'growth')">Practice Growth</button>
       </div>
 
       <!-- Webinar Grid -->
       <div class="ce-grid">
-        <div class="ce-card ce-card-done">
+        <div class="ce-card ce-card-done" data-ce-cat="resolution">
           <div class="ce-thumb ce-thumb-1">
             <div class="ce-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21"/></svg></div>
             <span class="ce-badge-dur">1h 30m</span>
@@ -1234,7 +1344,7 @@
           </div>
         </div>
 
-        <div class="ce-card ce-card-done">
+        <div class="ce-card ce-card-done" data-ce-cat="ethics">
           <div class="ce-thumb ce-thumb-2">
             <div class="ce-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21"/></svg></div>
             <span class="ce-badge-dur">1h 45m</span>
@@ -1249,7 +1359,7 @@
           </div>
         </div>
 
-        <div class="ce-card ce-card-done">
+        <div class="ce-card ce-card-done" data-ce-cat="federal">
           <div class="ce-thumb ce-thumb-3">
             <div class="ce-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21"/></svg></div>
             <span class="ce-badge-dur">2h 00m</span>
@@ -1264,7 +1374,7 @@
           </div>
         </div>
 
-        <div class="ce-card ce-card-progress">
+        <div class="ce-card ce-card-progress" data-ce-cat="irs">
           <div class="ce-thumb ce-thumb-4">
             <div class="ce-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21"/></svg></div>
             <span class="ce-badge-dur">1h 15m</span>
@@ -1279,7 +1389,7 @@
           </div>
         </div>
 
-        <div class="ce-card">
+        <div class="ce-card" data-ce-cat="state">
           <div class="ce-thumb ce-thumb-5">
             <div class="ce-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21"/></svg></div>
             <span class="ce-badge-dur">1h 30m</span>
@@ -1293,7 +1403,7 @@
           </div>
         </div>
 
-        <div class="ce-card">
+        <div class="ce-card" data-ce-cat="growth">
           <div class="ce-thumb ce-thumb-6">
             <div class="ce-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21"/></svg></div>
             <span class="ce-badge-dur">55m</span>
@@ -1339,11 +1449,11 @@
       </div>
 
       <!-- Co-branding Notice -->
-      <div class="mk-cobrand">
+      <div class="mk-cobrand" id="mk-cobrand">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         <div>
-          <strong>Co-branding available</strong>
-          <span>Upload your logo in the sidebar to automatically brand all downloadable assets.</span>
+          <strong id="mk-cobrand-title">Co-branding available</strong>
+          <span id="mk-cobrand-desc">Upload your logo in the sidebar to automatically brand all downloadable assets.</span>
         </div>
       </div>
 
@@ -1456,13 +1566,14 @@
           <div class="trn-check-item trn-check-done"><div class="trn-check-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="trn-check-title">Upload your logo</div><div class="trn-check-desc">Brand your portal and marketing materials</div></div></div>
           <div class="trn-check-item trn-check-done"><div class="trn-check-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="trn-check-title">Watch the intro video</div><div class="trn-check-desc">5-minute overview of how the partner program works</div></div></div>
           <div class="trn-check-item trn-check-done"><div class="trn-check-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="trn-check-title">Submit your first referral</div><div class="trn-check-desc">Send a client through the referral form</div></div></div>
-          <div class="trn-check-item"><div class="trn-check-box"></div><div><div class="trn-check-title">Complete Tax Resolution Basics</div><div class="trn-check-desc">30-minute training module on OIC, IA, and CNC</div></div></div>
-          <div class="trn-check-item"><div class="trn-check-box"></div><div><div class="trn-check-title">Set up payment method</div><div class="trn-check-desc">Add your bank details for commission payouts</div></div></div>
+          <div class="trn-check-item trn-check-item-clickable" onclick="portalNav(document.querySelector('[onclick*=portal-sec-ce]'),'portal-sec-ce')"><div class="trn-check-box"></div><div><div class="trn-check-title">Complete Tax Resolution Basics</div><div class="trn-check-desc">30-minute training module on OIC, IA, and CNC</div></div></div>
+          <div class="trn-check-item trn-check-item-clickable" onclick="portalNav(document.querySelector('[onclick*=portal-sec-settings]'),'portal-sec-settings')"><div class="trn-check-box"></div><div><div class="trn-check-title">Set up payment method</div><div class="trn-check-desc">Add your bank details for commission payouts</div></div></div>
         </div>
       </div>
 
       <!-- Training Modules -->
       <div class="trn-modules-title">Training Modules</div>
+      <div class="trn-time-estimate">~2 hours to complete all modules</div>
       <div class="trn-grid">
         <div class="trn-mod trn-mod-done">
           <div class="trn-mod-thumb trn-thumb-1">
@@ -1586,17 +1697,27 @@
         <p class="portal-sec-desc">Profile details, notification preferences, API keys, team member management, and tier info.</p>
       </div>
 
+      <!-- Unsaved Changes Bar -->
+      <div class="set-unsaved-bar" id="set-unsaved-bar">
+        <span>You have unsaved changes</span>
+        <button class="set-unsaved-btn" onclick="showToast('Settings saved successfully','success');document.getElementById('set-unsaved-bar').classList.remove('set-unsaved-visible')">Save Now</button>
+      </div>
+
       <!-- Profile -->
       <div class="set-section">
         <div class="set-section-title">Profile Information</div>
-        <div class="set-form-grid">
+        <label class="set-avatar-upload" id="set-avatar-upload">
+          <input type="file" accept="image/*" id="set-avatar-input" style="display:none" onchange="setAvatarPreview(this)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4-4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </label>
+        <div class="set-form-grid" oninput="setDetectChanges()">
           <div class="set-field"><label class="set-label">Full Name</label><input type="text" class="set-input" value="Josh Hohenstein"></div>
           <div class="set-field"><label class="set-label">Email Address</label><input type="email" class="set-input" value="josh@partnerllc.com"></div>
           <div class="set-field"><label class="set-label">Phone</label><input type="tel" class="set-input" value="(312) 555-0100"></div>
           <div class="set-field"><label class="set-label">Company / Firm Name</label><input type="text" class="set-input" value="Partner Tax Associates LLC"></div>
           <div class="set-field set-field-full"><label class="set-label">Business Address</label><input type="text" class="set-input" value="200 N Michigan Ave, Suite 1400, Chicago, IL 60601"></div>
         </div>
-        <div class="set-actions"><button class="set-save">Save Changes</button></div>
+        <div class="set-actions"><button class="set-save" onclick="showToast('Profile saved successfully','success');document.getElementById('set-unsaved-bar').classList.remove('set-unsaved-visible')">Save Changes</button></div>
       </div>
 
       <!-- Notifications -->
@@ -1624,7 +1745,13 @@
 
       <!-- Team Members -->
       <div class="set-section">
-        <div class="set-section-header"><div class="set-section-title">Team Members</div><button class="set-add-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Invite Member</button></div>
+        <div class="set-section-header"><div class="set-section-title">Team Members</div><button class="set-add-btn" onclick="document.getElementById('set-invite-form').classList.toggle('set-invite-visible')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Invite Member</button></div>
+        <div class="set-invite-form" id="set-invite-form">
+          <div class="set-field"><label class="set-label">Name</label><input type="text" class="set-input" placeholder="Full name"></div>
+          <div class="set-field"><label class="set-label">Email</label><input type="email" class="set-input" placeholder="email@company.com"></div>
+          <div class="set-field"><label class="set-label">Role</label><select class="set-input"><option>Member</option><option>Admin</option></select></div>
+          <button class="set-invite-submit" onclick="showToast('Invitation sent','success');document.getElementById('set-invite-form').classList.remove('set-invite-visible')">Send Invite</button>
+        </div>
         <div class="set-team-table">
           <div class="set-team-head"><div>Name</div><div>Role</div><div>Email</div><div>Status</div><div></div></div>
           <div class="set-team-row">
@@ -1666,10 +1793,25 @@
           </div>
           <div class="set-field set-field-full">
             <label class="set-label">Webhook URL</label>
-            <input type="text" class="set-input" placeholder="https://your-domain.com/webhooks/ctax">
+            <div style="display:flex;gap:8px">
+              <input type="text" class="set-input" placeholder="https://your-domain.com/webhooks/ctax" style="flex:1">
+              <button class="ref-bulk-btn" onclick="showToast('Test webhook sent successfully','success')" style="white-space:nowrap">Send Test</button>
+            </div>
           </div>
         </div>
-        <button class="set-regen-btn">Regenerate API Key</button>
+        <button class="set-regen-btn" onclick="showApiRegenConfirm()">Regenerate API Key</button>
+
+        <!-- API Regen Confirmation -->
+        <div class="set-confirm-overlay" id="set-regen-confirm">
+          <div class="set-confirm-dialog">
+            <div class="set-confirm-title">Regenerate API Key?</div>
+            <div class="set-confirm-text">This will invalidate your current API key immediately. Any integrations using the old key will stop working. This action cannot be undone.</div>
+            <div class="set-confirm-actions">
+              <button class="set-confirm-cancel" onclick="document.getElementById('set-regen-confirm').classList.remove('set-confirm-visible')">Cancel</button>
+              <button class="set-confirm-danger" onclick="document.getElementById('set-regen-confirm').classList.remove('set-confirm-visible');showToast('API key regenerated','warning')">Regenerate</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Current Tier -->
@@ -1725,6 +1867,7 @@
               </div>
             </div>
           </div>
+          <div class="sup-am-status"><div class="sup-am-dot sup-am-dot-online"></div> Available now</div>
           <button class="sup-schedule-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Schedule a Call</button>
         </div>
 
@@ -1740,7 +1883,7 @@
             </div>
           </div>
           <div class="sup-field"><label class="sup-label">Description</label><textarea class="sup-textarea" rows="4" placeholder="Describe your issue in detail..."></textarea></div>
-          <button class="sup-submit-btn">Submit Ticket</button>
+          <button class="sup-submit-btn" onclick="submitSupportTicket()">Submit Ticket</button>
         </div>
       </div>
 
@@ -1783,6 +1926,10 @@
       <!-- Knowledge Base -->
       <div class="sup-kb">
         <div class="sup-kb-title">Knowledge Base</div>
+        <div class="sup-kb-search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="sup-kb-search-input" id="sup-kb-search" placeholder="Search knowledge base..." oninput="kbSearch(this.value)">
+        </div>
         <div class="sup-kb-grid">
           <div class="sup-kb-item" onclick="this.classList.toggle('sup-kb-open')">
             <div class="sup-kb-q"><span>How do I update my payment method?</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
@@ -1809,9 +1956,16 @@
             <div class="sup-kb-a">Our team makes multiple contact attempts over 7-10 days via phone, email, and text. If the client remains unresponsive, the referral moves to "Inactive" status. You can re-engage the client and resubmit at any time — the referral credit stays with you.</div>
           </div>
         </div>
+        <button class="sup-live-chat-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Start Live Chat
+          <span class="sup-live-chat-tooltip">Chat coming soon</span>
+        </button>
       </div>
     </div>
 
   </main>
+  <!-- Toast Container -->
+  <div class="portal-toast-wrap" id="portal-toast-wrap"></div>
 </div>
 

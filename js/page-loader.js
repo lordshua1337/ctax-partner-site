@@ -81,6 +81,14 @@ function onPageLoaded(id) {
   if (id === 'portal' && typeof calcProjection === 'function') {
     setTimeout(calcProjection, 80);
   }
+  // Initialize dashboard greeting
+  if (id === 'portal' && typeof initDashGreeting === 'function') {
+    setTimeout(initDashGreeting, 80);
+  }
+  // Initialize payout countdown
+  if (id === 'portal' && typeof initPayCountdown === 'function') {
+    setTimeout(initPayCountdown, 80);
+  }
   // Initialize staggered card entrances on newly loaded page
   var el = document.getElementById('page-' + id);
   if (el && typeof window.initStagger === 'function') {
