@@ -204,20 +204,466 @@
 
     <!-- ═══ REFERRALS SECTION ═══ -->
     <div class="portal-section" id="portal-sec-referrals">
-      <div class="portal-sec-header">
-        <h2 class="portal-sec-title">Referrals</h2>
-        <p class="portal-sec-desc">Full list of all submitted referrals with status tracking, filters, and client detail views.</p>
+      <div class="portal-sec-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
+        <div>
+          <h2 class="portal-sec-title">Referrals</h2>
+          <p class="portal-sec-desc">Track every referral from submission to payout.</p>
+        </div>
+        <button class="ref-btn-primary" onclick="portalNav(document.querySelector('[onclick*=portal-sec-submit]'),'portal-sec-submit')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Referral
+        </button>
       </div>
-      <div class="portal-placeholder">Coming soon</div>
+
+      <!-- KPI Row -->
+      <div class="ref-kpi-row">
+        <div class="ref-kpi">
+          <div class="ref-kpi-icon ref-kpi-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div>
+            <div class="ref-kpi-val">42</div>
+            <div class="ref-kpi-label">Total Referrals</div>
+          </div>
+        </div>
+        <div class="ref-kpi">
+          <div class="ref-kpi-icon ref-kpi-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div>
+            <div class="ref-kpi-val">18</div>
+            <div class="ref-kpi-label">Active Cases</div>
+          </div>
+        </div>
+        <div class="ref-kpi">
+          <div class="ref-kpi-icon ref-kpi-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div>
+            <div class="ref-kpi-val">7</div>
+            <div class="ref-kpi-label">Resolved This Month</div>
+          </div>
+        </div>
+        <div class="ref-kpi">
+          <div class="ref-kpi-icon ref-kpi-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+          <div>
+            <div class="ref-kpi-val">34 days</div>
+            <div class="ref-kpi-label">Avg Resolution</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pipeline -->
+      <div class="ref-pipeline">
+        <div class="ref-pipe-label">Pipeline</div>
+        <div class="ref-pipe-bar">
+          <div class="ref-pipe-seg ref-pipe-new" style="flex:3" title="New: 3"><span>3</span>New</div>
+          <div class="ref-pipe-seg ref-pipe-invest" style="flex:7" title="Investigation: 7"><span>7</span>Investigation</div>
+          <div class="ref-pipe-seg ref-pipe-resolve" style="flex:8" title="Resolution: 8"><span>8</span>Resolution</div>
+          <div class="ref-pipe-seg ref-pipe-done" style="flex:17" title="Resolved: 17"><span>17</span>Resolved</div>
+          <div class="ref-pipe-seg ref-pipe-paid" style="flex:7" title="Paid: 7"><span>7</span>Paid</div>
+        </div>
+      </div>
+
+      <!-- Search + Filters -->
+      <div class="ref-toolbar">
+        <div class="ref-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search by client name, ID, or status..." class="ref-search-input" id="ref-search" oninput="filterReferrals()">
+        </div>
+        <div class="ref-filters">
+          <button class="ref-filter-pill ref-fp-active" onclick="setRefFilter(this,'all')">All <span class="ref-fp-count">42</span></button>
+          <button class="ref-filter-pill" onclick="setRefFilter(this,'new')">New <span class="ref-fp-count">3</span></button>
+          <button class="ref-filter-pill" onclick="setRefFilter(this,'investigation')">Investigation <span class="ref-fp-count">7</span></button>
+          <button class="ref-filter-pill" onclick="setRefFilter(this,'resolution')">Resolution <span class="ref-fp-count">8</span></button>
+          <button class="ref-filter-pill" onclick="setRefFilter(this,'resolved')">Resolved <span class="ref-fp-count">17</span></button>
+          <button class="ref-filter-pill" onclick="setRefFilter(this,'paid')">Paid <span class="ref-fp-count">7</span></button>
+        </div>
+      </div>
+
+      <!-- Referrals Table -->
+      <div class="ref-table-wrap">
+        <div class="ref-table-head">
+          <div class="ref-th ref-th-client">Client</div>
+          <div class="ref-th">Submitted</div>
+          <div class="ref-th">Status</div>
+          <div class="ref-th">Tax Debt</div>
+          <div class="ref-th">Your Share</div>
+          <div class="ref-th">Rep</div>
+          <div class="ref-th">Last Activity</div>
+          <div class="ref-th ref-th-acts"></div>
+        </div>
+
+        <!-- Row 1 -->
+        <div class="ref-row" data-status="resolution" onclick="toggleRefDetail(this)">
+          <div class="ref-td ref-td-client"><div class="ref-avatar" style="background:#0B5FD8">JW</div><div><div class="ref-name">James Williams</div><div class="ref-id">#REF-2026-0042</div></div></div>
+          <div class="ref-td">Feb 20, 2026</div>
+          <div class="ref-td"><span class="ref-badge ref-b-resolution">In Resolution</span></div>
+          <div class="ref-td ref-td-money">$34,200</div>
+          <div class="ref-td ref-td-share">$2,736</div>
+          <div class="ref-td"><span class="ref-rep">M. Chen</span></div>
+          <div class="ref-td ref-td-activity">IRS response filed <span class="ref-time">2h ago</span></div>
+          <div class="ref-td ref-td-acts">
+            <button class="ref-act" title="Call"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></button>
+            <button class="ref-act" title="Email"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></button>
+            <button class="ref-act" title="Flag"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+          </div>
+          <div class="ref-detail">
+            <div class="ref-detail-grid">
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Client Details</div>
+                <div class="ref-detail-row"><span>Phone</span><span>(312) 555-0147</span></div>
+                <div class="ref-detail-row"><span>Email</span><span>j.williams@email.com</span></div>
+                <div class="ref-detail-row"><span>Tax Years</span><span>2021, 2022, 2023</span></div>
+                <div class="ref-detail-row"><span>Debt Type</span><span>Unpaid income tax</span></div>
+                <div class="ref-detail-row"><span>IRS Notice</span><span>CP504 (Intent to Levy)</span></div>
+              </div>
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Case Timeline</div>
+                <div class="ref-timeline">
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Referral submitted</div><div class="ref-tl-date">Feb 20</div></div></div>
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Investigation started</div><div class="ref-tl-date">Feb 21</div></div></div>
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">IRS transcripts pulled</div><div class="ref-tl-date">Feb 22</div></div></div>
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Resolution plan created</div><div class="ref-tl-date">Feb 24</div></div></div>
+                  <div class="ref-tl-item ref-tl-active"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">OIC submission filed</div><div class="ref-tl-date">Feb 26 — In Progress</div></div></div>
+                </div>
+              </div>
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Financials</div>
+                <div class="ref-detail-row"><span>Total Debt</span><span style="font-weight:700">$34,200</span></div>
+                <div class="ref-detail-row"><span>Resolution Type</span><span>Offer in Compromise</span></div>
+                <div class="ref-detail-row"><span>Expected Offer</span><span>$6,840</span></div>
+                <div class="ref-detail-row"><span>Your Commission</span><span style="font-weight:700;color:var(--blue)">$2,736 (8%)</span></div>
+                <div class="ref-detail-row"><span>Payout Status</span><span>Pending resolution</span></div>
+                <div class="ref-detail-label" style="margin-top:16px">Documents</div>
+                <div class="ref-doc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Power of Attorney (2848)</div>
+                <div class="ref-doc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> IRS Transcripts (2021-23)</div>
+                <div class="ref-doc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> OIC Application (656)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="ref-row" data-status="investigation" onclick="toggleRefDetail(this)">
+          <div class="ref-td ref-td-client"><div class="ref-avatar" style="background:#7C3AED">MG</div><div><div class="ref-name">Maria Garcia</div><div class="ref-id">#REF-2026-0041</div></div></div>
+          <div class="ref-td">Feb 18, 2026</div>
+          <div class="ref-td"><span class="ref-badge ref-b-investigation">Investigation</span></div>
+          <div class="ref-td ref-td-money">$18,500</div>
+          <div class="ref-td ref-td-share"><span class="ref-pending">Pending</span></div>
+          <div class="ref-td"><span class="ref-rep">S. Patel</span></div>
+          <div class="ref-td ref-td-activity">Transcripts requested <span class="ref-time">1d ago</span></div>
+          <div class="ref-td ref-td-acts">
+            <button class="ref-act" title="Call"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></button>
+            <button class="ref-act" title="Email"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></button>
+            <button class="ref-act" title="Flag"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+          </div>
+          <div class="ref-detail">
+            <div class="ref-detail-grid">
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Client Details</div>
+                <div class="ref-detail-row"><span>Phone</span><span>(312) 555-0203</span></div>
+                <div class="ref-detail-row"><span>Email</span><span>m.garcia@email.com</span></div>
+                <div class="ref-detail-row"><span>Tax Years</span><span>2022, 2023</span></div>
+                <div class="ref-detail-row"><span>Debt Type</span><span>Unfiled returns + balance</span></div>
+                <div class="ref-detail-row"><span>IRS Notice</span><span>CP71C (Notice of Balance)</span></div>
+              </div>
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Case Timeline</div>
+                <div class="ref-timeline">
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Referral submitted</div><div class="ref-tl-date">Feb 18</div></div></div>
+                  <div class="ref-tl-item ref-tl-active"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Requesting IRS transcripts</div><div class="ref-tl-date">Feb 19 — In Progress</div></div></div>
+                </div>
+              </div>
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Financials</div>
+                <div class="ref-detail-row"><span>Total Debt</span><span style="font-weight:700">$18,500</span></div>
+                <div class="ref-detail-row"><span>Resolution Type</span><span>TBD — Under Investigation</span></div>
+                <div class="ref-detail-row"><span>Your Commission</span><span class="ref-pending">Pending</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="ref-row" data-status="resolved" onclick="toggleRefDetail(this)">
+          <div class="ref-td ref-td-client"><div class="ref-avatar" style="background:#059669">RT</div><div><div class="ref-name">Robert Thompson</div><div class="ref-id">#REF-2026-0038</div></div></div>
+          <div class="ref-td">Feb 14, 2026</div>
+          <div class="ref-td"><span class="ref-badge ref-b-resolved">Resolved</span></div>
+          <div class="ref-td ref-td-money">$52,800</div>
+          <div class="ref-td ref-td-share ref-td-paid">$4,224</div>
+          <div class="ref-td"><span class="ref-rep">M. Chen</span></div>
+          <div class="ref-td ref-td-activity">Case closed <span class="ref-time">5d ago</span></div>
+          <div class="ref-td ref-td-acts">
+            <button class="ref-act" title="Call"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></button>
+            <button class="ref-act" title="Email"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></button>
+            <button class="ref-act" title="Flag"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+          </div>
+          <div class="ref-detail">
+            <div class="ref-detail-grid">
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Client Details</div>
+                <div class="ref-detail-row"><span>Phone</span><span>(312) 555-0318</span></div>
+                <div class="ref-detail-row"><span>Email</span><span>r.thompson@email.com</span></div>
+                <div class="ref-detail-row"><span>Tax Years</span><span>2019, 2020, 2021, 2022</span></div>
+                <div class="ref-detail-row"><span>Debt Type</span><span>Payroll tax + penalties</span></div>
+              </div>
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Case Timeline</div>
+                <div class="ref-timeline">
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Referral submitted</div><div class="ref-tl-date">Feb 14</div></div></div>
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Investigation complete</div><div class="ref-tl-date">Feb 15</div></div></div>
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Installment agreement filed</div><div class="ref-tl-date">Feb 17</div></div></div>
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">IRS accepted agreement</div><div class="ref-tl-date">Feb 21</div></div></div>
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Case resolved — Commission paid</div><div class="ref-tl-date">Feb 21</div></div></div>
+                </div>
+              </div>
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Financials</div>
+                <div class="ref-detail-row"><span>Total Debt</span><span style="font-weight:700">$52,800</span></div>
+                <div class="ref-detail-row"><span>Resolution Type</span><span>Installment Agreement</span></div>
+                <div class="ref-detail-row"><span>Monthly Payment</span><span>$880/mo (60 months)</span></div>
+                <div class="ref-detail-row"><span>Your Commission</span><span style="font-weight:700;color:#059669">$4,224 Paid</span></div>
+                <div class="ref-detail-row"><span>Paid On</span><span>Feb 21, 2026</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="ref-row" data-status="new" onclick="toggleRefDetail(this)">
+          <div class="ref-td ref-td-client"><div class="ref-avatar" style="background:#D97706">KP</div><div><div class="ref-name">Karen Patel</div><div class="ref-id">#REF-2026-0043</div></div></div>
+          <div class="ref-td">Feb 25, 2026</div>
+          <div class="ref-td"><span class="ref-badge ref-b-new">New</span></div>
+          <div class="ref-td ref-td-money">$12,400</div>
+          <div class="ref-td ref-td-share"><span class="ref-pending">Pending</span></div>
+          <div class="ref-td"><span class="ref-rep">Unassigned</span></div>
+          <div class="ref-td ref-td-activity">Submitted <span class="ref-time">1d ago</span></div>
+          <div class="ref-td ref-td-acts">
+            <button class="ref-act" title="Call"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></button>
+            <button class="ref-act" title="Email"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></button>
+            <button class="ref-act" title="Flag"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+          </div>
+          <div class="ref-detail">
+            <div class="ref-detail-grid">
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Client Details</div>
+                <div class="ref-detail-row"><span>Phone</span><span>(312) 555-0491</span></div>
+                <div class="ref-detail-row"><span>Email</span><span>k.patel@email.com</span></div>
+                <div class="ref-detail-row"><span>Tax Years</span><span>2023</span></div>
+                <div class="ref-detail-row"><span>Debt Type</span><span>Estimated tax penalty</span></div>
+                <div class="ref-detail-row"><span>IRS Notice</span><span>CP14 (Balance Due)</span></div>
+              </div>
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Case Timeline</div>
+                <div class="ref-timeline">
+                  <div class="ref-tl-item ref-tl-active"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Referral submitted</div><div class="ref-tl-date">Feb 25 — Awaiting assignment</div></div></div>
+                </div>
+              </div>
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Financials</div>
+                <div class="ref-detail-row"><span>Total Debt</span><span style="font-weight:700">$12,400</span></div>
+                <div class="ref-detail-row"><span>Resolution Type</span><span>TBD</span></div>
+                <div class="ref-detail-row"><span>Your Commission</span><span class="ref-pending">Pending</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 5 -->
+        <div class="ref-row" data-status="paid" onclick="toggleRefDetail(this)">
+          <div class="ref-td ref-td-client"><div class="ref-avatar" style="background:#0891B2">DL</div><div><div class="ref-name">David Lee</div><div class="ref-id">#REF-2026-0031</div></div></div>
+          <div class="ref-td">Jan 28, 2026</div>
+          <div class="ref-td"><span class="ref-badge ref-b-paid">Paid</span></div>
+          <div class="ref-td ref-td-money">$27,100</div>
+          <div class="ref-td ref-td-share ref-td-paid">$2,168</div>
+          <div class="ref-td"><span class="ref-rep">S. Patel</span></div>
+          <div class="ref-td ref-td-activity">Payout processed <span class="ref-time">12d ago</span></div>
+          <div class="ref-td ref-td-acts">
+            <button class="ref-act" title="Call"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></button>
+            <button class="ref-act" title="Email"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></button>
+            <button class="ref-act" title="Flag"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+          </div>
+          <div class="ref-detail">
+            <div class="ref-detail-grid">
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Client Details</div>
+                <div class="ref-detail-row"><span>Phone</span><span>(312) 555-0622</span></div>
+                <div class="ref-detail-row"><span>Email</span><span>d.lee@email.com</span></div>
+                <div class="ref-detail-row"><span>Tax Years</span><span>2020, 2021</span></div>
+                <div class="ref-detail-row"><span>Debt Type</span><span>Unfiled returns</span></div>
+              </div>
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Case Timeline</div>
+                <div class="ref-timeline">
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Referral submitted</div><div class="ref-tl-date">Jan 28</div></div></div>
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Returns filed, penalty abatement</div><div class="ref-tl-date">Feb 5</div></div></div>
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">IRS accepted — $0 balance</div><div class="ref-tl-date">Feb 12</div></div></div>
+                  <div class="ref-tl-item ref-tl-done"><div class="ref-tl-dot"></div><div class="ref-tl-content"><div class="ref-tl-title">Commission paid — $2,168</div><div class="ref-tl-date">Feb 14</div></div></div>
+                </div>
+              </div>
+              <div class="ref-detail-col">
+                <div class="ref-detail-label">Financials</div>
+                <div class="ref-detail-row"><span>Total Debt</span><span style="font-weight:700">$27,100</span></div>
+                <div class="ref-detail-row"><span>Resolution Type</span><span>Penalty Abatement + Filing</span></div>
+                <div class="ref-detail-row"><span>Final Balance</span><span style="color:#059669;font-weight:700">$0.00</span></div>
+                <div class="ref-detail-row"><span>Your Commission</span><span style="font-weight:700;color:#059669">$2,168 Paid</span></div>
+                <div class="ref-detail-row"><span>Paid On</span><span>Feb 14, 2026</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- Table footer -->
+      <div class="ref-table-footer">
+        <span class="ref-showing">Showing 5 of 42 referrals</span>
+        <div class="ref-pager">
+          <button class="ref-page-btn ref-page-active">1</button>
+          <button class="ref-page-btn">2</button>
+          <button class="ref-page-btn">3</button>
+          <button class="ref-page-btn">...</button>
+          <button class="ref-page-btn">9</button>
+        </div>
+      </div>
     </div>
 
     <!-- ═══ EARNINGS SECTION ═══ -->
     <div class="portal-section" id="portal-sec-earnings">
-      <div class="portal-sec-header">
-        <h2 class="portal-sec-title">Earnings</h2>
-        <p class="portal-sec-desc">Detailed commission breakdown by referral, monthly trends, and lifetime earnings history.</p>
+      <div class="portal-sec-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
+        <div>
+          <h2 class="portal-sec-title">Earnings</h2>
+          <p class="portal-sec-desc">Detailed commission breakdown by referral, monthly trends, and lifetime earnings history.</p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="earn-period-pills">
+            <button class="earn-period earn-period-active">This Month</button>
+            <button class="earn-period">This Quarter</button>
+            <button class="earn-period">This Year</button>
+            <button class="earn-period">All Time</button>
+          </div>
+          <button class="earn-export"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export</button>
+        </div>
       </div>
-      <div class="portal-placeholder">Coming soon</div>
+
+      <!-- KPI Row -->
+      <div class="earn-kpi-row">
+        <div class="earn-kpi">
+          <div class="earn-kpi-icon earn-kpi-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+          <div>
+            <div class="earn-kpi-val">$18,432</div>
+            <div class="earn-kpi-label">Total Earned</div>
+          </div>
+          <div class="earn-kpi-trend earn-kpi-up">+12.4%</div>
+        </div>
+        <div class="earn-kpi">
+          <div class="earn-kpi-icon earn-kpi-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+          <div>
+            <div class="earn-kpi-val">$438</div>
+            <div class="earn-kpi-label">Avg per Referral</div>
+          </div>
+          <div class="earn-kpi-trend earn-kpi-up">+3.1%</div>
+        </div>
+        <div class="earn-kpi">
+          <div class="earn-kpi-icon earn-kpi-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div>
+            <div class="earn-kpi-val">$4,224</div>
+            <div class="earn-kpi-label">Best Month</div>
+          </div>
+          <div class="earn-kpi-subtext">Jan 2026</div>
+        </div>
+        <div class="earn-kpi">
+          <div class="earn-kpi-icon earn-kpi-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div>
+            <div class="earn-kpi-val">$5,472</div>
+            <div class="earn-kpi-label">Pending Payouts</div>
+          </div>
+          <div class="earn-kpi-subtext">3 referrals</div>
+        </div>
+      </div>
+
+      <!-- Monthly Chart -->
+      <div class="earn-chart-wrap">
+        <div class="earn-chart-title">Monthly Earnings</div>
+        <div class="earn-chart">
+          <div class="earn-chart-y">
+            <span>$5k</span><span>$4k</span><span>$3k</span><span>$2k</span><span>$1k</span><span>$0</span>
+          </div>
+          <div class="earn-chart-bars">
+            <div class="earn-bar-col">
+              <div class="earn-bar" style="height:46%"><span class="earn-bar-val">$2,310</span></div>
+              <div class="earn-bar-label">Sep</div>
+            </div>
+            <div class="earn-bar-col">
+              <div class="earn-bar" style="height:62%"><span class="earn-bar-val">$3,120</span></div>
+              <div class="earn-bar-label">Oct</div>
+            </div>
+            <div class="earn-bar-col">
+              <div class="earn-bar" style="height:54%"><span class="earn-bar-val">$2,688</span></div>
+              <div class="earn-bar-label">Nov</div>
+            </div>
+            <div class="earn-bar-col">
+              <div class="earn-bar" style="height:72%"><span class="earn-bar-val">$3,600</span></div>
+              <div class="earn-bar-label">Dec</div>
+            </div>
+            <div class="earn-bar-col">
+              <div class="earn-bar earn-bar-best" style="height:84%"><span class="earn-bar-val">$4,224</span></div>
+              <div class="earn-bar-label">Jan</div>
+            </div>
+            <div class="earn-bar-col">
+              <div class="earn-bar earn-bar-current" style="height:50%"><span class="earn-bar-val">$2,490</span></div>
+              <div class="earn-bar-label">Feb</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Earnings by Referral Table -->
+      <div class="earn-table-wrap">
+        <div class="earn-table-title">Earnings by Referral</div>
+        <div class="earn-table-head">
+          <div>Client</div>
+          <div>Resolution Type</div>
+          <div>Tax Debt</div>
+          <div>Commission</div>
+          <div>Date</div>
+          <div>Status</div>
+        </div>
+        <div class="earn-table-row">
+          <div class="earn-td-client"><div class="earn-avatar" style="background:#059669">RT</div><span>Robert Thompson</span></div>
+          <div>Installment Agreement</div>
+          <div style="font-weight:600">$52,800</div>
+          <div style="font-weight:700;color:#059669">$4,224</div>
+          <div>Feb 21, 2026</div>
+          <div><span class="earn-badge earn-b-paid">Paid</span></div>
+        </div>
+        <div class="earn-table-row">
+          <div class="earn-td-client"><div class="earn-avatar" style="background:#0891B2">DL</div><span>David Lee</span></div>
+          <div>Penalty Abatement</div>
+          <div style="font-weight:600">$27,100</div>
+          <div style="font-weight:700;color:#059669">$2,168</div>
+          <div>Feb 14, 2026</div>
+          <div><span class="earn-badge earn-b-paid">Paid</span></div>
+        </div>
+        <div class="earn-table-row">
+          <div class="earn-td-client"><div class="earn-avatar" style="background:#0B5FD8">JW</div><span>James Williams</span></div>
+          <div>Offer in Compromise</div>
+          <div style="font-weight:600">$34,200</div>
+          <div style="font-weight:700;color:var(--blue)">$2,736</div>
+          <div>Pending</div>
+          <div><span class="earn-badge earn-b-pending">Pending</span></div>
+        </div>
+        <div class="earn-table-row">
+          <div class="earn-td-client"><div class="earn-avatar" style="background:#7C3AED">MG</div><span>Maria Garcia</span></div>
+          <div>Under Investigation</div>
+          <div style="font-weight:600">$18,500</div>
+          <div style="color:var(--slate)">TBD</div>
+          <div>--</div>
+          <div><span class="earn-badge earn-b-investigation">In Progress</span></div>
+        </div>
+        <div class="earn-table-row">
+          <div class="earn-td-client"><div class="earn-avatar" style="background:#D97706">KP</div><span>Karen Patel</span></div>
+          <div>TBD</div>
+          <div style="font-weight:600">$12,400</div>
+          <div style="color:var(--slate)">TBD</div>
+          <div>--</div>
+          <div><span class="earn-badge earn-b-new">New</span></div>
+        </div>
+      </div>
     </div>
 
     <!-- ═══ PAYOUTS SECTION ═══ -->
