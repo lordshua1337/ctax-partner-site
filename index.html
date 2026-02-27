@@ -270,24 +270,19 @@
 <main id="main-content">
 <div class="page active" id="page-home">
 <div class="hero-wrap">
-  <div class="hero-float hero-float-1" aria-hidden="true"><svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="28" fill="rgba(75,163,255,0.07)"/></svg></div>
-  <div class="hero-float hero-float-2" aria-hidden="true"><svg viewBox="0 0 60 52" fill="none"><polygon points="30,2 58,50 2,50" rx="6" fill="rgba(0,200,224,0.06)"/></svg></div>
-  <div class="hero-float hero-float-3" aria-hidden="true"><svg viewBox="0 0 60 60" fill="none"><rect x="4" y="4" width="52" height="52" rx="12" fill="rgba(0,229,204,0.05)"/></svg></div>
-  <div class="hero-float hero-float-4" aria-hidden="true"><svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="26" fill="rgba(11,95,216,0.06)"/></svg></div>
-  <div class="hero-float hero-float-5" aria-hidden="true"><svg viewBox="0 0 60 60" fill="none"><polygon points="30,2 57,18 57,42 30,58 3,42 3,18" fill="rgba(75,163,255,0.05)"/></svg></div>
-  <div class="hero-float hero-float-6" aria-hidden="true"><svg viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="14" fill="rgba(0,200,224,0.04)"/></svg></div>
+  <canvas id="hero-mesh" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
   <div class="hero-inner-center">
-    <div class="h-badge">STRATEGIC PARTNERSHIPS</div>
+    <div class="h-badge hero-reveal" style="--reveal-d:0">STRATEGIC PARTNERSHIPS</div>
     <h1 class="h-title">
-      <span class="h-title-line">Turn Tax Debt</span>
-      <span class="h-title-line">Into <span class="h-title-gradient">Your Edge.</span></span>
+      <span class="h-title-line hero-reveal" style="--reveal-d:1">Turn Tax Debt</span>
+      <span class="h-title-line hero-reveal" style="--reveal-d:2">Into <span class="h-title-gradient">Your Edge.</span></span>
     </h1>
-    <p class="h-sub">Keep your clients, your brand, and your revenue stream. Community Tax resolves the debt — you stay the trusted advisor and earn the referral fee.</p>
-    <div class="h-cta-row">
+    <p class="h-sub hero-reveal" style="--reveal-d:3">Keep your clients, your brand, and your revenue stream. Community Tax resolves the debt — you stay the trusted advisor and earn the referral fee.</p>
+    <div class="h-cta-row hero-reveal" style="--reveal-d:4">
       <button class="h-cta-primary" onclick="showPage('apply')">Become a Partner</button>
       <button class="h-cta-secondary" onclick="openExploreModal()">Explore the Program</button>
     </div>
-    <div class="h-stats">
+    <div class="h-stats hero-reveal" style="--reveal-d:5">
       <div class="h-stat"><div class="h-stat-n hero-counter" data-prefix="$" data-target="2.3" data-suffix="B">$0B</div><div class="h-stat-l">Tax Debt Resolved</div></div>
       <div class="h-stat"><div class="h-stat-n hero-counter" data-target="120" data-suffix="K+">0K+</div><div class="h-stat-l">Clients Served</div></div>
       <div class="h-stat"><div class="h-stat-n hero-counter" data-target="10" data-suffix="K+">0K+</div><div class="h-stat-l">Referral Partners</div></div>
@@ -336,24 +331,45 @@
       <span class="eyebrow">How It Works For You</span>
       <h2 class="disp mt8">From relationship-ending event<br>to relationship-preserving solution.</h2>
     </div>
-    <div class="vcols">
-      <div class="vcol scroll-reveal">
-        <div class="vi vi-lt"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></div>
-        <span class="eyebrow eyebrow-md" style="font-size:15px">What Happens Today</span>
-        <h4>The Problem</h4>
-        <p>Tax debt disrupts client journeys — loans stall, filings end, clients disengage. You lose the transaction and the relationship.</p>
+    <div class="flip-grid">
+      <div class="flip-card scroll-reveal" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="vi vi-lt"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></div>
+            <span class="eyebrow eyebrow-md" style="font-size:15px">What Happens Today</span>
+            <h4 class="flip-title">The Problem</h4>
+            <span class="flip-hint">Hover to learn more</span>
+          </div>
+          <div class="flip-back">
+            <p>Tax debt disrupts client journeys — loans stall, filings end, clients disengage. You lose the transaction and the relationship.</p>
+          </div>
+        </div>
       </div>
-      <div class="vcol vcol-dk scroll-reveal" style="animation-delay:0.12s">
-        <div class="vi vi-dk"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <span class="eyebrow eyebrow-lt" style="font-size:15px">Community Tax's Role</span>
-        <h4>The Solution</h4>
-        <p>We resolve the tax debt on your client's behalf — while you remain the trusted advisor. A relationship-ending event becomes a relationship-preserving experience.</p>
+      <div class="flip-card scroll-reveal" style="animation-delay:0.12s" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-front flip-front-dk">
+            <div class="vi vi-dk"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <span class="eyebrow eyebrow-lt" style="font-size:15px">Community Tax's Role</span>
+            <h4 class="flip-title" style="color:#fff">The Solution</h4>
+            <span class="flip-hint" style="color:rgba(255,255,255,0.4)">Hover to learn more</span>
+          </div>
+          <div class="flip-back flip-back-dk">
+            <p>We resolve the tax debt on your client's behalf — while you remain the trusted advisor. A relationship-ending event becomes a relationship-preserving experience.</p>
+          </div>
+        </div>
       </div>
-      <div class="vcol scroll-reveal" style="animation-delay:0.24s">
-        <div class="vi vi-lt"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <span class="eyebrow eyebrow-md" style="font-size:15px">What It Means For You</span>
-        <h4>The Outcome</h4>
-        <p>Complete the original service. Keep the client. Earn referral revenue. Grow without operational complexity.</p>
+      <div class="flip-card scroll-reveal" style="animation-delay:0.24s" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="vi vi-lt"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="eyebrow eyebrow-md" style="font-size:15px">What It Means For You</span>
+            <h4 class="flip-title">The Outcome</h4>
+            <span class="flip-hint">Hover to learn more</span>
+          </div>
+          <div class="flip-back">
+            <p>Complete the original service. Keep the client. Earn referral revenue. Grow without operational complexity.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -370,11 +386,11 @@
   </div>
 </section>
 
-<section class="sec bg-off">
+<section class="sec" style="background:linear-gradient(165deg,#0A1628 0%,#0f1d36 50%,#0A1628 100%)">
   <div class="con">
     <div class="text-center mb48 reveal">
-      <span class="eyebrow">Partner Voices</span>
-      <h2 class="disp mt8">What partners say about<br>the program.</h2>
+      <span class="eyebrow" style="color:var(--sky)">Partner Voices</span>
+      <h2 class="disp mt8" style="color:#fff">What partners say about<br>the program.</h2>
     </div>
     <div class="testi-grid">
       <div class="testi-card reveal">
@@ -386,7 +402,7 @@
             <div class="testi-role">ERO Owner · 600+ Client Base · Texas</div>
           </div>
         </div>
-        <span class="testi-stat"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> First case closed in 18 days</span>
+        <span class="testi-stat"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Onboarded and active in under 3 weeks</span>
       </div>
       <div class="testi-card reveal reveal-delay-2">
         <p class="testi-quote">Before this program, I was sending clients to competitors and watching them leave. Now I have a path for every tax debt situation — and I keep the relationship every time.</p>
@@ -397,7 +413,7 @@
             <div class="testi-role">CPA · Regional Accounting Firm · Illinois</div>
           </div>
         </div>
-        <span class="testi-stat"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg> 6-figure referral revenue, Year 1</span>
+        <span class="testi-stat"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg> New revenue stream within the first year</span>
       </div>
       <div class="testi-card reveal reveal-delay-3">
         <p class="testi-quote">Our lending platform was losing qualified applicants at the IRS liability stage. This partnership turned those losses into a new revenue line. The ROI was immediate and measurable.</p>
@@ -408,7 +424,7 @@
             <div class="testi-role">VP of Partnerships · Fintech Platform · Enterprise Tier</div>
           </div>
         </div>
-        <span class="testi-stat"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> 23% reduction in drop-off rate</span>
+        <span class="testi-stat"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Fewer lost applicants at the liability stage</span>
       </div>
     </div>
   </div>
@@ -671,5 +687,6 @@
 <script src="js/ad-maker.js"></script>
 <script src="js/dashboard.js"></script>
 <script src="js/widgets.js"></script>
+<script src="js/hero-mesh.js"></script>
 </body>
 </html>

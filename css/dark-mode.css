@@ -108,6 +108,14 @@
 [data-theme="dark"] .sp-pill:hover{border-color:rgba(255,255,255,0.2);color:#fff}
 [data-theme="dark"] .price-bg{background:#111827;border-top-color:rgba(255,255,255,0.06)}
 
+/* ── Flip cards ── */
+[data-theme="dark"] .flip-front{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .flip-back{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .flip-title{color:#e0e4ec}
+[data-theme="dark"] .flip-back p{color:rgba(255,255,255,0.7)}
+[data-theme="dark"] .flip-hint{color:rgba(255,255,255,0.3)}
+[data-theme="dark"] .vi-lt{background:rgba(75,163,255,0.1);border-color:rgba(75,163,255,0.2)}
+
 /* ── Value cols, problem cards, risk blocks ── */
 [data-theme="dark"] .vcol h4{color:#e0e4ec}
 [data-theme="dark"] .vcol p{color:rgba(255,255,255,0.6)}
@@ -182,8 +190,8 @@
 /* ── Gradient text → plain white in dark mode ── */
 [data-theme="dark"] .eyebrow,[data-theme="dark"] .eyebrow-lt,[data-theme="dark"] .eyebrow-md{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:rgba(255,255,255,0.4);background-clip:unset}
 [data-theme="dark"] .eyebrow-ph{background:linear-gradient(90deg,#c8d8e8,#ffffff,#dde8f0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-[data-theme="dark"] .h-title-gradient{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:#fff;background-clip:unset}
-[data-theme="dark"] .h-marquee-label{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:rgba(255,255,255,0.35);background-clip:unset}
+[data-theme="dark"] .h-title-gradient{background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+[data-theme="dark"] .h-marquee-label{background:linear-gradient(#0c1220,#0c1220) padding-box,linear-gradient(135deg,#5a6a7e 0%,#a0b0c4 30%,#e0e8f0 50%,#a0b0c4 70%,#5a6a7e 100%) border-box;color:rgba(255,255,255,0.6)}
 [data-theme="dark"] .ft-col-lbl{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:rgba(255,255,255,0.4);background-clip:unset}
 [data-theme="dark"] .footer-col-title{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:rgba(255,255,255,0.4);background-clip:unset}
 [data-theme="dark"] .footer-copyright{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:rgba(255,255,255,0.3);background-clip:unset}
