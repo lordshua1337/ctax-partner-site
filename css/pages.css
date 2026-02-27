@@ -1521,6 +1521,91 @@ body.portal-mode{padding-bottom:0}
   .earn-chart-bars{gap:6px;padding:0 8px}
 }
 
+/* ── PAYOUTS SECTION ── */
+.pay-top-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.pay-next{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:12px;padding:28px;color:white;position:relative;overflow:hidden}
+.pay-next::after{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.04)}
+.pay-next-label{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.6;margin-bottom:8px;font-weight:600}
+.pay-next-amount{font-family:'DM Serif Display',serif;font-size:36px;margin-bottom:16px;line-height:1}
+.pay-next-meta{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.pay-next-detail{display:flex;align-items:center;gap:8px;font-size:13px;opacity:0.75}
+.pay-next-detail svg{opacity:0.6}
+.pay-next-countdown{display:inline-block;background:rgba(255,255,255,0.12);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600}
+
+.pay-method{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:28px}
+.pay-method-label{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--slate);margin-bottom:16px;font-weight:600}
+.pay-method-card{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.pay-bank-icon{width:48px;height:48px;border-radius:10px;background:rgba(11,95,216,0.06);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pay-bank-icon svg{stroke:var(--blue)}
+.pay-bank-name{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.pay-bank-acct{font-size:13px;color:var(--slate)}
+.pay-bank-routing{font-size:12px;color:var(--mist)}
+.pay-method-btn{width:100%;padding:10px;border:1px solid var(--off2);border-radius:8px;background:var(--off);font-size:13px;font-weight:600;color:var(--navy);cursor:pointer;transition:all 0.15s}
+.pay-method-btn:hover{border-color:var(--blue);color:var(--blue);background:rgba(11,95,216,0.03)}
+
+.pay-schedule-notice{display:flex;align-items:flex-start;gap:10px;background:rgba(11,95,216,0.04);border:1px solid rgba(11,95,216,0.08);border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:13px;color:var(--navy);line-height:1.6}
+.pay-schedule-notice svg{flex-shrink:0;margin-top:2px;stroke:var(--blue)}
+.pay-schedule-notice strong{font-weight:700}
+
+.pay-ledger-wrap{background:var(--white);border:1px solid var(--off2);border-radius:12px;overflow:hidden;margin-bottom:24px}
+.pay-ledger-title{font-size:14px;font-weight:700;color:var(--navy);padding:20px 20px 0}
+.pay-ledger-head{display:grid;grid-template-columns:1fr 1fr 1.2fr 1.3fr 0.7fr 0.8fr;gap:8px;padding:14px 20px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--slate);border-bottom:1px solid var(--off2);margin-top:12px}
+.pay-ledger-row{display:grid;grid-template-columns:1fr 1fr 1.2fr 1.3fr 0.7fr 0.8fr;gap:8px;padding:14px 20px;align-items:center;font-size:13px;color:var(--navy);border-bottom:1px solid var(--off2);transition:background 0.12s}
+.pay-ledger-row:last-child{border-bottom:none}
+.pay-ledger-row:hover{background:rgba(11,95,216,0.015)}
+.pay-ledger-pending{background:rgba(11,95,216,0.02);border-left:3px solid var(--blue)}
+.pay-ref-id{font-size:12px;font-family:monospace;color:var(--slate)}
+.pay-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.pay-b-complete{background:rgba(5,150,105,0.08);color:#059669}
+.pay-b-scheduled{background:rgba(11,95,216,0.08);color:var(--blue)}
+
+.pay-tax-docs{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:24px}
+.pay-tax-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.pay-tax-desc{font-size:13px;color:var(--slate);margin-bottom:20px}
+.pay-tax-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pay-tax-card{border:1px solid var(--off2);border-radius:10px;padding:20px;text-align:center}
+.pay-tax-year{font-family:'DM Serif Display',serif;font-size:28px;color:var(--navy);margin-bottom:4px}
+.pay-tax-type{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--slate);margin-bottom:8px}
+.pay-tax-amount{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px}
+.pay-tax-dl{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px;border:1px solid var(--blue);border-radius:6px;background:none;color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s}
+.pay-tax-dl:hover{background:var(--blue);color:white}
+.pay-tax-dl:disabled{border-color:var(--off2);color:var(--mist);cursor:not-allowed}
+.pay-tax-dl:disabled:hover{background:none;color:var(--mist)}
+.pay-tax-card-pending{border-style:dashed;opacity:0.65}
+
+/* Payouts dark mode */
+[data-theme="dark"] .pay-next{background:linear-gradient(135deg,#0d1929,#162138)}
+[data-theme="dark"] .pay-method{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .pay-bank-icon{background:rgba(75,163,255,0.1)}
+[data-theme="dark"] .pay-bank-name{color:#e0e4ec}
+[data-theme="dark"] .pay-bank-acct{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .pay-bank-routing{color:rgba(255,255,255,0.3)}
+[data-theme="dark"] .pay-method-btn{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.06);color:#e0e4ec}
+[data-theme="dark"] .pay-schedule-notice{background:rgba(75,163,255,0.06);border-color:rgba(75,163,255,0.1);color:#e0e4ec}
+[data-theme="dark"] .pay-ledger-wrap{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .pay-ledger-title{color:#e0e4ec}
+[data-theme="dark"] .pay-ledger-head{color:rgba(255,255,255,0.4);border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .pay-ledger-row{color:#e0e4ec;border-color:rgba(255,255,255,0.04)}
+[data-theme="dark"] .pay-ledger-row:hover{background:rgba(75,163,255,0.03)}
+[data-theme="dark"] .pay-ledger-pending{background:rgba(75,163,255,0.04);border-left-color:rgba(75,163,255,0.4)}
+[data-theme="dark"] .pay-ref-id{color:rgba(255,255,255,0.4)}
+[data-theme="dark"] .pay-tax-docs{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .pay-tax-title{color:#e0e4ec}
+[data-theme="dark"] .pay-tax-desc{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .pay-tax-card{border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .pay-tax-year{color:#e0e4ec}
+[data-theme="dark"] .pay-tax-amount{color:#e0e4ec}
+[data-theme="dark"] .pay-tax-dl{border-color:rgba(75,163,255,0.4);color:rgba(75,163,255,0.8)}
+[data-theme="dark"] .pay-tax-dl:hover{background:rgba(75,163,255,0.15);color:#e0e4ec}
+
+/* Payouts mobile */
+@media(max-width:768px){
+  .pay-top-row{grid-template-columns:1fr}
+  .pay-tax-grid{grid-template-columns:1fr 1fr}
+  .pay-ledger-head,.pay-ledger-row{grid-template-columns:1fr 1fr 1fr 0.8fr;font-size:12px}
+  .pay-ledger-head>:nth-child(4),.pay-ledger-head>:nth-child(5),.pay-ledger-row>:nth-child(4),.pay-ledger-row>:nth-child(5){display:none}
+}
+
 /* Mobile portal */
 @media(max-width:768px){
   .portal-sidebar{left:-260px;transition:left 0.25s ease}

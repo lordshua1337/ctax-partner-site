@@ -672,7 +672,124 @@
         <h2 class="portal-sec-title">Payouts</h2>
         <p class="portal-sec-desc">Payout schedule, payment method management, tax documents (1099), and transaction ledger.</p>
       </div>
-      <div class="portal-placeholder">Coming soon</div>
+
+      <!-- Top Row: Next Payout + Payment Method -->
+      <div class="pay-top-row">
+        <div class="pay-next">
+          <div class="pay-next-label">Next Scheduled Payout</div>
+          <div class="pay-next-amount">$2,736.00</div>
+          <div class="pay-next-meta">
+            <div class="pay-next-detail"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> March 1, 2026</div>
+            <div class="pay-next-detail"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H3a2 2 0 00-2 2v12a2 2 0 002 2h18a2 2 0 002-2V6a2 2 0 00-2-2z"/><line x1="1" y1="10" x2="23" y2="10"/></svg> ACH Direct Deposit</div>
+          </div>
+          <div class="pay-next-countdown">3 days away</div>
+        </div>
+        <div class="pay-method">
+          <div class="pay-method-label">Payment Method on File</div>
+          <div class="pay-method-card">
+            <div class="pay-bank-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M3 10h18"/><path d="M12 3l9 7H3l9-7z"/><path d="M5 10v11"/><path d="M19 10v11"/><path d="M9 10v11"/><path d="M14 10v11"/></svg></div>
+            <div>
+              <div class="pay-bank-name">Chase Business Checking</div>
+              <div class="pay-bank-acct">Account ending in ****4829</div>
+              <div class="pay-bank-routing">Routing: ****0021</div>
+            </div>
+          </div>
+          <button class="pay-method-btn">Change Payment Method</button>
+        </div>
+      </div>
+
+      <!-- Payout Schedule Notice -->
+      <div class="pay-schedule-notice">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Payouts are processed on the <strong>1st</strong> and <strong>15th</strong> of each month. Commissions are released once a case reaches "Resolved" status. Allow 2-3 business days for ACH transfers.
+      </div>
+
+      <!-- Transaction Ledger -->
+      <div class="pay-ledger-wrap">
+        <div class="pay-ledger-title">Transaction History</div>
+        <div class="pay-ledger-head">
+          <div>Date</div>
+          <div>Amount</div>
+          <div>Referral</div>
+          <div>Client</div>
+          <div>Method</div>
+          <div>Status</div>
+        </div>
+        <div class="pay-ledger-row">
+          <div>Feb 15, 2026</div>
+          <div style="font-weight:700;color:#059669">+$4,224.00</div>
+          <div class="pay-ref-id">#REF-2026-0038</div>
+          <div>Robert Thompson</div>
+          <div>ACH</div>
+          <div><span class="pay-badge pay-b-complete">Complete</span></div>
+        </div>
+        <div class="pay-ledger-row">
+          <div>Feb 15, 2026</div>
+          <div style="font-weight:700;color:#059669">+$2,168.00</div>
+          <div class="pay-ref-id">#REF-2026-0031</div>
+          <div>David Lee</div>
+          <div>ACH</div>
+          <div><span class="pay-badge pay-b-complete">Complete</span></div>
+        </div>
+        <div class="pay-ledger-row">
+          <div>Jan 15, 2026</div>
+          <div style="font-weight:700;color:#059669">+$3,840.00</div>
+          <div class="pay-ref-id">#REF-2026-0022</div>
+          <div>Sandra Mitchell</div>
+          <div>ACH</div>
+          <div><span class="pay-badge pay-b-complete">Complete</span></div>
+        </div>
+        <div class="pay-ledger-row">
+          <div>Jan 1, 2026</div>
+          <div style="font-weight:700;color:#059669">+$1,920.00</div>
+          <div class="pay-ref-id">#REF-2025-0189</div>
+          <div>Thomas Nguyen</div>
+          <div>ACH</div>
+          <div><span class="pay-badge pay-b-complete">Complete</span></div>
+        </div>
+        <div class="pay-ledger-row">
+          <div>Dec 15, 2025</div>
+          <div style="font-weight:700;color:#059669">+$3,600.00</div>
+          <div class="pay-ref-id">#REF-2025-0172</div>
+          <div>Angela Foster</div>
+          <div>Check</div>
+          <div><span class="pay-badge pay-b-complete">Complete</span></div>
+        </div>
+        <div class="pay-ledger-row pay-ledger-pending">
+          <div>Mar 1, 2026</div>
+          <div style="font-weight:700;color:var(--blue)">+$2,736.00</div>
+          <div class="pay-ref-id">#REF-2026-0042</div>
+          <div>James Williams</div>
+          <div>ACH</div>
+          <div><span class="pay-badge pay-b-scheduled">Scheduled</span></div>
+        </div>
+      </div>
+
+      <!-- Tax Documents -->
+      <div class="pay-tax-docs">
+        <div class="pay-tax-title">Tax Documents</div>
+        <p class="pay-tax-desc">Year-end 1099-NEC forms for your records. Download or forward to your accountant.</p>
+        <div class="pay-tax-grid">
+          <div class="pay-tax-card">
+            <div class="pay-tax-year">2025</div>
+            <div class="pay-tax-type">1099-NEC</div>
+            <div class="pay-tax-amount">$24,180.00</div>
+            <button class="pay-tax-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF</button>
+          </div>
+          <div class="pay-tax-card">
+            <div class="pay-tax-year">2024</div>
+            <div class="pay-tax-type">1099-NEC</div>
+            <div class="pay-tax-amount">$18,640.00</div>
+            <button class="pay-tax-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF</button>
+          </div>
+          <div class="pay-tax-card pay-tax-card-pending">
+            <div class="pay-tax-year">2026</div>
+            <div class="pay-tax-type">1099-NEC</div>
+            <div class="pay-tax-amount">Available Jan 2027</div>
+            <button class="pay-tax-dl" disabled>Not Yet Available</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ═══ SUBMIT REFERRAL SECTION ═══ -->
