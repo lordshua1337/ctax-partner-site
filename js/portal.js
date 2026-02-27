@@ -286,6 +286,31 @@ function calcProjection() {
   });
 }
 
+// --- Settings: API key toggle/copy ---
+function toggleApiKey() {
+  var input = document.getElementById('set-api-key');
+  var btn = input.nextElementSibling;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = 'Hide';
+  } else {
+    input.type = 'password';
+    btn.textContent = 'Show';
+  }
+}
+
+function copyApiKey() {
+  var input = document.getElementById('set-api-key');
+  var origType = input.type;
+  input.type = 'text';
+  input.select();
+  document.execCommand('copy');
+  input.type = origType;
+  var btn = input.nextElementSibling.nextElementSibling;
+  btn.textContent = 'Copied!';
+  setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+}
+
 // --- Marketing Kit filter ---
 function mkFilter(btn, cat) {
   document.querySelectorAll('.mk-tab').forEach(function(t) { t.classList.remove('mk-tab-active'); });

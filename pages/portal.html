@@ -1585,7 +1585,113 @@
         <h2 class="portal-sec-title">Settings</h2>
         <p class="portal-sec-desc">Profile details, notification preferences, API keys, team member management, and tier info.</p>
       </div>
-      <div class="portal-placeholder">Coming soon</div>
+
+      <!-- Profile -->
+      <div class="set-section">
+        <div class="set-section-title">Profile Information</div>
+        <div class="set-form-grid">
+          <div class="set-field"><label class="set-label">Full Name</label><input type="text" class="set-input" value="Josh Hohenstein"></div>
+          <div class="set-field"><label class="set-label">Email Address</label><input type="email" class="set-input" value="josh@partnerllc.com"></div>
+          <div class="set-field"><label class="set-label">Phone</label><input type="tel" class="set-input" value="(312) 555-0100"></div>
+          <div class="set-field"><label class="set-label">Company / Firm Name</label><input type="text" class="set-input" value="Partner Tax Associates LLC"></div>
+          <div class="set-field set-field-full"><label class="set-label">Business Address</label><input type="text" class="set-input" value="200 N Michigan Ave, Suite 1400, Chicago, IL 60601"></div>
+        </div>
+        <div class="set-actions"><button class="set-save">Save Changes</button></div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="set-section">
+        <div class="set-section-title">Notification Preferences</div>
+        <div class="set-toggles">
+          <div class="set-toggle-row">
+            <div><div class="set-toggle-label">Email Notifications</div><div class="set-toggle-desc">Referral status updates, case milestones, and payout confirmations</div></div>
+            <label class="set-switch"><input type="checkbox" checked><span class="set-slider"></span></label>
+          </div>
+          <div class="set-toggle-row">
+            <div><div class="set-toggle-label">SMS Alerts</div><div class="set-toggle-desc">Urgent notifications: new case assignments, IRS deadlines</div></div>
+            <label class="set-switch"><input type="checkbox" checked><span class="set-slider"></span></label>
+          </div>
+          <div class="set-toggle-row">
+            <div><div class="set-toggle-label">Monthly Performance Report</div><div class="set-toggle-desc">Summary of referrals, earnings, and pipeline delivered to your inbox</div></div>
+            <label class="set-switch"><input type="checkbox" checked><span class="set-slider"></span></label>
+          </div>
+          <div class="set-toggle-row">
+            <div><div class="set-toggle-label">Marketing Updates</div><div class="set-toggle-desc">New assets, seasonal campaigns, and co-branding opportunities</div></div>
+            <label class="set-switch"><input type="checkbox"><span class="set-slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Members -->
+      <div class="set-section">
+        <div class="set-section-header"><div class="set-section-title">Team Members</div><button class="set-add-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Invite Member</button></div>
+        <div class="set-team-table">
+          <div class="set-team-head"><div>Name</div><div>Role</div><div>Email</div><div>Status</div><div></div></div>
+          <div class="set-team-row">
+            <div class="set-team-name"><div class="set-team-avatar" style="background:var(--blue)">JH</div>Josh Hohenstein</div>
+            <div>Owner</div>
+            <div>josh@partnerllc.com</div>
+            <div><span class="set-badge set-b-active">Active</span></div>
+            <div></div>
+          </div>
+          <div class="set-team-row">
+            <div class="set-team-name"><div class="set-team-avatar" style="background:#7C3AED">SR</div>Sarah Rodriguez</div>
+            <div>Admin</div>
+            <div>sarah@partnerllc.com</div>
+            <div><span class="set-badge set-b-active">Active</span></div>
+            <div class="set-team-acts"><button class="set-team-act">Edit</button><button class="set-team-act set-team-remove">Remove</button></div>
+          </div>
+          <div class="set-team-row">
+            <div class="set-team-name"><div class="set-team-avatar" style="background:var(--mist)">MK</div>Mike Kim</div>
+            <div>Member</div>
+            <div>mike@partnerllc.com</div>
+            <div><span class="set-badge set-b-invited">Invited</span></div>
+            <div class="set-team-acts"><button class="set-team-act">Resend</button><button class="set-team-act set-team-remove">Revoke</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API Access -->
+      <div class="set-section">
+        <div class="set-section-title">API Access</div>
+        <p class="set-section-desc">Use your API key to integrate referral submissions from your own systems.</p>
+        <div class="set-api-row">
+          <div class="set-field set-field-full">
+            <label class="set-label">API Key</label>
+            <div class="set-api-key-wrap">
+              <input type="password" class="set-input set-api-input" value="ctax_pk_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6" id="set-api-key" readonly>
+              <button class="set-api-toggle" onclick="toggleApiKey()">Show</button>
+              <button class="set-api-copy" onclick="copyApiKey()">Copy</button>
+            </div>
+          </div>
+          <div class="set-field set-field-full">
+            <label class="set-label">Webhook URL</label>
+            <input type="text" class="set-input" placeholder="https://your-domain.com/webhooks/ctax">
+          </div>
+        </div>
+        <button class="set-regen-btn">Regenerate API Key</button>
+      </div>
+
+      <!-- Current Tier -->
+      <div class="set-section">
+        <div class="set-tier-card">
+          <div class="set-tier-info">
+            <div class="set-tier-badge">Current Tier</div>
+            <div class="set-tier-name">Silver Partner</div>
+            <div class="set-tier-rate">8% Commission Rate</div>
+            <div class="set-tier-progress-label">14 of 25 referrals to Gold tier</div>
+            <div class="set-tier-bar"><div class="set-tier-fill" style="width:56%"></div></div>
+          </div>
+          <button class="set-tier-link" onclick="showPage('tiers')">View All Tiers</button>
+        </div>
+      </div>
+
+      <!-- Danger Zone -->
+      <div class="set-section set-danger">
+        <div class="set-section-title" style="color:#DC2626">Danger Zone</div>
+        <p class="set-section-desc">Permanently delete your partner account and all associated data. This action cannot be undone.</p>
+        <button class="set-delete-btn">Delete Account</button>
+      </div>
     </div>
 
     <!-- ═══ SUPPORT SECTION ═══ -->
