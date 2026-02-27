@@ -131,6 +131,32 @@ function onPageLoaded(id) {
   }
 }
 
+// ── WEBINAR CATEGORY FILTER ──────────────────────────────────
+function filterWebinars(pill, cat) {
+  // Update active pill
+  var pills = document.querySelectorAll('.wbn-pill');
+  pills.forEach(function(p) { p.classList.remove('wbn-pill-active'); });
+  pill.classList.add('wbn-pill-active');
+
+  // Filter cards
+  var cards = document.querySelectorAll('.wbn-card');
+  var visibleCount = 0;
+  cards.forEach(function(card) {
+    if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+      card.style.display = '';
+      visibleCount++;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+
+  // Show/hide empty state
+  var empty = document.getElementById('wbn-empty');
+  if (empty) {
+    empty.style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+}
+
 // ── TIER VOLUME SELECTOR ──────────────────────────────────────
 function initTierFinder() {
   // Reset state on page load
