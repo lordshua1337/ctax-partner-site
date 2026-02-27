@@ -1960,6 +1960,71 @@ body.portal-mode{padding-bottom:0}
   .ce-grid{grid-template-columns:1fr}
 }
 
+/* ── MARKETING KIT SECTION ── */
+.mk-cobrand{display:flex;align-items:flex-start;gap:12px;background:rgba(11,95,216,0.04);border:1px solid rgba(11,95,216,0.08);border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:var(--navy);line-height:1.5}
+.mk-cobrand svg{stroke:var(--blue);flex-shrink:0;margin-top:1px}
+.mk-cobrand strong{display:block;margin-bottom:2px}
+.mk-cobrand span{color:var(--slate)}
+
+.mk-tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--off);border-radius:8px;padding:3px;overflow-x:auto}
+.mk-tab{background:none;border:none;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:600;color:var(--slate);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.mk-tab-active{background:var(--white);color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+
+.mk-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.mk-card{background:var(--white);border:1px solid var(--off2);border-radius:12px;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s}
+.mk-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.mk-preview{height:140px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.mk-preview-1{background:linear-gradient(135deg,#f0f4f8,#e2e8f0)}
+.mk-preview-2{background:linear-gradient(135deg,#fef3c7,#fde68a)}
+.mk-preview-3{background:linear-gradient(135deg,#ede9fe,#ddd6fe)}
+.mk-preview-4{background:linear-gradient(135deg,#dbeafe,#bfdbfe)}
+.mk-preview-5{background:linear-gradient(135deg,#d1fae5,#a7f3d0)}
+.mk-preview-6{background:linear-gradient(135deg,#ffe4e6,#fecdd3)}
+.mk-preview-7{background:linear-gradient(135deg,#e0e7ff,#c7d2fe)}
+.mk-preview-8{background:linear-gradient(135deg,var(--navy),var(--navy2))}
+.mk-preview-lines{display:flex;flex-direction:column;gap:8px;width:60%;padding:20px}
+.mk-preview-lines>div{height:6px;background:rgba(0,0,0,0.08);border-radius:3px}
+.mk-preview-lines>div:last-child{width:60%}
+.mk-preview-sq{width:70px;height:70px;border-radius:8px;background:rgba(0,0,0,0.06)}
+.mk-preview-doc{width:50%;padding:20px}
+.mk-preview-doc>div{height:5px;background:rgba(0,0,0,0.07);border-radius:3px;margin-bottom:6px}
+.mk-preview-doc>div:last-child{width:40%}
+.mk-preview-browser{width:75%;background:white;border-radius:6px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.mk-preview-urlbar{height:12px;background:var(--off);border-bottom:1px solid var(--off2)}
+.mk-preview-browser .mk-preview-lines{padding:10px;gap:5px}
+.mk-preview-browser .mk-preview-lines>div{height:4px}
+.mk-builder-icon{width:64px;height:64px;border-radius:14px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center}
+
+.mk-card-body{padding:16px}
+.mk-card-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.mk-card-desc{font-size:12px;color:var(--slate);line-height:1.5;margin-bottom:12px}
+.mk-card-foot{display:flex;justify-content:space-between;align-items:center}
+.mk-format{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--mist);background:var(--off);padding:3px 8px;border-radius:4px}
+.mk-dl-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--off2);padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;color:var(--blue);cursor:pointer;transition:all 0.15s}
+.mk-dl-btn:hover{background:rgba(11,95,216,0.06);border-color:var(--blue)}
+.mk-dl-launch{background:var(--blue);color:white;border-color:var(--blue)}
+.mk-dl-launch:hover{background:var(--blue2)}
+
+/* Marketing dark mode */
+[data-theme="dark"] .mk-cobrand{background:rgba(75,163,255,0.06);border-color:rgba(75,163,255,0.1);color:#e0e4ec}
+[data-theme="dark"] .mk-cobrand span{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .mk-tabs{background:#141e30}
+[data-theme="dark"] .mk-tab{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .mk-tab-active{background:rgba(255,255,255,0.1);color:#e0e4ec}
+[data-theme="dark"] .mk-card{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .mk-card:hover{box-shadow:0 8px 24px rgba(0,0,0,0.2)}
+[data-theme="dark"] .mk-preview-1,.mk-preview-2,.mk-preview-3,.mk-preview-4,.mk-preview-5,.mk-preview-6,.mk-preview-7{filter:brightness(0.7) saturate(0.7)}
+[data-theme="dark"] .mk-card-title{color:#e0e4ec}
+[data-theme="dark"] .mk-format{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.4)}
+[data-theme="dark"] .mk-dl-btn{border-color:rgba(255,255,255,0.1);color:rgba(75,163,255,0.8)}
+[data-theme="dark"] .mk-dl-btn:hover{background:rgba(75,163,255,0.08)}
+
+/* Marketing mobile */
+@media(max-width:768px){
+  .mk-grid{grid-template-columns:1fr}
+  .mk-preview{height:110px}
+}
+
 /* Mobile portal */
 @media(max-width:768px){
   .portal-sidebar{left:-260px;transition:left 0.25s ease}

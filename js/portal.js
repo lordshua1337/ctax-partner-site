@@ -286,6 +286,19 @@ function calcProjection() {
   });
 }
 
+// --- Marketing Kit filter ---
+function mkFilter(btn, cat) {
+  document.querySelectorAll('.mk-tab').forEach(function(t) { t.classList.remove('mk-tab-active'); });
+  btn.classList.add('mk-tab-active');
+  document.querySelectorAll('.mk-card').forEach(function(card) {
+    if (cat === 'all' || card.getAttribute('data-mk-cat') === cat) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
 // --- Documents tab filter ---
 function docFilter(btn, cat) {
   document.querySelectorAll('.doc-tab').forEach(function(t) { t.classList.remove('doc-tab-active'); });
