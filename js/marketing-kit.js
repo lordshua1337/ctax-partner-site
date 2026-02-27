@@ -104,7 +104,10 @@ var MK_EMAIL_TEMPLATES = {
 
 function mkShowEmailBuilder() {
   var panel = document.getElementById('mk-email-builder');
-  if (panel) panel.style.display = 'block';
+  if (panel) {
+    panel.style.display = 'block';
+    setTimeout(function() { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+  }
   mkUpdateEmailPreview();
 }
 
@@ -172,7 +175,10 @@ var mkSocialLogoUrl = null;
 
 function mkShowSocialBuilder() {
   var panel = document.getElementById('mk-social-builder');
-  if (panel) panel.style.display = 'block';
+  if (panel) {
+    panel.style.display = 'block';
+    setTimeout(function() { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+  }
   mkUpdateSocialPreview();
 }
 
@@ -283,7 +289,10 @@ var mkOnePagerLogoUrl = null;
 
 function mkShowOnePagerBuilder() {
   var panel = document.getElementById('mk-onepager-builder');
-  if (panel) panel.style.display = 'block';
+  if (panel) {
+    panel.style.display = 'block';
+    setTimeout(function() { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+  }
   mkUpdateOnePagerPreview();
 }
 
