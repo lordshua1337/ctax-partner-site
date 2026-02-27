@@ -93,6 +93,14 @@ function onPageLoaded(id) {
   if (id === 'portal' && typeof mkInitBuilders === 'function') {
     setTimeout(mkInitBuilders, 80);
   }
+  // Restore saved business planner roadmap
+  if (id === 'portal' && typeof bpTryRestore === 'function') {
+    setTimeout(bpTryRestore, 100);
+  }
+  // Initialize collapsible playbook cards
+  if (id === 'portal') {
+    setTimeout(pbInitCollapsible, 100);
+  }
   // Initialize staggered card entrances on newly loaded page
   var el = document.getElementById('page-' + id);
   if (el && typeof window.initStagger === 'function') {
@@ -129,6 +137,126 @@ function onPageLoaded(id) {
       }
     });
   }
+}
+
+// ── REFERRAL PLAYBOOK TAB SWITCHER ──────────────────────────
+function pbSwitchTab(btn, panelId) {
+  var tabs = document.querySelectorAll('.pb-tab');
+  tabs.forEach(function(t) { t.classList.remove('pb-tab-active'); });
+  btn.classList.add('pb-tab-active');
+
+  var panels = document.querySelectorAll('.pb-panel');
+  panels.forEach(function(p) { p.classList.remove('pb-panel-active'); });
+
+  var target = document.getElementById(panelId);
+  if (target) {
+    target.classList.add('pb-panel-active');
+    // Inject copy buttons on first reveal
+    pbInitCopyButtons(target);
+    // Init collapsible cards on spotting panel
+    if (panelId === 'pb-panel-spotting') {
+      pbInitCollapsible();
+    }
+  }
+}
+
+// ── PLAYBOOK COPY BUTTONS ───────────────────────────────────
+function pbInitCopyButtons(container) {
+  if (!container) return;
+  // Script text blocks
+  container.querySelectorAll('.pb-script-text').forEach(function(el) {
+    if (el.querySelector('.pb-copy-btn')) return;
+    var btn = document.createElement('button');
+    btn.className = 'pb-copy-btn';
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy';
+    btn.onclick = function(e) {
+      e.preventDefault();
+      pbCopyText(el.textContent.replace(/\s*Copy$/, '').trim(), btn);
+    };
+    el.appendChild(btn);
+  });
+  // Objection response blocks
+  container.querySelectorAll('.pb-obj-a').forEach(function(el) {
+    if (el.querySelector('.pb-copy-btn')) return;
+    var btn = document.createElement('button');
+    btn.className = 'pb-copy-btn';
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy';
+    btn.onclick = function(e) {
+      e.preventDefault();
+      pbCopyText(el.textContent.replace(/\s*Copy$/, '').trim(), btn);
+    };
+    el.appendChild(btn);
+  });
+}
+
+function pbCopyText(text, btn) {
+  navigator.clipboard.writeText(text).then(function() {
+    var original = btn.innerHTML;
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+    btn.classList.add('pb-copy-btn-done');
+    setTimeout(function() {
+      btn.innerHTML = original;
+      btn.classList.remove('pb-copy-btn-done');
+    }, 2000);
+  }).catch(function() {
+    // Fallback for older browsers
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var original = btn.innerHTML;
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+    btn.classList.add('pb-copy-btn-done');
+    setTimeout(function() {
+      btn.innerHTML = original;
+      btn.classList.remove('pb-copy-btn-done');
+    }, 2000);
+  });
+}
+
+// ── PLAYBOOK COLLAPSIBLE CARDS ──────────────────────────────
+function pbInitCollapsible() {
+  var cards = document.querySelectorAll('.pb-card');
+  cards.forEach(function(card) {
+    // Open the first card by default
+    if (card === cards[0]) {
+      card.classList.add('pb-card-open');
+    }
+    var title = card.querySelector('.pb-card-title');
+    if (title && !title._pbWired) {
+      title._pbWired = true;
+      title.addEventListener('click', function() {
+        card.classList.toggle('pb-card-open');
+      });
+    }
+  });
+}
+
+// ── PLAYBOOK PRINT CHEAT SHEET ─────────────────────────────
+function pbPrintCheatSheet() {
+  // Show all panels so everything prints
+  var panels = document.querySelectorAll('.pb-panel');
+  var wasHidden = [];
+  panels.forEach(function(p) {
+    if (!p.classList.contains('pb-panel-active')) {
+      p.classList.add('pb-panel-active');
+      wasHidden.push(p);
+    }
+    // Init copy buttons so text renders fully
+    pbInitCopyButtons(p);
+  });
+
+  document.body.classList.add('pb-printing');
+
+  setTimeout(function() {
+    window.print();
+    document.body.classList.remove('pb-printing');
+    // Restore hidden panels
+    wasHidden.forEach(function(p) { p.classList.remove('pb-panel-active'); });
+  }, 100);
 }
 
 // ── WEBINAR CATEGORY FILTER ──────────────────────────────────
