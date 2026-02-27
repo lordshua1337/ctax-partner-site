@@ -1,3 +1,35 @@
+// --- Referrals interactions ---
+function toggleRefDetail(row) {
+  // Don't toggle if they clicked an action button
+  if (event && event.target.closest('.ref-act')) return;
+  row.classList.toggle('ref-row-open');
+}
+
+function setRefFilter(btn, status) {
+  document.querySelectorAll('.ref-filter-pill').forEach(function(p) { p.classList.remove('ref-fp-active'); });
+  btn.classList.add('ref-fp-active');
+  document.querySelectorAll('.ref-row').forEach(function(row) {
+    if (status === 'all' || row.getAttribute('data-status') === status) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+      row.classList.remove('ref-row-open');
+    }
+  });
+}
+
+function filterReferrals() {
+  var q = (document.getElementById('ref-search').value || '').toLowerCase();
+  document.querySelectorAll('.ref-row').forEach(function(row) {
+    var text = row.textContent.toLowerCase();
+    row.style.display = text.indexOf(q) !== -1 ? '' : 'none';
+  });
+  // Reset filter pills to "All" visually
+  if (q) {
+    document.querySelectorAll('.ref-filter-pill').forEach(function(p) { p.classList.remove('ref-fp-active'); });
+  }
+}
+
 // --- Portal navigation ---
 function portalNav(el, secId) {
   document.querySelectorAll('.portal-nav-item').forEach(function(a) { a.classList.remove('pni-active'); });
@@ -153,4 +185,59 @@ function initPortalBrand() {
     var m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return m ? { r: parseInt(m[1],16), g: parseInt(m[2],16), b: parseInt(m[3],16) } : { r: 136, g: 136, b: 136 };
   }
+}
+
+// --- Submit Referral multi-step form ---
+var subCurrentStep = 1;
+var subTotalSteps = 4;
+
+function subFormNav(dir) {
+  var next = subCurrentStep + dir;
+  if (next < 1 || next > subTotalSteps) return;
+
+  // Hide current panel, show next
+  var curPanel = document.getElementById('sub-panel-' + subCurrentStep);
+  var nextPanel = document.getElementById('sub-panel-' + next);
+  if (curPanel) curPanel.classList.remove('sub-panel-active');
+  if (nextPanel) nextPanel.classList.add('sub-panel-active');
+
+  // Update step indicators
+  var steps = document.querySelectorAll('.sub-step');
+  var fills = [
+    document.getElementById('sub-fill-1'),
+    document.getElementById('sub-fill-2'),
+    document.getElementById('sub-fill-3')
+  ];
+
+  steps.forEach(function(step) {
+    var stepNum = parseInt(step.getAttribute('data-step'));
+    step.classList.remove('sub-step-active', 'sub-step-done');
+    if (stepNum < next) step.classList.add('sub-step-done');
+    else if (stepNum === next) step.classList.add('sub-step-active');
+  });
+
+  fills.forEach(function(fill, i) {
+    if (!fill) return;
+    fill.style.width = next > (i + 1) ? '100%' : '0';
+  });
+
+  subCurrentStep = next;
+
+  // Update nav buttons
+  var backBtn = document.getElementById('sub-btn-back');
+  var nextBtn = document.getElementById('sub-btn-next');
+  if (backBtn) backBtn.style.visibility = subCurrentStep === 1 ? 'hidden' : 'visible';
+  if (nextBtn) {
+    if (subCurrentStep === subTotalSteps) {
+      nextBtn.textContent = 'Submit Referral';
+      nextBtn.classList.add('sub-btn-submit');
+    } else {
+      nextBtn.textContent = 'Continue';
+      nextBtn.classList.remove('sub-btn-submit');
+    }
+  }
+
+  // Scroll to top of form
+  var formWrap = document.querySelector('.sub-form-wrap');
+  if (formWrap) formWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }

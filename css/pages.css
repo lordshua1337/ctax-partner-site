@@ -1606,6 +1606,114 @@ body.portal-mode{padding-bottom:0}
   .pay-ledger-head>:nth-child(4),.pay-ledger-head>:nth-child(5),.pay-ledger-row>:nth-child(4),.pay-ledger-row>:nth-child(5){display:none}
 }
 
+/* ── SUBMIT REFERRAL SECTION ── */
+.sub-steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:32px;padding:0 20px}
+.sub-step{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;z-index:1}
+.sub-step-num{width:36px;height:36px;border-radius:50%;border:2px solid var(--off2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--slate);background:var(--white);transition:all 0.25s}
+.sub-step-label{font-size:11px;font-weight:600;color:var(--slate);white-space:nowrap;transition:color 0.25s}
+.sub-step-active .sub-step-num{border-color:var(--blue);color:var(--blue);background:rgba(11,95,216,0.06);box-shadow:0 0 0 4px rgba(11,95,216,0.08)}
+.sub-step-active .sub-step-label{color:var(--blue)}
+.sub-step-done .sub-step-num{border-color:#059669;background:#059669;color:white}
+.sub-step-done .sub-step-label{color:#059669}
+.sub-step-line{flex:1;height:2px;background:var(--off2);position:relative;margin:0 8px;margin-bottom:20px}
+.sub-step-fill{position:absolute;top:0;left:0;height:100%;width:0;background:#059669;transition:width 0.35s ease;border-radius:2px}
+
+.sub-form-wrap{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:32px;margin-bottom:20px}
+.sub-panel{display:none}
+.sub-panel-active{display:block;animation:subFadeIn 0.3s ease}
+@keyframes subFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sub-panel-title{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.sub-panel-desc{font-size:13px;color:var(--slate);margin-bottom:20px;line-height:1.6}
+
+.sub-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+.sub-field-full{grid-column:1/-1}
+.sub-label{display:block;font-size:12px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.sub-input{width:100%;padding:10px 14px;border:1px solid var(--off2);border-radius:8px;font-size:14px;color:var(--navy);background:var(--white);transition:border-color 0.15s;outline:none;font-family:inherit;box-sizing:border-box}
+.sub-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,95,216,0.08)}
+.sub-input::placeholder{color:var(--mist)}
+.sub-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.sub-input-prefix{position:relative;display:flex;align-items:center}
+.sub-input-prefix span{position:absolute;left:14px;font-size:14px;font-weight:600;color:var(--slate);pointer-events:none}
+.sub-input-prefix .sub-input{padding-left:28px}
+
+.sub-checkboxes{display:flex;flex-wrap:wrap;gap:8px}
+.sub-check{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--navy);cursor:pointer;padding:6px 12px;border:1px solid var(--off2);border-radius:6px;transition:all 0.15s}
+.sub-check:hover{border-color:var(--blue);background:rgba(11,95,216,0.02)}
+.sub-check input[type="checkbox"]{accent-color:var(--blue)}
+.sub-textarea{width:100%;padding:10px 14px;border:1px solid var(--off2);border-radius:8px;font-size:14px;color:var(--navy);background:var(--white);font-family:inherit;resize:vertical;outline:none;transition:border-color 0.15s;box-sizing:border-box}
+.sub-textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,95,216,0.08)}
+
+.sub-upload-zone{border:2px dashed var(--off2);border-radius:12px;padding:40px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:16px}
+.sub-upload-zone:hover{border-color:var(--blue);background:rgba(11,95,216,0.02)}
+.sub-upload-icon{margin-bottom:12px}
+.sub-upload-icon svg{stroke:var(--mist)}
+.sub-upload-text{font-size:14px;color:var(--navy);margin-bottom:4px}
+.sub-upload-browse{color:var(--blue);font-weight:600;text-decoration:underline}
+.sub-upload-hint{font-size:12px;color:var(--mist)}
+.sub-file-list{display:flex;flex-direction:column;gap:8px}
+.sub-file-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--off);border-radius:8px;font-size:13px}
+.sub-file-item svg{stroke:var(--blue);flex-shrink:0}
+.sub-file-name{font-weight:600;color:var(--navy);flex:1}
+.sub-file-size{color:var(--mist);font-size:12px}
+.sub-file-remove{background:none;border:none;color:#DC2626;font-size:12px;font-weight:600;cursor:pointer;padding:2px 8px;border-radius:4px;transition:background 0.15s}
+.sub-file-remove:hover{background:rgba(220,38,38,0.06)}
+
+.sub-review{display:flex;flex-direction:column;gap:20px;margin-bottom:20px}
+.sub-review-section{border:1px solid var(--off2);border-radius:10px;padding:20px}
+.sub-review-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--slate);margin-bottom:12px}
+.sub-review-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sub-review-item{font-size:13px;color:var(--slate)}
+.sub-review-item span{display:block;margin-bottom:2px}
+.sub-review-item strong{color:var(--navy);font-size:14px}
+.sub-review-file{font-size:13px;color:var(--navy);font-weight:600}
+.sub-consent{margin-top:8px}
+.sub-consent .sub-check{border:none;padding:0;font-size:13px;line-height:1.5;color:var(--slate)}
+
+.sub-nav{display:flex;justify-content:space-between;align-items:center}
+.sub-btn-back{background:none;border:1px solid var(--off2);padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;color:var(--navy);cursor:pointer;transition:all 0.15s}
+.sub-btn-back:hover{border-color:var(--navy)}
+.sub-btn-next{background:var(--blue);border:none;padding:10px 32px;border-radius:8px;font-size:14px;font-weight:600;color:white;cursor:pointer;transition:all 0.15s}
+.sub-btn-next:hover{background:var(--blue2)}
+.sub-btn-submit{background:linear-gradient(135deg,#059669,#047857);padding:12px 40px}
+.sub-btn-submit:hover{filter:brightness(1.08)}
+
+/* Submit dark mode */
+[data-theme="dark"] .sub-step-num{background:#141e30;border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .sub-step-label{color:rgba(255,255,255,0.4)}
+[data-theme="dark"] .sub-step-active .sub-step-num{background:rgba(75,163,255,0.1);border-color:rgba(75,163,255,0.4);color:rgba(75,163,255,0.9)}
+[data-theme="dark"] .sub-step-active .sub-step-label{color:rgba(75,163,255,0.8)}
+[data-theme="dark"] .sub-step-line{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .sub-form-wrap{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .sub-panel-title{color:#e0e4ec}
+[data-theme="dark"] .sub-panel-desc{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .sub-label{color:#e0e4ec}
+[data-theme="dark"] .sub-input{background:#0d1929;border-color:rgba(255,255,255,0.08);color:#e0e4ec}
+[data-theme="dark"] .sub-input:focus{border-color:rgba(75,163,255,0.5);box-shadow:0 0 0 3px rgba(75,163,255,0.1)}
+[data-theme="dark"] .sub-input::placeholder{color:rgba(255,255,255,0.25)}
+[data-theme="dark"] .sub-check{border-color:rgba(255,255,255,0.08);color:#e0e4ec}
+[data-theme="dark"] .sub-check:hover{border-color:rgba(75,163,255,0.3);background:rgba(75,163,255,0.04)}
+[data-theme="dark"] .sub-textarea{background:#0d1929;border-color:rgba(255,255,255,0.08);color:#e0e4ec}
+[data-theme="dark"] .sub-upload-zone{border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .sub-upload-zone:hover{border-color:rgba(75,163,255,0.3);background:rgba(75,163,255,0.04)}
+[data-theme="dark"] .sub-upload-text{color:#e0e4ec}
+[data-theme="dark"] .sub-file-item{background:rgba(255,255,255,0.04)}
+[data-theme="dark"] .sub-file-name{color:#e0e4ec}
+[data-theme="dark"] .sub-review-section{border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .sub-review-item strong{color:#e0e4ec}
+[data-theme="dark"] .sub-review-file{color:#e0e4ec}
+[data-theme="dark"] .sub-consent .sub-check{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .sub-btn-back{border-color:rgba(255,255,255,0.1);color:#e0e4ec}
+
+/* Submit mobile */
+@media(max-width:768px){
+  .sub-field-grid{grid-template-columns:1fr}
+  .sub-review-grid{grid-template-columns:1fr}
+  .sub-form-wrap{padding:20px}
+  .sub-steps{gap:0;padding:0}
+  .sub-step-label{font-size:10px}
+  .sub-step-num{width:30px;height:30px;font-size:12px}
+}
+
 /* Mobile portal */
 @media(max-width:768px){
   .portal-sidebar{left:-260px;transition:left 0.25s ease}
