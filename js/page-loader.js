@@ -77,6 +77,10 @@ function onPageLoaded(id) {
   if (id === 'portal' && typeof initPortalBrand === 'function') {
     setTimeout(initPortalBrand, 80);
   }
+  // Initialize portal revenue calculator
+  if (id === 'portal' && typeof calcProjection === 'function') {
+    setTimeout(calcProjection, 80);
+  }
   // Initialize staggered card entrances on newly loaded page
   var el = document.getElementById('page-' + id);
   if (el && typeof window.initStagger === 'function') {

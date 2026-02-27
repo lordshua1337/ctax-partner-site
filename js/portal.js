@@ -242,6 +242,50 @@ function subFormNav(dir) {
   if (formWrap) formWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+// --- Revenue Calculator ---
+function calcProjection() {
+  var refs = parseInt(document.getElementById('calc-ref').value) || 5;
+  var debt = parseInt(document.getElementById('calc-debt').value) || 25000;
+  var rate = parseInt(document.getElementById('calc-rate').value) || 8;
+
+  // Update display values
+  document.getElementById('calc-ref-val').textContent = refs;
+  document.getElementById('calc-debt-val').textContent = '$' + debt.toLocaleString();
+  document.getElementById('calc-rate-val').textContent = rate + '%';
+
+  // Calculate projections
+  var monthly = refs * debt * (rate / 100);
+  var annual = monthly * 12;
+  var threeYr = annual * 3;
+
+  document.getElementById('calc-monthly').textContent = '$' + Math.round(monthly).toLocaleString();
+  document.getElementById('calc-annual').textContent = '$' + Math.round(annual).toLocaleString();
+  document.getElementById('calc-3yr').textContent = '$' + Math.round(threeYr).toLocaleString();
+
+  // Tier comparison (current rate vs +2%)
+  var currentAnnual = refs * debt * (rate / 100) * 12;
+  var nextAnnual = refs * debt * ((rate + 2) / 100) * 12;
+  document.getElementById('calc-tier-current').textContent = '$' + Math.round(currentAnnual).toLocaleString() + '/yr';
+  document.getElementById('calc-tier-next').textContent = '$' + Math.round(nextAnnual).toLocaleString() + '/yr';
+  document.getElementById('calc-tier-bonus').textContent = '$' + Math.round(nextAnnual - currentAnnual).toLocaleString();
+
+  // Growth bars (at different volumes, using current debt + rate)
+  var volumes = [5, 10, 20, 50];
+  var maxVal = 50 * debt * (rate / 100) * 12;
+  volumes.forEach(function(vol) {
+    var val = vol * debt * (rate / 100) * 12;
+    var pct = Math.max(4, (val / maxVal) * 100);
+    var bar = document.getElementById('calc-grow-' + vol);
+    var label = document.getElementById('calc-grow-' + vol + '-val');
+    if (bar) bar.style.width = pct + '%';
+    if (label) {
+      if (val >= 1000000) label.textContent = '$' + (val / 1000000).toFixed(1) + 'M';
+      else if (val >= 1000) label.textContent = '$' + Math.round(val / 1000) + 'k';
+      else label.textContent = '$' + Math.round(val);
+    }
+  });
+}
+
 // --- Documents tab filter ---
 function docFilter(btn, cat) {
   document.querySelectorAll('.doc-tab').forEach(function(t) { t.classList.remove('doc-tab-active'); });

@@ -1089,7 +1089,92 @@
         <h2 class="portal-sec-title">Revenue Calculator</h2>
         <p class="portal-sec-desc">Model projected earnings based on referral volume, average debt size, and your commission tier.</p>
       </div>
-      <div class="portal-placeholder">Coming soon</div>
+
+      <div class="calc-layout">
+        <!-- Sliders Column -->
+        <div class="calc-sliders">
+          <div class="calc-slider-group">
+            <div class="calc-slider-header">
+              <label class="calc-slider-label">Monthly Referrals</label>
+              <span class="calc-slider-val" id="calc-ref-val">5</span>
+            </div>
+            <input type="range" class="calc-range" id="calc-ref" min="1" max="50" value="5" oninput="calcProjection()">
+            <div class="calc-range-labels"><span>1</span><span>25</span><span>50</span></div>
+          </div>
+          <div class="calc-slider-group">
+            <div class="calc-slider-header">
+              <label class="calc-slider-label">Average Tax Debt</label>
+              <span class="calc-slider-val" id="calc-debt-val">$25,000</span>
+            </div>
+            <input type="range" class="calc-range" id="calc-debt" min="5000" max="200000" step="5000" value="25000" oninput="calcProjection()">
+            <div class="calc-range-labels"><span>$5k</span><span>$100k</span><span>$200k</span></div>
+          </div>
+          <div class="calc-slider-group">
+            <div class="calc-slider-header">
+              <label class="calc-slider-label">Commission Rate</label>
+              <span class="calc-slider-val" id="calc-rate-val">8%</span>
+            </div>
+            <input type="range" class="calc-range" id="calc-rate" min="5" max="15" value="8" oninput="calcProjection()">
+            <div class="calc-range-labels"><span>5%</span><span>10%</span><span>15%</span></div>
+          </div>
+
+          <!-- Tier Comparison -->
+          <div class="calc-tier-compare">
+            <div class="calc-tier-title">Tier Comparison</div>
+            <div class="calc-tier-row">
+              <div class="calc-tier-card calc-tier-current">
+                <div class="calc-tier-badge">Current Tier</div>
+                <div class="calc-tier-name">Silver</div>
+                <div class="calc-tier-pct">8% commission</div>
+                <div class="calc-tier-annual" id="calc-tier-current">$12,000/yr</div>
+              </div>
+              <div class="calc-tier-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+              <div class="calc-tier-card calc-tier-next">
+                <div class="calc-tier-badge">Next Tier</div>
+                <div class="calc-tier-name">Gold</div>
+                <div class="calc-tier-pct">10% commission</div>
+                <div class="calc-tier-annual" id="calc-tier-next">$15,000/yr</div>
+              </div>
+            </div>
+            <div class="calc-tier-diff">Upgrading to Gold means <strong id="calc-tier-bonus">$3,000</strong> more per year</div>
+          </div>
+        </div>
+
+        <!-- Projections Column -->
+        <div class="calc-projections">
+          <div class="calc-proj-card calc-proj-monthly">
+            <div class="calc-proj-label">Monthly</div>
+            <div class="calc-proj-amount" id="calc-monthly">$1,000</div>
+            <div class="calc-proj-sub">per month</div>
+          </div>
+          <div class="calc-proj-card calc-proj-annual">
+            <div class="calc-proj-label">Annual</div>
+            <div class="calc-proj-amount" id="calc-annual">$12,000</div>
+            <div class="calc-proj-sub">per year</div>
+          </div>
+          <div class="calc-proj-card calc-proj-3yr">
+            <div class="calc-proj-label">3-Year</div>
+            <div class="calc-proj-amount" id="calc-3yr">$36,000</div>
+            <div class="calc-proj-sub">cumulative</div>
+          </div>
+
+          <!-- Volume Growth Chart -->
+          <div class="calc-growth">
+            <div class="calc-growth-title">Earnings at Different Volumes</div>
+            <div class="calc-growth-bars">
+              <div class="calc-grow-row"><span class="calc-grow-label">5/mo</span><div class="calc-grow-track"><div class="calc-grow-bar" id="calc-grow-5" style="width:10%"></div></div><span class="calc-grow-val" id="calc-grow-5-val">$12k</span></div>
+              <div class="calc-grow-row"><span class="calc-grow-label">10/mo</span><div class="calc-grow-track"><div class="calc-grow-bar" id="calc-grow-10" style="width:20%"></div></div><span class="calc-grow-val" id="calc-grow-10-val">$24k</span></div>
+              <div class="calc-grow-row"><span class="calc-grow-label">20/mo</span><div class="calc-grow-track"><div class="calc-grow-bar" id="calc-grow-20" style="width:40%"></div></div><span class="calc-grow-val" id="calc-grow-20-val">$48k</span></div>
+              <div class="calc-grow-row"><span class="calc-grow-label">50/mo</span><div class="calc-grow-track"><div class="calc-grow-bar" id="calc-grow-50" style="width:100%"></div></div><span class="calc-grow-val" id="calc-grow-50-val">$120k</span></div>
+            </div>
+          </div>
+
+          <div class="calc-callout">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Partners referring 10+ clients/month earn an average of <strong>$28,800</strong> annually
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ═══ CE WEBINARS SECTION ═══ -->
