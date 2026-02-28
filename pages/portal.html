@@ -120,8 +120,12 @@
         <div class="portal-search-results" id="portal-search-results"></div>
       </div>
       <div class="portal-topbar-right">
+        <button class="dash-quick-submit" onclick="portalNav(document.querySelector('[onclick*=portal-sec-submit]'),'portal-sec-submit')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Submit Referral
+        </button>
         <div class="portal-notif-wrap">
-          <button class="portal-notif-btn" onclick="toggleNotifPanel()">
+          <button class="portal-notif-btn" onclick="portalToggleNotif()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
             <span class="portal-notif-badge" id="portal-notif-badge">3</span>
           </button>
@@ -147,10 +151,6 @@
       <div class="portal-sec-header">
         <div class="dash-welcome-row">
           <h2 class="dash-greeting" id="dash-greeting">Dashboard</h2>
-          <button class="dash-quick-submit" onclick="portalNav(document.querySelector('[onclick*=portal-sec-submit]'),'portal-sec-submit')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Submit New Referral
-          </button>
         </div>
         <p class="portal-sec-desc">Real-time overview of your referral performance, earnings, and activity.</p>
       </div>

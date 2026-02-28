@@ -879,7 +879,7 @@ function showToast(message, type) {
 }
 
 // --- Notification bell ---
-function toggleNotifPanel() {
+function portalToggleNotif() {
   var panel = document.getElementById('portal-notif-panel');
   if (panel) panel.classList.toggle('portal-notif-open');
 }

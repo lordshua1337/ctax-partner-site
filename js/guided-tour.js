@@ -63,7 +63,6 @@ function tourShouldShow() {
 }
 
 function tourStart() {
-  if (!tourShouldShow()) return;
   if (document.getElementById('tour-overlay')) return;
 
   var firstTarget = document.querySelector(TOUR_STEPS[0].target);

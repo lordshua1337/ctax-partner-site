@@ -3059,7 +3059,7 @@ body.portal-mode{padding-bottom:0}
 /* Eyebrow badge — gradient text like site's .eyebrow */
 .tour-tooltip-eyebrow{
   font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
-  background:linear-gradient(90deg,var(--blue),var(--sky),var(--cyan));
+  background:linear-gradient(90deg,#9ca3b0,#d4d8e0,#9ca3b0);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;
 }
