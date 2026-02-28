@@ -119,19 +119,9 @@ function updatePageSEO(id) {
   if (metaDesc) metaDesc.setAttribute('content', seo.desc);
 }
 
-// Support deep links — read hash from URL on load
+// Always start on home — ignore hash on fresh load
 (function initDeepLink() {
-  var hash = window.location.hash.replace('#', '');
-  var validPages = Object.keys(pageSEO);
-  if (hash && validPages.indexOf(hash) !== -1) {
-    history.replaceState({ page: hash }, '', '#' + hash);
-    // Navigate after page-loader has loaded partials
-    window.addEventListener('load', function() {
-      showPage(hash, true);
-    });
-  } else {
-    history.replaceState({ page: 'home' }, '', window.location.pathname);
-  }
+  history.replaceState({ page: 'home' }, '', window.location.pathname);
 })();
 function switchSeg(id,btn){
   document.querySelectorAll('.seg-panel').forEach(function(p){p.classList.remove('active');});
