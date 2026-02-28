@@ -103,10 +103,18 @@ function pbInit() {
   // Apply saved mode (guided/advanced)
   pbApplyMode(pbGetMode());
 
-  // Apply saved color preset
+  // Apply saved theme
   if (typeof pbRestorePreset === 'function') {
     pbRestorePreset();
   }
+
+  // Close theme panel on outside click
+  document.addEventListener('click', function(e) {
+    var panel = document.getElementById('pb-theme-panel');
+    if (!panel || !panel.classList.contains('pb-theme-panel-open')) return;
+    var wrap = e.target.closest('.pb-theme-wrap');
+    if (!wrap) pbCloseThemePanel();
+  });
 
   // Auto-show template chooser on first visit
   if (isFirstVisit) {

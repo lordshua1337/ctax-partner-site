@@ -4472,11 +4472,20 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
    ═══════════════════════════════════════════════ */
 body.pb-immersive .portal-sidebar{display:none}
 body.pb-immersive .portal-topbar{display:none}
-body.pb-immersive .portal-main{margin-left:0}
+body.pb-immersive .portal-main{margin-left:0;padding:0;overflow:hidden}
+body.pb-immersive #portal-sec-page-builder{padding:0!important;margin:0}
 body.pb-immersive #portal-sec-page-builder .portal-sec-header{display:none}
-body.pb-immersive .pb-wrap{border:none;border-radius:0}
-body.pb-immersive .pb-body{height:calc(100vh - 38px)}
-body.pb-immersive .pb-toolbar{border-radius:0}
+body.pb-immersive .pb-wrap{border:none;border-radius:0;height:100vh;display:flex;flex-direction:column}
+body.pb-immersive .pb-toolbar{border-radius:0;flex-shrink:0}
+body.pb-immersive .pb-body{height:0;flex:1;min-height:0}
+
+/* Canvas fills edge-to-edge in immersive mode */
+body.pb-immersive .pb-canvas-area{overflow:hidden}
+body.pb-immersive .pb-canvas-area #gjs{height:100%!important}
+body.pb-immersive .gjs-cv-canvas{background:#2a2a2a!important;width:100%!important;top:0!important;left:0!important}
+body.pb-immersive .gjs-frame-wrapper{box-shadow:none!important;border-radius:0!important;margin:0!important;padding:0!important}
+body.pb-immersive .gjs-frame-wrapper__top{padding:0!important}
+body.pb-immersive .gjs-frame{margin:0!important;border:none!important}
 
 /* Back button in immersive toolbar */
 .pb-back-btn{display:none;align-items:center;gap:5px;padding:4px 10px;font-size:11px;font-weight:600;border:1px solid rgba(255,255,255,0.08);border-radius:6px;background:transparent;color:rgba(255,255,255,0.45);cursor:pointer;transition:all 0.15s;letter-spacing:0.01em;margin-right:4px}
@@ -4496,9 +4505,71 @@ body.pb-immersive .scroll-to-top{display:none!important}
 
 /* Mobile immersive */
 @media(max-width:900px){
-  body.pb-immersive .pb-body{height:calc(100vh - 38px);flex-direction:column}
+  body.pb-immersive .pb-body{flex-direction:column}
   body.pb-immersive .pb-sidebar{width:100%;max-height:200px}
 }
+
+/* ═══════════════════════════════════════════════
+   THEME PICKER PANEL
+   ═══════════════════════════════════════════════ */
+
+/* Wrapper for positioning */
+.pb-theme-wrap{position:relative}
+
+/* Panel dropdown */
+.pb-theme-panel{display:none;position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);width:320px;background:#1a1a1a;border:1px solid #333;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.5);z-index:999;padding:14px;max-height:70vh;overflow-y:auto}
+.pb-theme-panel-open{display:block}
+.pb-theme-panel::-webkit-scrollbar{width:4px}
+.pb-theme-panel::-webkit-scrollbar-track{background:transparent}
+.pb-theme-panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
+
+/* Header */
+.pb-tp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.pb-tp-title{font-size:13px;font-weight:700;color:#fff;letter-spacing:0.01em}
+.pb-tp-close{width:24px;height:24px;display:flex;align-items:center;justify-content:center;border:none;border-radius:6px;background:transparent;color:rgba(255,255,255,0.35);cursor:pointer;transition:all 0.15s}
+.pb-tp-close:hover{background:rgba(255,255,255,0.06);color:#fff}
+
+/* Section label */
+.pb-tp-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.3);margin-bottom:8px;margin-top:4px}
+
+/* Theme cards grid */
+.pb-tp-themes{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+
+/* Individual theme card */
+.pb-tp-card{padding:0;border:2px solid #333;border-radius:10px;background:#212121;cursor:pointer;transition:all 0.15s;text-align:left;overflow:hidden;font-family:inherit}
+.pb-tp-card:hover{border-color:#555;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+.pb-tp-card-active{border-color:#2563eb!important;box-shadow:0 0 0 1px rgba(37,99,235,0.3)}
+
+/* Theme preview mini */
+.pb-tp-card-preview{padding:8px 8px 0}
+.pb-tp-prev-bg{border-radius:6px;overflow:hidden;height:52px;position:relative;padding:6px}
+.pb-tp-prev-hero{height:20px;border-radius:3px;margin-bottom:4px}
+.pb-tp-prev-body{display:flex;flex-direction:column;gap:3px;padding:0 2px}
+.pb-tp-prev-line{height:3px;border-radius:1px}
+.pb-tp-prev-line-short{width:60%}
+.pb-tp-prev-btn{height:6px;width:40px;border-radius:2px;margin-top:2px}
+
+/* Theme card text */
+.pb-tp-card-label{font-size:11px;font-weight:700;color:#fff;padding:8px 10px 1px;letter-spacing:0.01em}
+.pb-tp-card-desc{font-size:10px;color:rgba(255,255,255,0.35);padding:0 10px 8px;line-height:1.3}
+
+/* Accent color row */
+.pb-tp-accents{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.pb-tp-accent{width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,255,255,0.12);cursor:pointer;transition:all 0.15s;padding:0}
+.pb-tp-accent:hover{border-color:rgba(255,255,255,0.5);transform:scale(1.15)}
+.pb-tp-accent-active{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,0.25)}
+
+/* Custom color picker */
+.pb-tp-accent-custom{width:24px;height:24px;border-radius:50%;border:2px dashed rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;color:rgba(255,255,255,0.3);position:relative;overflow:hidden}
+.pb-tp-accent-custom:hover{border-color:rgba(255,255,255,0.4);color:rgba(255,255,255,0.7)}
+.pb-tp-color-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+/* Reset accent button */
+.pb-tp-reset{display:block;width:100%;padding:6px;border:none;border-radius:6px;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.35);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s;letter-spacing:0.01em}
+.pb-tp-reset:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7)}
+
+/* Old preset swatches — hidden, replaced by theme panel */
+.pb-preset-swatches{display:none!important}
 
 /* ═══════════════════════════════════════════════
    MY PAGES DASHBOARD
