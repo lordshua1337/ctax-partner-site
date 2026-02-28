@@ -920,11 +920,11 @@ function rpRate(n) {
 
 // ── TUNES / MUSIC WIDGET ──────────────────────────────────────
 var TUNES_STATIONS = [
-  { id: 'beatblender', name: 'Chill Beats', desc: 'Downtempo & deep house', color: '#f59e0b', url: 'https://ice2.somafm.com/beatblender-128-mp3' },
+  { id: '7soul', name: 'Seven Soul', desc: 'Vintage soul from original 45s', color: '#a855f7', url: 'https://ice2.somafm.com/7soul-128-mp3' },
   { id: 'jazz24', name: 'Jazz', desc: 'Straight-ahead jazz radio', color: '#0891b2', url: 'https://live.wostreaming.net/direct/ppm-jazz24mp3-ibc1' },
   { id: 'classical', name: 'Classical', desc: 'Classical public radio', color: '#6366f1', url: 'https://stream.wqxr.org/wqxr' },
-  { id: '7soul', name: 'Seven Soul', desc: 'Vintage soul from original 45s', color: '#a855f7', url: 'https://ice2.somafm.com/7soul-128-mp3' },
   { id: 'seventies', name: 'Left Coast 70s', desc: 'Mellow album rock from the 70s', color: '#e87b35', url: 'https://ice2.somafm.com/seventies-128-mp3' },
+  { id: 'beatblender', name: 'Chill Beats', desc: 'Downtempo & deep house', color: '#f59e0b', url: 'https://ice2.somafm.com/beatblender-128-mp3' },
   { id: 'bossa', name: 'Bossa Nova', desc: 'Smooth Brazilian rhythms', color: '#10b981', url: 'https://ice2.somafm.com/bossa-128-mp3' },
   { id: 'groovesalad', name: 'Groove Salad', desc: 'Ambient grooves & chill beats', color: '#22c55e', url: 'https://ice2.somafm.com/groovesalad-128-mp3' },
   { id: 'folkfwd', name: 'Folk Forward', desc: 'Acoustic folk & singer-songwriter', color: '#65a30d', url: 'https://ice2.somafm.com/folkfwd-128-mp3' }
@@ -968,7 +968,7 @@ function playStation(idx) {
   var station = TUNES_STATIONS[idx];
   _jazzStation = idx;
   audio.src = station.url;
-  audio.volume = (document.getElementById('jazz-vol') || {}).value / 100 || 0.1;
+  audio.volume = (document.getElementById('jazz-vol') || {}).value / 100 || 0.05;
   audio.play().then(function() {
     _jazzPlaying = true;
     updatePlaybackUI(station);

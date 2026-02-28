@@ -3529,6 +3529,10 @@ body.portal-mode{padding-bottom:0}
 }
 
 /* ── RESOLUTION PRO CONTACT CARD ── */
+/* Only visible in portal mode (widgets get moved to body) */
+body:not(.portal-mode) > .rp-fab,
+body:not(.portal-mode) > .rp-card,
+body:not(.portal-mode) > .jazz-bar{display:none!important}
 .rp-fab{position:fixed;bottom:24px;right:24px;z-index:9998;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;padding:0;background:none;transition:transform 0.25s cubic-bezier(0.22,1,0.36,1)}
 .rp-fab:hover{transform:scale(1.08)}
 .rp-fab-avatar{width:52px;height:52px;border-radius:50%;overflow:hidden;border:3px solid #fff;box-shadow:0 4px 20px rgba(10,22,40,0.25),0 0 0 1px rgba(11,95,216,0.15)}

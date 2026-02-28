@@ -73,6 +73,16 @@ function onPageLoaded(id) {
   if ((id === 'dashboard' || id === 'portal') && typeof window.initDashboardHub === 'function') {
     setTimeout(window.initDashboardHub, 80);
   }
+  // Move fixed-position widgets (RP card, jazz bar) to body so CSS
+  // transforms on the page container don't break position:fixed
+  if (id === 'portal') {
+    ['rp-card', 'rp-fab', 'jazz-bar'].forEach(function(elId) {
+      var el = document.getElementById(elId);
+      if (el && el.parentElement !== document.body) {
+        document.body.appendChild(el);
+      }
+    });
+  }
   // Initialize portal brand upload
   if (id === 'portal' && typeof initPortalBrand === 'function') {
     setTimeout(initPortalBrand, 80);
