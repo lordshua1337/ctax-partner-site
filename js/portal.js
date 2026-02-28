@@ -1221,6 +1221,27 @@ function mobNavTap(tab, secId) {
   }
 }
 
+// --- Mobile tools sheet ---
+function mobToolsOpen() {
+  var overlay = document.getElementById('mob-tools-overlay');
+  var sheet = document.getElementById('mob-tools-sheet');
+  if (overlay) overlay.classList.add('mob-tools-open');
+  if (sheet) {
+    sheet.classList.add('mob-tools-open');
+    // Highlight tools tab
+    document.querySelectorAll('.mob-bnav-tab').forEach(function(t) { t.classList.remove('mob-bnav-tab-active'); });
+    var toolsTab = document.querySelector('[data-mob-sec="mob-tools"]');
+    if (toolsTab) toolsTab.classList.add('mob-bnav-tab-active');
+  }
+}
+
+function mobToolsClose() {
+  var overlay = document.getElementById('mob-tools-overlay');
+  var sheet = document.getElementById('mob-tools-sheet');
+  if (overlay) overlay.classList.remove('mob-tools-open');
+  if (sheet) sheet.classList.remove('mob-tools-open');
+}
+
 // --- Mobile money hero ---
 function initMobMoneyHero() {
   var hero = document.getElementById('mob-money-hero');
