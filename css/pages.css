@@ -4489,6 +4489,20 @@ body.pb-immersive .gjs-frame-wrapper{box-shadow:none!important;border-radius:0!i
 body.pb-immersive .gjs-frame-wrapper__top{padding:0!important}
 body.pb-immersive .gjs-frame{margin:0!important;border:none!important}
 
+/* ── Contextual Color Bar ── */
+.pb-color-bar{display:none;background:#1a1a1a;border-bottom:1px solid #2a2a2a;padding:0 12px;overflow:hidden;max-height:0;transition:max-height 0.2s ease,padding 0.2s ease}
+.pb-color-bar-open{display:flex;gap:16px;align-items:center;flex-wrap:wrap;max-height:50px;padding:6px 12px}
+.pb-cb-row{display:flex;align-items:center;gap:8px}
+.pb-cb-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.3);white-space:nowrap}
+.pb-cb-swatches{display:flex;gap:5px;align-items:center}
+.pb-cb-swatch{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);cursor:pointer;transition:all 0.12s;padding:0;background:none}
+.pb-cb-swatch:hover{transform:scale(1.2);border-color:rgba(255,255,255,0.4)}
+.pb-cb-swatch-active{border-color:#fff!important;box-shadow:0 0 0 2px rgba(255,255,255,0.25)}
+.pb-cb-custom{width:20px;height:20px;border-radius:50%;border:2px dashed rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,0.25);position:relative;overflow:hidden;transition:all 0.12s}
+.pb-cb-custom:hover{border-color:rgba(255,255,255,0.35);color:rgba(255,255,255,0.6)}
+.pb-cb-color-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.pb-cb-sep{width:1px;height:16px;background:rgba(255,255,255,0.08);margin:0 4px}
+
 /* Back button in immersive toolbar */
 .pb-back-btn{display:none;align-items:center;gap:5px;padding:4px 10px;font-size:11px;font-weight:600;border:1px solid rgba(255,255,255,0.08);border-radius:6px;background:transparent;color:rgba(255,255,255,0.45);cursor:pointer;transition:all 0.15s;letter-spacing:0.01em;margin-right:4px}
 .pb-back-btn:hover{background:rgba(255,255,255,0.06);color:#fff;border-color:rgba(255,255,255,0.15)}

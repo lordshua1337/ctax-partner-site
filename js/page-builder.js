@@ -116,6 +116,10 @@ function pbInit() {
     if (!wrap) pbCloseThemePanel();
   });
 
+  // Contextual color bar on component select
+  pbEditor.on('component:selected', pbShowColorBar);
+  pbEditor.on('component:deselected', pbHideColorBar);
+
   // Auto-show template chooser on first visit
   if (isFirstVisit) {
     setTimeout(pbShowTemplates, 400);
@@ -685,6 +689,157 @@ function pbEscapeHtml(str) {
 
 function pbEscapeAttr(str) {
   return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// ══════════════════════════════════════════
+//  Contextual Color Bar
+// ══════════════════════════════════════════
+
+var PB_TEXT_COLORS = [
+  { color: '#111827', label: 'Black' },
+  { color: '#ffffff', label: 'White' },
+  { color: '#1e3a5f', label: 'Navy' },
+  { color: '#475569', label: 'Slate' },
+  { color: '#2563eb', label: 'Blue' }
+];
+
+var PB_BTN_COLORS = [
+  { color: '#2563eb', label: 'Blue' },
+  { color: '#dc2626', label: 'Red' },
+  { color: '#16a34a', label: 'Green' },
+  { color: '#1e3a5f', label: 'Navy' },
+  { color: '#ea580c', label: 'Orange' }
+];
+
+var PB_BG_COLORS = [
+  { color: '#ffffff', label: 'White' },
+  { color: '#f8fafc', label: 'Light Gray' },
+  { color: '#111827', label: 'Dark' },
+  { color: '#1e3a5f', label: 'Navy' },
+  { color: '#0f172a', label: 'Midnight' }
+];
+
+// Detect what kind of element is selected
+function pbGetColorContext(component) {
+  if (!component) return null;
+  var tag = (component.get('tagName') || '').toLowerCase();
+  var classes = component.getClasses ? component.getClasses().join(' ') : '';
+
+  // Buttons
+  if (tag === 'button' || tag === 'a' && classes.indexOf('pb-btn') !== -1) {
+    return 'button';
+  }
+  if (classes.indexOf('pb-btn') !== -1) {
+    return 'button';
+  }
+
+  // Text elements
+  if (['h1','h2','h3','h4','h5','h6','p','span','li','strong','em','blockquote','cite','label'].indexOf(tag) !== -1) {
+    return 'text';
+  }
+
+  // Sections / divs with background potential
+  if (tag === 'div' || tag === 'section') {
+    return 'section';
+  }
+
+  return null;
+}
+
+function pbShowColorBar(component) {
+  var bar = document.getElementById('pb-color-bar');
+  if (!bar) return;
+
+  var context = pbGetColorContext(component);
+  if (!context) {
+    pbHideColorBar();
+    return;
+  }
+
+  var h = '';
+
+  if (context === 'text') {
+    h += pbBuildColorRow('Text Color', 'color', PB_TEXT_COLORS, component);
+  } else if (context === 'button') {
+    h += pbBuildColorRow('Button Color', 'background-color', PB_BTN_COLORS, component);
+    h += pbBuildColorRow('Text Color', 'color', PB_TEXT_COLORS, component);
+  } else if (context === 'section') {
+    h += pbBuildColorRow('Background', 'background-color', PB_BG_COLORS, component);
+    h += pbBuildColorRow('Text Color', 'color', PB_TEXT_COLORS, component);
+  }
+
+  bar.innerHTML = h;
+  bar.classList.add('pb-color-bar-open');
+}
+
+function pbHideColorBar() {
+  var bar = document.getElementById('pb-color-bar');
+  if (bar) {
+    bar.classList.remove('pb-color-bar-open');
+  }
+}
+
+function pbBuildColorRow(label, cssProp, presets, component) {
+  // Get current value from the component
+  var current = '';
+  if (component && component.getStyle) {
+    current = component.getStyle()[cssProp] || '';
+  }
+
+  var h = '<div class="pb-cb-row">';
+  h += '<span class="pb-cb-label">' + label + '</span>';
+  h += '<div class="pb-cb-swatches">';
+
+  presets.forEach(function(p) {
+    var active = (current && pbNormalizeColor(current) === pbNormalizeColor(p.color)) ? ' pb-cb-swatch-active' : '';
+    var border = (p.color === '#ffffff' || p.color === '#f8fafc') ? ';border-color:rgba(0,0,0,0.15)' : '';
+    h += '<button class="pb-cb-swatch' + active + '" ';
+    h += 'style="background:' + p.color + border + '" ';
+    h += 'title="' + p.label + '" ';
+    h += 'onclick="pbApplyColor(\'' + cssProp + '\',\'' + p.color + '\')"></button>';
+  });
+
+  // Custom hex input
+  h += '<label class="pb-cb-custom" title="Custom color">';
+  h += '<input type="color" class="pb-cb-color-input" value="' + (current || '#000000') + '" ';
+  h += 'onchange="pbApplyColor(\'' + cssProp + '\',this.value)">';
+  h += '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.71 5.63l-2.34-2.34a1 1 0 00-1.41 0l-14 14V21h3.71l14-14a1 1 0 000-1.41z"/></svg>';
+  h += '</label>';
+
+  h += '</div>';
+  h += '</div>';
+  return h;
+}
+
+function pbApplyColor(cssProp, color) {
+  if (!pbEditor) return;
+  var selected = pbEditor.getSelected();
+  if (!selected) return;
+
+  var style = Object.assign({}, selected.getStyle());
+  style[cssProp] = color;
+  selected.setStyle(style);
+  pbSave();
+
+  // Refresh the color bar to show active state
+  pbShowColorBar(selected);
+}
+
+// Normalize color for comparison (handles rgb vs hex)
+function pbNormalizeColor(color) {
+  if (!color) return '';
+  color = color.trim().toLowerCase();
+  // If it's already hex, return it
+  if (color.charAt(0) === '#') return color;
+  // Try to parse rgb(r,g,b)
+  var match = color.match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/);
+  if (match) {
+    var r = parseInt(match[1]).toString(16).padStart(2, '0');
+    var g = parseInt(match[2]).toString(16).padStart(2, '0');
+    var b = parseInt(match[3]).toString(16).padStart(2, '0');
+    return '#' + r + g + b;
+  }
+  return color;
 }
 
 // ══════════════════════════════════════════
