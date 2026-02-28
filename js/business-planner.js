@@ -260,7 +260,7 @@ function bpBuildRoadmap(inputs) {
   if (inputs.currentRefs === '10+') {
     m1Tasks.push({
       title: 'Scale What Already Works',
-      desc: 'You are already generating 10+ referrals monthly -- that puts you in the top 5% of partners. Focus on systematizing: document your process, train staff, and consider upgrading to Gold or Platinum tier for higher per-referral earnings. At your volume, a tier upgrade could mean an extra $1,000-2,500 per month.',
+      desc: 'You are already generating 10+ referrals monthly -- that puts you in the top 5% of partners. Focus on systematizing: document your process, train staff, and consider upgrading to Pro or Platinum tier for higher per-referral earnings. At your volume, a tier upgrade could mean an extra $1,000-2,500 per month.',
       type: 'growth',
       priority: 'high'
     });
@@ -376,7 +376,7 @@ function bpBuildRoadmap(inputs) {
   insights.push({
     title: 'Your Estimated 90-Day Revenue',
     value: '$' + (inputs.refGoal * 420).toLocaleString(),
-    desc: 'Based on ' + inputs.refGoal + ' referrals at $420 avg commission (Silver tier). Gold tier would yield $' + (inputs.refGoal * 525).toLocaleString() + '.'
+    desc: 'Based on ' + inputs.refGoal + ' referrals at $420 avg commission (Premium tier). Pro tier would yield $' + (inputs.refGoal * 525).toLocaleString() + '.'
   });
   insights.push({
     title: 'Client Base Referral Potential',
@@ -477,16 +477,16 @@ function bpRenderRoadmap(roadmap) {
 
   // "What if?" comparison cards
   var currentRev = roadmap.inputs.refGoal * 420;
-  var goldRev = roadmap.inputs.refGoal * 525;
+  var proRev = roadmap.inputs.refGoal * 525;
   var doubleRev = (roadmap.inputs.refGoal * 2) * 420;
   html += '<div class="bp-whatif">';
   html += '<div class="bp-whatif-title">What If?</div>';
   html += '<div class="bp-whatif-row">';
   html += '<div class="bp-whatif-card">';
-  html += '<div class="bp-whatif-label">Upgrade to Gold Tier</div>';
-  html += '<div class="bp-whatif-val">$' + goldRev.toLocaleString() + '</div>';
-  html += '<div class="bp-whatif-delta">+$' + (goldRev - currentRev).toLocaleString() + ' more per quarter</div>';
-  html += '<div class="bp-whatif-desc">Gold tier pays $525/referral instead of $420. Same effort, 25% more revenue.</div>';
+  html += '<div class="bp-whatif-label">Upgrade to Pro Tier</div>';
+  html += '<div class="bp-whatif-val">$' + proRev.toLocaleString() + '</div>';
+  html += '<div class="bp-whatif-delta">+$' + (proRev - currentRev).toLocaleString() + ' more per quarter</div>';
+  html += '<div class="bp-whatif-desc">Pro tier pays $525/referral instead of $420. Same effort, 25% more revenue.</div>';
   html += '</div>';
   html += '<div class="bp-whatif-card">';
   html += '<div class="bp-whatif-label">Double Your Referrals</div>';

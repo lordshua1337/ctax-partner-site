@@ -1319,15 +1319,15 @@ function saveGamificationData(data) {
 
 function calcPartnerLevel(totalRefs) {
   if (totalRefs >= 50) return 'platinum';
-  if (totalRefs >= 25) return 'gold';
-  if (totalRefs >= 10) return 'silver';
+  if (totalRefs >= 25) return 'pro';
+  if (totalRefs >= 10) return 'premium';
   return 'bronze';
 }
 
 function getLevelThreshold(level) {
-  if (level === 'bronze') return { next: 'Silver', need: 10 };
-  if (level === 'silver') return { next: 'Gold', need: 25 };
-  if (level === 'gold') return { next: 'Platinum', need: 50 };
+  if (level === 'bronze') return { next: 'Premium', need: 10 };
+  if (level === 'premium') return { next: 'Pro', need: 25 };
+  if (level === 'pro') return { next: 'Platinum', need: 50 };
   return { next: 'Max', need: 50 };
 }
 
@@ -1376,7 +1376,7 @@ function initGamification() {
     if (milestoneFill) milestoneFill.style.width = '100%';
   } else {
     var remaining = threshold.need - data.totalRefs;
-    var prevThreshold = level === 'bronze' ? 0 : level === 'silver' ? 10 : 25;
+    var prevThreshold = level === 'bronze' ? 0 : level === 'premium' ? 10 : 25;
     var progress = ((data.totalRefs - prevThreshold) / (threshold.need - prevThreshold)) * 100;
     if (milestoneText) milestoneText.textContent = remaining + ' more referrals to ' + threshold.next;
     if (milestoneFill) setTimeout(function() { milestoneFill.style.width = Math.min(progress, 100) + '%'; }, 400);
@@ -1400,8 +1400,8 @@ function checkAchievements(data) {
   var thresholds = [
     { key: 'first_ref', count: 1, label: 'First Referral!' },
     { key: 'ref_5', count: 5, label: '5 Referrals - On Fire!' },
-    { key: 'ref_10', count: 10, label: '10 Referrals - Silver Partner!' },
-    { key: 'ref_25', count: 25, label: '25 Referrals - Gold Partner!' },
+    { key: 'ref_10', count: 10, label: '10 Referrals - Premium Partner!' },
+    { key: 'ref_25', count: 25, label: '25 Referrals - Pro Partner!' },
     { key: 'ref_50', count: 50, label: '50 Referrals - Platinum!' }
   ];
   var earned = [
@@ -1648,25 +1648,25 @@ function sttScrollTop() {
 // ── PARTNER LEADERBOARD ─────────────────────────────────────
 var DLB_DATA = {
   referrals: [
-    { rank: 1, initials: 'SP', name: 'S. Patel', tier: 'Gold Partner', metric: '24 referrals', color: '#FFD700', crown: true },
-    { rank: 2, initials: 'JL', name: 'J. Lopez', tier: 'Gold Partner', metric: '21 referrals', color: '#C0C0C0' },
-    { rank: 3, initials: 'AW', name: 'A. Wright', tier: 'Silver Partner', metric: '19 referrals', color: '#CD7F32' },
-    { rank: 4, initials: 'RK', name: 'R. Kim', tier: 'Silver Partner', metric: '16 referrals', color: 'var(--blue)' },
-    { rank: 7, initials: 'JH', name: 'You', tier: 'Silver Partner', metric: '12 referrals', color: 'var(--blue)', you: true }
+    { rank: 1, initials: 'SP', name: 'S. Patel', tier: 'Pro Partner', metric: '24 referrals', color: '#FFD700', crown: true },
+    { rank: 2, initials: 'JL', name: 'J. Lopez', tier: 'Pro Partner', metric: '21 referrals', color: '#C0C0C0' },
+    { rank: 3, initials: 'AW', name: 'A. Wright', tier: 'Premium Partner', metric: '19 referrals', color: '#CD7F32' },
+    { rank: 4, initials: 'RK', name: 'R. Kim', tier: 'Premium Partner', metric: '16 referrals', color: 'var(--blue)' },
+    { rank: 7, initials: 'JH', name: 'You', tier: 'Premium Partner', metric: '12 referrals', color: 'var(--blue)', you: true }
   ],
   earnings: [
-    { rank: 1, initials: 'JL', name: 'J. Lopez', tier: 'Gold Partner', metric: '$38,400', color: '#FFD700', crown: true },
-    { rank: 2, initials: 'SP', name: 'S. Patel', tier: 'Gold Partner', metric: '$32,100', color: '#C0C0C0' },
-    { rank: 3, initials: 'MM', name: 'M. Martinez', tier: 'Gold Partner', metric: '$28,750', color: '#CD7F32' },
-    { rank: 4, initials: 'AW', name: 'A. Wright', tier: 'Silver Partner', metric: '$26,200', color: 'var(--blue)' },
-    { rank: 9, initials: 'JH', name: 'You', tier: 'Silver Partner', metric: '$24,850', color: 'var(--blue)', you: true }
+    { rank: 1, initials: 'JL', name: 'J. Lopez', tier: 'Pro Partner', metric: '$38,400', color: '#FFD700', crown: true },
+    { rank: 2, initials: 'SP', name: 'S. Patel', tier: 'Pro Partner', metric: '$32,100', color: '#C0C0C0' },
+    { rank: 3, initials: 'MM', name: 'M. Martinez', tier: 'Pro Partner', metric: '$28,750', color: '#CD7F32' },
+    { rank: 4, initials: 'AW', name: 'A. Wright', tier: 'Premium Partner', metric: '$26,200', color: 'var(--blue)' },
+    { rank: 9, initials: 'JH', name: 'You', tier: 'Premium Partner', metric: '$24,850', color: 'var(--blue)', you: true }
   ],
   streak: [
-    { rank: 1, initials: 'TN', name: 'T. Nguyen', tier: 'Gold Partner', metric: '45 days', color: '#FFD700', crown: true },
-    { rank: 2, initials: 'RK', name: 'R. Kim', tier: 'Silver Partner', metric: '38 days', color: '#C0C0C0' },
-    { rank: 3, initials: 'SP', name: 'S. Patel', tier: 'Gold Partner', metric: '31 days', color: '#CD7F32' },
-    { rank: 4, initials: 'JL', name: 'J. Lopez', tier: 'Gold Partner', metric: '28 days', color: 'var(--blue)' },
-    { rank: 12, initials: 'JH', name: 'You', tier: 'Silver Partner', metric: '14 days', color: 'var(--blue)', you: true }
+    { rank: 1, initials: 'TN', name: 'T. Nguyen', tier: 'Pro Partner', metric: '45 days', color: '#FFD700', crown: true },
+    { rank: 2, initials: 'RK', name: 'R. Kim', tier: 'Premium Partner', metric: '38 days', color: '#C0C0C0' },
+    { rank: 3, initials: 'SP', name: 'S. Patel', tier: 'Pro Partner', metric: '31 days', color: '#CD7F32' },
+    { rank: 4, initials: 'JL', name: 'J. Lopez', tier: 'Pro Partner', metric: '28 days', color: 'var(--blue)' },
+    { rank: 12, initials: 'JH', name: 'You', tier: 'Premium Partner', metric: '14 days', color: 'var(--blue)', you: true }
   ]
 };
 
@@ -1680,7 +1680,7 @@ function dlbSwitch(tab, category) {
   if (!list) return;
 
   var html = '';
-  var rankClasses = ['', 'dlb-row-gold', 'dlb-row-silver', 'dlb-row-bronze'];
+  var rankClasses = ['', 'dlb-row-pro', 'dlb-row-premium', 'dlb-row-bronze'];
   data.forEach(function(p, i) {
     var rowClass = p.you ? 'dlb-row-you' : (i < 3 ? rankClasses[i + 1] : '');
     var badge = '';
@@ -1753,7 +1753,7 @@ function rlgShare(channel) {
 
 // ── SMART INSIGHTS BANNER ──────────────────────────────────
 var _dibInsights = [
-  { title: 'Conversion tip', body: 'Partners at your tier who maintain 80%+ conversion for 3 consecutive months unlock Gold-tier pricing. You\'re on track -- keep it up.' },
+  { title: 'Conversion tip', body: 'Partners at your tier who maintain 80%+ conversion for 3 consecutive months unlock Pro-tier pricing. You\'re on track -- keep it up.' },
   { title: 'Referral momentum', body: 'You\'ve submitted 4 referrals this month. The average partner submits 6. One more strong week puts you above average.' },
   { title: 'Revenue milestone', body: 'You\'re $1,200 away from your next earnings tier. Submitting 2 more qualified referrals this month should get you there.' },
   { title: 'Engagement insight', body: 'Partners who complete the Business Planner earn 32% more in their first 90 days. Yours is ready to go in the sidebar.' },

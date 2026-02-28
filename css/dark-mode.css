@@ -433,8 +433,8 @@
 [data-theme="dark"] .dlb-tier{color:rgba(255,255,255,0.35)}
 [data-theme="dark"] .dlb-metric{color:rgba(255,255,255,0.55)}
 [data-theme="dark"] .dlb-rank{color:rgba(255,255,255,0.25)}
-[data-theme="dark"] .dlb-row-gold .dlb-rank{color:#D4A017}
-[data-theme="dark"] .dlb-row-silver .dlb-rank{color:#8B8E93}
+[data-theme="dark"] .dlb-row-pro .dlb-rank{color:#D4A017}
+[data-theme="dark"] .dlb-row-premium .dlb-rank{color:#8B8E93}
 [data-theme="dark"] .dlb-row-bronze .dlb-rank{color:#A0522D}
 [data-theme="dark"] .dlb-row-you{background:rgba(75,163,255,0.06);border-color:rgba(75,163,255,0.12)}
 [data-theme="dark"] .dlb-badge-you{background:rgba(75,163,255,0.12);color:#4BA3FF}
