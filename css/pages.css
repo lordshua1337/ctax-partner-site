@@ -1624,11 +1624,20 @@ body.portal-mode{padding-bottom:0}
 
 /* Earnings mobile */
 @media(max-width:768px){
-  .earn-kpi-row{grid-template-columns:1fr 1fr}
-  .earn-period-pills{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .earn-table-head,.earn-table-row{grid-template-columns:1.5fr 1fr 0.8fr 0.8fr;font-size:12px}
-  .earn-table-head>:nth-child(5),.earn-table-head>:nth-child(6),.earn-table-row>:nth-child(5),.earn-table-row>:nth-child(6){display:none}
-  .earn-chart-bars{gap:6px;padding:0 8px}
+  .earn-period-pills{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+  .earn-period{white-space:nowrap;flex-shrink:0}
+  .earn-kpi-row{
+    display:flex!important;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory;gap:10px;padding-bottom:8px;flex-wrap:nowrap
+  }
+  .earn-kpi-row .earn-kpi{min-width:180px;flex-shrink:0;scroll-snap-align:start}
+  .earn-chart-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .earn-chart-bars{gap:6px;padding:0 8px;min-width:320px}
+  .earn-chart-bars .earn-bar{min-width:20px}
+  .earn-table-head,.earn-table-row{grid-template-columns:1.8fr 1fr 0.8fr;font-size:12px}
+  .earn-table-head>:nth-child(4),.earn-table-head>:nth-child(5),.earn-table-head>:nth-child(6),
+  .earn-table-row>:nth-child(4),.earn-table-row>:nth-child(5),.earn-table-row>:nth-child(6){display:none}
+  .earn-td-client .earn-avatar{width:28px;height:28px;font-size:9px}
 }
 
 /* ── PAYOUTS SECTION ── */
@@ -1713,9 +1722,18 @@ body.portal-mode{padding-bottom:0}
 /* Payouts mobile */
 @media(max-width:768px){
   .pay-top-row{grid-template-columns:1fr}
-  .pay-tax-grid{grid-template-columns:1fr 1fr}
-  .pay-ledger-head,.pay-ledger-row{grid-template-columns:1fr 1fr 1fr 0.8fr;font-size:12px}
-  .pay-ledger-head>:nth-child(4),.pay-ledger-head>:nth-child(5),.pay-ledger-row>:nth-child(4),.pay-ledger-row>:nth-child(5){display:none}
+  .pay-next{padding:24px;border-radius:12px}
+  .pay-next-amount{font-size:36px}
+  .pay-next-countdown{animation:mobPulse 2s infinite}
+  .pay-method{padding:20px}
+  .pay-method-card{gap:12px}
+  .pay-year-pills{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+  .pay-ledger-head,.pay-ledger-row{grid-template-columns:0.9fr 0.8fr 1.2fr 0.8fr;font-size:12px}
+  .pay-ledger-head>:nth-child(4),.pay-ledger-head>:nth-child(5),
+  .pay-ledger-row>:nth-child(4),.pay-ledger-row>:nth-child(5){display:none}
+  .pay-tax-grid{grid-template-columns:1fr}
+  .pay-tax-card{padding:16px}
+  .pay-tax-year{font-size:22px}
 }
 
 /* ── SUBMIT REFERRAL SECTION ── */
