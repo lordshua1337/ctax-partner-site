@@ -208,7 +208,7 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
       <img src="images/ctax-cookie.webp" alt="" class="cc-img" aria-hidden="true" width="80" height="80">
     </div>
     <div class="cc-right">
-      <p class="cc-text">Hey, we use cookies to improve your experience. By browsing this site you agree to our <a onclick="showPage('privacy')" class="cc-link">Privacy Policy</a>.</p>
+      <p class="cc-text">Hey, we use cookies to improve your experience. By browsing this site you agree to our <a href="#privacy" onclick="event.preventDefault();showPage('privacy')" class="cc-link">Privacy Policy</a>.</p>
       <button onclick="acceptCookies()" class="cc-btn">Okay</button>
     </div>
   </div>
@@ -217,7 +217,7 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
 
 <div id="scroll-progress" aria-hidden="true"></div>
 <nav id="site-nav" role="navigation" aria-label="Main navigation">
-  <a class="nav-logo" onclick="showPage('home')"><img class="nav-logo-dark" src="images/logo.svg" alt="Community Tax" height="20" width="185" style="display:block"><img class="nav-logo-light" src="images/logo-white.svg" alt="Community Tax" height="20" width="185" style="display:none"></a>
+  <a class="nav-logo" href="#home" onclick="event.preventDefault();showPage('home')"><img class="nav-logo-dark" src="images/logo.svg" alt="Community Tax" height="20" width="185" style="display:block"><img class="nav-logo-light" src="images/logo-white.svg" alt="Community Tax" height="20" width="185" style="display:none"></a>
 
   <ul class="nav-links" role="menubar">
     <!-- PROGRAM dropdown -->
@@ -227,22 +227,22 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
         <div class="dd-inner">
         <div class="dd-section">
           <div class="dd-label">Learn</div>
-          <a class="dd-item" onclick="showPage('why')">
+          <a class="dd-item" href="#why" onclick="event.preventDefault();showPage('why')">
             <span class="dd-icon-wrap dd-ic-teal"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><polyline points="5 12 10 17 20 7"/></svg></span>
             <div><div class="dd-title">Why Community Tax</div><div class="dd-desc">Our value prop and track record</div></div>
             <span class="dd-arrow">&#8250;</span>
           </a>
-          <a class="dd-item" onclick="showPage('segments')">
+          <a class="dd-item" href="#segments" onclick="event.preventDefault();showPage('segments')">
             <span class="dd-icon-wrap dd-ic-blue"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>
             <div><div class="dd-title">Who We Serve</div><div class="dd-desc">CPAs, brokers, advisors, law firms</div></div>
             <span class="dd-arrow">&#8250;</span>
           </a>
-          <a class="dd-item" onclick="showPage('stories')">
+          <a class="dd-item" href="#stories" onclick="event.preventDefault();showPage('stories')">
             <span class="dd-icon-wrap dd-ic-navy"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
             <div><div class="dd-title">Success Stories</div><div class="dd-desc">Real partners, real revenue</div></div>
             <span class="dd-arrow">&#8250;</span>
           </a>
-          <a class="dd-item" onclick="showPage('compare')">
+          <a class="dd-item" href="#compare" onclick="event.preventDefault();showPage('compare')">
             <span class="dd-icon-wrap dd-ic-cyan"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
             <div><div class="dd-title">Compare</div><div class="dd-desc">CTAX vs. in-house vs. others</div></div>
             <span class="dd-arrow">&#8250;</span>
@@ -250,22 +250,22 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
         </div>
         <div class="dd-section">
           <div class="dd-label">Getting Started</div>
-          <a class="dd-item" onclick="showPage('how')">
+          <a class="dd-item" href="#how" onclick="event.preventDefault();showPage('how')">
             <span class="dd-icon-wrap dd-ic-cyan"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
             <div><div class="dd-title">How It Works</div><div class="dd-desc">From referral to revenue</div></div>
             <span class="dd-arrow">&#8250;</span>
           </a>
-          <a class="dd-item" onclick="showPage('tiers')">
+          <a class="dd-item" href="#tiers" onclick="event.preventDefault();showPage('tiers')">
             <span class="dd-icon-wrap dd-ic-blue"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg></span>
             <div><div class="dd-title">Partner Tiers</div><div class="dd-desc">Direct, Enterprise, Strategic</div></div>
             <span class="dd-arrow">&#8250;</span>
           </a>
-          <a class="dd-item" onclick="showPage('onboarding')">
+          <a class="dd-item" href="#onboarding" onclick="event.preventDefault();showPage('onboarding')">
             <span class="dd-icon-wrap dd-ic-teal"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
             <div><div class="dd-title">Onboarding Checklist</div><div class="dd-desc">Step-by-step setup guide</div></div>
             <span class="dd-arrow">&#8250;</span>
           </a>
-          <a class="dd-item" onclick="showPage('dashboard')">
+          <a class="dd-item" href="#dashboard" onclick="event.preventDefault();showPage('dashboard')">
             <span class="dd-icon-wrap dd-ic-navy"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></span>
             <div><div class="dd-title">Dashboard Preview</div><div class="dd-desc">See your partner portal</div></div>
             <span class="dd-arrow">&#8250;</span>
@@ -289,22 +289,22 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
         <div class="dd-inner">
         <div class="dd-section">
           <div class="dd-label">AI-Powered</div>
-          <a class="dd-item" onclick="showPage('calculator')">
+          <a class="dd-item" href="#calculator" onclick="event.preventDefault();showPage('calculator')">
             <span class="dd-icon-wrap dd-ic-cyan"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 3h6v7l3.5 7.5a1 1 0 0 1-.9 1.5H6.4a1 1 0 0 1-.9-1.5L9 10V3z"/></svg></span>
             <div><div class="dd-title">Revenue Lab</div><div class="dd-desc">AI revenue projections</div></div>
             <span class="dd-arrow">&#8250;</span>
           </a>
-          <a class="dd-item" onclick="showPage('scripts')">
+          <a class="dd-item" href="#scripts" onclick="event.preventDefault();showPage('scripts')">
             <span class="dd-icon-wrap dd-ic-navy"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
             <div><div class="dd-title">Script Builder</div><div class="dd-desc">Custom referral scripts</div></div>
             <span class="dd-arrow">&#8250;</span>
           </a>
-          <a class="dd-item" onclick="showPage('admaker')">
+          <a class="dd-item" href="#admaker" onclick="event.preventDefault();showPage('admaker')">
             <span class="dd-icon-wrap dd-ic-cyan"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
             <div><div class="dd-title">Ad Maker</div><div class="dd-desc">Co-branded social ads</div></div>
             <span class="dd-arrow">&#8250;</span>
           </a>
-          <a class="dd-item" onclick="showPage('resources')">
+          <a class="dd-item" href="#resources" onclick="event.preventDefault();showPage('resources')">
             <span class="dd-icon-wrap dd-ic-teal"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
             <div><div class="dd-title">Client Qualifier</div><div class="dd-desc">Assess referral strength</div></div>
             <span class="dd-arrow">&#8250;</span>
@@ -312,17 +312,17 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
         </div>
         <div class="dd-section">
           <div class="dd-label">Resources</div>
-          <a class="dd-item" onclick="showPage('dashboard')">
+          <a class="dd-item" href="#dashboard" onclick="event.preventDefault();showPage('dashboard')">
             <span class="dd-icon-wrap dd-ic-navy"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></span>
             <div><div class="dd-title">Dashboard Preview</div><div class="dd-desc">See your partner portal</div></div>
             <span class="dd-arrow">&#8250;</span>
           </a>
-          <a class="dd-item" onclick="showPage('resources')">
+          <a class="dd-item" href="#resources" onclick="event.preventDefault();showPage('resources')">
             <span class="dd-icon-wrap dd-ic-blue"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
             <div><div class="dd-title">Partner Resources</div><div class="dd-desc">Guides, templates, collateral</div></div>
             <span class="dd-arrow">&#8250;</span>
           </a>
-          <a class="dd-item" onclick="showPage('faq')">
+          <a class="dd-item" href="#faq" onclick="event.preventDefault();showPage('faq')">
             <span class="dd-icon-wrap dd-ic-teal"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
             <div><div class="dd-title">FAQ</div><div class="dd-desc">Common questions answered</div></div>
             <span class="dd-arrow">&#8250;</span>
@@ -332,8 +332,8 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
       </div>
     </li>
 
-    <li><a onclick="showPage('tiers')">Partner Tiers</a></li>
-    <li><a onclick="showPage('webinars')">CE Webinars</a></li>
+    <li><a href="#tiers" onclick="event.preventDefault();showPage('tiers')">Partner Tiers</a></li>
+    <li><a href="#webinars" onclick="event.preventDefault();showPage('webinars')">CE Webinars</a></li>
   </ul>
 
   <div class="nav-right">
@@ -404,28 +404,28 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
 <div class="mobile-nav-drawer" id="mobileNavDrawer" role="navigation" aria-label="Mobile navigation">
   <div class="mob-section">
     <div class="mob-label">Program</div>
-    <a class="mob-link" onclick="showPage('why');closeMobileNav()">Why Community Tax</a>
-    <a class="mob-link" onclick="showPage('segments');closeMobileNav()">Who We Serve</a>
-    <a class="mob-link" onclick="showPage('stories');closeMobileNav()">Success Stories</a>
-    <a class="mob-link" onclick="showPage('compare');closeMobileNav()">Compare</a>
+    <a class="mob-link" href="#why" onclick="event.preventDefault();showPage('why');closeMobileNav()">Why Community Tax</a>
+    <a class="mob-link" href="#segments" onclick="event.preventDefault();showPage('segments');closeMobileNav()">Who We Serve</a>
+    <a class="mob-link" href="#stories" onclick="event.preventDefault();showPage('stories');closeMobileNav()">Success Stories</a>
+    <a class="mob-link" href="#compare" onclick="event.preventDefault();showPage('compare');closeMobileNav()">Compare</a>
   </div>
   <div class="mob-section">
     <div class="mob-label">Getting Started</div>
-    <a class="mob-link" onclick="showPage('how');closeMobileNav()">How It Works</a>
-    <a class="mob-link" onclick="showPage('tiers');closeMobileNav()">Partner Tiers</a>
-    <a class="mob-link" onclick="showPage('onboarding');closeMobileNav()">Onboarding Checklist</a>
-    <a class="mob-link" onclick="showPage('dashboard');closeMobileNav()">Dashboard Preview</a>
-    <a class="mob-link" onclick="showPage('webinars');closeMobileNav()">CE Webinars</a>
+    <a class="mob-link" href="#how" onclick="event.preventDefault();showPage('how');closeMobileNav()">How It Works</a>
+    <a class="mob-link" href="#tiers" onclick="event.preventDefault();showPage('tiers');closeMobileNav()">Partner Tiers</a>
+    <a class="mob-link" href="#onboarding" onclick="event.preventDefault();showPage('onboarding');closeMobileNav()">Onboarding Checklist</a>
+    <a class="mob-link" href="#dashboard" onclick="event.preventDefault();showPage('dashboard');closeMobileNav()">Dashboard Preview</a>
+    <a class="mob-link" href="#webinars" onclick="event.preventDefault();showPage('webinars');closeMobileNav()">CE Webinars</a>
   </div>
   <div class="mob-section">
     <div class="mob-label">AI Tools</div>
-    <a class="mob-link" onclick="showPage('calculator');closeMobileNav()">Revenue Lab</a>
-    <a class="mob-link" onclick="showPage('scripts');closeMobileNav()">Script Builder</a>
-    <a class="mob-link" onclick="showPage('admaker');closeMobileNav()">Ad Maker</a>
-    <a class="mob-link" onclick="showPage('resources');closeMobileNav()">Client Qualifier</a>
-    <a class="mob-link" onclick="showPage('dashboard');closeMobileNav()">Dashboard Preview</a>
-    <a class="mob-link" onclick="showPage('resources');closeMobileNav()">Resources</a>
-    <a class="mob-link" onclick="showPage('faq');closeMobileNav()">FAQ</a>
+    <a class="mob-link" href="#calculator" onclick="event.preventDefault();showPage('calculator');closeMobileNav()">Revenue Lab</a>
+    <a class="mob-link" href="#scripts" onclick="event.preventDefault();showPage('scripts');closeMobileNav()">Script Builder</a>
+    <a class="mob-link" href="#admaker" onclick="event.preventDefault();showPage('admaker');closeMobileNav()">Ad Maker</a>
+    <a class="mob-link" href="#resources" onclick="event.preventDefault();showPage('resources');closeMobileNav()">Client Qualifier</a>
+    <a class="mob-link" href="#dashboard" onclick="event.preventDefault();showPage('dashboard');closeMobileNav()">Dashboard Preview</a>
+    <a class="mob-link" href="#resources" onclick="event.preventDefault();showPage('resources');closeMobileNav()">Resources</a>
+    <a class="mob-link" href="#faq" onclick="event.preventDefault();showPage('faq');closeMobileNav()">FAQ</a>
   </div>
   <div style="padding:12px 0;display:flex;flex-direction:column;gap:10px">
     <button class="btn btn-s" style="width:100%" onclick="showPage('portal');closeMobileNav()">Partner Dashboard</button>
@@ -798,12 +798,12 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
       <div>
         <div class="ft-col-lbl">Program</div>
         <div style="display:flex;flex-direction:column;gap:14px;margin-top:20px">
-          <a  class="ft-link" onclick="showPage('why');return false;" >Why Community Tax</a>
-          <a  class="ft-link" onclick="showPage('how');return false;" >How It Works</a>
-          <a  class="ft-link" onclick="showPage('tiers');return false;" >Partner Tiers</a>
-          <a  class="ft-link" onclick="showPage('apply');return false;" >Apply Now</a>
-          <a  class="ft-link" onclick="showPage('stories');return false;" >Success Stories</a>
-          <a  class="ft-link" onclick="showPage('webinars');return false;" >CE Webinars</a>
+          <a class="ft-link" href="#why" onclick="event.preventDefault();showPage('why')">Why Community Tax</a>
+          <a class="ft-link" href="#how" onclick="event.preventDefault();showPage('how')">How It Works</a>
+          <a class="ft-link" href="#tiers" onclick="event.preventDefault();showPage('tiers')">Partner Tiers</a>
+          <a class="ft-link" href="#apply" onclick="event.preventDefault();showPage('apply')">Apply Now</a>
+          <a class="ft-link" href="#stories" onclick="event.preventDefault();showPage('stories')">Success Stories</a>
+          <a class="ft-link" href="#webinars" onclick="event.preventDefault();showPage('webinars')">CE Webinars</a>
         </div>
       </div>
 
@@ -811,10 +811,10 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
       <div>
         <div class="ft-col-lbl">AI Tools</div>
         <div style="display:flex;flex-direction:column;gap:14px;margin-top:20px">
-          <a  class="ft-link" onclick="showPage('calculator');return false;" >Revenue Lab</a>
-          <a  class="ft-link" onclick="showPage('scripts');return false;" >Script Builder</a>
-          <a  class="ft-link" onclick="showPage('admaker');return false;" >Ad Maker</a>
-          <a  class="ft-link" onclick="showPage('resources');return false;" >Resources</a>
+          <a class="ft-link" href="#calculator" onclick="event.preventDefault();showPage('calculator')">Revenue Lab</a>
+          <a class="ft-link" href="#scripts" onclick="event.preventDefault();showPage('scripts')">Script Builder</a>
+          <a class="ft-link" href="#admaker" onclick="event.preventDefault();showPage('admaker')">Ad Maker</a>
+          <a class="ft-link" href="#resources" onclick="event.preventDefault();showPage('resources')">Resources</a>
         </div>
       </div>
 
@@ -822,13 +822,13 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
       <div>
         <div class="ft-col-lbl">Partner</div>
         <div style="display:flex;flex-direction:column;gap:14px;margin-top:20px">
-          <a  class="ft-link" onclick="showPage('apply');return false;" >Become a Partner</a>
-          <a  class="ft-link" onclick="showPage('apply');return false;" >Apply Now</a>
-          <a  class="ft-link" onclick="showPage('contact');return false;" >Support</a>
-          <a  class="ft-link" onclick="showPage('dashboard');return false;" >Dashboard Preview</a>
-          <a  class="ft-link" onclick="showPage('compare');return false;" >Compare</a>
-          <a  class="ft-link" onclick="showPage('onboarding');return false;" >Onboarding</a>
-          <a  class="ft-link" onclick="showPage('privacy');return false;" >Privacy Policy</a>
+          <a class="ft-link" href="#apply" onclick="event.preventDefault();showPage('apply')">Become a Partner</a>
+          <a class="ft-link" href="#apply" onclick="event.preventDefault();showPage('apply')">Apply Now</a>
+          <a class="ft-link" href="#contact" onclick="event.preventDefault();showPage('contact')">Support</a>
+          <a class="ft-link" href="#dashboard" onclick="event.preventDefault();showPage('dashboard')">Dashboard Preview</a>
+          <a class="ft-link" href="#compare" onclick="event.preventDefault();showPage('compare')">Compare</a>
+          <a class="ft-link" href="#onboarding" onclick="event.preventDefault();showPage('onboarding')">Onboarding</a>
+          <a class="ft-link" href="#privacy" onclick="event.preventDefault();showPage('privacy')">Privacy Policy</a>
         </div>
       </div>
 
@@ -837,9 +837,9 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
     <div class="ft-bot" style="display:flex;justify-content:space-between;align-items:center;padding-top:28px">
       <div class="ft-copy" style="background:linear-gradient(90deg,var(--blue),var(--sky),var(--cyan));background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:500">© <span class="ft-year"></span> Community Tax, LLC. All rights reserved.</div>
       <div class="ft-links">
-        <a  class="ft-link" style="font-size:13px" onclick="showPage('terms');return false;" >Terms</a>
-        <a  class="ft-link" style="font-size:13px" onclick="showPage('privacy');return false;" >Privacy</a>
-        <a  class="ft-link" style="font-size:13px" onclick="showPage('contact');return false;" >Contact</a>
+        <a class="ft-link" href="#terms" style="font-size:13px" onclick="event.preventDefault();showPage('terms')">Terms</a>
+        <a class="ft-link" href="#privacy" style="font-size:13px" onclick="event.preventDefault();showPage('privacy')">Privacy</a>
+        <a class="ft-link" href="#contact" style="font-size:13px" onclick="event.preventDefault();showPage('contact')">Contact</a>
       </div>
     </div>
   </div>
