@@ -1588,6 +1588,55 @@ function cmdkExecute(idx) {
   }
 }
 
+// ── QUICK NOTES ─────────────────────────────────────────────
+var _qnSaveTimer = null;
+
+function qnToggle() {
+  var wrap = document.getElementById('qn-wrap');
+  var fab = document.getElementById('qn-fab');
+  if (!wrap || !fab) return;
+  var isOpen = wrap.classList.contains('qn-open');
+  if (isOpen) {
+    wrap.classList.remove('qn-open');
+    fab.classList.remove('qn-fab-hidden');
+  } else {
+    wrap.classList.add('qn-open');
+    fab.classList.add('qn-fab-hidden');
+    var textarea = document.getElementById('qn-textarea');
+    if (textarea) textarea.focus();
+  }
+}
+
+function qnSave() {
+  var textarea = document.getElementById('qn-textarea');
+  var chars = document.getElementById('qn-chars');
+  var saved = document.getElementById('qn-saved');
+  if (!textarea) return;
+  if (chars) chars.textContent = textarea.value.length + ' chars';
+  clearTimeout(_qnSaveTimer);
+  _qnSaveTimer = setTimeout(function() {
+    try { localStorage.setItem('ctax_quicknotes', textarea.value); } catch (e) { /* ignore */ }
+    if (saved) {
+      saved.textContent = 'Saved';
+      saved.classList.add('qn-saved-show');
+      setTimeout(function() { saved.classList.remove('qn-saved-show'); }, 1500);
+    }
+  }, 500);
+}
+
+// Restore notes on load
+(function() {
+  try {
+    var saved = localStorage.getItem('ctax_quicknotes');
+    if (saved) {
+      var textarea = document.getElementById('qn-textarea');
+      var chars = document.getElementById('qn-chars');
+      if (textarea) textarea.value = saved;
+      if (chars) chars.textContent = saved.length + ' chars';
+    }
+  } catch (e) { /* ignore */ }
+})();
+
 // ── MONTHLY GOAL TRACKER ────────────────────────────────────
 function dgtEditGoal() {
   var current = 10;

@@ -447,6 +447,18 @@
 [data-theme="dark"] .dib-dismiss{color:rgba(255,255,255,0.25)}
 [data-theme="dark"] .dib-dismiss:hover{color:#e0e4ec}
 
+/* ── Quick Notes Dark Mode ── */
+[data-theme="dark"] .qn-wrap{background:#141e30;border-color:rgba(255,255,255,0.06);box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+[data-theme="dark"] .qn-header{border-bottom-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .qn-title{color:#e0e4ec}
+[data-theme="dark"] .qn-minimize{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .qn-minimize:hover{background:rgba(255,255,255,0.06);color:#e0e4ec}
+[data-theme="dark"] .qn-textarea{color:#e0e4ec}
+[data-theme="dark"] .qn-textarea::placeholder{color:rgba(255,255,255,0.25)}
+[data-theme="dark"] .qn-footer{border-top-color:rgba(255,255,255,0.04);color:rgba(255,255,255,0.3)}
+[data-theme="dark"] .qn-fab{background:#141e30;border-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.3)}
+[data-theme="dark"] .qn-fab:hover{color:#4BA3FF;border-color:#4BA3FF}
+
 /* ── Monthly Goal Tracker Dark Mode ── */
 [data-theme="dark"] .dash-goal-tracker{background:#141e30;border-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .dgt-title{color:#e0e4ec}
