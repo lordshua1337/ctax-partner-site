@@ -201,6 +201,8 @@
   .h-stat-n{font-size:22px}
   .h-marquee-label{font-size:15px}
   .sp-marquee-wrap{-webkit-mask-image:linear-gradient(90deg,transparent,black 4%,black 96%,transparent);mask-image:linear-gradient(90deg,transparent,black 4%,black 96%,transparent)}
+  .h-cta-row{flex-direction:column;width:100%;max-width:320px}
+  .h-cta-primary,.h-cta-secondary{width:100%;text-align:center}
 
   /* ── GENERIC GRIDS ── */
   .g2{grid-template-columns:1fr}
