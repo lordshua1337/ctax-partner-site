@@ -497,7 +497,7 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
       <h2 class="disp mt8">From relationship-ending event<br>to relationship-preserving solution.</h2>
     </div>
     <div class="flip-grid">
-      <div class="flip-card scroll-reveal" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card scroll-reveal" role="button" tabindex="0" onclick="this.classList.toggle('flipped')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.classList.toggle('flipped')}">
         <div class="flip-inner">
           <div class="flip-front">
             <div class="vi vi-lt"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></div>
@@ -510,7 +510,7 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
           </div>
         </div>
       </div>
-      <div class="flip-card scroll-reveal" style="animation-delay:0.12s" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card scroll-reveal" style="animation-delay:0.12s" role="button" tabindex="0" onclick="this.classList.toggle('flipped')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.classList.toggle('flipped')}">
         <div class="flip-inner">
           <div class="flip-front flip-front-dk">
             <div class="vi vi-dk"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
@@ -523,7 +523,7 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
           </div>
         </div>
       </div>
-      <div class="flip-card scroll-reveal" style="animation-delay:0.24s" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card scroll-reveal" style="animation-delay:0.24s" role="button" tabindex="0" onclick="this.classList.toggle('flipped')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.classList.toggle('flipped')}">
         <div class="flip-inner">
           <div class="flip-front">
             <div class="vi vi-lt"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -602,25 +602,25 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
       <h2 class="disp mt8">Everything you need to know.</h2>
     </div>
     <div class="g4">
-      <div class="card scroll-reveal" style="cursor:pointer;animation-delay:0s" onclick="showPage('why')">
+      <div class="card scroll-reveal" style="cursor:pointer;animation-delay:0s" role="link" tabindex="0" onclick="showPage('why')" onkeydown="if(event.key==='Enter'){showPage('why')}">
         <div style="margin-bottom:14px;color:var(--blue);opacity:0.8"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
         <h5 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:7px">Why Community Tax</h5>
         <p style="font-size:15px;color:var(--body);line-height:1.6;margin-bottom:14px">The market problem, value proposition, and the cost of inaction.</p>
         <span style="font-size:15px;color:var(--blue);font-weight:600">Learn More →</span>
       </div>
-      <div class="card scroll-reveal" style="cursor:pointer;animation-delay:0.1s" onclick="showPage('segments')">
+      <div class="card scroll-reveal" style="cursor:pointer;animation-delay:0.1s" role="link" tabindex="0" onclick="showPage('segments')" onkeydown="if(event.key==='Enter'){showPage('segments')}">
         <div style="margin-bottom:14px;color:var(--blue);opacity:0.8"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="11" rx="1"/><path d="M3 10l9-7 9 7"/><line x1="12" y1="10" x2="12" y2="21"/><line x1="7" y1="10" x2="7" y2="21"/><line x1="17" y1="10" x2="17" y2="21"/></svg></div>
         <h5 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:7px">Who We Serve</h5>
         <p style="font-size:15px;color:var(--body);line-height:1.6;margin-bottom:14px">Fintech platforms, CPAs, tax preparers, advisors, and law firms.</p>
         <span style="font-size:15px;color:var(--blue);font-weight:600">View Segments →</span>
       </div>
-      <div class="card scroll-reveal" style="cursor:pointer;animation-delay:0.2s" onclick="showPage('tiers')">
+      <div class="card scroll-reveal" style="cursor:pointer;animation-delay:0.2s" role="link" tabindex="0" onclick="showPage('tiers')" onkeydown="if(event.key==='Enter'){showPage('tiers')}">
         <div style="margin-bottom:14px;color:var(--blue);opacity:0.8"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
         <h5 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:7px">Partner Tiers</h5>
         <p style="font-size:15px;color:var(--body);line-height:1.6;margin-bottom:14px">Strategic, Enterprise, and Direct — find the right tier.</p>
         <span style="font-size:15px;color:var(--blue);font-weight:600">Compare Tiers →</span>
       </div>
-      <div class="card scroll-reveal" style="cursor:pointer;animation-delay:0.3s" onclick="showPage('faq')">
+      <div class="card scroll-reveal" style="cursor:pointer;animation-delay:0.3s" role="link" tabindex="0" onclick="showPage('faq')" onkeydown="if(event.key==='Enter'){showPage('faq')}">
         <div style="margin-bottom:14px;color:var(--blue);opacity:0.8"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
         <h5 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:7px">Partner FAQ</h5>
         <p style="font-size:15px;color:var(--body);line-height:1.6;margin-bottom:14px">Everything you need to know before your first referral.</p>

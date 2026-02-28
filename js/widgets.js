@@ -387,6 +387,8 @@ function toggleOnboardStep(el) {
     check.style.animation = '';
   }
   step.classList.toggle('ob-done');
+  var isChecked = step.classList.contains('ob-done');
+  check.setAttribute('aria-checked', isChecked ? 'true' : 'false');
   updateOnboardProgress();
 }
 function updateOnboardProgress() {
