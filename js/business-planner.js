@@ -267,6 +267,20 @@ function bpBuildRoadmap(inputs) {
   }
 
   m1Tasks.push({
+    title: 'Start the 30-Day Momentum Challenge',
+    desc: 'Open the 30-Day Momentum Challenge in Resources -- it gives you one small daily action for 30 straight days to build referral habits. Partners who complete it generate 2.5x more referrals in their first quarter than those who skip it. It only takes 5-10 minutes per day and tracks your streak automatically.',
+    type: 'action',
+    priority: 'high'
+  });
+
+  m1Tasks.push({
+    title: 'Build Your Referral Landing Page',
+    desc: 'Use the Landing Page Builder to create a custom referral page you can share with prospects and network contacts. Pick a template, add your info, and publish it in under 10 minutes. Partners with a dedicated landing page convert 35% more referrals than those using generic links.',
+    type: 'marketing',
+    priority: 'medium'
+  });
+
+  m1Tasks.push({
     title: 'Make Your First 3 Referral Conversations',
     desc: 'Use your audit list from week 1. Start with the 3 easiest -- clients you have strong relationships with who you know have tax issues. Goal: ' + monthlyRef + ' referrals submitted this month. Even if they decline, the practice of asking builds your referral muscle.',
     type: 'action',
@@ -317,6 +331,20 @@ function bpBuildRoadmap(inputs) {
   }
 
   m2Tasks.push({
+    title: 'Generate Custom Scripts with AI Script Builder',
+    desc: 'Open the AI Script Builder in your portal. Enter your practice type and client scenario, and it generates word-for-word referral scripts for phone calls, emails, and in-person conversations. Create 3-5 scripts tailored to your most common client situations and save them for quick access.',
+    type: 'action',
+    priority: 'medium'
+  });
+
+  m2Tasks.push({
+    title: 'Create Co-Branded Ads with Ad Maker',
+    desc: 'Use the Ad Maker tool to generate professional social media ads with your branding. Upload your logo, pick a template, and it produces ready-to-post images for Facebook, Instagram, and LinkedIn. Partners who run co-branded ads see 40% higher click-through rates than generic tax resolution ads.',
+    type: 'marketing',
+    priority: 'medium'
+  });
+
+  m2Tasks.push({
     title: 'Optimize Based on Month 1 Results',
     desc: 'Review your Referrals dashboard. Which conversation approach got the most "yes" responses? Which clients said no and why? Adjust your pitch. Target: ' + monthlyRef + ' referrals this month. If month 1 was below target, double down on the "every appointment" habit -- consistency beats volume.',
     type: 'action',
@@ -363,6 +391,27 @@ function bpBuildRoadmap(inputs) {
       priority: 'high'
     });
   }
+
+  m3Tasks.push({
+    title: 'Use the Client Qualifier AI Tool',
+    desc: 'Open the Client Qualifier in your portal\'s AI Tools. Input a client scenario and it instantly tells you whether that person is a good candidate for tax resolution, what programs they might qualify for, and the best way to bring it up. Use it before every referral conversation to go in prepared.',
+    type: 'action',
+    priority: 'medium'
+  });
+
+  m3Tasks.push({
+    title: 'Share Your Landing Page with Referral Network',
+    desc: 'Revisit the landing page you built in Month 1. Update it with your results and testimonials from the first 60 days. Share the live link with your referral network partners -- bankruptcy attorneys, financial advisors, and other professionals you identified in Month 2. A branded page gives them something concrete to send their clients.',
+    type: 'marketing',
+    priority: 'medium'
+  });
+
+  m3Tasks.push({
+    title: 'Complete 2+ CE Webinars for Deeper Expertise',
+    desc: 'The CE Webinars section has IRS-approved continuing education on tax resolution topics. Complete at least 2 modules this month -- "Advanced OIC Strategies" and "Identifying Levy vs. Lien Situations" are the highest-rated. Deeper knowledge directly translates to more confident referral conversations and better client outcomes.',
+    type: 'setup',
+    priority: 'medium'
+  });
 
   m3Tasks.push({
     title: 'Review and Plan Your Next Quarter',
@@ -496,6 +545,35 @@ function bpRenderRoadmap(roadmap) {
   html += '</div>';
   html += '</div></div>';
 
+  // Portal Toolkit callout
+  html += '<div class="bp-toolkit">';
+  html += '<div class="bp-toolkit-header">';
+  html += '<div class="bp-toolkit-title">Your Portal Toolkit</div>';
+  html += '<div class="bp-toolkit-desc">These tools are built into your partner portal. Use them alongside this roadmap to hit your targets faster.</div>';
+  html += '</div>';
+  html += '<div class="bp-toolkit-grid">';
+
+  var tools = [
+    { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>', name: 'Page Builder', desc: 'Create a branded referral landing page', section: 'portal-sec-page-builder' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', name: '30-Day Challenge', desc: 'Daily actions to build referral habits', section: 'portal-sec-challenge' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>', name: 'AI Script Builder', desc: 'Generate custom referral scripts', section: 'portal-sec-ai-scripts' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>', name: 'Ad Maker', desc: 'Co-branded social media ads', section: 'portal-sec-ai-admaker' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>', name: 'Marketing Kit', desc: 'Templates, emails, and assets', section: 'portal-sec-marketing' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>', name: 'CE Webinars', desc: 'IRS-approved continuing education', section: 'portal-sec-ce' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>', name: 'Client Qualifier', desc: 'AI-powered prospect screening', section: 'portal-sec-ai-qualifier' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>', name: 'Revenue Calculator', desc: 'Model referral earnings scenarios', section: 'portal-sec-calculator' }
+  ];
+
+  tools.forEach(function(tool) {
+    html += '<a class="bp-toolkit-card" href="javascript:void(0)" onclick="bpGoToSection(\'' + tool.section + '\')">';
+    html += '<div class="bp-toolkit-icon">' + tool.icon + '</div>';
+    html += '<div class="bp-toolkit-name">' + tool.name + '</div>';
+    html += '<div class="bp-toolkit-card-desc">' + tool.desc + '</div>';
+    html += '</a>';
+  });
+
+  html += '</div></div>';
+
   // Timeline
   var taskIndex = 0;
   html += '<div class="bp-timeline">';
@@ -613,6 +691,12 @@ function bpTypeIcon(type) {
 
 // Replace tool mentions in task descriptions with clickable portal links
 var BP_TOOL_LINKS = [
+  { text: '30-Day Momentum Challenge', section: 'portal-sec-challenge' },
+  { text: 'Landing Page Builder', section: 'portal-sec-page-builder' },
+  { text: 'AI Script Builder', section: 'portal-sec-ai-scripts' },
+  { text: 'Ad Maker', section: 'portal-sec-ai-admaker' },
+  { text: 'Client Qualifier', section: 'portal-sec-ai-qualifier' },
+  { text: 'CE Webinars', section: 'portal-sec-ce' },
   { text: 'Email Template Builder', section: 'portal-sec-marketing' },
   { text: 'Social Post Builder', section: 'portal-sec-marketing' },
   { text: 'One-Pager Builder', section: 'portal-sec-marketing' },
