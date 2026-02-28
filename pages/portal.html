@@ -148,6 +148,23 @@
 
     <!-- ═══ DASHBOARD SECTION ═══ -->
     <div class="portal-section portal-sec-active" id="portal-sec-dashboard">
+      <!-- Mobile Money Hero (hidden on desktop) -->
+      <div class="mob-money-hero" id="mob-money-hero">
+        <div class="mob-money-top">
+          <div>
+            <div class="mob-money-label">Next Payout</div>
+            <div class="mob-money-amount">$<span data-count-to="2736">0</span></div>
+            <div class="mob-money-countdown"><span class="mob-countdown-dot"></span> in 3 days</div>
+          </div>
+          <div class="mob-money-right">
+            <div class="mob-money-label">This Month</div>
+            <div class="mob-money-month">$<span data-count-to="6960">0</span></div>
+            <div class="mob-money-trend">+12.4%</div>
+          </div>
+        </div>
+        <button class="mob-money-cta" onclick="mobNavTap(this,'portal-sec-submit')">Submit New Referral</button>
+      </div>
+
       <div class="portal-sec-header">
         <div class="dash-welcome-row">
           <h2 class="dash-greeting" id="dash-greeting">Dashboard</h2>

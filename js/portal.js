@@ -1214,3 +1214,27 @@ function mobNavTap(tab, secId) {
     portalNav(sidebarLink, secId);
   }
 }
+
+// --- Mobile money hero ---
+function initMobMoneyHero() {
+  var hero = document.getElementById('mob-money-hero');
+  if (!hero) return;
+  hero.querySelectorAll('[data-count-to]').forEach(function(el) {
+    var target = parseInt(el.getAttribute('data-count-to'), 10);
+    var duration = 1200;
+    var start = 0;
+    var startTime = null;
+    function animate(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString();
+      if (progress < 1) requestAnimationFrame(animate);
+      else el.textContent = target.toLocaleString();
+    }
+    requestAnimationFrame(animate);
+  });
+}
+if (window.matchMedia('(max-width:768px)').matches) {
+  document.addEventListener('DOMContentLoaded', initMobMoneyHero);
+}
