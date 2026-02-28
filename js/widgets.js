@@ -847,3 +847,130 @@ function dismissToast(toast) {
     }
   });
 })();
+
+// ── RESOLUTION PRO CONTACT CARD ──────────────────────────────────────
+function toggleResolutionPro() {
+  var card = document.getElementById('rp-card');
+  var iconPerson = document.getElementById('rp-fab-icon-person');
+  var iconX = document.getElementById('rp-fab-icon-x');
+  if (!card) return;
+  var isOpen = card.classList.contains('rp-open');
+  card.classList.toggle('rp-open');
+  if (iconPerson) iconPerson.style.display = isOpen ? '' : 'none';
+  if (iconX) iconX.style.display = isOpen ? 'none' : '';
+}
+
+function closeResolutionPro() {
+  var card = document.getElementById('rp-card');
+  var iconPerson = document.getElementById('rp-fab-icon-person');
+  var iconX = document.getElementById('rp-fab-icon-x');
+  if (card) card.classList.remove('rp-open');
+  if (iconPerson) iconPerson.style.display = '';
+  if (iconX) iconX.style.display = 'none';
+}
+
+// ── JAZZ RADIO WIDGET ──────────────────────────────────────
+var _jazzPlaying = false;
+
+function toggleJazz() {
+  var audio = document.getElementById('jazz-audio');
+  var bar = document.getElementById('jazz-bar');
+  var iconPlay = document.getElementById('jazz-icon-play');
+  var iconPause = document.getElementById('jazz-icon-pause');
+  var nowEl = document.getElementById('jazz-now');
+  if (!audio) return;
+
+  // Show the bar if hidden
+  if (bar && !bar.classList.contains('jazz-visible')) {
+    bar.classList.add('jazz-visible');
+    adjustFabForJazz(true);
+  }
+
+  if (_jazzPlaying) {
+    audio.pause();
+    _jazzPlaying = false;
+    if (iconPlay) iconPlay.style.display = '';
+    if (iconPause) iconPause.style.display = 'none';
+    if (nowEl) nowEl.textContent = 'Paused';
+    removeEqBars();
+  } else {
+    audio.volume = (document.getElementById('jazz-vol') || {}).value / 100 || 0.4;
+    audio.play().then(function() {
+      _jazzPlaying = true;
+      if (iconPlay) iconPlay.style.display = 'none';
+      if (iconPause) iconPause.style.display = '';
+      if (nowEl) nowEl.textContent = 'Now Playing';
+      addEqBars();
+    }).catch(function() {
+      if (nowEl) nowEl.textContent = 'Tap to play';
+    });
+  }
+
+  localStorage.setItem('ctax_jazz', _jazzPlaying ? '1' : '0');
+}
+
+function setJazzVolume(val) {
+  var audio = document.getElementById('jazz-audio');
+  if (audio) audio.volume = val / 100;
+  localStorage.setItem('ctax_jazz_vol', val);
+}
+
+function openJazzBar() {
+  var bar = document.getElementById('jazz-bar');
+  if (bar && !bar.classList.contains('jazz-visible')) {
+    bar.classList.add('jazz-visible');
+    adjustFabForJazz(true);
+  }
+  if (!_jazzPlaying) toggleJazz();
+}
+
+function closeJazzBar() {
+  var audio = document.getElementById('jazz-audio');
+  var bar = document.getElementById('jazz-bar');
+  if (audio && _jazzPlaying) { audio.pause(); _jazzPlaying = false; }
+  if (bar) bar.classList.remove('jazz-visible');
+  adjustFabForJazz(false);
+  localStorage.setItem('ctax_jazz', '0');
+}
+
+function adjustFabForJazz(visible) {
+  var fab = document.getElementById('rp-fab');
+  var card = document.getElementById('rp-card');
+  if (fab) fab.style.bottom = visible ? '68px' : '';
+  if (card) card.style.bottom = visible ? '124px' : '';
+}
+
+function addEqBars() {
+  var info = document.querySelector('.jazz-info');
+  if (!info || document.querySelector('.jazz-eq')) return;
+  var eq = document.createElement('div');
+  eq.className = 'jazz-eq';
+  for (var i = 0; i < 5; i++) {
+    var bar = document.createElement('div');
+    bar.className = 'jazz-eq-bar';
+    eq.appendChild(bar);
+  }
+  info.appendChild(eq);
+}
+
+function removeEqBars() {
+  var eq = document.querySelector('.jazz-eq');
+  if (eq) eq.remove();
+}
+
+// Show jazz bar on portal if previously playing
+(function() {
+  var saved = localStorage.getItem('ctax_jazz');
+  var vol = localStorage.getItem('ctax_jazz_vol');
+  if (vol) {
+    var slider = document.getElementById('jazz-vol');
+    if (slider) slider.value = vol;
+  }
+  if (saved === '1') {
+    var bar = document.getElementById('jazz-bar');
+    if (bar) {
+      bar.classList.add('jazz-visible');
+      adjustFabForJazz(true);
+    }
+  }
+})();

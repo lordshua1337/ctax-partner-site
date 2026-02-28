@@ -3502,3 +3502,85 @@ body.portal-mode{padding-bottom:0}
   .pb-printing .pb-card-body{max-height:none;opacity:1;overflow:visible}
   .pb-printing .pb-card-title::after{display:none}
 }
+
+/* ── RESOLUTION PRO CONTACT CARD ── */
+.rp-fab{position:fixed;bottom:24px;left:24px;z-index:9998;display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border:1px solid rgba(255,255,255,0.1);padding:12px 18px 12px 14px;border-radius:50px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.02em;box-shadow:0 4px 24px rgba(10,22,40,0.3),0 1px 3px rgba(0,0,0,0.1);transition:all 0.25s cubic-bezier(0.22,1,0.36,1)}
+.rp-fab:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(10,22,40,0.4),0 2px 6px rgba(0,0,0,0.12)}
+.rp-fab-label{white-space:nowrap}
+.rp-fab-icon{flex-shrink:0}
+
+.rp-card{position:fixed;bottom:80px;left:24px;z-index:9999;width:320px;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(10,22,40,0.08);border-radius:18px;box-shadow:0 20px 60px rgba(10,22,40,0.15),0 4px 12px rgba(0,0,0,0.06),0 0 0 1px rgba(255,255,255,0.8) inset;padding:24px;opacity:0;transform:translateY(16px) scale(0.96);pointer-events:none;transition:all 0.35s cubic-bezier(0.22,1,0.36,1)}
+.rp-card.rp-open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+
+.rp-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;color:var(--slate);cursor:pointer;padding:4px;line-height:1;transition:color 0.15s}
+.rp-close:hover{color:var(--navy)}
+
+.rp-header{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.rp-avatar-ring{width:56px;height:56px;border-radius:50%;padding:2px;background:linear-gradient(135deg,var(--blue),var(--cyan));flex-shrink:0}
+.rp-avatar{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid #fff}
+.rp-avatar-fallback{width:100%;height:100%;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;letter-spacing:0.03em;border:2px solid #fff}
+
+.rp-info{min-width:0}
+.rp-name{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;color:var(--navy);letter-spacing:-0.01em}
+.rp-title{font-size:12px;color:var(--slate);font-weight:500;margin-top:1px}
+.rp-status{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--slate);margin-top:4px}
+.rp-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,0.5);flex-shrink:0}
+
+.rp-bio{font-size:13px;line-height:1.6;color:var(--body);margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(10,22,40,0.06)}
+
+.rp-actions{display:flex;flex-direction:column;gap:8px}
+.rp-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;text-decoration:none;transition:all 0.18s cubic-bezier(0.22,1,0.36,1);cursor:pointer;border:none}
+.rp-btn-call{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;box-shadow:0 2px 8px rgba(10,22,40,0.2)}
+.rp-btn-call:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(10,22,40,0.3)}
+.rp-btn-email{background:rgba(10,22,40,0.04);color:var(--navy);border:1px solid rgba(10,22,40,0.1)}
+.rp-btn-email:hover{background:rgba(10,22,40,0.07);transform:translateY(-1px)}
+
+/* ── JAZZ RADIO WIDGET ── */
+.jazz-bar{position:fixed;bottom:0;left:0;right:0;z-index:9990;display:none;align-items:center;gap:14px;padding:10px 20px;background:rgba(10,22,40,0.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.06);box-shadow:0 -4px 24px rgba(0,0,0,0.2);font-family:'DM Sans',sans-serif;animation:jazzSlideUp 0.4s cubic-bezier(0.22,1,0.36,1)}
+.jazz-bar.jazz-visible{display:flex}
+
+.jazz-play{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.18s;box-shadow:0 2px 10px rgba(11,95,216,0.35)}
+.jazz-play:hover{transform:scale(1.08);box-shadow:0 4px 16px rgba(11,95,216,0.45)}
+
+.jazz-info{flex:1;min-width:0}
+.jazz-now{font-size:13px;font-weight:600;color:#fff;letter-spacing:0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jazz-station{font-size:11px;color:rgba(255,255,255,0.45);margin-top:1px}
+
+.jazz-vol-wrap{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.4)}
+.jazz-vol{-webkit-appearance:none;appearance:none;width:80px;height:4px;border-radius:2px;background:rgba(255,255,255,0.12);outline:none;cursor:pointer}
+.jazz-vol::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);cursor:pointer;transition:transform 0.12s}
+.jazz-vol::-webkit-slider-thumb:hover{transform:scale(1.2)}
+.jazz-vol::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:none;box-shadow:0 1px 4px rgba(0,0,0,0.3);cursor:pointer}
+
+.jazz-close{background:none;border:none;color:rgba(255,255,255,0.3);font-size:20px;cursor:pointer;padding:4px 2px;line-height:1;transition:color 0.15s;flex-shrink:0}
+.jazz-close:hover{color:rgba(255,255,255,0.7)}
+
+/* Jazz bar eq visualizer */
+.jazz-eq{display:flex;align-items:flex-end;gap:2px;height:18px;margin-left:4px}
+.jazz-eq-bar{width:3px;background:var(--cyan);border-radius:1px;animation:jazzEq 0.8s ease-in-out infinite alternate}
+.jazz-eq-bar:nth-child(1){height:8px;animation-delay:0s}
+.jazz-eq-bar:nth-child(2){height:14px;animation-delay:0.2s}
+.jazz-eq-bar:nth-child(3){height:6px;animation-delay:0.4s}
+.jazz-eq-bar:nth-child(4){height:12px;animation-delay:0.1s}
+.jazz-eq-bar:nth-child(5){height:10px;animation-delay:0.3s}
+
+@keyframes jazzEq{0%{height:4px}100%{height:18px}}
+@keyframes jazzSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+@media(max-width:768px){
+  .rp-fab{bottom:16px;left:16px;padding:10px 14px 10px 12px}
+  .rp-fab-label{display:none}
+  .rp-card{left:16px;right:16px;width:auto;bottom:72px}
+  .jazz-vol-wrap{display:none}
+  .jazz-bar.jazz-visible ~ .rp-fab{bottom:60px}
+}
+
+/* ── DARK MODE OVERRIDES ── */
+[data-theme="dark"] .rp-card{background:rgba(20,30,48,0.97);border-color:rgba(255,255,255,0.08);box-shadow:0 20px 60px rgba(0,0,0,0.4),0 4px 12px rgba(0,0,0,0.2),0 0 0 1px rgba(255,255,255,0.04) inset}
+[data-theme="dark"] .rp-close{color:rgba(255,255,255,0.4)}
+[data-theme="dark"] .rp-close:hover{color:#fff}
+[data-theme="dark"] .rp-name{color:#e8ecf2}
+[data-theme="dark"] .rp-title,[data-theme="dark"] .rp-status{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .rp-bio{color:rgba(255,255,255,0.6);border-bottom-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .rp-btn-email{background:rgba(255,255,255,0.06);color:#e8ecf2;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .rp-btn-email:hover{background:rgba(255,255,255,0.1)}
