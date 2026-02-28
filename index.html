@@ -88,16 +88,14 @@ try{if(localStorage.getItem('ctax_theme')==='dark')document.documentElement.setA
 <!-- Google Fonts — non-blocking with preload -->
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&family=Playfair+Display:ital@1&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&family=Playfair+Display:ital@1&display=swap"></noscript>
-<!-- Async-load non-critical stylesheets -->
-<link rel="stylesheet" href="css/base.css" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="css/nav.css" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="css/components.css" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="css/pages.css" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="css/dark-mode.css" media="print" onload="this.media='all'">
-<noscript>
+<!-- Small structural CSS — sync (11 KiB, prevents unstyled flash) -->
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/nav.css">
 <link rel="stylesheet" href="css/components.css">
+<!-- Large page-specific CSS — async (46 KiB, not needed for first paint) -->
+<link rel="stylesheet" href="css/pages.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="css/dark-mode.css" media="print" onload="this.media='all'">
+<noscript>
 <link rel="stylesheet" href="css/pages.css">
 <link rel="stylesheet" href="css/dark-mode.css">
 </noscript>
