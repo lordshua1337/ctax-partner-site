@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0A1628">
 <title>Community Tax — Enterprise Partner Program</title>
 <meta name="description" content="Join 10,000+ financial professionals earning revenue from IRS tax resolution referrals. Community Tax handles everything - you earn 8-18% revenue share with zero overhead.">
 <meta name="keywords" content="tax resolution partner program, IRS tax debt referral, CPA partner program, financial advisor referral, tax resolution revenue share">
@@ -16,13 +17,84 @@
 <meta name="twitter:title" content="Community Tax Enterprise Partner Program">
 <meta name="twitter:description" content="Earn 8-18% revenue share referring clients who owe the IRS. Join 10,000+ partners.">
 <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<!-- Preconnect to third-party origins -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<!-- Critical CSS inlined for first paint (nav + hero above-the-fold) -->
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{--navy:#0A1628;--navy2:#112244;--navy3:#1a3160;--blue:#0B5FD8;--blue2:#1470f0;--sky:#4BA3FF;--cyan:#00C8E0;--teal:#00E5CC;--cyan-text:#0E7F94;--teal-text:#0C8C6E;--white:#FFFFFF;--off:#F5F7FA;--off2:#EEF1F7;--mist:#D8DDE8;--slate:#8A95AA;--ink:#1C2333;--body:#3D4760}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);line-height:1.6;overflow-x:hidden;padding-bottom:56px}
+.page{display:none;min-height:100vh;padding-top:72px}
+.page.active{display:block}
+.con{max-width:1160px;margin:0 auto;padding:0 40px}
+#site-nav{position:fixed;top:0;left:0;right:0;z-index:9000;height:72px;background:rgba(255,255,255,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(10,22,40,0.06);box-shadow:0 1px 0 rgba(10,22,40,0.04);display:flex;align-items:center;padding:0 48px;gap:0;transition:box-shadow 0.3s,background 0.3s}
+.nav-logo{display:flex;align-items:center;text-decoration:none;flex-shrink:0;cursor:pointer}
+.nav-logo img{height:28px;width:auto;max-width:200px;object-fit:contain;display:block}
+.nav-links{display:flex;list-style:none;gap:4px;margin:0 0 0 40px;flex-wrap:nowrap;align-items:center}
+.nav-links>li>a{display:block;padding:8px 16px;font-size:14px;font-weight:500;letter-spacing:0.01em;color:var(--body);text-decoration:none;border-radius:8px;transition:color 0.2s,background 0.2s;white-space:nowrap;cursor:pointer}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.nav-cta{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.04em;padding:8px 20px;border-radius:7px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;box-shadow:0 2px 8px rgba(11,95,216,0.25);transition:transform 0.18s,box-shadow 0.18s}
+.nav-cta-outline{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.04em;padding:8px 20px;border-radius:7px;border:1.5px solid var(--mist);cursor:pointer;background:transparent;color:var(--body);transition:border-color 0.18s,color 0.18s}
+.nav-icon-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;border:none;background:transparent;cursor:pointer;color:var(--slate);transition:background 0.18s,color 0.18s}
+.nav-hamburger{display:none}
+.hero-wrap{min-height:calc(100vh - 64px);background:#f8f9fc;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 40px 0}
+.hero-inner-center{position:relative;z-index:2;max-width:860px;width:100%;display:flex;flex-direction:column;align-items:center}
+.h-badge{display:inline-flex;align-items:center;padding:6px 20px;border-radius:30px;font-size:10px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#d0d8e4;position:relative;margin-bottom:24px;border:1.5px solid transparent;background:linear-gradient(#0a1628,#0a1628) padding-box,linear-gradient(135deg,#5a6a7e 0%,#a0b0c4 30%,#e0e8f0 50%,#a0b0c4 70%,#5a6a7e 100%) border-box;overflow:hidden}
+.h-title{font-family:'DM Serif Display',serif;font-size:clamp(48px,7vw,92px);font-weight:400;line-height:1.0;letter-spacing:-0.03em;color:var(--navy);margin:0 0 28px;opacity:0;animation:hRise 0.8s cubic-bezier(0.22,1,0.36,1) forwards 0.5s}
+.h-title-line{display:block}
+.h-title-gradient{background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.h-sub{font-size:17px;font-weight:300;line-height:1.72;color:rgba(10,22,40,0.75);max-width:560px;margin:0 auto 44px;opacity:0;animation:hFade 0.7s ease forwards 1.1s}
+.h-cta-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:64px;opacity:0;animation:hFade 0.7s ease forwards 1.4s}
+.h-cta-primary{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.05em;padding:15px 36px;border:none;border-radius:6px;cursor:pointer;box-shadow:0 4px 20px rgba(11,95,216,0.35)}
+.h-cta-secondary{background:#fff;color:var(--navy);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.05em;padding:15px 36px;border:1.5px solid rgba(10,22,40,0.14);border-radius:6px;cursor:pointer}
+.h-stats{display:flex;justify-content:center;gap:0;border-top:1px solid rgba(10,22,40,0.08);padding-top:36px;width:100%;max-width:640px;opacity:0;animation:hFade 0.8s ease forwards 2.2s}
+.h-stat{flex:1;display:flex;flex-direction:column;align-items:center;padding:0 24px;border-right:1px solid rgba(10,22,40,0.08)}
+.h-stat:last-child{border-right:none}
+.h-stat-n{font-family:'DM Serif Display',serif;font-size:clamp(26px,3vw,36px);font-weight:400;color:var(--navy);line-height:1;letter-spacing:-0.02em;margin-bottom:5px}
+.h-stat-l{font-size:15px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(10,22,40,0.62)}
+.hero-reveal{opacity:0;transform:translateY(32px);animation:heroRevealIn 0.8s cubic-bezier(0.22,1,0.36,1) forwards;animation-delay:calc(var(--reveal-d,0) * 120ms + 200ms)}
+@keyframes heroRevealIn{to{opacity:1;transform:translateY(0)}}
+@keyframes hRise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes hFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.notif-wrap{position:relative}
+.notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:#ef4444}
+@media(max-width:1024px){.nav-links{display:none}.nav-right .nav-cta-outline,.nav-right .nav-cta{display:none}.nav-hamburger{display:flex;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:8px}.nav-hamburger span{width:18px;height:2px;background:var(--ink);border-radius:2px}}
+@media(max-width:768px){#site-nav{padding:0 16px;height:60px}.page{padding-top:60px}.hero-wrap{padding:48px 0}}
+[data-theme="dark"]{--white:#0c1220;--off:#111827;--off2:#1a2234;--mist:#2a3650;--slate:#7889a4;--ink:#e8ecf2;--body:#b0b8cc}
+[data-theme="dark"] body{background:#0c1220;color:#e8ecf2}
+[data-theme="dark"] #site-nav{background:rgba(12,18,32,0.92);border-bottom-color:rgba(255,255,255,0.06);box-shadow:0 1px 0 rgba(255,255,255,0.03)}
+[data-theme="dark"] .nav-logo-dark{display:none!important}
+[data-theme="dark"] .nav-logo-light{display:block!important}
+[data-theme="dark"] .nav-links>li>a{color:rgba(255,255,255,0.7)}
+[data-theme="dark"] .nav-cta-outline{color:#fff;border-color:rgba(255,255,255,0.25)}
+[data-theme="dark"] .nav-icon-btn{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .nav-hamburger span{background:#e8ecf2}
+</style>
+<script>
+/* Prevent dark-mode flash: apply theme before first paint */
+try{if(localStorage.getItem('ctax_theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
+</script>
+<!-- Google Fonts — non-blocking with preload -->
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&family=Playfair+Display:ital@1&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&family=Playfair+Display:ital@1&display=swap"></noscript>
+<!-- Async-load non-critical stylesheets -->
+<link rel="stylesheet" href="css/base.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="css/nav.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="css/components.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="css/pages.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="css/dark-mode.css" media="print" onload="this.media='all'">
+<noscript>
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/nav.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/pages.css">
 <link rel="stylesheet" href="css/dark-mode.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</noscript>
+<!-- html2canvas — deferred, only needed for Ad Maker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 </head>
 <body>
 <a href="#main-content" class="skip-nav" style="position:absolute;top:-100%;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;padding:8px 20px;border-radius:0 0 8px 8px;font-size:14px;font-weight:600;z-index:99999;text-decoration:none;transition:top 0.2s" onfocus="this.style.top='0'" onblur="this.style.top='-100%'">Skip to main content</a>
@@ -680,20 +752,20 @@
   </div>
 </footer>
 
-<script src="js/api-config.js"></script>
-<script src="js/page-loader.js"></script>
-<script src="js/calculator.js"></script>
-<script src="js/script-builder.js"></script>
-<script src="js/navigation.js"></script>
-<script src="js/client-qualifier.js"></script>
-<script src="js/knowledge-base.js"></script>
-<script src="js/ad-maker.js"></script>
-<script src="js/marketing-kit.js"></script>
-<script src="js/business-planner.js"></script>
-<script src="js/dashboard.js"></script>
-<script src="js/widgets.js"></script>
-<script src="js/hero-mesh.js"></script>
-<script src="js/guided-tour.js"></script>
-<script src="js/portal.js"></script>
+<script src="js/api-config.js" defer></script>
+<script src="js/page-loader.js" defer></script>
+<script src="js/calculator.js" defer></script>
+<script src="js/script-builder.js" defer></script>
+<script src="js/navigation.js" defer></script>
+<script src="js/client-qualifier.js" defer></script>
+<script src="js/knowledge-base.js" defer></script>
+<script src="js/ad-maker.js" defer></script>
+<script src="js/marketing-kit.js" defer></script>
+<script src="js/business-planner.js" defer></script>
+<script src="js/dashboard.js" defer></script>
+<script src="js/widgets.js" defer></script>
+<script src="js/hero-mesh.js" defer></script>
+<script src="js/guided-tour.js" defer></script>
+<script src="js/portal.js" defer></script>
 </body>
 </html>
