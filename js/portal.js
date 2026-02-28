@@ -433,6 +433,8 @@ function submitReferral() {
   var refNum = 'REF-2026-' + String(Math.floor(Math.random() * 9000) + 1000).padStart(4, '0');
   document.getElementById('sub-success-id').textContent = 'Referral #' + refNum + ' submitted successfully.';
   showToast('Referral submitted successfully!', 'success');
+  // Update gamification streak
+  if (typeof updateStreak === 'function') updateStreak();
 }
 
 function resetSubForm() {
@@ -1264,4 +1266,136 @@ function initMobMoneyHero() {
 }
 if (window.matchMedia('(max-width:768px)').matches) {
   document.addEventListener('DOMContentLoaded', initMobMoneyHero);
+  document.addEventListener('DOMContentLoaded', initGamification);
+}
+
+// --- Gamification ---
+var GAMIFICATION_KEY = 'ctax_gamification';
+
+function getGamificationData() {
+  try {
+    var stored = localStorage.getItem(GAMIFICATION_KEY);
+    if (stored) return JSON.parse(stored);
+  } catch (e) { /* ignore */ }
+  return { streak: 0, lastRefDate: null, totalRefs: 6, totalEarned: 24850, achievements: [] };
+}
+
+function saveGamificationData(data) {
+  try { localStorage.setItem(GAMIFICATION_KEY, JSON.stringify(data)); } catch (e) { /* ignore */ }
+}
+
+function calcPartnerLevel(totalRefs) {
+  if (totalRefs >= 50) return 'platinum';
+  if (totalRefs >= 25) return 'gold';
+  if (totalRefs >= 10) return 'silver';
+  return 'bronze';
+}
+
+function getLevelThreshold(level) {
+  if (level === 'bronze') return { next: 'Silver', need: 10 };
+  if (level === 'silver') return { next: 'Gold', need: 25 };
+  if (level === 'gold') return { next: 'Platinum', need: 50 };
+  return { next: 'Max', need: 50 };
+}
+
+function initGamification() {
+  var data = getGamificationData();
+
+  // Demo: simulate some activity
+  if (!data.lastRefDate) {
+    data.streak = 5;
+    data.totalRefs = 6;
+    data.totalEarned = 24850;
+    data.lastRefDate = new Date().toISOString().slice(0, 10);
+    saveGamificationData(data);
+  }
+
+  // Streak
+  var streakEl = document.getElementById('mob-streak-count');
+  if (streakEl) streakEl.textContent = data.streak;
+
+  // Progress ring (referrals this month vs goal of 10)
+  var monthlyGoal = 10;
+  var monthlyRefs = Math.min(data.totalRefs, monthlyGoal);
+  var ringFill = document.getElementById('mob-ring-fill');
+  var ringLabel = document.getElementById('mob-ring-label');
+  if (ringFill) {
+    var circumference = 125.66;
+    var offset = circumference - (monthlyRefs / monthlyGoal) * circumference;
+    setTimeout(function() { ringFill.style.strokeDashoffset = offset; }, 200);
+  }
+  if (ringLabel) ringLabel.textContent = monthlyRefs + '/' + monthlyGoal;
+
+  // Level badge
+  var level = calcPartnerLevel(data.totalRefs);
+  var badgeEl = document.getElementById('mob-level-badge');
+  if (badgeEl) {
+    badgeEl.textContent = level.charAt(0).toUpperCase() + level.slice(1);
+    badgeEl.className = 'mob-level-badge mob-level-' + level;
+  }
+
+  // Milestone bar
+  var threshold = getLevelThreshold(level);
+  var milestoneText = document.getElementById('mob-milestone-text');
+  var milestoneFill = document.getElementById('mob-milestone-fill');
+  if (threshold.next === 'Max') {
+    if (milestoneText) milestoneText.textContent = 'Max level reached!';
+    if (milestoneFill) milestoneFill.style.width = '100%';
+  } else {
+    var remaining = threshold.need - data.totalRefs;
+    var prevThreshold = level === 'bronze' ? 0 : level === 'silver' ? 10 : 25;
+    var progress = ((data.totalRefs - prevThreshold) / (threshold.need - prevThreshold)) * 100;
+    if (milestoneText) milestoneText.textContent = remaining + ' more referrals to ' + threshold.next;
+    if (milestoneFill) setTimeout(function() { milestoneFill.style.width = Math.min(progress, 100) + '%'; }, 400);
+  }
+}
+
+function updateStreak() {
+  var data = getGamificationData();
+  var today = new Date().toISOString().slice(0, 10);
+  if (data.lastRefDate !== today) {
+    data.streak = data.streak + 1;
+    data.lastRefDate = today;
+  }
+  data.totalRefs = data.totalRefs + 1;
+  saveGamificationData(data);
+  checkAchievements(data);
+  initGamification();
+}
+
+function checkAchievements(data) {
+  var thresholds = [
+    { key: 'first_ref', count: 1, label: 'First Referral!' },
+    { key: 'ref_5', count: 5, label: '5 Referrals - On Fire!' },
+    { key: 'ref_10', count: 10, label: '10 Referrals - Silver Partner!' },
+    { key: 'ref_25', count: 25, label: '25 Referrals - Gold Partner!' },
+    { key: 'ref_50', count: 50, label: '50 Referrals - Platinum!' }
+  ];
+  var earned = [
+    { key: 'earn_1k', amount: 1000, label: '$1K Earned!' },
+    { key: 'earn_5k', amount: 5000, label: '$5K Earned!' },
+    { key: 'earn_10k', amount: 10000, label: '$10K Club!' },
+    { key: 'earn_25k', amount: 25000, label: '$25K Milestone!' }
+  ];
+  thresholds.forEach(function(t) {
+    if (data.totalRefs >= t.count && data.achievements.indexOf(t.key) === -1) {
+      data.achievements.push(t.key);
+      showAchievementToast(t.label);
+    }
+  });
+  earned.forEach(function(e) {
+    if (data.totalEarned >= e.amount && data.achievements.indexOf(e.key) === -1) {
+      data.achievements.push(e.key);
+      showAchievementToast(e.label);
+    }
+  });
+  saveGamificationData(data);
+}
+
+function showAchievementToast(msg) {
+  var toast = document.getElementById('mob-achieve-toast');
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add('mob-achieve-show');
+  setTimeout(function() { toast.classList.remove('mob-achieve-show'); }, 3000);
 }

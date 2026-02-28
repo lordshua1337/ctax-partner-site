@@ -162,8 +162,30 @@
             <div class="mob-money-trend">+12.4%</div>
           </div>
         </div>
+        <!-- Gamification row -->
+        <div class="mob-game-row">
+          <div class="mob-streak" id="mob-streak">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 8.5 3 12.5 3 15.5a9 9 0 0018 0C21 12.5 17.5 8.5 12 2z"/></svg>
+            <span id="mob-streak-count">0</span> day streak
+          </div>
+          <div class="mob-progress-ring-wrap">
+            <svg class="mob-progress-ring" width="48" height="48" viewBox="0 0 48 48">
+              <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="4"/>
+              <circle class="mob-progress-ring-fill" id="mob-ring-fill" cx="24" cy="24" r="20" fill="none" stroke="#4ade80" stroke-width="4" stroke-linecap="round" stroke-dasharray="125.66" stroke-dashoffset="125.66" transform="rotate(-90 24 24)"/>
+            </svg>
+            <span class="mob-ring-label" id="mob-ring-label">0/10</span>
+          </div>
+          <div class="mob-level-badge" id="mob-level-badge">Bronze</div>
+        </div>
+        <div class="mob-milestone-wrap" id="mob-milestone-wrap">
+          <div class="mob-milestone-text" id="mob-milestone-text">0 more referrals to Silver</div>
+          <div class="mob-milestone-track"><div class="mob-milestone-fill" id="mob-milestone-fill" style="width:0%"></div></div>
+        </div>
         <button class="mob-money-cta" onclick="mobNavTap(this,'portal-sec-submit')">Submit New Referral</button>
       </div>
+
+      <!-- Achievement toast (mobile only) -->
+      <div class="mob-achieve-toast" id="mob-achieve-toast"></div>
 
       <div class="portal-sec-header">
         <div class="dash-welcome-row">
