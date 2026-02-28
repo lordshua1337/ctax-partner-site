@@ -2776,7 +2776,7 @@ body.portal-mode{padding-bottom:0}
 
 /* ═══ Dashboard Extracted Inline Styles ═══ */
 .dash-kpi-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;margin-bottom:24px}
-.dash-kpi-card{border:1px solid var(--off2);border-radius:12px;padding:20px;background:var(--off)}
+.dash-kpi-card{border:1px solid var(--off2);border-radius:12px;padding:20px;background:var(--off);position:relative;overflow:hidden}
 .dash-kpi-card-primary{background:linear-gradient(135deg,rgba(11,95,216,0.06),rgba(75,163,255,0.06));border-color:rgba(11,95,216,0.12)}
 .dash-kpi-label{font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-bottom:8px}
 .dash-kpi-card-primary .dash-kpi-label{color:var(--blue)}
@@ -2784,6 +2784,7 @@ body.portal-mode{padding-bottom:0}
 .dash-kpi-trend{font-size:13px;font-weight:600;margin-top:4px}
 .dash-kpi-trend-up{color:var(--cyan-text)}
 .dash-kpi-trend-neutral{color:var(--slate)}
+.kpi-spark{position:absolute;bottom:0;right:0;width:60%;height:28px;pointer-events:none}
 
 /* Client Pipeline */
 .dash-pipeline{margin-bottom:28px}
