@@ -115,8 +115,8 @@ function onPageLoaded(id) {
     setTimeout(pbInitQuiz, 120);
   }
   // Start guided tour spotlight walkthrough on portal load
-  if (id === 'portal' && typeof tourStart === 'function') {
-    setTimeout(tourStart, 500);
+  if (id === 'portal' && typeof tourShouldShow === 'function' && tourShouldShow()) {
+    if (typeof tourStart === 'function') setTimeout(tourStart, 500);
   }
   // Initialize staggered card entrances on newly loaded page
   var el = document.getElementById('page-' + id);

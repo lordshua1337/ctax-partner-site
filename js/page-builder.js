@@ -1,16 +1,19 @@
 // --- Landing Page Builder (GrapesJS) ---
 // Full drag-and-drop page builder powered by GrapesJS.
-// Partners design referral/business landing pages with custom blocks,
-// device preview, and HTML export.
+// Partners pick a stock design, then customize with blocks,
+// device preview, style editing, and HTML export.
 
 var PB_STORAGE_KEY = 'ctax_pb_gjs';
 var pbEditor = null;
 
-// Starter templates
+// ── Template definitions ──
+// Each template has a label, description, icon identifier, and full HTML.
 var PB_TEMPLATES = {
   referral: {
-    label: 'Referral Page',
-    desc: 'Client-facing page for IRS tax resolution referrals',
+    label: 'Client Referral',
+    desc: 'Full-funnel page: hero, social proof, features, testimonial, CTA, and lead form.',
+    icon: 'funnel',
+    sections: ['Hero', 'Stats', 'Features', 'Testimonial', 'CTA', 'Form'],
     html: [
       '<section class="pb-hero">',
       '  <h1>Struggling with IRS Tax Debt?</h1>',
@@ -53,8 +56,10 @@ var PB_TEMPLATES = {
     ].join('\n')
   },
   business: {
-    label: 'Business Page',
-    desc: 'Professional page showcasing your tax practice',
+    label: 'Tax Practice',
+    desc: 'Showcase your firm: trust badges, services grid, testimonial, and contact form.',
+    icon: 'briefcase',
+    sections: ['Hero', 'Trust Bar', 'Features', 'Testimonial', 'Form'],
     html: [
       '<section class="pb-hero pb-hero-dark">',
       '  <h1>Your Trusted Tax Partner</h1>',
@@ -91,14 +96,58 @@ var PB_TEMPLATES = {
       '</section>'
     ].join('\n')
   },
-  minimal: {
-    label: 'Minimal',
-    desc: 'Clean one-section lead capture',
+  authority: {
+    label: 'Authority Page',
+    desc: 'Build trust and credibility: credentials, stats, FAQ, and a strong call to action.',
+    icon: 'shield',
+    sections: ['Hero', 'Trust Bar', 'Stats', 'FAQ', 'CTA'],
+    html: [
+      '<section class="pb-hero">',
+      '  <h1>14 Years Resolving IRS Tax Debt</h1>',
+      '  <p>Licensed enrolled agents and CPAs with a proven track record of helping Americans settle their tax obligations.</p>',
+      '  <a class="pb-btn">Check Your Eligibility</a>',
+      '</section>',
+      '<section class="pb-trust-bar">',
+      '  <span class="pb-trust-badge">IRS Authorized e-file Provider</span>',
+      '  <span class="pb-trust-badge">BBB A+ Rated</span>',
+      '  <span class="pb-trust-badge">NAEA Member</span>',
+      '  <span class="pb-trust-badge">$2.3B+ Resolved</span>',
+      '</section>',
+      '<section class="pb-stats-row">',
+      '  <div class="pb-stat"><span class="pb-stat-val">50,000+</span><span class="pb-stat-label">Cases Resolved</span></div>',
+      '  <div class="pb-stat"><span class="pb-stat-val">83%</span><span class="pb-stat-label">Avg. Debt Reduction</span></div>',
+      '  <div class="pb-stat"><span class="pb-stat-val">4.8/5</span><span class="pb-stat-label">Client Rating</span></div>',
+      '  <div class="pb-stat"><span class="pb-stat-val">48hrs</span><span class="pb-stat-label">IRS Response Time</span></div>',
+      '</section>',
+      '<section class="pb-faq">',
+      '  <h2>Common Questions</h2>',
+      '  <div class="pb-faq-item"><strong>What is an Offer in Compromise?</strong><p>An OIC lets you settle your tax debt for less than you owe. Our team evaluates your eligibility and negotiates directly with the IRS.</p></div>',
+      '  <div class="pb-faq-item"><strong>Will I get audited or penalized?</strong><p>No. Working with a licensed representative shows good faith. The IRS prefers resolution over enforcement.</p></div>',
+      '  <div class="pb-faq-item"><strong>How much does it cost?</strong><p>Your initial consultation is free. We review your situation and present transparent pricing before any commitment.</p></div>',
+      '  <div class="pb-faq-item"><strong>How long does resolution take?</strong><p>Most cases resolve in 3-6 months. Complex cases involving multiple years or business taxes may take longer.</p></div>',
+      '</section>',
+      '<section class="pb-cta-section">',
+      '  <h2>Get Your Free Tax Debt Analysis</h2>',
+      '  <p>Find out exactly where you stand and what options are available to you.</p>',
+      '  <a class="pb-btn">Start Your Free Review</a>',
+      '</section>'
+    ].join('\n')
+  },
+  leadcapture: {
+    label: 'Lead Capture',
+    desc: 'Minimal high-conversion page: bold headline, key stats, and a focused lead form.',
+    icon: 'target',
+    sections: ['Hero', 'Stats', 'Form'],
     html: [
       '<section class="pb-hero">',
       '  <h1>Resolve Your IRS Tax Debt</h1>',
       '  <p>Licensed professionals. Proven results. Free consultation.</p>',
       '  <a class="pb-btn">Start Now</a>',
+      '</section>',
+      '<section class="pb-stats-row">',
+      '  <div class="pb-stat"><span class="pb-stat-val">$2.3B</span><span class="pb-stat-label">Tax Debt Resolved</span></div>',
+      '  <div class="pb-stat"><span class="pb-stat-val">50K+</span><span class="pb-stat-label">Clients Helped</span></div>',
+      '  <div class="pb-stat"><span class="pb-stat-val">Free</span><span class="pb-stat-label">Consultation</span></div>',
       '</section>',
       '<section class="pb-form-section">',
       '  <h2>Request a Free Consultation</h2>',
@@ -110,45 +159,120 @@ var PB_TEMPLATES = {
       '  </form>',
       '</section>'
     ].join('\n')
+  },
+  webinar: {
+    label: 'Webinar / Event',
+    desc: 'Promote a webinar or live event: headline, key details, speaker bio, and registration.',
+    icon: 'video',
+    sections: ['Hero', 'Stats', 'Features', 'Testimonial', 'Form'],
+    html: [
+      '<section class="pb-hero pb-hero-dark">',
+      '  <h1>Free Webinar: How to Settle IRS Tax Debt</h1>',
+      '  <p>Join our licensed tax professionals for a live 30-minute session. Learn the exact steps to resolve your tax debt legally.</p>',
+      '  <a class="pb-btn">Reserve Your Spot</a>',
+      '</section>',
+      '<section class="pb-stats-row">',
+      '  <div class="pb-stat"><span class="pb-stat-val">Live</span><span class="pb-stat-label">30-Min Session</span></div>',
+      '  <div class="pb-stat"><span class="pb-stat-val">Free</span><span class="pb-stat-label">No Obligation</span></div>',
+      '  <div class="pb-stat"><span class="pb-stat-val">Q&A</span><span class="pb-stat-label">Ask Questions Live</span></div>',
+      '</section>',
+      '<section class="pb-features">',
+      '  <h2>What You Will Learn</h2>',
+      '  <div class="pb-feat-grid">',
+      '    <div class="pb-feat-card"><h3>Your Options</h3><p>Offers in compromise, installment plans, penalty abatement, and which one fits your situation.</p></div>',
+      '    <div class="pb-feat-card"><h3>The Process</h3><p>Step-by-step walkthrough of how IRS resolution works, from initial filing to final settlement.</p></div>',
+      '    <div class="pb-feat-card"><h3>Common Mistakes</h3><p>The costly errors most people make when dealing with the IRS, and how to avoid them.</p></div>',
+      '  </div>',
+      '</section>',
+      '<section class="pb-testimonial">',
+      '  <blockquote>"This webinar gave me the confidence to finally deal with my $32K tax debt. I had no idea settling was even an option."</blockquote>',
+      '  <cite>-- Lisa M., Webinar Attendee</cite>',
+      '</section>',
+      '<section class="pb-form-section">',
+      '  <h2>Register for the Free Webinar</h2>',
+      '  <form class="pb-form">',
+      '    <input type="text" placeholder="Full Name"/>',
+      '    <input type="email" placeholder="Email Address"/>',
+      '    <input type="tel" placeholder="Phone Number"/>',
+      '    <button type="button" class="pb-btn">Reserve My Spot</button>',
+      '  </form>',
+      '</section>'
+    ].join('\n')
+  },
+  compare: {
+    label: 'Comparison',
+    desc: 'Compare your services to alternatives: side-by-side features, social proof, and CTA.',
+    icon: 'compare',
+    sections: ['Hero', 'Features', 'Stats', 'Testimonial', 'CTA', 'Form'],
+    html: [
+      '<section class="pb-hero">',
+      '  <h1>Why Clients Choose Us Over DIY Tax Relief</h1>',
+      '  <p>See how working with licensed professionals compares to going it alone or using discount services.</p>',
+      '</section>',
+      '<section class="pb-features">',
+      '  <h2>The Difference Is Clear</h2>',
+      '  <div class="pb-feat-grid">',
+      '    <div class="pb-feat-card"><h3>Licensed Representation</h3><p>Enrolled agents and CPAs who are authorized to represent you before the IRS. Discount services use unlicensed staff.</p></div>',
+      '    <div class="pb-feat-card"><h3>Full Case Management</h3><p>We handle everything from initial filing to final resolution. DIY means navigating IRS bureaucracy yourself.</p></div>',
+      '    <div class="pb-feat-card"><h3>Transparent Pricing</h3><p>Flat fees with no hidden charges. Competitors often add surprise fees mid-case when you are locked in.</p></div>',
+      '  </div>',
+      '</section>',
+      '<section class="pb-stats-row">',
+      '  <div class="pb-stat"><span class="pb-stat-val">83%</span><span class="pb-stat-label">Avg. Reduction</span></div>',
+      '  <div class="pb-stat"><span class="pb-stat-val">3-6 Mo</span><span class="pb-stat-label">Resolution Time</span></div>',
+      '  <div class="pb-stat"><span class="pb-stat-val">4.8/5</span><span class="pb-stat-label">Client Rating</span></div>',
+      '</section>',
+      '<section class="pb-testimonial">',
+      '  <blockquote>"I tried to handle it myself for two years and got nowhere. Community Tax resolved everything in four months. I wish I had called sooner."</blockquote>',
+      '  <cite>-- David T., Small Business Owner, FL</cite>',
+      '</section>',
+      '<section class="pb-cta-section">',
+      '  <h2>Stop Wondering. Start Resolving.</h2>',
+      '  <p>Free consultation. No obligation. Real answers.</p>',
+      '  <a class="pb-btn">Get Your Free Assessment</a>',
+      '</section>',
+      '<section class="pb-form-section">',
+      '  <h2>Talk to a Tax Professional Today</h2>',
+      '  <form class="pb-form">',
+      '    <input type="text" placeholder="Full Name"/>',
+      '    <input type="email" placeholder="Email Address"/>',
+      '    <input type="tel" placeholder="Phone Number"/>',
+      '    <input type="text" placeholder="Estimated Tax Debt"/>',
+      '    <button type="button" class="pb-btn">Get Free Assessment</button>',
+      '  </form>',
+      '</section>'
+    ].join('\n')
   }
 };
 
-// Canvas styles injected into the GrapesJS iframe
+// Canvas styles injected into the GrapesJS iframe (kept as fallback)
 var PB_CANVAS_CSS = [
   '* { margin:0; padding:0; box-sizing:border-box; }',
   'body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; color:#1a2332; line-height:1.6; background:#fff; }',
-  // Hero
   '.pb-hero { padding:64px 32px; text-align:center; background:linear-gradient(135deg,#111827 0%,#1f2937 100%); color:#fff; }',
   '.pb-hero-dark { background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%); }',
   '.pb-hero h1 { font-size:36px; font-weight:800; margin-bottom:12px; letter-spacing:-0.02em; }',
   '.pb-hero p { font-size:16px; opacity:0.8; max-width:520px; margin:0 auto 24px; line-height:1.6; }',
-  // Button
   '.pb-btn { display:inline-block; padding:12px 28px; background:#2563eb; color:#fff; font-size:14px; font-weight:700; border-radius:8px; text-decoration:none; border:none; cursor:pointer; letter-spacing:0.01em; }',
   '.pb-btn:hover { background:#1d4ed8; }',
-  // Stats
   '.pb-stats-row { display:flex; justify-content:center; gap:48px; padding:40px 32px; background:#f8fafc; }',
   '.pb-stat { text-align:center; }',
   '.pb-stat-val { display:block; font-size:28px; font-weight:800; color:#111827; letter-spacing:-0.02em; }',
   '.pb-stat-label { display:block; font-size:13px; color:#64748b; margin-top:2px; }',
-  // Features
   '.pb-features { padding:48px 32px; text-align:center; }',
   '.pb-features h2 { font-size:24px; font-weight:700; margin-bottom:24px; color:#111827; }',
   '.pb-feat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; max-width:800px; margin:0 auto; }',
   '.pb-feat-card { padding:24px; border:1px solid #e5e7eb; border-radius:10px; text-align:left; }',
   '.pb-feat-card h3 { font-size:15px; font-weight:700; margin-bottom:6px; color:#111827; }',
   '.pb-feat-card p { font-size:13px; color:#64748b; line-height:1.6; }',
-  // Testimonial
   '.pb-testimonial { padding:40px 32px; background:#f8fafc; text-align:center; }',
   '.pb-testimonial blockquote { font-size:16px; font-style:italic; color:#374151; max-width:600px; margin:0 auto 12px; line-height:1.7; }',
   '.pb-testimonial cite { font-size:13px; color:#64748b; font-style:normal; font-weight:600; }',
-  // CTA
   '.pb-cta-section { padding:48px 32px; text-align:center; background:#111827; color:#fff; }',
   '.pb-cta-section h2 { font-size:24px; font-weight:700; margin-bottom:8px; }',
   '.pb-cta-section p { font-size:14px; opacity:0.7; margin-bottom:20px; }',
-  // Trust bar
   '.pb-trust-bar { display:flex; justify-content:center; gap:16px; padding:24px 32px; background:#f8fafc; flex-wrap:wrap; }',
   '.pb-trust-badge { padding:8px 16px; background:#fff; border:1px solid #e5e7eb; border-radius:6px; font-size:13px; font-weight:600; color:#374151; }',
-  // Form
   '.pb-form-section { padding:48px 32px; text-align:center; }',
   '.pb-form-section h2 { font-size:22px; font-weight:700; margin-bottom:20px; color:#111827; }',
   '.pb-form { max-width:400px; margin:0 auto; text-align:left; }',
@@ -156,19 +280,15 @@ var PB_CANVAS_CSS = [
   '.pb-form input:focus, .pb-form textarea:focus { outline:none; border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,0.1); }',
   '.pb-form textarea { min-height:80px; resize:vertical; }',
   '.pb-form .pb-btn { width:100%; text-align:center; margin-top:4px; }',
-  // Divider
   '.pb-divider { padding:16px 0; }',
   '.pb-divider hr { border:none; height:1px; background:#e5e7eb; }',
-  // Text
   '.pb-text-block { padding:32px; max-width:700px; margin:0 auto; }',
   '.pb-text-block p { font-size:15px; color:#374151; line-height:1.7; }',
-  // FAQ
   '.pb-faq { padding:48px 32px; }',
   '.pb-faq h2 { text-align:center; font-size:22px; font-weight:700; margin-bottom:24px; color:#111827; }',
   '.pb-faq-item { padding:16px 20px; border:1px solid #e5e7eb; border-radius:8px; margin-bottom:10px; max-width:600px; margin-left:auto; margin-right:auto; }',
   '.pb-faq-item strong { color:#111827; font-size:14px; }',
   '.pb-faq-item p { font-size:13px; color:#64748b; margin-top:4px; line-height:1.5; }',
-  // Responsive in canvas
   '@media(max-width:600px) {',
   '  .pb-hero h1 { font-size:26px; }',
   '  .pb-feat-grid { grid-template-columns:1fr; }',
@@ -176,13 +296,46 @@ var PB_CANVAS_CSS = [
   '}'
 ].join('\n');
 
+// ── SVG icons for template cards ──
+var PB_ICONS = {
+  funnel: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>',
+  briefcase: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>',
+  shield: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>',
+  target: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+  video: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="15" height="16" rx="2"/><polygon points="22 8 17 12 22 16 22 8"/></svg>',
+  compare: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/><line x1="6.5" y1="7" x2="6.5" y2="7.01"/><line x1="6.5" y1="11" x2="6.5" y2="11.01"/><line x1="17.5" y1="7" x2="17.5" y2="7.01"/><line x1="17.5" y1="11" x2="17.5" y2="11.01"/></svg>',
+  blank: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>'
+};
+
+// ── Section color map for visual preview blocks ──
+var PB_SECTION_COLORS = {
+  Hero: '#1f2937',
+  Stats: '#e2e5ea',
+  Features: '#f3f4f6',
+  Testimonial: '#e8edf2',
+  CTA: '#1f2937',
+  Form: '#f9fafb',
+  'Trust Bar': '#edf0f3',
+  FAQ: '#f3f4f6'
+};
+
+// ══════════════════════════════════════════
+//  Initialize editor
+// ══════════════════════════════════════════
 function pbInit() {
   var container = document.getElementById('gjs');
   if (!container || pbEditor) return;
 
-  // Load saved state or default template
+  // Clear stale pre-canvas-CSS saves (one-time migration)
+  if (!localStorage.getItem('ctax_pb_v2')) {
+    localStorage.removeItem(PB_STORAGE_KEY);
+    localStorage.setItem('ctax_pb_v2', '1');
+  }
+
+  // Load saved state or show template chooser for first visit
   var savedHtml = '';
   var savedCss = '';
+  var isFirstVisit = false;
   try {
     var saved = localStorage.getItem(PB_STORAGE_KEY);
     if (saved) {
@@ -194,6 +347,7 @@ function pbInit() {
 
   if (!savedHtml) {
     savedHtml = PB_TEMPLATES.referral.html;
+    isFirstVisit = true;
   }
 
   pbEditor = grapesjs.init({
@@ -206,8 +360,7 @@ function pbInit() {
     storageManager: false,
     noticeOnUnload: false,
     canvas: {
-      styles: [],
-      scripts: []
+      styles: ['/css/pb-canvas.css']
     },
     panels: { defaults: [] },
     deviceManager: {
@@ -224,69 +377,44 @@ function pbInit() {
     styleManager: {
       appendTo: '#pb-styles',
       sectors: [
-        {
-          name: 'Layout',
-          open: true,
-          buildProps: ['display', 'flex-direction', 'justify-content', 'align-items', 'flex-wrap', 'gap']
-        },
-        {
-          name: 'Dimension',
-          open: false,
-          buildProps: ['width', 'max-width', 'min-height', 'padding', 'margin']
-        },
-        {
-          name: 'Typography',
-          open: false,
-          buildProps: ['font-family', 'font-size', 'font-weight', 'color', 'line-height', 'text-align', 'letter-spacing']
-        },
-        {
-          name: 'Appearance',
-          open: false,
-          buildProps: ['background-color', 'background', 'border', 'border-radius', 'box-shadow', 'opacity']
-        }
+        { name: 'Layout', open: true, buildProps: ['display', 'flex-direction', 'justify-content', 'align-items', 'flex-wrap', 'gap'] },
+        { name: 'Dimension', open: false, buildProps: ['width', 'max-width', 'min-height', 'padding', 'margin'] },
+        { name: 'Typography', open: false, buildProps: ['font-family', 'font-size', 'font-weight', 'color', 'line-height', 'text-align', 'letter-spacing'] },
+        { name: 'Appearance', open: false, buildProps: ['background-color', 'background', 'border', 'border-radius', 'box-shadow', 'opacity'] }
       ]
     },
-    selectorManager: {
-      appendTo: '#pb-styles'
-    },
-    layerManager: {
-      appendTo: '#pb-layers'
-    }
+    selectorManager: { appendTo: '#pb-styles' },
+    layerManager: { appendTo: '#pb-layers' }
   });
 
-  // Inject canvas styles
-  var canvasDoc = pbEditor.Canvas.getDocument();
-  if (canvasDoc) {
-    var styleEl = canvasDoc.createElement('style');
-    styleEl.textContent = PB_CANVAS_CSS;
-    canvasDoc.head.appendChild(styleEl);
-  }
-
-  // Also inject on canvas frame load (for initial load)
-  pbEditor.on('canvas:frame:load', function(opts) {
-    var doc = opts.window.document;
-    var style = doc.createElement('style');
-    style.textContent = PB_CANVAS_CSS;
-    doc.head.appendChild(style);
+  // Ensure canvas styles are loaded (fallback: inject inline)
+  pbEditor.on('canvas:frame:load', function() {
+    pbInjectCanvasStyles();
   });
 
   // Add custom blocks
   pbAddBlocks(pbEditor);
 
   // Auto-save on change
-  pbEditor.on('change:changesCount', function() {
-    pbSave();
-  });
+  pbEditor.on('change:changesCount', function() { pbSave(); });
 
   // Update block count
   pbEditor.on('component:add', pbUpdateCount);
   pbEditor.on('component:remove', pbUpdateCount);
   pbUpdateCount();
 
-  // Add keyboard shortcuts
+  // Keyboard shortcut for save
   pbEditor.Commands.add('pb:save', { run: function() { pbSave(); } });
+
+  // Auto-show template chooser on first visit
+  if (isFirstVisit) {
+    setTimeout(pbShowTemplates, 400);
+  }
 }
 
+// ══════════════════════════════════════════
+//  Block definitions
+// ══════════════════════════════════════════
 function pbAddBlocks(editor) {
   var bm = editor.Blocks;
 
@@ -391,6 +519,9 @@ function pbAddBlocks(editor) {
   });
 }
 
+// ══════════════════════════════════════════
+//  Utility functions
+// ══════════════════════════════════════════
 function pbSave() {
   if (!pbEditor) return;
   try {
@@ -410,17 +541,14 @@ function pbUpdateCount() {
   el.textContent = count + ' section' + (count !== 1 ? 's' : '');
 }
 
-// Device switching
 function pbSetDevice(device) {
   if (!pbEditor) return;
   pbEditor.setDevice(device);
-  // Update active button
   document.querySelectorAll('.pb-device-btn').forEach(function(btn) {
     btn.classList.toggle('pb-device-active', btn.getAttribute('data-device') === device);
   });
 }
 
-// Panel switching (blocks / styles / layers)
 function pbShowPanel(panel) {
   var panels = ['pb-blocks', 'pb-styles', 'pb-layers'];
   panels.forEach(function(id) {
@@ -432,7 +560,25 @@ function pbShowPanel(panel) {
   });
 }
 
-// Export as HTML file
+// Helper: inject canvas styles into the GrapesJS iframe
+function pbInjectCanvasStyles() {
+  if (!pbEditor) return;
+  var frame = pbEditor.Canvas.getFrameEl();
+  if (!frame) return;
+  var doc = frame.contentDocument;
+  if (!doc) return;
+  if (doc.querySelector('style[data-pb-canvas]')) return;
+  var links = doc.querySelectorAll('link[href*="pb-canvas"]');
+  if (links.length > 0) return;
+  var style = doc.createElement('style');
+  style.setAttribute('data-pb-canvas', '1');
+  style.textContent = PB_CANVAS_CSS;
+  doc.head.appendChild(style);
+}
+
+// ══════════════════════════════════════════
+//  Export HTML
+// ══════════════════════════════════════════
 function pbExportHTML() {
   if (!pbEditor) return;
   var html = pbEditor.getHtml();
@@ -456,18 +602,20 @@ function pbExportHTML() {
   if (typeof portalToast === 'function') portalToast('HTML exported', 'success');
 }
 
-// Load a template
+// ══════════════════════════════════════════
+//  Template system
+// ══════════════════════════════════════════
 function pbLoadTemplate(key) {
   if (!pbEditor || !PB_TEMPLATES[key]) return;
   var t = PB_TEMPLATES[key];
   pbEditor.setComponents(t.html);
   pbEditor.setStyle('');
+  pbInjectCanvasStyles();
   pbSave();
   pbUpdateCount();
   if (typeof portalToast === 'function') portalToast(t.label + ' loaded', 'success');
 }
 
-// Clear canvas
 function pbClearCanvas() {
   if (!pbEditor) return;
   pbEditor.setComponents('');
@@ -477,7 +625,22 @@ function pbClearCanvas() {
   if (typeof portalToast === 'function') portalToast('Canvas cleared', 'info');
 }
 
-// Template chooser modal
+// Build a visual mini-preview showing section blocks
+function pbBuildPreview(sections) {
+  var h = '<div class="pb-tpl-preview">';
+  sections.forEach(function(name) {
+    var bg = PB_SECTION_COLORS[name] || '#f3f4f6';
+    var isDark = (bg === '#1f2937');
+    var textColor = isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.3)';
+    h += '<div class="pb-tpl-preview-block" style="background:' + bg + ';color:' + textColor + '">';
+    h += '<span>' + name + '</span>';
+    h += '</div>';
+  });
+  h += '</div>';
+  return h;
+}
+
+// Full-screen template chooser gallery
 function pbShowTemplates() {
   var existing = document.getElementById('pb-template-overlay');
   if (existing) existing.remove();
@@ -491,9 +654,12 @@ function pbShowTemplates() {
   modal.className = 'pb-tpl-modal';
 
   var h = '<div class="pb-tpl-header">';
-  h += '<div class="pb-tpl-title">Choose a Template</div>';
+  h += '<div>';
+  h += '<div class="pb-tpl-title">Choose a Design</div>';
+  h += '<div class="pb-tpl-subtitle">Pick a starting point, then customize every section in the editor.</div>';
+  h += '</div>';
   h += '<button class="pb-tpl-close" onclick="document.getElementById(\'pb-template-overlay\').remove()">';
-  h += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  h += '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
   h += '</button>';
   h += '</div>';
   h += '<div class="pb-tpl-grid">';
@@ -501,18 +667,28 @@ function pbShowTemplates() {
   var keys = Object.keys(PB_TEMPLATES);
   keys.forEach(function(key) {
     var t = PB_TEMPLATES[key];
+    var iconSvg = PB_ICONS[t.icon] || PB_ICONS.funnel;
     h += '<div class="pb-tpl-card" onclick="pbLoadTemplate(\'' + key + '\');document.getElementById(\'pb-template-overlay\').remove();">';
-    h += '<div class="pb-tpl-card-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div>';
+    h += pbBuildPreview(t.sections);
+    h += '<div class="pb-tpl-card-body">';
+    h += '<div class="pb-tpl-card-icon">' + iconSvg + '</div>';
+    h += '<div class="pb-tpl-card-info">';
     h += '<div class="pb-tpl-card-name">' + t.label + '</div>';
     h += '<div class="pb-tpl-card-desc">' + t.desc + '</div>';
     h += '</div>';
+    h += '</div>';
+    h += '</div>';
   });
 
+  // Blank option
   h += '<div class="pb-tpl-card pb-tpl-card-blank" onclick="pbClearCanvas();document.getElementById(\'pb-template-overlay\').remove();">';
-  h += '<div class="pb-tpl-card-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>';
-  h += '<div class="pb-tpl-card-name">Blank</div>';
-  h += '<div class="pb-tpl-card-desc">Start from scratch</div>';
-  h += '</div>';
+  h += '<div class="pb-tpl-preview pb-tpl-preview-blank"><div class="pb-tpl-preview-plus">' + PB_ICONS.blank + '</div></div>';
+  h += '<div class="pb-tpl-card-body">';
+  h += '<div class="pb-tpl-card-icon">' + PB_ICONS.blank + '</div>';
+  h += '<div class="pb-tpl-card-info">';
+  h += '<div class="pb-tpl-card-name">Blank Canvas</div>';
+  h += '<div class="pb-tpl-card-desc">Start from scratch and build your own layout.</div>';
+  h += '</div></div></div>';
 
   h += '</div>';
   modal.innerHTML = h;
@@ -520,7 +696,9 @@ function pbShowTemplates() {
   document.body.appendChild(overlay);
 }
 
-// Destroy editor when leaving the section
+// ══════════════════════════════════════════
+//  Lifecycle
+// ══════════════════════════════════════════
 function pbDestroy() {
   if (pbEditor) {
     pbSave();

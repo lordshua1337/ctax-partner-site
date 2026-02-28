@@ -589,11 +589,15 @@
 [data-theme="dark"] .pb-tpl-modal{background:#0d1726;box-shadow:0 24px 80px rgba(0,0,0,0.5)}
 [data-theme="dark"] .pb-tpl-header{border-bottom-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .pb-tpl-title{color:#e0e4ec}
+[data-theme="dark"] .pb-tpl-subtitle{color:rgba(255,255,255,0.35)}
 [data-theme="dark"] .pb-tpl-close{color:rgba(255,255,255,0.4)}
 [data-theme="dark"] .pb-tpl-close:hover{background:rgba(255,255,255,0.06);color:#e0e4ec}
 [data-theme="dark"] .pb-tpl-card{border-color:rgba(255,255,255,0.06);background:#111827}
-[data-theme="dark"] .pb-tpl-card:hover{border-color:#2563eb;background:rgba(37,99,235,0.04);box-shadow:0 4px 16px rgba(0,0,0,0.3)}
+[data-theme="dark"] .pb-tpl-card:hover{border-color:rgba(255,255,255,0.2);background:#1a2332;box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+[data-theme="dark"] .pb-tpl-preview{background:rgba(255,255,255,0.03)}
+[data-theme="dark"] .pb-tpl-card-body{border-top-color:rgba(255,255,255,0.04)}
 [data-theme="dark"] .pb-tpl-card-icon{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5)}
-[data-theme="dark"] .pb-tpl-card:hover .pb-tpl-card-icon{background:rgba(37,99,235,0.1);color:#60a5fa}
+[data-theme="dark"] .pb-tpl-card:hover .pb-tpl-card-icon{background:rgba(255,255,255,0.12);color:#fff}
 [data-theme="dark"] .pb-tpl-card-name{color:#e0e4ec}
 [data-theme="dark"] .pb-tpl-card-desc{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .pb-tpl-preview-plus{color:rgba(255,255,255,0.15)}

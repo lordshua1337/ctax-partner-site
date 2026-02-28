@@ -1,0 +1,74 @@
+/* Canvas styles for the Landing Page Builder */
+/* These get loaded inside the GrapesJS iframe */
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; color:#1a2332; line-height:1.6; background:#fff; }
+
+/* Hero */
+.pb-hero { padding:64px 32px; text-align:center; background:linear-gradient(135deg,#111827 0%,#1f2937 100%); color:#fff; }
+.pb-hero-dark { background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%); }
+.pb-hero h1 { font-size:36px; font-weight:800; margin-bottom:12px; letter-spacing:-0.02em; }
+.pb-hero p { font-size:16px; opacity:0.8; max-width:520px; margin:0 auto 24px; line-height:1.6; }
+
+/* Button */
+.pb-btn { display:inline-block; padding:12px 28px; background:#2563eb; color:#fff; font-size:14px; font-weight:700; border-radius:8px; text-decoration:none; border:none; cursor:pointer; letter-spacing:0.01em; }
+.pb-btn:hover { background:#1d4ed8; }
+
+/* Stats */
+.pb-stats-row { display:flex; justify-content:center; gap:48px; padding:40px 32px; background:#f8fafc; }
+.pb-stat { text-align:center; }
+.pb-stat-val { display:block; font-size:28px; font-weight:800; color:#111827; letter-spacing:-0.02em; }
+.pb-stat-label { display:block; font-size:13px; color:#64748b; margin-top:2px; }
+
+/* Features */
+.pb-features { padding:48px 32px; text-align:center; }
+.pb-features h2 { font-size:24px; font-weight:700; margin-bottom:24px; color:#111827; }
+.pb-feat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; max-width:800px; margin:0 auto; }
+.pb-feat-card { padding:24px; border:1px solid #e5e7eb; border-radius:10px; text-align:left; }
+.pb-feat-card h3 { font-size:15px; font-weight:700; margin-bottom:6px; color:#111827; }
+.pb-feat-card p { font-size:13px; color:#64748b; line-height:1.6; }
+
+/* Testimonial */
+.pb-testimonial { padding:40px 32px; background:#f8fafc; text-align:center; }
+.pb-testimonial blockquote { font-size:16px; font-style:italic; color:#374151; max-width:600px; margin:0 auto 12px; line-height:1.7; }
+.pb-testimonial cite { font-size:13px; color:#64748b; font-style:normal; font-weight:600; }
+
+/* CTA */
+.pb-cta-section { padding:48px 32px; text-align:center; background:#111827; color:#fff; }
+.pb-cta-section h2 { font-size:24px; font-weight:700; margin-bottom:8px; }
+.pb-cta-section p { font-size:14px; opacity:0.7; margin-bottom:20px; }
+
+/* Trust bar */
+.pb-trust-bar { display:flex; justify-content:center; gap:16px; padding:24px 32px; background:#f8fafc; flex-wrap:wrap; }
+.pb-trust-badge { padding:8px 16px; background:#fff; border:1px solid #e5e7eb; border-radius:6px; font-size:13px; font-weight:600; color:#374151; }
+
+/* Form */
+.pb-form-section { padding:48px 32px; text-align:center; }
+.pb-form-section h2 { font-size:22px; font-weight:700; margin-bottom:20px; color:#111827; }
+.pb-form { max-width:400px; margin:0 auto; text-align:left; }
+.pb-form input, .pb-form textarea { width:100%; padding:11px 14px; border:1px solid #d1d5db; border-radius:8px; font-size:14px; margin-bottom:10px; font-family:inherit; color:#111827; background:#fff; }
+.pb-form input:focus, .pb-form textarea:focus { outline:none; border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,0.1); }
+.pb-form textarea { min-height:80px; resize:vertical; }
+.pb-form .pb-btn { width:100%; text-align:center; margin-top:4px; }
+
+/* Divider */
+.pb-divider { padding:16px 0; }
+.pb-divider hr { border:none; height:1px; background:#e5e7eb; }
+
+/* Text */
+.pb-text-block { padding:32px; max-width:700px; margin:0 auto; }
+.pb-text-block p { font-size:15px; color:#374151; line-height:1.7; }
+
+/* FAQ */
+.pb-faq { padding:48px 32px; }
+.pb-faq h2 { text-align:center; font-size:22px; font-weight:700; margin-bottom:24px; color:#111827; }
+.pb-faq-item { padding:16px 20px; border:1px solid #e5e7eb; border-radius:8px; margin-bottom:10px; max-width:600px; margin-left:auto; margin-right:auto; }
+.pb-faq-item strong { color:#111827; font-size:14px; }
+.pb-faq-item p { font-size:13px; color:#64748b; margin-top:4px; line-height:1.5; }
+
+/* Responsive */
+@media(max-width:600px) {
+  .pb-hero h1 { font-size:26px; }
+  .pb-feat-grid { grid-template-columns:1fr; }
+  .pb-stats-row { flex-wrap:wrap; gap:20px; }
+}
