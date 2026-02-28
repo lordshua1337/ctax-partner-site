@@ -138,6 +138,28 @@ function portalNav(el, secId) {
   // Lazy-init animations on section reveal
   if (secId === 'portal-sec-earnings') initEarningsAnimation();
   if (secId === 'portal-sec-ce') initCeRingAnimation();
+
+  // Entrance animation for section content
+  if (sec) portalAnimateEntrance(sec);
+}
+
+function portalAnimateEntrance(sec) {
+  var targets = sec.querySelectorAll('.portal-sec-header, .pb-stats, .pb-streak, .pb-tabs, .pb-quiz, .bp-form-grid, .bp-callout, .dash-kpi-row, .dash-table, .dash-activity-feed, .dash-quick-links, .bp-insights-row, .bp-whatif, .bp-month');
+  var delay = 0;
+  targets.forEach(function(el) {
+    if (el.dataset.entered) return;
+    el.dataset.entered = '1';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(12px)';
+    el.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+    (function(target, d) {
+      setTimeout(function() {
+        target.style.opacity = '1';
+        target.style.transform = 'translateY(0)';
+      }, d);
+    })(el, delay);
+    delay += 50;
+  });
 }
 
 // --- Dashboard: Welcome greeting ---

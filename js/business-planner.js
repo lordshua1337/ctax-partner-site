@@ -37,6 +37,9 @@ function bpGenerateRoadmap() {
   var hasWebsite = document.getElementById('bp-has-website').checked;
   var hasSocial = document.getElementById('bp-has-social').checked;
   var hasEmail = document.getElementById('bp-has-email').checked;
+  var geo = document.getElementById('bp-geo') ? document.getElementById('bp-geo').value : '';
+  var years = document.getElementById('bp-years') ? document.getElementById('bp-years').value : '';
+  var currentRefs = document.getElementById('bp-current-refs') ? document.getElementById('bp-current-refs').value : '';
   var season = bpGetSeason();
 
   if (!practiceType) {
@@ -53,6 +56,9 @@ function bpGenerateRoadmap() {
     hasWebsite: hasWebsite,
     hasSocial: hasSocial,
     hasEmail: hasEmail,
+    geo: geo,
+    years: years,
+    currentRefs: currentRefs,
     season: season
   };
 
@@ -100,6 +106,12 @@ function bpTryRestore() {
   if (el) el.checked = !!inputs.hasSocial;
   el = document.getElementById('bp-has-email');
   if (el) el.checked = !!inputs.hasEmail;
+  el = document.getElementById('bp-geo');
+  if (el && inputs.geo) el.value = inputs.geo;
+  el = document.getElementById('bp-years');
+  if (el && inputs.years) el.value = inputs.years;
+  el = document.getElementById('bp-current-refs');
+  if (el && inputs.currentRefs) el.value = inputs.currentRefs;
 
   // Regenerate and render roadmap with current season
   var freshInputs = Object.assign({}, inputs, { season: bpGetSeason() });
@@ -128,7 +140,7 @@ function bpBuildRoadmap(inputs) {
   var m1Tasks = [];
   m1Tasks.push({
     title: 'Complete Your Partner Onboarding',
-    desc: 'Finish all training modules in the Training section. Focus on "Tax Resolution Basics" and "Handling Client Objections" -- these are the two modules that directly drive referral conversions.',
+    desc: 'Finish all training modules in the Onboarding section. Focus on "Tax Resolution Basics" and "Handling Client Objections" -- these are the two modules that directly drive referral conversions.',
     type: 'setup',
     priority: 'high'
   });
@@ -160,6 +172,43 @@ function bpBuildRoadmap(inputs) {
       desc: 'Use the Ad Builder tool to create co-branded ads for ' + (inputs.hasSocial ? 'Facebook and Instagram' : 'LinkedIn') + '. Target: ' + audienceLabel.toLowerCase() + ' within 25 miles of your office. Budget: $' + Math.min(inputs.budget, 250) + '/month. Ad angle: "Owe $10K+ to the IRS? Free consultation -- we partner with tax resolution specialists to help."',
       type: 'marketing',
       priority: 'medium'
+    });
+  }
+
+  // New practice onboarding boost
+  if (inputs.years === 'new') {
+    m1Tasks.push({
+      title: 'New Practice Fast-Start: Join 2 Local Business Groups',
+      desc: 'As a newer practice, your network is your biggest growth lever. Join your local chamber of commerce and one industry-specific group (CPA society, bar association, etc.). Introduce yourself as someone who helps clients with tax debt. New practices that network actively generate referrals 40% faster.',
+      type: 'growth',
+      priority: 'high'
+    });
+  }
+
+  // Geography-specific outreach
+  if (inputs.geo === 'rural') {
+    m1Tasks.push({
+      title: 'Community-Based Outreach Strategy',
+      desc: 'In rural areas, word-of-mouth is the dominant channel. Focus on community events, church bulletin boards, and local print ads. Partner with the local H&R Block or Liberty Tax -- they handle volume but don\'t do resolution. One rural partnership can yield 5-8 referrals per quarter.',
+      type: 'marketing',
+      priority: 'medium'
+    });
+  } else if (inputs.geo === 'urban') {
+    m1Tasks.push({
+      title: 'Urban Digital Presence Quick-Win',
+      desc: 'In metro areas, competition is higher but volume is too. Ensure your Google Business Profile mentions "tax debt help" and "IRS resolution referrals." Urban practices see 3x more inbound leads from search than suburban or rural.',
+      type: 'marketing',
+      priority: 'medium'
+    });
+  }
+
+  // Current referrals context
+  if (inputs.currentRefs === '10+') {
+    m1Tasks.push({
+      title: 'Scale What Already Works',
+      desc: 'You are already generating 10+ referrals monthly -- that puts you in the top 5% of partners. Focus on systematizing: document your process, train staff, and consider upgrading to Gold or Platinum tier for higher per-referral earnings. At your volume, a tier upgrade could mean an extra $1,000-2,500 per month.',
+      type: 'growth',
+      priority: 'high'
     });
   }
 
@@ -340,6 +389,18 @@ function bpRenderRoadmap(roadmap) {
   html += '<button class="bp-action-btn bp-btn-reset" onclick="bpResetPlanner()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 105.64-11.36L1 10"/></svg> Start Over</button>';
   html += '</div></div>';
 
+  // Email drip toggle
+  var dripEnabled = false;
+  try { dripEnabled = localStorage.getItem('bp_email_drip') === 'true'; } catch (e) { /* ignore */ }
+  html += '<div class="bp-drip-bar">';
+  html += '<div class="bp-drip-left">';
+  html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
+  html += '<div><div class="bp-drip-title">Weekly Task Reminders</div>';
+  html += '<div class="bp-drip-desc">Get your upcoming tasks delivered to your inbox every Monday</div></div>';
+  html += '</div>';
+  html += '<label class="bp-drip-toggle"><input type="checkbox" id="bp-drip-check"' + (dripEnabled ? ' checked' : '') + ' onchange="bpToggleDrip(this.checked)"><span class="bp-drip-slider"></span></label>';
+  html += '</div>';
+
   // Progress bar
   html += '<div class="bp-progress-wrap">';
   html += '<div class="bp-progress-header">';
@@ -359,6 +420,27 @@ function bpRenderRoadmap(roadmap) {
     html += '</div>';
   });
   html += '</div>';
+
+  // "What if?" comparison cards
+  var currentRev = roadmap.inputs.refGoal * 420;
+  var goldRev = roadmap.inputs.refGoal * 525;
+  var doubleRev = (roadmap.inputs.refGoal * 2) * 420;
+  html += '<div class="bp-whatif">';
+  html += '<div class="bp-whatif-title">What If?</div>';
+  html += '<div class="bp-whatif-row">';
+  html += '<div class="bp-whatif-card">';
+  html += '<div class="bp-whatif-label">Upgrade to Gold Tier</div>';
+  html += '<div class="bp-whatif-val">$' + goldRev.toLocaleString() + '</div>';
+  html += '<div class="bp-whatif-delta">+$' + (goldRev - currentRev).toLocaleString() + ' more per quarter</div>';
+  html += '<div class="bp-whatif-desc">Gold tier pays $525/referral instead of $420. Same effort, 25% more revenue.</div>';
+  html += '</div>';
+  html += '<div class="bp-whatif-card">';
+  html += '<div class="bp-whatif-label">Double Your Referrals</div>';
+  html += '<div class="bp-whatif-val">$' + doubleRev.toLocaleString() + '</div>';
+  html += '<div class="bp-whatif-delta">+$' + (doubleRev - currentRev).toLocaleString() + ' more per quarter</div>';
+  html += '<div class="bp-whatif-desc">Partners who add 1 new referral per week typically double within 90 days by following this roadmap consistently.</div>';
+  html += '</div>';
+  html += '</div></div>';
 
   // Timeline
   var taskIndex = 0;
@@ -485,7 +567,7 @@ var BP_TOOL_LINKS = [
   { text: 'Referral Playbook', section: 'portal-sec-playbook' },
   { text: 'Revenue Calculator', section: 'portal-sec-calculator' },
   { text: 'Referrals dashboard', section: 'portal-sec-referrals' },
-  { text: 'Training section', section: 'portal-sec-training' },
+  { text: 'Onboarding section', section: 'portal-sec-training' },
   { text: 'Co-Brand landing page', section: 'portal-sec-marketing' }
 ];
 
@@ -515,6 +597,18 @@ function bpGoToSection(sectionId) {
         setTimeout(function() { sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
       }
       return;
+    }
+  }
+}
+
+// Toggle weekly email drip (mock for now)
+function bpToggleDrip(enabled) {
+  try { localStorage.setItem('bp_email_drip', enabled ? 'true' : 'false'); } catch (e) { /* ignore */ }
+  if (typeof showToast === 'function') {
+    if (enabled) {
+      showToast('Weekly reminders enabled! You will receive tasks every Monday.', 'success');
+    } else {
+      showToast('Weekly reminders disabled.', 'info');
     }
   }
 }
