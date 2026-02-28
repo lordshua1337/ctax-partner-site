@@ -531,10 +531,144 @@ function animateCalcValue(id, target) {
 }
 
 // --- Earnings: Period pill toggle ---
+// --- Earnings: Period Data Sets ---
+var EARN_DATA = {
+  month: {
+    kpis: { total: '$2,490', avg: '$498', best: '$1,280', bestLabel: 'Feb 12', pending: '$2,736', pendingSub: '1 referral' },
+    trend: { total: '+8.2%', totalDir: 'up', avg: '+2.4%', avgDir: 'up' },
+    chart: { title: 'Weekly Earnings (Feb 2026)', yLabels: ['$1.5k','$1.2k','$900','$600','$300','$0'], bars: [
+      { h: '52%', val: '$780', label: 'Wk 1' },
+      { h: '85%', val: '$1,280', label: 'Wk 2', best: true },
+      { h: '29%', val: '$430', label: 'Wk 3', current: true },
+      { h: '0%', val: '--', label: 'Wk 4' }
+    ]},
+    rows: [
+      { initials: 'DL', color: 'var(--cyan-text)', name: 'David Lee', type: 'Penalty Abatement', debt: '$27,100', comm: '$2,168', commColor: 'var(--cyan-text)', date: 'Feb 14, 2026', badge: 'Paid', badgeClass: 'earn-b-paid' },
+      { initials: 'JW', color: '#0B5FD8', name: 'James Williams', type: 'Offer in Compromise', debt: '$34,200', comm: '$2,736', commColor: 'var(--blue)', date: 'Pending', badge: 'Pending', badgeClass: 'earn-b-pending' }
+    ]
+  },
+  quarter: {
+    kpis: { total: '$9,402', avg: '$470', best: '$4,224', bestLabel: 'Jan 2026', pending: '$5,472', pendingSub: '3 referrals' },
+    trend: { total: '+18.6%', totalDir: 'up', avg: '+5.3%', avgDir: 'up' },
+    chart: { title: 'Monthly Earnings (Q1 2026)', yLabels: ['$5k','$4k','$3k','$2k','$1k','$0'], bars: [
+      { h: '84%', val: '$4,224', label: 'Jan', best: true },
+      { h: '50%', val: '$2,490', label: 'Feb', current: true },
+      { h: '54%', val: '$2,688', label: 'Mar' }
+    ]},
+    rows: [
+      { initials: 'RT', color: 'var(--cyan-text)', name: 'Robert Thompson', type: 'Installment Agreement', debt: '$52,800', comm: '$4,224', commColor: 'var(--cyan-text)', date: 'Feb 21, 2026', badge: 'Paid', badgeClass: 'earn-b-paid' },
+      { initials: 'DL', color: 'var(--cyan-text)', name: 'David Lee', type: 'Penalty Abatement', debt: '$27,100', comm: '$2,168', commColor: 'var(--cyan-text)', date: 'Feb 14, 2026', badge: 'Paid', badgeClass: 'earn-b-paid' },
+      { initials: 'JW', color: '#0B5FD8', name: 'James Williams', type: 'Offer in Compromise', debt: '$34,200', comm: '$2,736', commColor: 'var(--blue)', date: 'Pending', badge: 'Pending', badgeClass: 'earn-b-pending' },
+      { initials: 'MG', color: 'var(--cyan-text)', name: 'Maria Garcia', type: 'Under Investigation', debt: '$18,500', comm: 'TBD', commColor: 'var(--slate)', date: '--', badge: 'In Progress', badgeClass: 'earn-b-investigation' }
+    ]
+  },
+  year: {
+    kpis: { total: '$24,850', avg: '$438', best: '$4,224', bestLabel: 'Jan 2026', pending: '$5,472', pendingSub: '3 referrals' },
+    trend: { total: '+34.2%', totalDir: 'up', avg: '+12.1%', avgDir: 'up' },
+    chart: { title: 'Monthly Earnings (2026)', yLabels: ['$5k','$4k','$3k','$2k','$1k','$0'], bars: [
+      { h: '84%', val: '$4,224', label: 'Jan', best: true },
+      { h: '50%', val: '$2,490', label: 'Feb', current: true }
+    ]},
+    rows: [
+      { initials: 'RT', color: 'var(--cyan-text)', name: 'Robert Thompson', type: 'Installment Agreement', debt: '$52,800', comm: '$4,224', commColor: 'var(--cyan-text)', date: 'Feb 21, 2026', badge: 'Paid', badgeClass: 'earn-b-paid' },
+      { initials: 'DL', color: 'var(--cyan-text)', name: 'David Lee', type: 'Penalty Abatement', debt: '$27,100', comm: '$2,168', commColor: 'var(--cyan-text)', date: 'Feb 14, 2026', badge: 'Paid', badgeClass: 'earn-b-paid' },
+      { initials: 'JW', color: '#0B5FD8', name: 'James Williams', type: 'Offer in Compromise', debt: '$34,200', comm: '$2,736', commColor: 'var(--blue)', date: 'Pending', badge: 'Pending', badgeClass: 'earn-b-pending' },
+      { initials: 'MG', color: 'var(--cyan-text)', name: 'Maria Garcia', type: 'Under Investigation', debt: '$18,500', comm: 'TBD', commColor: 'var(--slate)', date: '--', badge: 'In Progress', badgeClass: 'earn-b-investigation' },
+      { initials: 'KP', color: 'var(--sky)', name: 'Karen Patel', type: 'TBD', debt: '$12,400', comm: 'TBD', commColor: 'var(--slate)', date: '--', badge: 'New', badgeClass: 'earn-b-new' }
+    ]
+  },
+  all: {
+    kpis: { total: '$67,310', avg: '$415', best: '$4,224', bestLabel: 'Jan 2026', pending: '$5,472', pendingSub: '3 referrals' },
+    trend: { total: '+142%', totalDir: 'up', avg: '+28.5%', avgDir: 'up' },
+    chart: { title: 'Quarterly Earnings (All Time)', yLabels: ['$20k','$16k','$12k','$8k','$4k','$0'], bars: [
+      { h: '18%', val: '$3,600', label: 'Q2 \'25' },
+      { h: '34%', val: '$6,840', label: 'Q3 \'25' },
+      { h: '47%', val: '$9,408', label: 'Q4 \'25' },
+      { h: '47%', val: '$9,402', label: 'Q1 \'26', current: true }
+    ]},
+    rows: [
+      { initials: 'RT', color: 'var(--cyan-text)', name: 'Robert Thompson', type: 'Installment Agreement', debt: '$52,800', comm: '$4,224', commColor: 'var(--cyan-text)', date: 'Feb 21, 2026', badge: 'Paid', badgeClass: 'earn-b-paid' },
+      { initials: 'DL', color: 'var(--cyan-text)', name: 'David Lee', type: 'Penalty Abatement', debt: '$27,100', comm: '$2,168', commColor: 'var(--cyan-text)', date: 'Feb 14, 2026', badge: 'Paid', badgeClass: 'earn-b-paid' },
+      { initials: 'JW', color: '#0B5FD8', name: 'James Williams', type: 'Offer in Compromise', debt: '$34,200', comm: '$2,736', commColor: 'var(--blue)', date: 'Pending', badge: 'Pending', badgeClass: 'earn-b-pending' },
+      { initials: 'MG', color: 'var(--cyan-text)', name: 'Maria Garcia', type: 'Under Investigation', debt: '$18,500', comm: 'TBD', commColor: 'var(--slate)', date: '--', badge: 'In Progress', badgeClass: 'earn-b-investigation' },
+      { initials: 'KP', color: 'var(--sky)', name: 'Karen Patel', type: 'TBD', debt: '$12,400', comm: 'TBD', commColor: 'var(--slate)', date: '--', badge: 'New', badgeClass: 'earn-b-new' },
+      { initials: 'SB', color: '#6366f1', name: 'Sarah Brooks', type: 'Installment Agreement', debt: '$41,200', comm: '$3,296', commColor: 'var(--cyan-text)', date: 'Dec 8, 2025', badge: 'Paid', badgeClass: 'earn-b-paid' },
+      { initials: 'TN', color: 'var(--cyan-text)', name: 'Tom Nguyen', type: 'Offer in Compromise', debt: '$29,800', comm: '$2,384', commColor: 'var(--cyan-text)', date: 'Nov 15, 2025', badge: 'Paid', badgeClass: 'earn-b-paid' },
+      { initials: 'LM', color: 'var(--sky)', name: 'Lisa Martinez', type: 'Penalty Abatement', debt: '$15,600', comm: '$1,248', commColor: 'var(--cyan-text)', date: 'Oct 22, 2025', badge: 'Paid', badgeClass: 'earn-b-paid' }
+    ]
+  }
+};
+
 function setEarnPeriod(btn, period) {
   document.querySelectorAll('.earn-period').forEach(function(p) { p.classList.remove('earn-period-active'); });
   btn.classList.add('earn-period-active');
-  showToast('Showing ' + btn.textContent.trim() + ' data', 'info');
+
+  var data = EARN_DATA[period];
+  if (!data) return;
+
+  // Update KPIs
+  var kpis = document.querySelectorAll('#portal-sec-earnings .earn-kpi');
+  if (kpis[0]) {
+    kpis[0].querySelector('.earn-kpi-val').textContent = data.kpis.total;
+    var t0 = kpis[0].querySelector('.earn-kpi-trend');
+    if (t0) { t0.textContent = data.trend.total; t0.className = 'earn-kpi-trend earn-kpi-' + data.trend.totalDir; }
+  }
+  if (kpis[1]) {
+    kpis[1].querySelector('.earn-kpi-val').textContent = data.kpis.avg;
+    var t1 = kpis[1].querySelector('.earn-kpi-trend');
+    if (t1) { t1.textContent = data.trend.avg; t1.className = 'earn-kpi-trend earn-kpi-' + data.trend.avgDir; }
+  }
+  if (kpis[2]) {
+    kpis[2].querySelector('.earn-kpi-val').textContent = data.kpis.best;
+    var sub2 = kpis[2].querySelector('.earn-kpi-subtext');
+    if (sub2) sub2.textContent = data.kpis.bestLabel;
+  }
+  if (kpis[3]) {
+    kpis[3].querySelector('.earn-kpi-val').textContent = data.kpis.pending;
+    var sub3 = kpis[3].querySelector('.earn-kpi-subtext');
+    if (sub3) sub3.textContent = data.kpis.pendingSub;
+  }
+
+  // Update chart
+  var chartTitle = document.querySelector('#portal-sec-earnings .earn-chart-title');
+  if (chartTitle) chartTitle.textContent = data.chart.title;
+
+  var yAxis = document.querySelector('#portal-sec-earnings .earn-chart-y');
+  if (yAxis) {
+    yAxis.innerHTML = data.chart.yLabels.map(function(l) { return '<span>' + l + '</span>'; }).join('');
+  }
+
+  var barsWrap = document.querySelector('#portal-sec-earnings .earn-chart-bars');
+  if (barsWrap) {
+    barsWrap.innerHTML = data.chart.bars.map(function(b) {
+      var barClass = 'earn-bar';
+      if (b.best) barClass += ' earn-bar-best';
+      if (b.current) barClass += ' earn-bar-current';
+      return '<div class="earn-bar-col">' +
+        '<div class="' + barClass + '" style="height:' + b.h + '"><span class="earn-bar-val">' + b.val + '</span></div>' +
+        '<div class="earn-bar-label">' + b.label + '</div></div>';
+    }).join('');
+  }
+
+  // Update table
+  var tableWrap = document.querySelector('#portal-sec-earnings .earn-table-wrap');
+  if (tableWrap) {
+    var headHtml = '<div class="earn-table-title">Earnings by Referral</div>' +
+      '<div class="earn-table-head"><div>Client</div><div>Resolution Type</div><div>Tax Debt</div><div>Commission</div><div>Date</div><div>Status</div></div>';
+
+    var rowsHtml = data.rows.map(function(r) {
+      var commStyle = r.commColor ? 'font-weight:700;color:' + r.commColor : 'font-weight:700';
+      return '<div class="earn-table-row">' +
+        '<div class="earn-td-client"><div class="earn-avatar" style="background:' + r.color + '">' + r.initials + '</div><span>' + r.name + '</span></div>' +
+        '<div>' + r.type + '</div>' +
+        '<div style="font-weight:600">' + r.debt + '</div>' +
+        '<div style="' + commStyle + '">' + r.comm + '</div>' +
+        '<div>' + r.date + '</div>' +
+        '<div><span class="earn-badge ' + r.badgeClass + '">' + r.badge + '</span></div></div>';
+    }).join('');
+
+    tableWrap.innerHTML = headHtml + rowsHtml;
+  }
 }
 
 // --- Earnings: Export CSV ---
