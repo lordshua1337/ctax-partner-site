@@ -1588,6 +1588,21 @@ function cmdkExecute(idx) {
   }
 }
 
+// ── CASE DETAIL DRAWER ──────────────────────────────────────
+function cddOpen(clientName) {
+  var overlay = document.getElementById('cdd-overlay');
+  var drawer = document.getElementById('cdd-drawer');
+  if (overlay) overlay.classList.add('cdd-open');
+  if (drawer) drawer.classList.add('cdd-open');
+}
+
+function cddClose() {
+  var overlay = document.getElementById('cdd-overlay');
+  var drawer = document.getElementById('cdd-drawer');
+  if (overlay) overlay.classList.remove('cdd-open');
+  if (drawer) drawer.classList.remove('cdd-open');
+}
+
 // ── SCROLL TO TOP ───────────────────────────────────────────
 function sttScrollTop() {
   var main = document.querySelector('.portal-main');

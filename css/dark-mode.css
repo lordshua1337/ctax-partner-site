@@ -447,6 +447,26 @@
 [data-theme="dark"] .dib-dismiss{color:rgba(255,255,255,0.25)}
 [data-theme="dark"] .dib-dismiss:hover{color:#e0e4ec}
 
+/* ── Case Detail Drawer Dark Mode ── */
+[data-theme="dark"] .cdd-overlay{background:rgba(0,0,0,0.55)}
+[data-theme="dark"] .cdd-drawer{background:#0d1726;box-shadow:-8px 0 40px rgba(0,0,0,0.4)}
+[data-theme="dark"] .cdd-client-name{color:#e0e4ec}
+[data-theme="dark"] .cdd-ref-id{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .cdd-close{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .cdd-close:hover{background:rgba(255,255,255,0.06);color:#e0e4ec}
+[data-theme="dark"] .cdd-sum-item{background:rgba(255,255,255,0.04)}
+[data-theme="dark"] .cdd-sum-label{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .cdd-sum-val{color:#e0e4ec}
+[data-theme="dark"] .cdd-timeline-title{color:#e0e4ec}
+[data-theme="dark"] .cdd-timeline::before{background:rgba(255,255,255,0.08)}
+[data-theme="dark"] .cdd-event-dot{background:#0d1726;border-color:rgba(255,255,255,0.12)}
+[data-theme="dark"] .cdd-event-done .cdd-event-dot{background:#059669;border-color:#059669}
+[data-theme="dark"] .cdd-event-active .cdd-event-dot{background:#4BA3FF;border-color:#4BA3FF;box-shadow:0 0 0 3px rgba(75,163,255,0.2)}
+[data-theme="dark"] .cdd-event-date{color:rgba(255,255,255,0.3)}
+[data-theme="dark"] .cdd-event-text{color:rgba(255,255,255,0.55)}
+[data-theme="dark"] .cdd-event-active .cdd-event-text{color:#e0e4ec}
+[data-theme="dark"] .cdd-event-pending .cdd-event-text{color:rgba(255,255,255,0.2)}
+
 /* ── Keyboard Shortcuts Help Dark Mode ── */
 [data-theme="dark"] .kbd-help-overlay{background:rgba(0,0,0,0.6)}
 [data-theme="dark"] .kbd-help-modal{background:#141e30;box-shadow:0 24px 80px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.06)}

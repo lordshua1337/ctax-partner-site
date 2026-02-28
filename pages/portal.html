@@ -348,7 +348,7 @@
           <div class="pipe-stage">
             <div class="pipe-stage-label">Active Resolution <span class="pipe-stage-count">4</span></div>
             <div class="pipe-cards">
-              <div class="pipe-card pipe-card-highlight"><div class="pipe-card-name">J. Williams</div><div class="pipe-card-debt">$34,200</div><div class="pipe-card-date">Feb 20</div><div class="pipe-card-tag">OIC Filed</div></div>
+              <div class="pipe-card pipe-card-highlight pipe-card-clickable" onclick="cddOpen('Williams')"><div class="pipe-card-name">J. Williams</div><div class="pipe-card-debt">$34,200</div><div class="pipe-card-date">Feb 20</div><div class="pipe-card-tag">OIC Filed</div></div>
               <div class="pipe-card"><div class="pipe-card-name">B. Johnson</div><div class="pipe-card-debt">$28,900</div><div class="pipe-card-date">Feb 5</div><div class="pipe-card-tag">IA Pending</div></div>
               <div class="pipe-card"><div class="pipe-card-name">T. Nguyen</div><div class="pipe-card-debt">$67,500</div><div class="pipe-card-date">Jan 28</div><div class="pipe-card-tag">Appeals</div></div>
               <div class="pipe-card"><div class="pipe-card-name">C. Davis</div><div class="pipe-card-debt">$19,300</div><div class="pipe-card-date">Jan 20</div><div class="pipe-card-tag">CNC Review</div></div>
@@ -382,7 +382,7 @@
         <div class="dash-table-head">
           <div>Client</div><div>Submitted</div><div>Status</div><div>Tax Debt</div><div>Your Share</div><div>Actions</div>
         </div>
-        <div class="dash-table-row">
+        <div class="dash-table-row dash-table-row-clickable" onclick="cddOpen('Williams')">
           <div class="dash-td-name">J. Williams</div><div class="dash-td-date">Feb 20, 2026</div><div><span class="dash-td-badge dash-td-badge-resolution">In Resolution</span></div><div>$34,200</div><div class="dash-td-share">$2,736</div>
           <div class="dash-td-acts"><span class="dash-act-btn" title="Call"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span><span class="dash-act-btn" title="Email"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span></div>
         </div>
@@ -3342,6 +3342,76 @@
         <span class="mob-tool-label">Documents</span>
         <span class="mob-tool-desc">Files and contracts</span>
       </button>
+    </div>
+  </div>
+
+  <!-- Case Detail Drawer -->
+  <div class="cdd-overlay" id="cdd-overlay" onclick="cddClose()"></div>
+  <div class="cdd-drawer" id="cdd-drawer">
+    <div class="cdd-header">
+      <div>
+        <div class="cdd-client-name" id="cdd-name">J. Williams</div>
+        <div class="cdd-ref-id" id="cdd-ref-id">REF-0042</div>
+      </div>
+      <button class="cdd-close" onclick="cddClose()">&times;</button>
+    </div>
+    <div class="cdd-summary">
+      <div class="cdd-sum-item"><div class="cdd-sum-label">Tax Debt</div><div class="cdd-sum-val" id="cdd-debt">$34,200</div></div>
+      <div class="cdd-sum-item"><div class="cdd-sum-label">Status</div><div class="cdd-sum-val" id="cdd-status"><span class="cdd-status-dot cdd-dot-active"></span>Active Resolution</div></div>
+      <div class="cdd-sum-item"><div class="cdd-sum-label">Your Share</div><div class="cdd-sum-val" id="cdd-share">$2,736</div></div>
+      <div class="cdd-sum-item"><div class="cdd-sum-label">Submitted</div><div class="cdd-sum-val" id="cdd-submitted">Feb 20, 2026</div></div>
+    </div>
+    <div class="cdd-timeline-title">Case Timeline</div>
+    <div class="cdd-timeline" id="cdd-timeline">
+      <div class="cdd-event cdd-event-done">
+        <div class="cdd-event-dot"></div>
+        <div class="cdd-event-content">
+          <div class="cdd-event-date">Feb 20</div>
+          <div class="cdd-event-text">Referral submitted by partner</div>
+        </div>
+      </div>
+      <div class="cdd-event cdd-event-done">
+        <div class="cdd-event-dot"></div>
+        <div class="cdd-event-content">
+          <div class="cdd-event-date">Feb 21</div>
+          <div class="cdd-event-text">Client contacted and onboarded</div>
+        </div>
+      </div>
+      <div class="cdd-event cdd-event-done">
+        <div class="cdd-event-dot"></div>
+        <div class="cdd-event-content">
+          <div class="cdd-event-date">Feb 22</div>
+          <div class="cdd-event-text">IRS transcripts pulled, case investigation complete</div>
+        </div>
+      </div>
+      <div class="cdd-event cdd-event-done">
+        <div class="cdd-event-dot"></div>
+        <div class="cdd-event-content">
+          <div class="cdd-event-date">Feb 24</div>
+          <div class="cdd-event-text">Resolution strategy selected: Offer in Compromise</div>
+        </div>
+      </div>
+      <div class="cdd-event cdd-event-active">
+        <div class="cdd-event-dot"></div>
+        <div class="cdd-event-content">
+          <div class="cdd-event-date">Feb 26</div>
+          <div class="cdd-event-text">OIC filed with IRS, awaiting assignment to examiner</div>
+        </div>
+      </div>
+      <div class="cdd-event cdd-event-pending">
+        <div class="cdd-event-dot"></div>
+        <div class="cdd-event-content">
+          <div class="cdd-event-date">--</div>
+          <div class="cdd-event-text">IRS review and decision</div>
+        </div>
+      </div>
+      <div class="cdd-event cdd-event-pending">
+        <div class="cdd-event-dot"></div>
+        <div class="cdd-event-content">
+          <div class="cdd-event-date">--</div>
+          <div class="cdd-event-text">Case resolved, commission released</div>
+        </div>
+      </div>
     </div>
   </div>
 
