@@ -27,12 +27,67 @@ var BP_BUDGETS = {
   '5000': '$2,500+/month'
 };
 
-// Generate the 90-day roadmap based on user inputs
+// ── Carousel State ────────────────────────────────────────────
+var _bpcStep = 1;
+var _bpcTotal = 7;
+
+function bpcGetSelectedVal(containerId) {
+  var sel = document.querySelector('#' + containerId + ' .bpc-opt-selected');
+  return sel ? sel.getAttribute('data-val') : '';
+}
+
+function bpcSelect(btn) {
+  var siblings = btn.parentElement.querySelectorAll('.bpc-opt');
+  siblings.forEach(function(s) { s.classList.remove('bpc-opt-selected'); });
+  btn.classList.add('bpc-opt-selected');
+}
+
+function bpcShowStep(step) {
+  var slides = document.querySelectorAll('.bpc-slide');
+  slides.forEach(function(s) { s.classList.remove('bpc-slide-active'); });
+  var target = document.querySelector('.bpc-slide[data-step="' + step + '"]');
+  if (target) target.classList.add('bpc-slide-active');
+
+  var label = document.getElementById('bpc-step-label');
+  if (label) label.textContent = 'Step ' + step + ' of ' + _bpcTotal;
+  var fill = document.getElementById('bpc-progress-fill');
+  if (fill) fill.style.width = (step / _bpcTotal * 100) + '%';
+  var back = document.getElementById('bpc-back');
+  if (back) back.style.visibility = step === 1 ? 'hidden' : 'visible';
+  var next = document.getElementById('bpc-next');
+  if (next) {
+    if (step === _bpcTotal) {
+      next.innerHTML = 'Generate My Roadmap <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>';
+    } else {
+      next.innerHTML = 'Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+    }
+  }
+  _bpcStep = step;
+}
+
+function bpcNext() {
+  // Validate current step
+  if (_bpcStep === 1 && !bpcGetSelectedVal('bpc-practice-opts')) {
+    showToast('Please select your practice type', 'warning');
+    return;
+  }
+  if (_bpcStep === _bpcTotal) {
+    bpGenerateRoadmap();
+    return;
+  }
+  bpcShowStep(_bpcStep + 1);
+}
+
+function bpcPrev() {
+  if (_bpcStep > 1) bpcShowStep(_bpcStep - 1);
+}
+
+// Generate the 90-day roadmap based on carousel inputs
 function bpGenerateRoadmap() {
-  var practiceType = document.getElementById('bp-practice-type').value;
+  var practiceType = bpcGetSelectedVal('bpc-practice-opts');
   var clientCount = parseInt(document.getElementById('bp-client-count').value) || 0;
-  var audience = document.getElementById('bp-audience').value;
-  var budget = document.getElementById('bp-budget').value;
+  var audience = bpcGetSelectedVal('bpc-audience-opts') || 'individuals';
+  var budget = bpcGetSelectedVal('bpc-budget-opts') || '0';
   var refGoal = parseInt(document.getElementById('bp-ref-goal').value) || 5;
   var hasWebsite = document.getElementById('bp-has-website').checked;
   var hasSocial = document.getElementById('bp-has-social').checked;
@@ -88,18 +143,17 @@ function bpTryRestore() {
   var inputs = bpLoadInputs();
   if (!inputs || !inputs.practiceType) return;
 
-  // Restore form field values so "Edit" flow is seamless
-  var el;
-  el = document.getElementById('bp-practice-type');
-  if (el) el.value = inputs.practiceType;
-  el = document.getElementById('bp-client-count');
+  // Restore carousel selections
+  var practiceOpt = document.querySelector('#bpc-practice-opts .bpc-opt[data-val="' + inputs.practiceType + '"]');
+  if (practiceOpt) practiceOpt.classList.add('bpc-opt-selected');
+  var el = document.getElementById('bp-client-count');
   if (el) el.value = inputs.clientCount || '';
-  el = document.getElementById('bp-audience');
-  if (el) el.value = inputs.audience || '';
-  el = document.getElementById('bp-budget');
-  if (el) el.value = inputs.budget != null ? String(inputs.budget) : '';
+  var audOpt = document.querySelector('#bpc-audience-opts .bpc-opt[data-val="' + inputs.audience + '"]');
+  if (audOpt) audOpt.classList.add('bpc-opt-selected');
   el = document.getElementById('bp-ref-goal');
   if (el) el.value = inputs.refGoal || 5;
+  var budOpt = document.querySelector('#bpc-budget-opts .bpc-opt[data-val="' + inputs.budget + '"]');
+  if (budOpt) budOpt.classList.add('bpc-opt-selected');
   el = document.getElementById('bp-has-website');
   if (el) el.checked = !!inputs.hasWebsite;
   el = document.getElementById('bp-has-social');
@@ -634,6 +688,17 @@ function bpResetPlanner() {
   var form = document.getElementById('bp-form-wrap');
   if (result) { result.innerHTML = ''; result.style.display = 'none'; }
   if (form) form.style.display = 'block';
+  // Reset carousel to step 1
+  document.querySelectorAll('.bpc-opt-selected').forEach(function(o) { o.classList.remove('bpc-opt-selected'); });
+  var cc = document.getElementById('bp-client-count'); if (cc) cc.value = '';
+  var rg = document.getElementById('bp-ref-goal'); if (rg) rg.value = '5';
+  var hw = document.getElementById('bp-has-website'); if (hw) hw.checked = false;
+  var hs = document.getElementById('bp-has-social'); if (hs) hs.checked = false;
+  var he = document.getElementById('bp-has-email'); if (he) he.checked = false;
+  var geo = document.getElementById('bp-geo'); if (geo) geo.value = '';
+  var yrs = document.getElementById('bp-years'); if (yrs) yrs.value = '';
+  var cr = document.getElementById('bp-current-refs'); if (cr) cr.value = '';
+  bpcShowStep(1);
   // Clear saved progress and inputs when starting over
   try {
     localStorage.removeItem('bp_task_progress');

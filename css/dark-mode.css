@@ -334,6 +334,8 @@
 [data-theme="dark"] .pb-tab{color:var(--slate)}
 [data-theme="dark"] .pb-tab-active{color:#4BA3FF;border-bottom-color:#4BA3FF}
 [data-theme="dark"] .pb-card{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .pb-card-open{border-color:rgba(75,163,255,0.15)}
+[data-theme="dark"] .pb-card-chevron svg{stroke:rgba(255,255,255,0.3)}
 [data-theme="dark"] .pb-script{background:#141e30;border-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .pb-script-header{border-bottom-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .pb-script-text{background:rgba(255,255,255,0.03);border-left-color:#4BA3FF;color:var(--ink)}
@@ -349,8 +351,20 @@
 [data-theme="dark"] .pb-copy-btn:hover{background:#4BA3FF;color:#fff;border-color:#4BA3FF}
 
 /* ── Business Planner Dark Mode ── */
+[data-theme="dark"] .bpc-question{color:#e0e4ec}
+[data-theme="dark"] .bpc-opt{background:#141e30;border-color:rgba(255,255,255,0.08);color:#e0e4ec}
+[data-theme="dark"] .bpc-opt:hover{border-color:#4BA3FF;background:rgba(75,163,255,0.06)}
+[data-theme="dark"] .bpc-opt-selected{border-color:#4BA3FF;background:rgba(75,163,255,0.08)}
+[data-theme="dark"] .bpc-big-input{background:#141e30;border-color:rgba(255,255,255,0.1);color:#e0e4ec}
+[data-theme="dark"] .bpc-big-input:focus{border-color:#4BA3FF}
+[data-theme="dark"] .bpc-check-opt{background:#141e30;border-color:rgba(255,255,255,0.08);color:#e0e4ec}
+[data-theme="dark"] .bpc-check-opt:hover{border-color:#4BA3FF}
+[data-theme="dark"] .bpc-check-box{background:#141e30;border-color:rgba(255,255,255,0.15)}
+[data-theme="dark"] .bpc-nav-back{border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .bpc-nav-back:hover{color:#e0e4ec;border-color:rgba(255,255,255,0.2)}
+[data-theme="dark"] .bpc-progress{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .bpc-nav{border-top-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .bp-input,[data-theme="dark"] .bp-select{background:#141e30;border-color:rgba(255,255,255,0.1);color:var(--ink)}
-[data-theme="dark"] .bp-callout{background:rgba(0,200,224,0.05);border-color:rgba(0,200,224,0.12)}
 [data-theme="dark"] .bp-insight-card{background:#141e30;border-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .bp-task{background:#141e30;border-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .bp-whatif-title{color:#e0e4ec}
@@ -368,7 +382,6 @@
 [data-theme="dark"] .bp-action-title{color:#e0e4ec}
 [data-theme="dark"] .bp-action-btn{background:#1a2740;border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)}
 [data-theme="dark"] .bp-btn-pdf:hover{background:#4BA3FF;color:#fff;border-color:#4BA3FF}
-@media(max-width:768px){[data-theme="dark"] .bp-generate-btn-wrap{background:#0e1825;border-top-color:rgba(255,255,255,0.06)}}
 
 /* ── Guided Tour Dark Mode ── */
 [data-theme="dark"] .tour-overlay{background:rgba(0,0,0,0.7)}

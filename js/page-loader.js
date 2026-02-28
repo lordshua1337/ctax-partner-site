@@ -476,19 +476,12 @@ function pbRenderStreak(data) {
 // ── PLAYBOOK COLLAPSIBLE CARDS ──────────────────────────────
 function pbInitCollapsible() {
   var cards = document.querySelectorAll('.pb-card');
-  cards.forEach(function(card) {
-    // Open the first card by default
-    if (card === cards[0]) {
-      card.classList.add('pb-card-open');
-    }
-    var title = card.querySelector('.pb-card-title');
-    if (title && !title._pbWired) {
-      title._pbWired = true;
-      title.addEventListener('click', function() {
-        card.classList.toggle('pb-card-open');
-      });
-    }
-  });
+  if (cards.length > 0) cards[0].classList.add('pb-card-open');
+}
+
+function pbToggleCard(headEl) {
+  var card = headEl.closest('.pb-card');
+  if (card) card.classList.toggle('pb-card-open');
 }
 
 // ── PLAYBOOK SCRIPT RATING ──────────────────────────────────

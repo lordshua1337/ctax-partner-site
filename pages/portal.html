@@ -2382,38 +2382,56 @@
 
         <div class="pb-card-grid">
           <div class="pb-card">
-            <div class="pb-card-icon pb-icon-red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-            <div class="pb-card-title">Red Flag: Balance Due on Return</div>
+            <div class="pb-card-head" onclick="pbToggleCard(this)">
+              <div class="pb-card-icon pb-icon-red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <div class="pb-card-title">Balance Due on Return</div>
+              <div class="pb-card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+            </div>
             <div class="pb-card-body">When you prepare a return and there's a balance due over $5,000, that's your opening. The client is already anxious. Say: <strong>"I want to make sure you have a plan for this balance. If it's something that's hard to pay right now, I work with a tax resolution team that can negotiate with the IRS on your behalf."</strong></div>
           </div>
 
           <div class="pb-card">
-            <div class="pb-card-icon pb-icon-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-            <div class="pb-card-title">Red Flag: Missing Tax Years</div>
+            <div class="pb-card-head" onclick="pbToggleCard(this)">
+              <div class="pb-card-icon pb-icon-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              <div class="pb-card-title">Missing Tax Years</div>
+              <div class="pb-card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+            </div>
             <div class="pb-card-body">A client who hasn't filed for 1+ years almost certainly has a compounding problem. When they come back, don't just file the returns -- ask: <strong>"Since we're catching up on these, would you like me to connect you with someone who can handle any balances or penalties with the IRS? They deal with this every day."</strong></div>
           </div>
 
           <div class="pb-card">
-            <div class="pb-card-icon pb-icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-            <div class="pb-card-title">Red Flag: Client Mentions IRS Letters</div>
+            <div class="pb-card-head" onclick="pbToggleCard(this)">
+              <div class="pb-card-icon pb-icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+              <div class="pb-card-title">Client Mentions IRS Letters</div>
+              <div class="pb-card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+            </div>
             <div class="pb-card-body">If a client casually mentions "I got a letter from the IRS" or "they say I owe money," don't let it pass. This is your highest-conversion moment. Respond: <strong>"Do you have that letter? Let me look at it. Depending on what it says, I have a partner team that specializes in resolving these -- often for much less than the full amount."</strong></div>
           </div>
 
           <div class="pb-card">
-            <div class="pb-card-icon pb-icon-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-            <div class="pb-card-title">Red Flag: Self-Employed with No Estimated Payments</div>
+            <div class="pb-card-head" onclick="pbToggleCard(this)">
+              <div class="pb-card-icon pb-icon-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+              <div class="pb-card-title">Self-Employed, No Estimated Payments</div>
+              <div class="pb-card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+            </div>
             <div class="pb-card-body">Self-employed clients who don't make quarterly estimated payments accumulate debt fast. After calculating their liability, mention: <strong>"You've got about $X in estimated tax that's built up. Before it gets worse with penalties, I'd like to introduce you to a team that negotiates with the IRS. They can often set up a payment plan that actually works."</strong></div>
           </div>
 
           <div class="pb-card">
-            <div class="pb-card-icon pb-icon-teal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-            <div class="pb-card-title">Red Flag: Divorce or Business Closure</div>
+            <div class="pb-card-head" onclick="pbToggleCard(this)">
+              <div class="pb-card-icon pb-icon-teal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+              <div class="pb-card-title">Divorce or Business Closure</div>
+              <div class="pb-card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+            </div>
             <div class="pb-card-body">Major life events create tax problems. Divorce splits often leave one spouse with the tax debt. Business closures leave payroll tax liabilities. Ask: <strong>"During transitions like this, tax issues often get lost in the shuffle. Want me to have my tax resolution partner do a quick check to make sure nothing is pending with the IRS?"</strong></div>
           </div>
 
           <div class="pb-card">
-            <div class="pb-card-icon pb-icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg></div>
-            <div class="pb-card-title">Red Flag: Client Asks About Payment Plans</div>
+            <div class="pb-card-head" onclick="pbToggleCard(this)">
+              <div class="pb-card-icon pb-icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg></div>
+              <div class="pb-card-title">Client Asks About Payment Plans</div>
+              <div class="pb-card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+            </div>
             <div class="pb-card-body">When clients ask "Can I just pay the IRS monthly?" they're signaling they can't pay in full. This is a direct referral opportunity: <strong>"You can, but the IRS's default terms aren't always the best. I work with a resolution team that negotiates better terms -- sometimes they can reduce the total amount owed too. Want me to set up a free evaluation?"</strong></div>
           </div>
         </div>
@@ -2675,142 +2693,123 @@
 
     <!-- ═══ BUSINESS PLANNER SECTION ═══ -->
     <div class="portal-section" id="portal-sec-planner">
-      <div class="portal-sec-header">
-        <h2 class="portal-sec-title">Business Planner</h2>
-        <p class="portal-sec-desc">Answer a few questions about your practice and get a customized 90-day go-to-market roadmap to grow your referral revenue.</p>
-      </div>
-
-      <!-- Form -->
+      <!-- Carousel Form -->
       <div id="bp-form-wrap">
-        <div class="bp-form-grid">
-          <!-- Left Column -->
-          <div class="bp-form-col">
-            <div class="bp-form-section-label">YOUR PRACTICE</div>
+        <div class="bpc-header">
+          <div class="bpc-step-label" id="bpc-step-label">Step 1 of 7</div>
+          <div class="bpc-progress"><div class="bpc-progress-fill" id="bpc-progress-fill" style="width:14.28%"></div></div>
+        </div>
 
-            <div class="bp-field">
-              <label class="bp-label">Practice Type</label>
-              <select id="bp-practice-type" class="bp-select">
-                <option value="">Select your practice type...</option>
-                <option value="tax-prep">Tax Preparation Practice</option>
-                <option value="accounting">Accounting / Bookkeeping Firm</option>
-                <option value="financial-advisory">Financial Advisory / Wealth Management</option>
-                <option value="legal">Law Firm (Tax or Estate)</option>
-                <option value="insurance">Insurance Agency</option>
-                <option value="mortgage">Mortgage / Real Estate</option>
-                <option value="other">Other Professional Services</option>
-              </select>
-            </div>
-
-            <div class="bp-field">
-              <label class="bp-label">Active Client Count</label>
-              <input type="number" id="bp-client-count" class="bp-input" placeholder="e.g. 150" min="0">
-              <div class="bp-hint">How many clients do you actively serve per year?</div>
-            </div>
-
-            <div class="bp-field">
-              <label class="bp-label">Target Audience</label>
-              <select id="bp-audience" class="bp-select">
-                <option value="individuals">Individual Taxpayers</option>
-                <option value="small-biz">Small Business Owners</option>
-                <option value="high-net-worth">High-Net-Worth Individuals</option>
-                <option value="self-employed">Self-Employed / Freelancers</option>
-                <option value="mixed">Mixed (Individuals + Businesses)</option>
-              </select>
-            </div>
-
-            <div class="bp-field">
-              <label class="bp-label">90-Day Referral Goal</label>
-              <input type="number" id="bp-ref-goal" class="bp-input" value="5" min="1" max="100">
-              <div class="bp-hint">How many referrals do you want to submit in 90 days?</div>
-            </div>
-
-            <div class="bp-form-section-label" style="margin-top:8px">OPTIONAL DETAILS</div>
-
-            <div class="bp-field">
-              <label class="bp-label">Geographic Focus</label>
-              <select id="bp-geo" class="bp-select">
-                <option value="">-- Skip --</option>
-                <option value="urban">Urban / Metro Area</option>
-                <option value="suburban">Suburban</option>
-                <option value="rural">Rural / Small Town</option>
-              </select>
-            </div>
-
-            <div class="bp-field">
-              <label class="bp-label">Years in Business</label>
-              <select id="bp-years" class="bp-select">
-                <option value="">-- Skip --</option>
-                <option value="new">Less than 2 years</option>
-                <option value="mid">2 - 10 years</option>
-                <option value="established">10+ years</option>
-              </select>
-            </div>
-
-            <div class="bp-field">
-              <label class="bp-label">Current Monthly Referrals</label>
-              <select id="bp-current-refs" class="bp-select">
-                <option value="">-- Skip --</option>
-                <option value="0">0 (just starting)</option>
-                <option value="1-3">1 - 3 per month</option>
-                <option value="4-10">4 - 10 per month</option>
-                <option value="10+">10+ per month</option>
-              </select>
+        <div class="bpc-viewport" id="bpc-viewport">
+          <!-- Step 1: Practice Type -->
+          <div class="bpc-slide bpc-slide-active" data-step="1">
+            <div class="bpc-question">What type of practice do you run?</div>
+            <div class="bpc-sub">This shapes your entire roadmap. Pick the closest match.</div>
+            <div class="bpc-options" id="bpc-practice-opts">
+              <button class="bpc-opt" data-val="tax-prep" onclick="bpcSelect(this)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="9" y1="6" x2="15" y2="6"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="12" y2="14"/></svg><span>Tax Preparation</span></button>
+              <button class="bpc-opt" data-val="accounting" onclick="bpcSelect(this)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><span>Accounting / Bookkeeping</span></button>
+              <button class="bpc-opt" data-val="financial-advisory" onclick="bpcSelect(this)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span>Financial Advisory</span></button>
+              <button class="bpc-opt" data-val="legal" onclick="bpcSelect(this)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Law Firm (Tax / Estate)</span></button>
+              <button class="bpc-opt" data-val="insurance" onclick="bpcSelect(this)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Insurance Agency</span></button>
+              <button class="bpc-opt" data-val="mortgage" onclick="bpcSelect(this)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><span>Mortgage / Real Estate</span></button>
+              <button class="bpc-opt" data-val="other" onclick="bpcSelect(this)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span>Other Professional Services</span></button>
             </div>
           </div>
 
-          <!-- Right Column -->
-          <div class="bp-form-col">
-            <div class="bp-form-section-label">MARKETING CHANNELS</div>
-
-            <div class="bp-field">
-              <label class="bp-label">Monthly Marketing Budget</label>
-              <select id="bp-budget" class="bp-select">
-                <option value="0">$0 (Organic Only)</option>
-                <option value="250">Under $250/month</option>
-                <option value="500">$250 - $500/month</option>
-                <option value="1000">$500 - $1,000/month</option>
-                <option value="2500">$1,000 - $2,500/month</option>
-                <option value="5000">$2,500+/month</option>
-              </select>
+          <!-- Step 2: Client Count -->
+          <div class="bpc-slide" data-step="2">
+            <div class="bpc-question">How many clients do you actively serve per year?</div>
+            <div class="bpc-sub">Roughly how many active clients are in your book right now?</div>
+            <div class="bpc-input-wrap">
+              <input type="number" id="bp-client-count" class="bpc-big-input" placeholder="150" min="0">
+              <div class="bpc-input-hint">clients per year</div>
             </div>
+          </div>
 
-            <div class="bp-field">
-              <label class="bp-label">Current Channels</label>
-              <div class="bp-hint" style="margin-bottom:10px">Select all that you currently use:</div>
-              <div class="bp-check-group">
-                <label class="bp-check"><input type="checkbox" id="bp-has-website"><span>Website</span></label>
-                <label class="bp-check"><input type="checkbox" id="bp-has-social"><span>Social Media (Facebook, Instagram, LinkedIn)</span></label>
-                <label class="bp-check"><input type="checkbox" id="bp-has-email"><span>Email Marketing / Client Newsletter</span></label>
+          <!-- Step 3: Target Audience -->
+          <div class="bpc-slide" data-step="3">
+            <div class="bpc-question">Who makes up the majority of your client base?</div>
+            <div class="bpc-sub">We tailor your outreach strategy based on who you serve.</div>
+            <div class="bpc-options" id="bpc-audience-opts">
+              <button class="bpc-opt" data-val="individuals" onclick="bpcSelect(this)"><span>Individual Taxpayers</span></button>
+              <button class="bpc-opt" data-val="small-biz" onclick="bpcSelect(this)"><span>Small Business Owners</span></button>
+              <button class="bpc-opt" data-val="high-net-worth" onclick="bpcSelect(this)"><span>High-Net-Worth Individuals</span></button>
+              <button class="bpc-opt" data-val="self-employed" onclick="bpcSelect(this)"><span>Self-Employed / Freelancers</span></button>
+              <button class="bpc-opt" data-val="mixed" onclick="bpcSelect(this)"><span>Mixed (Individuals + Businesses)</span></button>
+            </div>
+          </div>
+
+          <!-- Step 4: Referral Goal -->
+          <div class="bpc-slide" data-step="4">
+            <div class="bpc-question">How many referrals do you want to submit in 90 days?</div>
+            <div class="bpc-sub">Set a realistic target. Even 3-5 is a strong start.</div>
+            <div class="bpc-input-wrap">
+              <input type="number" id="bp-ref-goal" class="bpc-big-input" value="5" min="1" max="100">
+              <div class="bpc-input-hint">referrals in 90 days</div>
+            </div>
+          </div>
+
+          <!-- Step 5: Marketing Budget -->
+          <div class="bpc-slide" data-step="5">
+            <div class="bpc-question">What's your monthly marketing budget?</div>
+            <div class="bpc-sub">No budget is totally fine. We focus on free strategies first.</div>
+            <div class="bpc-options" id="bpc-budget-opts">
+              <button class="bpc-opt" data-val="0" onclick="bpcSelect(this)"><span>$0 -- Organic Only</span></button>
+              <button class="bpc-opt" data-val="250" onclick="bpcSelect(this)"><span>Under $250 / month</span></button>
+              <button class="bpc-opt" data-val="500" onclick="bpcSelect(this)"><span>$250 - $500 / month</span></button>
+              <button class="bpc-opt" data-val="1000" onclick="bpcSelect(this)"><span>$500 - $1,000 / month</span></button>
+              <button class="bpc-opt" data-val="2500" onclick="bpcSelect(this)"><span>$1,000 - $2,500 / month</span></button>
+              <button class="bpc-opt" data-val="5000" onclick="bpcSelect(this)"><span>$2,500+ / month</span></button>
+            </div>
+          </div>
+
+          <!-- Step 6: Channels -->
+          <div class="bpc-slide" data-step="6">
+            <div class="bpc-question">Which marketing channels do you already use?</div>
+            <div class="bpc-sub">Select all that apply. It's OK if you don't use any yet.</div>
+            <div class="bpc-checks">
+              <label class="bpc-check-opt"><input type="checkbox" id="bp-has-website"><div class="bpc-check-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Website</span></label>
+              <label class="bpc-check-opt"><input type="checkbox" id="bp-has-social"><div class="bpc-check-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Social Media (Facebook, Instagram, LinkedIn)</span></label>
+              <label class="bpc-check-opt"><input type="checkbox" id="bp-has-email"><div class="bpc-check-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Email Marketing / Client Newsletter</span></label>
+            </div>
+          </div>
+
+          <!-- Step 7: Optional Details -->
+          <div class="bpc-slide" data-step="7">
+            <div class="bpc-question">A few more details to personalize your plan.</div>
+            <div class="bpc-sub">All optional -- skip anything you'd rather not answer.</div>
+            <div class="bpc-optional-grid">
+              <div class="bp-field">
+                <label class="bp-label">Geographic Focus</label>
+                <select id="bp-geo" class="bp-select"><option value="">-- Skip --</option><option value="urban">Urban / Metro Area</option><option value="suburban">Suburban</option><option value="rural">Rural / Small Town</option></select>
               </div>
-            </div>
-
-            <div class="bp-callout">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              <div>
-                <strong>No budget? No problem.</strong> The highest-converting referral channel is face-to-face conversation with existing clients. Your roadmap will prioritize zero-cost strategies first.
+              <div class="bp-field">
+                <label class="bp-label">Years in Business</label>
+                <select id="bp-years" class="bp-select"><option value="">-- Skip --</option><option value="new">Less than 2 years</option><option value="mid">2 - 10 years</option><option value="established">10+ years</option></select>
+              </div>
+              <div class="bp-field">
+                <label class="bp-label">Current Monthly Referrals</label>
+                <select id="bp-current-refs" class="bp-select"><option value="">-- Skip --</option><option value="0">0 (just starting)</option><option value="1-3">1 - 3 per month</option><option value="4-10">4 - 10 per month</option><option value="10+">10+ per month</option></select>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="bp-generate-btn-wrap" style="text-align:center;margin-top:32px">
-          <button class="btn btn-p btn-lg" onclick="bpGenerateRoadmap()">
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-            Generate My 90-Day Roadmap
+        <!-- Navigation -->
+        <div class="bpc-nav">
+          <button class="bpc-nav-back" id="bpc-back" onclick="bpcPrev()" style="visibility:hidden">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Back
+          </button>
+          <button class="bpc-nav-next" id="bpc-next" onclick="bpcNext()">
+            Next
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </button>
         </div>
       </div>
 
-      <!-- Results -->
-      <div id="bp-result" style="display:none">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
-          <div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--navy)">Your 90-Day Growth Roadmap</div>
-          <button class="btn btn-s" onclick="bpResetPlanner()">
-            <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.33"/></svg>
-            Start Over
-          </button>
-        </div>
-      </div>
+      <!-- Results (rendered by JS) -->
+      <div id="bp-result" style="display:none"></div>
     </div>
 
     <!-- ═══ SETTINGS SECTION ═══ -->
@@ -3247,6 +3246,8 @@
     <div class="jazz-eq" id="jazz-eq" style="display:none">
       <div class="jazz-eq-bar"></div><div class="jazz-eq-bar"></div><div class="jazz-eq-bar"></div><div class="jazz-eq-bar"></div><div class="jazz-eq-bar"></div>
     </div>
+    <div class="jazz-divider"></div>
+    <div class="jazz-marquee" id="jazz-marquee"></div>
     <div class="jazz-vol-wrap">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg>
       <input type="range" class="jazz-vol" id="jazz-vol" min="0" max="100" value="3" oninput="setJazzVolume(this.value)">
