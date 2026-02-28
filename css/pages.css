@@ -4048,3 +4048,97 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 [data-theme="dark"] .tunes-card:hover{border-color:rgba(11,95,216,0.35);box-shadow:0 4px 16px rgba(0,0,0,0.15)}
 [data-theme="dark"] .tunes-card-name{color:#e8ecf2}
 [data-theme="dark"] .tunes-card-desc{color:rgba(255,255,255,0.45)}
+
+/* ═══ 30-DAY CHALLENGE ═══ */
+
+/* Hero Status Card */
+.ch-hero{display:flex;gap:32px;background:linear-gradient(135deg,rgba(11,95,216,0.04),rgba(0,200,224,0.03));border:1px solid rgba(11,95,216,0.1);border-radius:16px;padding:32px;margin-bottom:24px;align-items:center}
+.ch-hero-left{display:flex;flex-direction:column;align-items:center;gap:14px;flex-shrink:0}
+.ch-hero-ring-wrap{position:relative;width:120px;height:120px}
+.ch-hero-ring{width:100%;height:100%}
+.ch-ring-fill{transition:stroke-dashoffset 1s ease}
+.ch-hero-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ch-hero-day{font-family:'DM Serif Display',serif;font-size:24px;color:var(--navy);line-height:1}
+.ch-hero-of{font-size:12px;color:var(--mist);margin-top:2px}
+.ch-hero-streak{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--blue);background:rgba(11,95,216,0.06);padding:6px 14px;border-radius:20px}
+.ch-hero-streak svg{stroke:var(--blue)}
+.ch-hero-right{flex:1;min-width:0}
+.ch-hero-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
+.ch-stat{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:18px 16px;text-align:center}
+.ch-stat-val{font-family:'DM Serif Display',serif;font-size:24px;color:var(--navy);margin-bottom:4px}
+.ch-stat-label{font-size:11px;font-weight:600;color:var(--mist);text-transform:uppercase;letter-spacing:0.08em}
+.ch-hero-badges{display:flex;gap:10px}
+.ch-badge{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--off);border:1px solid var(--off2);color:var(--mist);transition:all 0.2s}
+.ch-badge-earned{background:linear-gradient(135deg,rgba(11,95,216,0.08),rgba(0,200,224,0.06));border-color:rgba(11,95,216,0.15);color:var(--blue)}
+
+/* Weekly Progress Grid */
+.ch-weeks{background:var(--white);border:1px solid var(--off2);border-radius:14px;padding:24px;margin-bottom:24px}
+.ch-weeks-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.ch-weeks-title{font-size:15px;font-weight:700;color:var(--navy)}
+.ch-weeks-legend{display:flex;gap:14px;font-size:12px;color:var(--slate)}
+.ch-leg{display:flex;align-items:center;gap:5px}
+.ch-leg-dot{width:10px;height:10px;border-radius:50%}
+.ch-leg-done{background:linear-gradient(135deg,#0B5FD8,#00C8E0)}
+.ch-leg-today{background:var(--blue);box-shadow:0 0 0 3px rgba(11,95,216,0.2)}
+.ch-leg-locked{background:var(--off);border:1px solid var(--off2)}
+.ch-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:8px}
+.ch-cell{width:100%;aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--mist);background:var(--off);border:1px solid var(--off2);transition:all 0.2s;cursor:default}
+.ch-cell-done{background:linear-gradient(135deg,#0B5FD8,#00C8E0);color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(11,95,216,0.2)}
+.ch-cell-done svg{stroke:#fff}
+.ch-cell-today{background:var(--white);border-color:var(--blue);color:var(--blue);box-shadow:0 0 0 3px rgba(11,95,216,0.12);font-weight:800}
+.ch-cell-skipped{background:rgba(220,38,38,0.04);border-color:rgba(220,38,38,0.15);color:#DC2626}
+.ch-cell-locked{opacity:0.4}
+
+/* Today's Challenge */
+.ch-today{background:var(--white);border:1px solid var(--off2);border-radius:14px;padding:28px;margin-bottom:24px;transition:all 0.3s}
+.ch-today-eyebrow{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px}
+.ch-today-eyebrow svg{stroke:var(--blue)}
+.ch-today-pts{background:linear-gradient(135deg,rgba(11,95,216,0.06),rgba(0,200,224,0.04));color:var(--cyan-text);padding:3px 10px;border-radius:20px;font-size:11px;letter-spacing:0.04em;margin-left:auto}
+.ch-today-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--navy);margin-bottom:10px}
+.ch-today-desc{font-size:14px;color:var(--body);line-height:1.7;margin-bottom:20px}
+.ch-today-actions{display:flex;gap:12px}
+.ch-btn-complete{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;font-size:14px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--blue),#00C8E0);border:none;border-radius:10px;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif;box-shadow:0 4px 16px rgba(11,95,216,0.2)}
+.ch-btn-complete:hover{box-shadow:0 6px 24px rgba(11,95,216,0.3);transform:translateY(-1px)}
+.ch-btn-complete:disabled{opacity:0.6;cursor:default;transform:none;box-shadow:none}
+.ch-btn-skip{padding:12px 20px;font-size:14px;font-weight:600;color:var(--slate);background:none;border:1px solid var(--off2);border-radius:10px;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.ch-btn-skip:hover{border-color:var(--navy);color:var(--navy)}
+.ch-today-completed{border-color:rgba(5,150,105,0.2);background:rgba(5,150,105,0.02)}
+.ch-today-completed .ch-today-eyebrow{color:#059669}
+.ch-today-completed .ch-today-eyebrow svg{stroke:#059669}
+.ch-today-completed .ch-btn-complete{background:#059669}
+
+/* Upcoming Days */
+.ch-upcoming{margin-bottom:24px}
+.ch-upcoming-title{font-size:12px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px}
+.ch-upcoming-list{display:flex;flex-direction:column;gap:10px}
+.ch-up-card{display:flex;align-items:center;gap:16px;background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:16px 20px;opacity:0.6}
+.ch-up-day{font-size:12px;font-weight:700;color:var(--mist);white-space:nowrap;min-width:50px}
+.ch-up-info{flex:1;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.ch-up-title{font-size:14px;font-weight:600;color:var(--navy)}
+.ch-up-pts{font-size:12px;font-weight:600;color:var(--blue);white-space:nowrap}
+
+/* Challenge Leaderboard */
+.ch-leaderboard{background:var(--white);border:1px solid var(--off2);border-radius:14px;padding:24px}
+.ch-lb-header{margin-bottom:16px}
+.ch-lb-title{font-size:16px;font-weight:700;color:var(--navy)}
+.ch-lb-sub{font-size:13px;color:var(--mist);margin-top:2px}
+.ch-lb-list{display:flex;flex-direction:column;gap:6px}
+.ch-lb-row{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:10px;transition:background 0.15s}
+.ch-lb-row:hover{background:var(--off1)}
+.ch-lb-rank{width:24px;font-size:14px;font-weight:700;color:var(--mist);text-align:center}
+.ch-lb-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.ch-lb-info{flex:1;min-width:0}
+.ch-lb-name{font-size:14px;font-weight:600;color:var(--navy)}
+.ch-lb-day{font-size:11px;color:var(--mist)}
+.ch-lb-pts{font-size:13px;font-weight:700;color:var(--blue)}
+.ch-lb-row-you{background:rgba(11,95,216,0.03);border:1px solid rgba(11,95,216,0.08)}
+.ch-lb-row-you:hover{background:rgba(11,95,216,0.06)}
+
+@media(max-width:768px){
+  .ch-hero{flex-direction:column;padding:24px;gap:20px}
+  .ch-hero-stats{grid-template-columns:1fr;gap:10px}
+  .ch-grid{grid-template-columns:repeat(6,1fr);gap:6px}
+  .ch-today-title{font-size:19px}
+  .ch-today-actions{flex-direction:column}
+  .ch-up-info{flex-direction:column;align-items:flex-start;gap:4px}
+}

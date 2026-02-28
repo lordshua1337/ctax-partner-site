@@ -439,6 +439,29 @@
 [data-theme="dark"] .dlb-row-you{background:rgba(75,163,255,0.06);border-color:rgba(75,163,255,0.12)}
 [data-theme="dark"] .dlb-badge-you{background:rgba(75,163,255,0.12);color:#4BA3FF}
 
+/* ── 30-Day Challenge Dark Mode ── */
+[data-theme="dark"] .ch-hero{background:linear-gradient(135deg,rgba(75,163,255,0.06),rgba(0,200,224,0.04));border-color:rgba(75,163,255,0.1)}
+[data-theme="dark"] .ch-hero-day{color:#e0e4ec}
+[data-theme="dark"] .ch-stat{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ch-stat-val{color:#e0e4ec}
+[data-theme="dark"] .ch-badge{background:#141e30;border-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.25)}
+[data-theme="dark"] .ch-badge-earned{background:rgba(75,163,255,0.1);border-color:rgba(75,163,255,0.15);color:#4BA3FF}
+[data-theme="dark"] .ch-weeks{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ch-weeks-title{color:#e0e4ec}
+[data-theme="dark"] .ch-cell{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.25)}
+[data-theme="dark"] .ch-cell-today{background:#141e30;border-color:#4BA3FF;color:#4BA3FF}
+[data-theme="dark"] .ch-today{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ch-today-title{color:#e0e4ec}
+[data-theme="dark"] .ch-today-desc{color:rgba(255,255,255,0.55)}
+[data-theme="dark"] .ch-btn-skip{border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .ch-up-card{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ch-up-title{color:#e0e4ec}
+[data-theme="dark"] .ch-leaderboard{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ch-lb-title{color:#e0e4ec}
+[data-theme="dark"] .ch-lb-name{color:#e0e4ec}
+[data-theme="dark"] .ch-lb-row:hover{background:rgba(255,255,255,0.03)}
+[data-theme="dark"] .ch-lb-row-you{background:rgba(75,163,255,0.06);border-color:rgba(75,163,255,0.1)}
+
 /* ── Referral Link Generator Dark Mode ── */
 [data-theme="dark"] .rlg-wrap{background:#141e30;border-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .rlg-title{color:#e0e4ec}

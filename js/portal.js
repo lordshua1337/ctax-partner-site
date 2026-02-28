@@ -176,6 +176,10 @@ function portalNav(el, secId) {
     }
   }
 
+  if (secId === 'portal-sec-challenge') {
+    if (typeof chInit === 'function') chInit();
+  }
+
   // Entrance animation for section content
   if (sec) portalAnimateEntrance(sec);
 

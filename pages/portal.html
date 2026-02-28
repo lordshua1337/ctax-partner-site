@@ -87,6 +87,11 @@
           Business Planner
           <span class="pni-badge pni-badge-green">New</span>
         </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-challenge')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          30-Day Challenge
+          <span class="pni-badge pni-badge-green">New</span>
+        </a>
       </div>
 
       <div class="portal-nav-group">
@@ -3036,6 +3041,140 @@
 
       <!-- Results (rendered by JS) -->
       <div id="bp-result" style="display:none"></div>
+    </div>
+
+    <!-- ═══ 30-DAY CHALLENGE SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-challenge">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">30-Day Momentum Challenge</h2>
+        <p class="portal-sec-desc">Build unstoppable habits in 30 days. Complete daily actions from your growth roadmap, earn points, and level up your partner game.</p>
+      </div>
+
+      <!-- Challenge Hero / Status Card -->
+      <div class="ch-hero">
+        <div class="ch-hero-left">
+          <div class="ch-hero-ring-wrap">
+            <svg viewBox="0 0 120 120" class="ch-hero-ring">
+              <circle cx="60" cy="60" r="52" fill="none" stroke="var(--off2)" stroke-width="8"/>
+              <circle cx="60" cy="60" r="52" fill="none" stroke="url(#chGrad)" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="228.7" class="ch-ring-fill" id="ch-ring-fill" transform="rotate(-90 60 60)"/>
+              <defs><linearGradient id="chGrad" x1="0" y1="0" x2="120" y2="120"><stop stop-color="#0B5FD8"/><stop offset="1" stop-color="#00C8E0"/></linearGradient></defs>
+            </svg>
+            <div class="ch-hero-ring-center">
+              <div class="ch-hero-day" id="ch-hero-day">Day 9</div>
+              <div class="ch-hero-of">of 30</div>
+            </div>
+          </div>
+          <div class="ch-hero-streak">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <span id="ch-streak-val">9-day streak</span>
+          </div>
+        </div>
+        <div class="ch-hero-right">
+          <div class="ch-hero-stats">
+            <div class="ch-stat">
+              <div class="ch-stat-val" id="ch-points">1,280</div>
+              <div class="ch-stat-label">Total Points</div>
+            </div>
+            <div class="ch-stat">
+              <div class="ch-stat-val" id="ch-completed">9</div>
+              <div class="ch-stat-label">Days Completed</div>
+            </div>
+            <div class="ch-stat">
+              <div class="ch-stat-val" id="ch-rank">Top 15%</div>
+              <div class="ch-stat-label">Partner Rank</div>
+            </div>
+          </div>
+          <div class="ch-hero-badges" id="ch-hero-badges">
+            <div class="ch-badge ch-badge-earned" title="Week 1 Complete">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
+            </div>
+            <div class="ch-badge ch-badge-earned" title="3-Day Streak">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <div class="ch-badge" title="7-Day Streak (Locked)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </div>
+            <div class="ch-badge" title="Perfect Week (Locked)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly Progress Grid -->
+      <div class="ch-weeks">
+        <div class="ch-weeks-header">
+          <div class="ch-weeks-title">Your Progress</div>
+          <div class="ch-weeks-legend">
+            <span class="ch-leg"><span class="ch-leg-dot ch-leg-done"></span> Done</span>
+            <span class="ch-leg"><span class="ch-leg-dot ch-leg-today"></span> Today</span>
+            <span class="ch-leg"><span class="ch-leg-dot ch-leg-locked"></span> Upcoming</span>
+          </div>
+        </div>
+        <div class="ch-grid" id="ch-grid">
+          <!-- JS fills 30 day cells -->
+        </div>
+      </div>
+
+      <!-- Today's Challenge Card -->
+      <div class="ch-today" id="ch-today">
+        <div class="ch-today-eyebrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Today's Challenge
+          <span class="ch-today-pts">+150 pts</span>
+        </div>
+        <div class="ch-today-title" id="ch-today-title">Write your first referral intro email</div>
+        <div class="ch-today-desc" id="ch-today-desc">Use the Script Builder to generate a warm introduction email for a client you think could benefit from IRS resolution help. Personalize it and save it to your templates.</div>
+        <div class="ch-today-actions">
+          <button class="ch-btn-complete" id="ch-btn-complete" onclick="chCompleteDay()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Mark Complete
+          </button>
+          <button class="ch-btn-skip" onclick="chSkipDay()">Skip Today</button>
+        </div>
+      </div>
+
+      <!-- Upcoming Days Preview -->
+      <div class="ch-upcoming">
+        <div class="ch-upcoming-title">Coming Up Next</div>
+        <div class="ch-upcoming-list" id="ch-upcoming-list">
+          <!-- JS fills upcoming 3 days -->
+        </div>
+      </div>
+
+      <!-- Leaderboard Mini -->
+      <div class="ch-leaderboard">
+        <div class="ch-lb-header">
+          <div class="ch-lb-title">Challenge Leaderboard</div>
+          <div class="ch-lb-sub">Top partners this month</div>
+        </div>
+        <div class="ch-lb-list">
+          <div class="ch-lb-row">
+            <div class="ch-lb-rank">1</div>
+            <div class="ch-lb-avatar" style="background:#FFD700">SP</div>
+            <div class="ch-lb-info"><div class="ch-lb-name">S. Patel</div><div class="ch-lb-day">Day 30</div></div>
+            <div class="ch-lb-pts">4,500 pts</div>
+          </div>
+          <div class="ch-lb-row">
+            <div class="ch-lb-rank">2</div>
+            <div class="ch-lb-avatar" style="background:#C0C0C0">JL</div>
+            <div class="ch-lb-info"><div class="ch-lb-name">J. Lopez</div><div class="ch-lb-day">Day 28</div></div>
+            <div class="ch-lb-pts">4,200 pts</div>
+          </div>
+          <div class="ch-lb-row">
+            <div class="ch-lb-rank">3</div>
+            <div class="ch-lb-avatar" style="background:#CD7F32">AW</div>
+            <div class="ch-lb-info"><div class="ch-lb-name">A. Wright</div><div class="ch-lb-day">Day 24</div></div>
+            <div class="ch-lb-pts">3,600 pts</div>
+          </div>
+          <div class="ch-lb-row ch-lb-row-you">
+            <div class="ch-lb-rank">8</div>
+            <div class="ch-lb-avatar" style="background:var(--blue)">JH</div>
+            <div class="ch-lb-info"><div class="ch-lb-name">You</div><div class="ch-lb-day">Day 9</div></div>
+            <div class="ch-lb-pts">1,280 pts</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ═══ SETTINGS SECTION ═══ -->
