@@ -95,6 +95,30 @@
       </div>
 
       <div class="portal-nav-group">
+        <div class="portal-nav-heading">AI Tools</div>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-ai-scripts')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Script Builder
+          <span class="pni-badge">Pro</span>
+        </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-ai-admaker')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Ad Maker
+          <span class="pni-badge">Pro</span>
+        </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-ai-qualifier')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Client Qualifier
+          <span class="pni-badge">Pro</span>
+        </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-ai-kb')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          Knowledge Base
+          <span class="pni-badge">Pro</span>
+        </a>
+      </div>
+
+      <div class="portal-nav-group">
         <div class="portal-nav-heading">Account</div>
         <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-settings')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -3174,6 +3198,96 @@
             <div class="ch-lb-pts">1,280 pts</div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ═══ AI SCRIPT BUILDER (Portal Wrapper) ═══ -->
+    <div class="portal-section" id="portal-sec-ai-scripts">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">AI Script Builder <span class="pni-badge">Pro</span></h2>
+        <p class="portal-sec-desc">Generate referral conversation scripts, email templates, objection handlers, and follow-up sequences -- powered by AI and tailored to your practice.</p>
+      </div>
+      <div class="ai-portal-embed">
+        <div class="ai-embed-tabs">
+          <button class="ai-embed-tab ai-embed-tab-active" onclick="aiTabSwitch(this,'ai-sb-conversation')">Conversation</button>
+          <button class="ai-embed-tab" onclick="aiTabSwitch(this,'ai-sb-email')">Email</button>
+          <button class="ai-embed-tab" onclick="aiTabSwitch(this,'ai-sb-objections')">Objections</button>
+          <button class="ai-embed-tab" onclick="aiTabSwitch(this,'ai-sb-followup')">Follow-up</button>
+        </div>
+        <div class="ai-embed-panel ai-embed-panel-active" id="ai-sb-conversation">
+          <div class="ai-embed-field"><label class="ai-embed-label">Client situation</label><textarea class="ai-embed-input" rows="3" placeholder="e.g. Long-time tax prep client, just found out they owe $38k from 2021-2023..."></textarea></div>
+          <div class="ai-embed-field"><label class="ai-embed-label">Your relationship</label><select class="ai-embed-select"><option>Tax preparer</option><option>Financial advisor</option><option>Insurance agent</option><option>CPA</option><option>Other</option></select></div>
+          <div class="ai-embed-field"><label class="ai-embed-label">Tone</label><select class="ai-embed-select"><option>Warm and empathetic</option><option>Direct and professional</option><option>Casual and friendly</option></select></div>
+          <button class="ai-embed-btn" onclick="aiDemoGenerate(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Generate Script</button>
+          <div class="ai-embed-result" id="ai-sb-result"></div>
+        </div>
+        <div class="ai-embed-panel" id="ai-sb-email"><div class="ai-embed-field"><label class="ai-embed-label">Email type</label><select class="ai-embed-select"><option>Client outreach</option><option>Warm introduction</option><option>Follow-up reminder</option><option>Tax season check-in</option></select></div><div class="ai-embed-field"><label class="ai-embed-label">Client context</label><textarea class="ai-embed-input" rows="3" placeholder="Brief notes about the client..."></textarea></div><button class="ai-embed-btn" onclick="aiDemoGenerate(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Generate Email</button><div class="ai-embed-result"></div></div>
+        <div class="ai-embed-panel" id="ai-sb-objections"><div class="ai-embed-field"><label class="ai-embed-label">Objection</label><select class="ai-embed-select"><option>I can't afford it</option><option>I don't trust anyone with my taxes</option><option>I'll handle it myself</option><option>The IRS isn't bothering me</option><option>I already have a tax attorney</option></select></div><button class="ai-embed-btn" onclick="aiDemoGenerate(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Generate Response</button><div class="ai-embed-result"></div></div>
+        <div class="ai-embed-panel" id="ai-sb-followup"><div class="ai-embed-field"><label class="ai-embed-label">Follow-up timing</label><select class="ai-embed-select"><option>Same week</option><option>One week later</option><option>Two weeks later</option><option>One month later</option></select></div><div class="ai-embed-field"><label class="ai-embed-label">Previous interaction</label><textarea class="ai-embed-input" rows="2" placeholder="What happened in your last conversation..."></textarea></div><button class="ai-embed-btn" onclick="aiDemoGenerate(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Generate Follow-up</button><div class="ai-embed-result"></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ AI AD MAKER (Portal Wrapper) ═══ -->
+    <div class="portal-section" id="portal-sec-ai-admaker">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">AI Ad Maker <span class="pni-badge">Pro</span></h2>
+        <p class="portal-sec-desc">Create co-branded social media ads and marketing assets in seconds. Pick a template, customize the copy, and download -- ready to post.</p>
+      </div>
+      <div class="ai-portal-embed">
+        <div class="ai-embed-field"><label class="ai-embed-label">Ad template</label><select class="ai-embed-select"><option>Tax Relief Awareness</option><option>IRS Problem Solver</option><option>Free Consultation Offer</option><option>Tax Season Special</option><option>Client Success Story</option></select></div>
+        <div class="ai-embed-row">
+          <div class="ai-embed-field" style="flex:1"><label class="ai-embed-label">Headline</label><input class="ai-embed-input" type="text" placeholder="e.g. Struggling with IRS debt?"></div>
+          <div class="ai-embed-field" style="flex:1"><label class="ai-embed-label">CTA text</label><input class="ai-embed-input" type="text" placeholder="e.g. Get Free Assessment"></div>
+        </div>
+        <div class="ai-embed-field"><label class="ai-embed-label">Platform</label><div class="ai-embed-pills"><button class="ai-pill ai-pill-active">LinkedIn</button><button class="ai-pill">Facebook</button><button class="ai-pill">Instagram</button><button class="ai-pill">X/Twitter</button></div></div>
+        <button class="ai-embed-btn" onclick="aiDemoGenerate(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Generate Ad</button>
+        <div class="ai-embed-result" id="ai-ad-result"></div>
+      </div>
+    </div>
+
+    <!-- ═══ AI CLIENT QUALIFIER (Portal Wrapper) ═══ -->
+    <div class="portal-section" id="portal-sec-ai-qualifier">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">AI Client Qualifier <span class="pni-badge">Pro</span></h2>
+        <p class="portal-sec-desc">Analyze a client's tax situation in seconds. Get a referral strength score, resolution path, estimated case value, and talking points for the conversation.</p>
+      </div>
+      <div class="ai-portal-embed">
+        <div class="ai-embed-row">
+          <div class="ai-embed-field" style="flex:1"><label class="ai-embed-label">Estimated tax debt</label><select class="ai-embed-select"><option value="">Select range...</option><option>Under $7,000</option><option>$7,000 - $15,000</option><option>$15,000 - $30,000</option><option>$30,000 - $50,000</option><option>$50,000 - $100,000</option><option>$100,000+</option></select></div>
+          <div class="ai-embed-field" style="flex:1"><label class="ai-embed-label">Type of tax issue</label><select class="ai-embed-select"><option value="">Select issue...</option><option>Unpaid taxes / back taxes</option><option>Unfiled returns</option><option>Wage garnishment</option><option>Tax lien</option><option>Bank levy</option><option>IRS audit</option><option>Multiple issues</option></select></div>
+        </div>
+        <div class="ai-embed-row">
+          <div class="ai-embed-field" style="flex:1"><label class="ai-embed-label">Years affected</label><select class="ai-embed-select"><option value="">Select...</option><option>1 year</option><option>2-3 years</option><option>4-6 years</option><option>7+ years</option></select></div>
+          <div class="ai-embed-field" style="flex:1"><label class="ai-embed-label">IRS notices received?</label><select class="ai-embed-select"><option value="">Select...</option><option>Yes, recent</option><option>Yes, a while ago</option><option>No notices</option><option>Not sure</option></select></div>
+        </div>
+        <div class="ai-embed-field"><label class="ai-embed-label">Additional context <span style="font-weight:400;color:var(--mist)">(optional)</span></label><textarea class="ai-embed-input" rows="2" placeholder="e.g. Client mentioned owing $40k from a business that closed..."></textarea></div>
+        <button class="ai-embed-btn" onclick="aiDemoGenerate(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Qualify This Client</button>
+        <div class="ai-embed-result" id="ai-cq-result"></div>
+      </div>
+    </div>
+
+    <!-- ═══ AI KNOWLEDGE BASE (Portal Wrapper) ═══ -->
+    <div class="portal-section" id="portal-sec-ai-kb">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Knowledge Base <span class="pni-badge">Pro</span></h2>
+        <p class="portal-sec-desc">AI-powered search across all partner program documentation. Ask anything about revenue share, referral process, IRS programs, or program policies.</p>
+      </div>
+      <div class="ai-portal-embed">
+        <div class="ai-embed-field">
+          <label class="ai-embed-label">Ask a question</label>
+          <div class="ai-kb-search-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="ai-embed-input ai-kb-input" type="text" placeholder="e.g. How does revenue share work?" style="border:none;padding-left:0">
+          </div>
+        </div>
+        <div class="ai-embed-pills" style="margin-bottom:20px">
+          <button class="ai-pill" onclick="this.closest('.ai-portal-embed').querySelector('.ai-kb-input').value=this.textContent">Revenue share</button>
+          <button class="ai-pill" onclick="this.closest('.ai-portal-embed').querySelector('.ai-kb-input').value=this.textContent">Investigation fee</button>
+          <button class="ai-pill" onclick="this.closest('.ai-portal-embed').querySelector('.ai-kb-input').value=this.textContent">Referral submission</button>
+          <button class="ai-pill" onclick="this.closest('.ai-portal-embed').querySelector('.ai-kb-input').value=this.textContent">IRS programs</button>
+        </div>
+        <button class="ai-embed-btn" onclick="aiDemoGenerate(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Search Knowledge Base</button>
+        <div class="ai-embed-result" id="ai-kb-result"></div>
       </div>
     </div>
 

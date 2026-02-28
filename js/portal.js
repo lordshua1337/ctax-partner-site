@@ -180,6 +180,9 @@ function portalNav(el, secId) {
     if (typeof chInit === 'function') chInit();
   }
 
+  // Pro gate check (shows overlay on locked sections)
+  if (typeof proCheckGate === 'function') proCheckGate(secId);
+
   // Entrance animation for section content
   if (sec) portalAnimateEntrance(sec);
 

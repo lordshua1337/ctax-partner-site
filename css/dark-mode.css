@@ -462,6 +462,37 @@
 [data-theme="dark"] .ch-lb-row:hover{background:rgba(255,255,255,0.03)}
 [data-theme="dark"] .ch-lb-row-you{background:rgba(75,163,255,0.06);border-color:rgba(75,163,255,0.1)}
 
+/* ── Pro Gating Dark Mode ── */
+[data-theme="dark"] .pro-lock-overlay{background:rgba(15,25,35,0.92)}
+[data-theme="dark"] .pro-lock-icon{background:rgba(75,163,255,0.1)}
+[data-theme="dark"] .pro-lock-title{color:#e0e4ec}
+[data-theme="dark"] .pro-lock-desc{color:rgba(255,255,255,0.55)}
+[data-theme="dark"] .pro-pw-modal{background:#0f1724}
+[data-theme="dark"] .pro-pw-close{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .pro-pw-title{color:#e0e4ec}
+[data-theme="dark"] .pro-pw-subtitle{color:rgba(255,255,255,0.55)}
+[data-theme="dark"] .pro-pw-price-card{background:rgba(75,163,255,0.06);border-color:rgba(75,163,255,0.1)}
+[data-theme="dark"] .pro-pw-dollar,[data-theme="dark"] .pro-pw-amount,[data-theme="dark"] .pro-pw-cents{color:#e0e4ec}
+[data-theme="dark"] .pro-pw-feat{border-bottom-color:rgba(255,255,255,0.04)}
+[data-theme="dark"] .pro-pw-feat-icon{background:rgba(75,163,255,0.08)}
+[data-theme="dark"] .pro-pw-feat-name{color:#e0e4ec}
+[data-theme="dark"] .pro-pw-feat-desc{color:rgba(255,255,255,0.4)}
+
+/* ── AI Tool Embeds Dark Mode ── */
+[data-theme="dark"] .ai-portal-embed{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ai-embed-tabs{background:rgba(255,255,255,0.04)}
+[data-theme="dark"] .ai-embed-tab{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .ai-embed-tab:hover{color:#e0e4ec}
+[data-theme="dark"] .ai-embed-tab-active{background:#1a2740;color:#e0e4ec}
+[data-theme="dark"] .ai-embed-input,[data-theme="dark"] .ai-embed-select{background:#0f1724;border-color:rgba(255,255,255,0.1);color:#e0e4ec}
+[data-theme="dark"] .ai-pill{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .ai-pill:hover,[data-theme="dark"] .ai-pill-active{border-color:rgba(75,163,255,0.2);color:#4BA3FF;background:rgba(75,163,255,0.06)}
+[data-theme="dark"] .ai-result-card{background:#0f1724;border-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7)}
+[data-theme="dark"] .ai-ad-mock{background:#1a2740;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ai-ad-mock-header{border-bottom-color:rgba(255,255,255,0.04)}
+[data-theme="dark"] .ai-ad-mock-headline{color:#e0e4ec}
+[data-theme="dark"] .ai-kb-search-wrap{border-color:rgba(255,255,255,0.1);background:#0f1724}
+
 /* ── Referral Link Generator Dark Mode ── */
 [data-theme="dark"] .rlg-wrap{background:#141e30;border-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .rlg-title{color:#e0e4ec}
