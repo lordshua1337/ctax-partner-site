@@ -279,19 +279,21 @@ function mkDownloadSocialPng() {
   );
   document.body.appendChild(offscreen);
 
-  html2canvas(offscreen, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: null })
-    .then(function(cv) {
-      var a = document.createElement('a');
-      a.href = cv.toDataURL('image/png');
-      a.download = firm.trim().replace(/\s+/g, '-').toLowerCase() + '-ctax-' + mkSocialW + 'x' + mkSocialH + '.png';
-      a.click();
-      document.body.removeChild(offscreen);
-      if (typeof showToast === 'function') showToast('Social post downloaded', 'success');
-    })
-    .catch(function() {
-      document.body.removeChild(offscreen);
-      if (typeof showToast === 'function') showToast('Download failed. Please try again.', 'error');
-    });
+  (window.loadHtml2Canvas ? window.loadHtml2Canvas() : Promise.resolve()).then(function(){
+    html2canvas(offscreen, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: null })
+      .then(function(cv) {
+        var a = document.createElement('a');
+        a.href = cv.toDataURL('image/png');
+        a.download = firm.trim().replace(/\s+/g, '-').toLowerCase() + '-ctax-' + mkSocialW + 'x' + mkSocialH + '.png';
+        a.click();
+        document.body.removeChild(offscreen);
+        if (typeof showToast === 'function') showToast('Social post downloaded', 'success');
+      })
+      .catch(function() {
+        document.body.removeChild(offscreen);
+        if (typeof showToast === 'function') showToast('Download failed. Please try again.', 'error');
+      });
+  });
 }
 
 
@@ -439,19 +441,21 @@ function mkDownloadOnePager() {
   offscreen.innerHTML = mkBuildOnePager(firm, phone, email, website, tagline, mkOnePagerLogoUrl);
   document.body.appendChild(offscreen);
 
-  html2canvas(offscreen, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: null })
-    .then(function(cv) {
-      var a = document.createElement('a');
-      a.href = cv.toDataURL('image/png');
-      a.download = firm.trim().replace(/\s+/g, '-').toLowerCase() + '-partner-one-pager.png';
-      a.click();
-      document.body.removeChild(offscreen);
-      if (typeof showToast === 'function') showToast('One-pager downloaded', 'success');
-    })
-    .catch(function() {
-      document.body.removeChild(offscreen);
-      if (typeof showToast === 'function') showToast('Download failed. Please try again.', 'error');
-    });
+  (window.loadHtml2Canvas ? window.loadHtml2Canvas() : Promise.resolve()).then(function(){
+    html2canvas(offscreen, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: null })
+      .then(function(cv) {
+        var a = document.createElement('a');
+        a.href = cv.toDataURL('image/png');
+        a.download = firm.trim().replace(/\s+/g, '-').toLowerCase() + '-partner-one-pager.png';
+        a.click();
+        document.body.removeChild(offscreen);
+        if (typeof showToast === 'function') showToast('One-pager downloaded', 'success');
+      })
+      .catch(function() {
+        document.body.removeChild(offscreen);
+        if (typeof showToast === 'function') showToast('Download failed. Please try again.', 'error');
+      });
+  });
 }
 
 

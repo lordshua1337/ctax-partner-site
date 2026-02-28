@@ -253,17 +253,19 @@ function runDownload(el){
   var firm = (document.getElementById('am-firm')||{value:'partner'}).value.trim() || 'partner';
   var realW = window._amRealW || 1200;
   var realH = window._amRealH || 628;
-  // Canvas is displayed at 50%, so scale:2 gives us full resolution
-  html2canvas(el, {
-    scale: 2,
-    useCORS: true,
-    allowTaint: true,
-    backgroundColor: null
-  }).then(function(cv){
-    var a = document.createElement('a');
-    a.href = cv.toDataURL('image/png');
-    a.download = firm.replace(/\s+/g,'-').toLowerCase() + '-ctax-' + realW + 'x' + realH + '.png';
-    a.click();
+  // Lazy load html2canvas, then capture
+  (window.loadHtml2Canvas ? window.loadHtml2Canvas() : Promise.resolve()).then(function(){
+    html2canvas(el, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: null
+    }).then(function(cv){
+      var a = document.createElement('a');
+      a.href = cv.toDataURL('image/png');
+      a.download = firm.replace(/\s+/g,'-').toLowerCase() + '-ctax-' + realW + 'x' + realH + '.png';
+      a.click();
+    });
   });
 }
 
