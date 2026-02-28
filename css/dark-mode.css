@@ -383,6 +383,12 @@
 [data-theme="dark"] .bp-action-btn{background:#1a2740;border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)}
 [data-theme="dark"] .bp-btn-pdf:hover{background:#4BA3FF;color:#fff;border-color:#4BA3FF}
 
+/* ── Client Pipeline Dark Mode ── */
+[data-theme="dark"] .pipe-card{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .pipe-card:hover{border-color:rgba(75,163,255,0.2);box-shadow:0 4px 16px rgba(0,0,0,0.2)}
+[data-theme="dark"] .pipe-stage-count{background:rgba(255,255,255,0.06);color:#e0e4ec}
+[data-theme="dark"] .pipe-card-tag{background:rgba(75,163,255,0.08)}
+
 /* ── Command Bar Dark Mode ── */
 [data-theme="dark"] .cmdk-overlay{background:rgba(0,0,0,0.65)}
 [data-theme="dark"] .cmdk-modal{background:#141e30;box-shadow:0 24px 80px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.06)}
