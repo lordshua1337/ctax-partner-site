@@ -640,3 +640,10 @@
 [data-theme="dark"] .lpb-edit-footer{border-top-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .lpb-edit-cancel{border-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5)}
 [data-theme="dark"] .lpb-edit-cancel:hover{border-color:#4BA3FF;color:#4BA3FF}
+[data-theme="dark"] .lpb-toolbar-count{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .lpb-template-card{border-color:rgba(255,255,255,0.06);background:#0d1726}
+[data-theme="dark"] .lpb-template-card:hover{border-color:#4BA3FF;background:rgba(75,163,255,0.04);box-shadow:0 4px 16px rgba(0,0,0,0.3)}
+[data-theme="dark"] .lpb-template-icon{background:rgba(75,163,255,0.08);color:#4BA3FF}
+[data-theme="dark"] .lpb-template-name{color:#e0e4ec}
+[data-theme="dark"] .lpb-template-desc{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .lpb-template-count{color:#4BA3FF}

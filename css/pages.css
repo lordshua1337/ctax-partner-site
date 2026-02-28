@@ -4278,9 +4278,12 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 .lpb-toolbar-title{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--navy);letter-spacing:-0.01em}
 .lpb-toolbar-title svg{color:var(--blue)}
 .lpb-toolbar-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;background:rgba(11,95,216,0.08);color:var(--blue)}
+.lpb-toolbar-count{font-size:11px;color:var(--mist);font-weight:500}
 .lpb-toolbar-actions{display:flex;gap:8px}
 .lpb-toolbar-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;font-size:13px;font-weight:600;border-radius:8px;border:none;cursor:pointer;background:var(--blue);color:#fff;transition:all 0.15s}
 .lpb-toolbar-btn:hover{background:#0a4fb5}
+.lpb-toolbar-btn-export{background:linear-gradient(135deg,#0B5FD8 0%,#1a7aff 100%)}
+.lpb-toolbar-btn-export:hover{background:linear-gradient(135deg,#0a4fb5 0%,#0B5FD8 100%)}
 .lpb-toolbar-btn-outline{background:transparent;color:var(--slate);border:1.5px solid var(--off2)}
 .lpb-toolbar-btn-outline:hover{border-color:var(--blue);color:var(--blue);background:rgba(11,95,216,0.04)}
 
@@ -4416,6 +4419,18 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 .lpb-preview-mode .lpb-block:hover{border:none;box-shadow:none}
 .lpb-preview-mode .lpb-block-preview{padding:0}
 .lpb-preview-mode .lpb-prev-hero{border-radius:0}
+
+/* ── Template chooser ── */
+.lpb-template-modal{max-width:600px}
+.lpb-template-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:20px}
+.lpb-template-card{padding:20px;border:1.5px solid var(--off2);border-radius:10px;cursor:pointer;text-align:center;transition:all 0.2s}
+.lpb-template-card:hover{border-color:var(--blue);background:rgba(11,95,216,0.03);transform:translateY(-2px);box-shadow:0 4px 16px rgba(11,95,216,0.08)}
+.lpb-template-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;border-radius:10px;background:rgba(11,95,216,0.06);color:var(--blue)}
+.lpb-template-icon svg{width:20px;height:20px}
+.lpb-template-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.lpb-template-desc{font-size:12px;color:var(--mist);line-height:1.4;margin-bottom:6px}
+.lpb-template-count{font-size:11px;color:var(--blue);font-weight:600}
+.lpb-template-blank{border-style:dashed}
 
 /* ── Responsive ── */
 @media(max-width:900px){
