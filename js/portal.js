@@ -1570,6 +1570,60 @@ function cmdkExecute(idx) {
   }
 }
 
+// ── PARTNER LEADERBOARD ─────────────────────────────────────
+var DLB_DATA = {
+  referrals: [
+    { rank: 1, initials: 'SP', name: 'S. Patel', tier: 'Gold Partner', metric: '24 referrals', color: '#FFD700', crown: true },
+    { rank: 2, initials: 'JL', name: 'J. Lopez', tier: 'Gold Partner', metric: '21 referrals', color: '#C0C0C0' },
+    { rank: 3, initials: 'AW', name: 'A. Wright', tier: 'Silver Partner', metric: '19 referrals', color: '#CD7F32' },
+    { rank: 4, initials: 'RK', name: 'R. Kim', tier: 'Silver Partner', metric: '16 referrals', color: 'var(--blue)' },
+    { rank: 7, initials: 'JH', name: 'You', tier: 'Silver Partner', metric: '12 referrals', color: 'var(--blue)', you: true }
+  ],
+  earnings: [
+    { rank: 1, initials: 'JL', name: 'J. Lopez', tier: 'Gold Partner', metric: '$38,400', color: '#FFD700', crown: true },
+    { rank: 2, initials: 'SP', name: 'S. Patel', tier: 'Gold Partner', metric: '$32,100', color: '#C0C0C0' },
+    { rank: 3, initials: 'MM', name: 'M. Martinez', tier: 'Gold Partner', metric: '$28,750', color: '#CD7F32' },
+    { rank: 4, initials: 'AW', name: 'A. Wright', tier: 'Silver Partner', metric: '$26,200', color: 'var(--blue)' },
+    { rank: 9, initials: 'JH', name: 'You', tier: 'Silver Partner', metric: '$24,850', color: 'var(--blue)', you: true }
+  ],
+  streak: [
+    { rank: 1, initials: 'TN', name: 'T. Nguyen', tier: 'Gold Partner', metric: '45 days', color: '#FFD700', crown: true },
+    { rank: 2, initials: 'RK', name: 'R. Kim', tier: 'Silver Partner', metric: '38 days', color: '#C0C0C0' },
+    { rank: 3, initials: 'SP', name: 'S. Patel', tier: 'Gold Partner', metric: '31 days', color: '#CD7F32' },
+    { rank: 4, initials: 'JL', name: 'J. Lopez', tier: 'Gold Partner', metric: '28 days', color: 'var(--blue)' },
+    { rank: 12, initials: 'JH', name: 'You', tier: 'Silver Partner', metric: '14 days', color: 'var(--blue)', you: true }
+  ]
+};
+
+function dlbSwitch(tab, category) {
+  var tabs = tab.parentElement.querySelectorAll('.dlb-tab');
+  tabs.forEach(function(t) { t.classList.remove('dlb-tab-active'); });
+  tab.classList.add('dlb-tab-active');
+
+  var data = DLB_DATA[category] || DLB_DATA.referrals;
+  var list = document.getElementById('dlb-list');
+  if (!list) return;
+
+  var html = '';
+  var rankClasses = ['', 'dlb-row-gold', 'dlb-row-silver', 'dlb-row-bronze'];
+  data.forEach(function(p, i) {
+    var rowClass = p.you ? 'dlb-row-you' : (i < 3 ? rankClasses[i + 1] : '');
+    var badge = '';
+    if (p.crown) badge = '<div class="dlb-badge dlb-badge-crown"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"/></svg></div>';
+    else if (p.you) badge = '<div class="dlb-badge dlb-badge-you">You</div>';
+    else badge = '<div class="dlb-badge"></div>';
+
+    html += '<div class="dlb-row ' + rowClass + '">';
+    html += '<div class="dlb-rank">' + p.rank + '</div>';
+    html += '<div class="dlb-avatar" style="background:' + p.color + '">' + p.initials + '</div>';
+    html += '<div class="dlb-info"><div class="dlb-name">' + p.name + '</div><div class="dlb-tier">' + p.tier + '</div></div>';
+    html += '<div class="dlb-metric">' + p.metric + '</div>';
+    html += badge;
+    html += '</div>';
+  });
+  list.innerHTML = html;
+}
+
 // ── REFERRAL LINK GENERATOR ──────────────────────────────────
 var _rlgBaseUrl = 'https://communitytax.com/refer?p=JH-2847';
 

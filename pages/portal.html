@@ -241,6 +241,58 @@
         </div>
       </div>
 
+      <!-- Partner Leaderboard -->
+      <div class="dash-leaderboard">
+        <div class="dlb-header">
+          <div>
+            <div class="dlb-title">Partner Leaderboard</div>
+            <div class="dlb-subtitle">Top performers this month across the network</div>
+          </div>
+          <div class="dlb-tabs">
+            <button class="dlb-tab dlb-tab-active" onclick="dlbSwitch(this,'referrals')">Referrals</button>
+            <button class="dlb-tab" onclick="dlbSwitch(this,'earnings')">Earnings</button>
+            <button class="dlb-tab" onclick="dlbSwitch(this,'streak')">Streak</button>
+          </div>
+        </div>
+        <div class="dlb-list" id="dlb-list">
+          <div class="dlb-row dlb-row-gold">
+            <div class="dlb-rank">1</div>
+            <div class="dlb-avatar" style="background:#FFD700">SP</div>
+            <div class="dlb-info"><div class="dlb-name">S. Patel</div><div class="dlb-tier">Gold Partner</div></div>
+            <div class="dlb-metric">24 referrals</div>
+            <div class="dlb-badge dlb-badge-crown"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"/></svg></div>
+          </div>
+          <div class="dlb-row dlb-row-silver">
+            <div class="dlb-rank">2</div>
+            <div class="dlb-avatar" style="background:#C0C0C0">JL</div>
+            <div class="dlb-info"><div class="dlb-name">J. Lopez</div><div class="dlb-tier">Gold Partner</div></div>
+            <div class="dlb-metric">21 referrals</div>
+            <div class="dlb-badge"></div>
+          </div>
+          <div class="dlb-row dlb-row-bronze">
+            <div class="dlb-rank">3</div>
+            <div class="dlb-avatar" style="background:#CD7F32">AW</div>
+            <div class="dlb-info"><div class="dlb-name">A. Wright</div><div class="dlb-tier">Silver Partner</div></div>
+            <div class="dlb-metric">19 referrals</div>
+            <div class="dlb-badge"></div>
+          </div>
+          <div class="dlb-row">
+            <div class="dlb-rank">4</div>
+            <div class="dlb-avatar" style="background:var(--blue)">RK</div>
+            <div class="dlb-info"><div class="dlb-name">R. Kim</div><div class="dlb-tier">Silver Partner</div></div>
+            <div class="dlb-metric">16 referrals</div>
+            <div class="dlb-badge"></div>
+          </div>
+          <div class="dlb-row dlb-row-you">
+            <div class="dlb-rank">7</div>
+            <div class="dlb-avatar" style="background:var(--blue)">JH</div>
+            <div class="dlb-info"><div class="dlb-name">You</div><div class="dlb-tier">Silver Partner</div></div>
+            <div class="dlb-metric">12 referrals</div>
+            <div class="dlb-badge dlb-badge-you">You</div>
+          </div>
+        </div>
+      </div>
+
       <!-- KPI Cards -->
       <div class="dash-kpi-row">
         <div class="dash-kpi-card dash-kpi-card-primary">

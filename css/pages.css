@@ -2824,6 +2824,38 @@ body.portal-mode{padding-bottom:0}
   100%{transform:translateY(100vh) translateX(var(--cf-drift,0)) rotate(var(--cf-rot,360deg));opacity:0}
 }
 
+/* Partner Leaderboard */
+.dash-leaderboard{background:var(--white);border:1px solid var(--off2);border-radius:14px;padding:24px;margin-bottom:24px}
+.dlb-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.dlb-title{font-size:16px;font-weight:700;color:var(--navy)}
+.dlb-subtitle{font-size:13px;color:var(--mist);margin-top:2px}
+.dlb-tabs{display:flex;gap:4px;background:var(--off1);border-radius:8px;padding:3px}
+.dlb-tab{padding:6px 14px;border:none;background:none;border-radius:6px;font-size:12px;font-weight:600;color:var(--slate);cursor:pointer;transition:all 0.15s}
+.dlb-tab:hover{color:var(--navy)}
+.dlb-tab-active{background:var(--white);color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.dlb-list{display:flex;flex-direction:column;gap:6px}
+.dlb-row{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:10px;transition:background 0.15s}
+.dlb-row:hover{background:var(--off1)}
+.dlb-rank{width:24px;font-size:14px;font-weight:700;color:var(--mist);text-align:center}
+.dlb-row-gold .dlb-rank{color:#D4A017}
+.dlb-row-silver .dlb-rank{color:#8B8E93}
+.dlb-row-bronze .dlb-rank{color:#A0522D}
+.dlb-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.dlb-info{flex:1;min-width:0}
+.dlb-name{font-size:14px;font-weight:600;color:var(--navy)}
+.dlb-tier{font-size:11px;color:var(--mist)}
+.dlb-metric{font-size:13px;font-weight:600;color:var(--slate);white-space:nowrap}
+.dlb-badge{width:28px;display:flex;align-items:center;justify-content:center}
+.dlb-badge-crown{color:#D4A017}
+.dlb-badge-you{font-size:10px;font-weight:700;color:var(--blue);background:rgba(11,95,216,0.08);padding:3px 8px;border-radius:20px;white-space:nowrap}
+.dlb-row-you{background:rgba(11,95,216,0.03);border:1px solid rgba(11,95,216,0.08)}
+.dlb-row-you:hover{background:rgba(11,95,216,0.06)}
+@media(max-width:640px){
+  .dlb-header{flex-direction:column;gap:10px}
+  .dlb-row{padding:10px 12px;gap:10px}
+  .dlb-metric{font-size:12px}
+}
+
 /* Referral Link Generator */
 .rlg-wrap{background:var(--white);border:1px solid var(--off2);border-radius:14px;padding:24px;margin-bottom:24px}
 .rlg-header{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:20px;flex-wrap:wrap}
