@@ -450,6 +450,7 @@ var TIER_CONFIG = {
       setTimeout(function(){
         var el = document.getElementById('tiers-calculator');
         if (el) el.scrollIntoView({ behavior: 'smooth' });
+        if (typeof selectTier === 'function') selectTier(3);
       }, 300);
     }
   }}
