@@ -445,7 +445,13 @@ var TIER_CONFIG = {
     // Footer
     'footer-tag': 'Built for organizations that want scalable tax resolution revenue \u2014 without building the operation.'
   }, actions: {
-    'hero-cta2': function(){ showPage('tiers'); }
+    'hero-cta2': function(){
+      showPage('tiers');
+      setTimeout(function(){
+        var el = document.getElementById('tiers-calculator');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
   }}
 };
 
