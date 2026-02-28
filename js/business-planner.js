@@ -682,9 +682,7 @@ function bpBuildCover() {
   cover.innerHTML =
     '<div class="bp-cover-inner">' +
       '<div class="bp-cover-logo">' +
-        '<svg width="32" height="32" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="#0B5FD8"/><path d="M20 8c-6.6 0-12 5.4-12 12s5.4 12 12 12 12-5.4 12-12-5.4-12-12-12zm0 21.6c-5.3 0-9.6-4.3-9.6-9.6S14.7 10.4 20 10.4s9.6 4.3 9.6 9.6-4.3 9.6-9.6 9.6z" fill="#fff"/><path d="M20 13.2c-3.7 0-6.8 3-6.8 6.8s3 6.8 6.8 6.8 6.8-3 6.8-6.8-3.1-6.8-6.8-6.8z" fill="#00C8E0"/></svg>' +
-        '<span class="bp-cover-brand">COMMUNITY TAX</span>' +
-        '<span class="bp-cover-sub">PARTNER PROGRAM</span>' +
+        '<img src="images/logo-white.svg" alt="Community Tax" class="bp-cover-logo-img">' +
       '</div>' +
       '<div class="bp-cover-title">Your 90-Day<br>Growth Roadmap</div>' +
       '<div class="bp-cover-divider"></div>' +
@@ -722,7 +720,7 @@ function bpPrintRoadmap() {
   result.insertBefore(cover, result.firstChild);
 
   var opt = {
-    margin: [0, 0, 0, 0],
+    margin: [56, 43, 56, 43],
     filename: '90-Day-Growth-Roadmap.pdf',
     image: { type: 'jpeg', quality: 0.95 },
     html2canvas: { scale: 2, useCORS: true, letterRendering: true },

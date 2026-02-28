@@ -280,10 +280,11 @@ function renderLandingPage(slug) {
 
   // Build full HTML for the iframe
   var canvasCss = (typeof PB_CANVAS_CSS !== 'undefined') ? PB_CANVAS_CSS : '';
+  var presetCSS = (typeof pbGetPresetInlineCSS === 'function') ? pbGetPresetInlineCSS() : '';
   var fullHtml = '<!DOCTYPE html><html lang="en"><head>' +
     '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">' +
     '<title>' + page.title + '</title>' +
-    '<style>' + canvasCss + '\n' + (page.css || '') + '</style>' +
+    '<style>' + presetCSS + '\n' + canvasCss + '\n' + (page.css || '') + '</style>' +
     '</head><body>' + (page.html || '') + '</body></html>';
 
   lpEl.innerHTML = '<div class="lp-back-bar">' +

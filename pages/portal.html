@@ -3631,7 +3631,14 @@
               </button>
             </div>
             <span class="pb-sep"></span>
+            <div class="pb-mode-toggle">
+              <button class="pb-mode-btn pb-mode-active" data-mode="guided" onclick="pbSetMode('guided')">Guided</button>
+              <button class="pb-mode-btn" data-mode="advanced" onclick="pbSetMode('advanced')">Advanced</button>
+            </div>
+            <span class="pb-sep"></span>
             <span class="pb-count" id="pb-block-count">0 sections</span>
+            <span class="pb-sep"></span>
+            <div class="pb-preset-swatches" id="pb-preset-swatches"></div>
           </div>
           <div class="pb-toolbar-right">
             <button class="pb-tool-btn" onclick="pbShowTemplates()" title="Choose a design template">

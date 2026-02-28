@@ -3858,9 +3858,8 @@ body:has(.tour-overlay) .portal-topbar{
   page-break-after:always;padding:40px;box-sizing:border-box;
 }
 .bp-cover-inner{text-align:center;max-width:500px;width:100%}
-.bp-cover-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:48px}
-.bp-cover-brand{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:0.08em}
-.bp-cover-sub{font-size:11px;font-weight:600;letter-spacing:0.14em;color:rgba(255,255,255,0.4);text-transform:uppercase}
+.bp-cover-logo{display:flex;align-items:center;justify-content:center;margin-bottom:48px}
+.bp-cover-logo-img{width:280px;height:auto}
 .bp-cover-title{
   font-family:'DM Serif Display',serif;font-size:44px;color:#fff;
   line-height:1.15;margin-bottom:32px;letter-spacing:-0.01em;
@@ -4455,6 +4454,18 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 
 /* Active state for toggle buttons */
 .pb-tool-btn-active{background:rgba(37,99,235,0.2)!important;color:#93c5fd!important;border-color:rgba(37,99,235,0.3)!important}
+
+/* Mode toggle (guided / advanced) */
+.pb-mode-toggle{display:flex;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px}
+.pb-mode-btn{padding:4px 10px;font-size:11px;font-weight:600;border:none;border-radius:4px;background:transparent;color:rgba(255,255,255,0.35);cursor:pointer;transition:all 0.15s;letter-spacing:0.01em}
+.pb-mode-btn:hover{color:rgba(255,255,255,0.7)}
+.pb-mode-active{background:rgba(255,255,255,0.1);color:#fff}
+
+/* Color preset swatches */
+.pb-preset-swatches{display:flex;gap:6px;align-items:center}
+.pb-preset-swatch{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);cursor:pointer;transition:all 0.15s;padding:0;background:none}
+.pb-preset-swatch:hover{border-color:rgba(255,255,255,0.5);transform:scale(1.15)}
+.pb-preset-swatch-active{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,0.3)}
 
 /* ═══════════════════════════════════════════════
    MY PAGES DASHBOARD
