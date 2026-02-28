@@ -968,7 +968,7 @@ function playStation(idx) {
   var station = TUNES_STATIONS[idx];
   _jazzStation = idx;
   audio.src = station.url;
-  audio.volume = (document.getElementById('jazz-vol') || {}).value / 100 || 0.05;
+  audio.volume = (document.getElementById('jazz-vol') || {}).value / 100 || 0.03;
   audio.play().then(function() {
     _jazzPlaying = true;
     updatePlaybackUI(station);

@@ -1579,6 +1579,7 @@ body.portal-mode{padding-bottom:0}
 [data-theme="dark"] .portal-branded .portal-sec-title{color:#e0e4ec}
 [data-theme="dark"] .portal-sec-desc{color:rgba(255,255,255,0.5)}
 [data-theme="dark"] .portal-placeholder{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .portal-toast{background:#1a2436;color:#e0e4ec;border-color:rgba(255,255,255,0.08)}
 
 /* ── EARNINGS SECTION ── */
 .earn-period-pills{display:flex;gap:4px;background:var(--off);border-radius:8px;padding:3px}
@@ -2705,13 +2706,13 @@ body.portal-mode{padding-bottom:0}
 
 /* ═══ CROSS-CUTTING: Toast Notification System ═══ */
 .portal-toast-wrap{position:fixed;top:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none}
-.portal-toast{pointer-events:auto;display:flex;align-items:center;gap:10px;padding:14px 20px;border-radius:10px;font-size:14px;font-weight:500;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,0.18);transform:translateX(120%);animation:toastIn 0.35s ease forwards}
+.portal-toast{pointer-events:auto;display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:8px;font-size:13px;font-weight:500;color:var(--ink);background:#fff;border:1px solid var(--off2);box-shadow:0 4px 16px rgba(0,0,0,0.08);transform:translateX(120%);animation:toastIn 0.35s ease forwards}
 .portal-toast-dismiss{animation:toastOut 0.3s ease forwards}
-.portal-toast-success{background:var(--cyan-text)}
-.portal-toast-error{background:#DC2626}
-.portal-toast-info{background:var(--blue,#0B5FD8)}
-.portal-toast-warning{background:#D97706}
-.portal-toast svg{flex-shrink:0}
+.portal-toast-success svg{color:var(--cyan-text)}
+.portal-toast-error svg{color:#DC2626}
+.portal-toast-info svg{color:var(--slate)}
+.portal-toast-warning svg{color:#D97706}
+.portal-toast svg{flex-shrink:0;color:var(--slate)}
 @keyframes toastIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes toastOut{from{transform:translateX(0);opacity:1}to{transform:translateX(120%);opacity:0}}
 
