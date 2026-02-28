@@ -1539,6 +1539,58 @@ function cmdkExecute(idx) {
   }
 }
 
+// ── REFERRAL LINK GENERATOR ──────────────────────────────────
+var _rlgBaseUrl = 'https://communitytax.com/refer?p=JH-2847';
+
+function rlgBuildLink() {
+  var src = document.getElementById('rlg-utm-source');
+  var med = document.getElementById('rlg-utm-medium');
+  var camp = document.getElementById('rlg-utm-campaign');
+  var parts = [_rlgBaseUrl];
+  if (src && src.value) parts.push('utm_source=' + encodeURIComponent(src.value));
+  if (med && med.value) parts.push('utm_medium=' + encodeURIComponent(med.value));
+  if (camp && camp.value) parts.push('utm_campaign=' + encodeURIComponent(camp.value));
+  return parts.join('&');
+}
+
+function rlgUpdateLink() {
+  var input = document.getElementById('rlg-link');
+  if (input) input.value = rlgBuildLink();
+}
+
+function rlgCopy() {
+  var input = document.getElementById('rlg-link');
+  var btn = document.getElementById('rlg-copy-btn');
+  var label = document.getElementById('rlg-copy-label');
+  if (!input) return;
+  try {
+    navigator.clipboard.writeText(input.value);
+  } catch (e) {
+    input.select();
+    document.execCommand('copy');
+  }
+  if (btn) btn.classList.add('rlg-copied');
+  if (label) label.textContent = 'Copied!';
+  setTimeout(function() {
+    if (btn) btn.classList.remove('rlg-copied');
+    if (label) label.textContent = 'Copy';
+  }, 2000);
+}
+
+function rlgShare(channel) {
+  var link = rlgBuildLink();
+  var text = 'Owe the IRS? I work with Community Tax — they resolve tax debt fast. Check them out:';
+  if (channel === 'email') {
+    window.open('mailto:?subject=' + encodeURIComponent('Resolve Your Tax Debt') + '&body=' + encodeURIComponent(text + '\n\n' + link));
+  } else if (channel === 'linkedin') {
+    window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(link), '_blank', 'width=600,height=500');
+  } else if (channel === 'x') {
+    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(link), '_blank', 'width=600,height=400');
+  } else if (channel === 'sms') {
+    window.open('sms:?body=' + encodeURIComponent(text + ' ' + link));
+  }
+}
+
 // ── SMART INSIGHTS BANNER ──────────────────────────────────
 var _dibInsights = [
   { title: 'Conversion tip', body: 'Partners at your tier who maintain 80%+ conversion for 3 consecutive months unlock Gold-tier pricing. You\'re on track -- keep it up.' },

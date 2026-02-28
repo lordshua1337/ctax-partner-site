@@ -357,6 +357,23 @@
         <div class="dash-activity-item"><div class="dash-activity-dot dash-activity-dot-green"></div><span>Thompson case resolved -- $4,224 commission <strong>paid</strong>.</span><span class="dash-activity-time">5d ago</span></div>
       </div>
 
+      <!-- Smart Insights -->
+      <div class="dash-insights-banner" id="dash-insights-banner">
+        <div class="dib-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </div>
+        <div class="dib-content">
+          <div class="dib-title" id="dib-title">Your conversion rate is 84% -- above the 80% benchmark</div>
+          <div class="dib-body" id="dib-body">Partners at your tier who maintain 80%+ conversion for 3 consecutive months unlock Gold-tier pricing. You're on track -- keep it up.</div>
+        </div>
+        <button class="dib-next" onclick="dibNextInsight()" aria-label="Next insight">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button class="dib-dismiss" onclick="dibDismiss()" aria-label="Dismiss">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
       <!-- Quick Links -->
       <div class="dash-quick-links">
         <div class="dash-quick-links-title">Tools and Resources</div>
@@ -1743,6 +1760,58 @@
         <div>
           <strong id="mk-cobrand-title">Co-branding available</strong>
           <span id="mk-cobrand-desc">Upload your logo in the sidebar to automatically brand all downloadable assets.</span>
+        </div>
+      </div>
+
+      <!-- Referral Link Generator -->
+      <div class="rlg-wrap">
+        <div class="rlg-header">
+          <div class="rlg-header-left">
+            <div class="rlg-title">Your Referral Link</div>
+            <div class="rlg-desc">Share this link anywhere. Every click and signup is tracked to your account.</div>
+          </div>
+          <div class="rlg-stats">
+            <div class="rlg-stat"><div class="rlg-stat-val" data-count-to="247">0</div><div class="rlg-stat-label">Clicks</div></div>
+            <div class="rlg-stat"><div class="rlg-stat-val" data-count-to="18">0</div><div class="rlg-stat-label">Signups</div></div>
+            <div class="rlg-stat"><div class="rlg-stat-val">7.3%</div><div class="rlg-stat-label">Conv. Rate</div></div>
+          </div>
+        </div>
+        <div class="rlg-link-row">
+          <div class="rlg-link-field">
+            <svg class="rlg-link-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+            <input type="text" class="rlg-link-input" id="rlg-link" value="https://communitytax.com/refer?p=JH-2847&utm_source=partner" readonly>
+          </div>
+          <button class="rlg-copy-btn" id="rlg-copy-btn" onclick="rlgCopy()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            <span id="rlg-copy-label">Copy</span>
+          </button>
+        </div>
+        <div class="rlg-channels">
+          <span class="rlg-channel-label">Quick share:</span>
+          <button class="rlg-channel-btn rlg-ch-email" onclick="rlgShare('email')" title="Email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </button>
+          <button class="rlg-channel-btn rlg-ch-linkedin" onclick="rlgShare('linkedin')" title="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </button>
+          <button class="rlg-channel-btn rlg-ch-x" onclick="rlgShare('x')" title="X / Twitter">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+          </button>
+          <button class="rlg-channel-btn rlg-ch-sms" onclick="rlgShare('sms')" title="SMS">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </button>
+        </div>
+        <div class="rlg-utm-toggle" onclick="document.getElementById('rlg-utm-panel').classList.toggle('rlg-utm-open')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4"/></svg>
+          Advanced: customize UTM parameters
+          <svg class="rlg-utm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="rlg-utm-panel" id="rlg-utm-panel">
+          <div class="rlg-utm-grid">
+            <div class="rlg-utm-field"><label class="rlg-utm-label">Source</label><input type="text" class="rlg-utm-input" id="rlg-utm-source" value="partner" oninput="rlgUpdateLink()"></div>
+            <div class="rlg-utm-field"><label class="rlg-utm-label">Medium</label><input type="text" class="rlg-utm-input" id="rlg-utm-medium" placeholder="email, social, direct..." oninput="rlgUpdateLink()"></div>
+            <div class="rlg-utm-field"><label class="rlg-utm-label">Campaign</label><input type="text" class="rlg-utm-input" id="rlg-utm-campaign" placeholder="spring-2026, outreach..." oninput="rlgUpdateLink()"></div>
+          </div>
         </div>
       </div>
 
