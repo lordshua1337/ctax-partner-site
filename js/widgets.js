@@ -927,7 +927,7 @@ var TUNES_STATIONS = [
   { id: 'seventies', name: 'Left Coast 70s', desc: 'Mellow album rock from the 70s', color: '#e87b35', url: 'https://ice2.somafm.com/seventies-128-mp3' },
   { id: 'bossa', name: 'Bossa Nova', desc: 'Smooth Brazilian rhythms', color: '#10b981', url: 'https://ice2.somafm.com/bossa-128-mp3' },
   { id: 'groovesalad', name: 'Groove Salad', desc: 'Ambient grooves & chill beats', color: '#22c55e', url: 'https://ice2.somafm.com/groovesalad-128-mp3' },
-  { id: 'lush', name: 'Lush', desc: 'Mellow vocals & easy listening', color: '#ec4899', url: 'https://ice2.somafm.com/lush-128-mp3' }
+  { id: 'folkfwd', name: 'Folk Forward', desc: 'Acoustic folk & singer-songwriter', color: '#65a30d', url: 'https://ice2.somafm.com/folkfwd-128-mp3' }
 ];
 var _jazzPlaying = false;
 var _jazzStation = 0;
