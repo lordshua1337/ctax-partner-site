@@ -667,6 +667,38 @@ function bpToggleDrip(enabled) {
   }
 }
 
+// Build branded cover page for PDF export
+function bpBuildCover() {
+  var inputs = bpLoadInputs();
+  var practiceLabel = inputs ? (BP_PRACTICE_TYPES[inputs.practiceType] || 'Your Practice') : 'Your Practice';
+  var refGoal = inputs ? (inputs.refGoal || 5) : 5;
+  var revenue = '$' + (refGoal * 420).toLocaleString();
+  var today = new Date();
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var dateStr = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
+
+  var cover = document.createElement('div');
+  cover.className = 'bp-pdf-cover';
+  cover.innerHTML =
+    '<div class="bp-cover-inner">' +
+      '<div class="bp-cover-logo">' +
+        '<svg width="32" height="32" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="#0B5FD8"/><path d="M20 8c-6.6 0-12 5.4-12 12s5.4 12 12 12 12-5.4 12-12-5.4-12-12-12zm0 21.6c-5.3 0-9.6-4.3-9.6-9.6S14.7 10.4 20 10.4s9.6 4.3 9.6 9.6-4.3 9.6-9.6 9.6z" fill="#fff"/><path d="M20 13.2c-3.7 0-6.8 3-6.8 6.8s3 6.8 6.8 6.8 6.8-3 6.8-6.8-3.1-6.8-6.8-6.8z" fill="#00C8E0"/></svg>' +
+        '<span class="bp-cover-brand">COMMUNITY TAX</span>' +
+        '<span class="bp-cover-sub">PARTNER PROGRAM</span>' +
+      '</div>' +
+      '<div class="bp-cover-title">Your 90-Day<br>Growth Roadmap</div>' +
+      '<div class="bp-cover-divider"></div>' +
+      '<div class="bp-cover-meta">' +
+        '<div class="bp-cover-meta-row"><span class="bp-cover-label">Practice</span><span class="bp-cover-val">' + practiceLabel + '</span></div>' +
+        '<div class="bp-cover-meta-row"><span class="bp-cover-label">90-Day Goal</span><span class="bp-cover-val">' + refGoal + ' Referrals</span></div>' +
+        '<div class="bp-cover-meta-row"><span class="bp-cover-label">Projected Revenue</span><span class="bp-cover-val">' + revenue + '</span></div>' +
+        '<div class="bp-cover-meta-row"><span class="bp-cover-label">Generated</span><span class="bp-cover-val">' + dateStr + '</span></div>' +
+      '</div>' +
+      '<div class="bp-cover-footer">Personalized action plan built from your Business Planner inputs</div>' +
+    '</div>';
+  return cover;
+}
+
 // Export roadmap as PDF using html2pdf.js
 function bpPrintRoadmap() {
   var result = document.getElementById('bp-result');
@@ -685,8 +717,12 @@ function bpPrintRoadmap() {
   if (dripBar) dripBar.style.display = 'none';
   checks.forEach(function(c) { c.style.display = 'none'; });
 
+  // Inject branded cover page at the top
+  var cover = bpBuildCover();
+  result.insertBefore(cover, result.firstChild);
+
   var opt = {
-    margin: [12, 16, 12, 16],
+    margin: [0, 0, 0, 0],
     filename: '90-Day-Growth-Roadmap.pdf',
     image: { type: 'jpeg', quality: 0.95 },
     html2canvas: { scale: 2, useCORS: true, letterRendering: true },
@@ -697,12 +733,14 @@ function bpPrintRoadmap() {
   showToast('Generating PDF...', 'info');
 
   html2pdf().set(opt).from(result).save().then(function() {
-    // Restore hidden elements
+    // Remove cover and restore hidden elements
+    if (cover.parentNode) cover.parentNode.removeChild(cover);
     if (actionBar) actionBar.style.display = '';
     if (dripBar) dripBar.style.display = '';
     checks.forEach(function(c) { c.style.display = ''; });
     showToast('PDF downloaded!', 'success');
   }).catch(function() {
+    if (cover.parentNode) cover.parentNode.removeChild(cover);
     if (actionBar) actionBar.style.display = '';
     if (dripBar) dripBar.style.display = '';
     checks.forEach(function(c) { c.style.display = ''; });
