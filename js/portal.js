@@ -3,6 +3,12 @@ function toggleRefDetail(row) {
   if (event && event.target.closest('.ref-act')) return;
   if (event && event.target.closest('.ref-cb')) return;
   row.classList.toggle('ref-row-open');
+  // On mobile, scroll tapped row to top of viewport
+  if (window.matchMedia('(max-width:768px)').matches && row.classList.contains('ref-row-open')) {
+    setTimeout(function() {
+      row.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 120);
+  }
 }
 
 function setRefFilter(btn, status) {

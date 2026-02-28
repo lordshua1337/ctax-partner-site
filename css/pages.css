@@ -1373,14 +1373,70 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 
 /* Mobile referrals */
 @media(max-width:768px){
-  .ref-kpi-row{grid-template-columns:1fr 1fr}
-  .ref-table-head{display:none}
-  .ref-row{grid-template-columns:1fr;gap:6px;padding:14px 16px}
-  .ref-td:nth-child(6),.ref-td:nth-child(7){display:none}
-  .ref-detail-grid{grid-template-columns:1fr}
-  .ref-pipe-seg{font-size:0}.ref-pipe-seg span{font-size:11px}
-  .ref-toolbar{flex-direction:column}
-  .ref-filters{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
+  /* KPI row — horizontal scroll */
+  .ref-kpi-row{
+    display:flex!important;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory;gap:10px;padding-bottom:8px;flex-wrap:nowrap
+  }
+  .ref-kpi-row .ref-kpi{min-width:200px;flex-shrink:0;scroll-snap-align:start}
+
+  /* Pipeline — simplified */
+  .ref-pipeline .ref-pipe-legend{display:none}
+  .ref-pipe-seg{font-size:0;min-width:24px}.ref-pipe-seg span{font-size:10px}
+
+  /* Toolbar — search above filters */
+  .ref-toolbar{flex-direction:column;gap:10px}
+  .ref-toolbar .ref-search-wrap{width:100%}
+  .ref-toolbar .ref-search-wrap input{width:100%}
+  .ref-filters{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .ref-filter-pill{white-space:nowrap;flex-shrink:0;font-size:11px;padding:5px 12px}
+
+  /* Table header — hide */
+  .ref-table-head{display:none!important}
+
+  /* Referral rows — card layout */
+  .ref-row{
+    display:flex!important;flex-wrap:wrap;align-items:center;
+    gap:6px;padding:14px 16px;position:relative;
+    grid-template-columns:none
+  }
+  /* Show: client name + avatar */
+  .ref-td-client{flex:1;min-width:0;gap:10px}
+  .ref-td-client .ref-name{font-size:15px;font-weight:600}
+  .ref-td-client .ref-cb{display:none}
+  /* Show: status badge — same row */
+  .ref-row>.ref-td:nth-child(3){order:2}
+  /* Show: action buttons */
+  .ref-row>.ref-td-acts{order:3;margin-left:auto}
+  .ref-act{width:36px;height:36px;border-radius:8px}
+  /* Hide: submitted date, tax debt, share, rep, last activity */
+  .ref-row>.ref-td:nth-child(2),
+  .ref-row>.ref-td:nth-child(4),
+  .ref-row>.ref-td:nth-child(5),
+  .ref-row>.ref-td:nth-child(6),
+  .ref-row>.ref-td:nth-child(7){display:none}
+  /* Chevron indicator */
+  .ref-row::after{
+    content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%) rotate(0deg);
+    width:8px;height:8px;border-right:2px solid var(--slate);border-bottom:2px solid var(--slate);
+    transform:translateY(-50%) rotate(-45deg);transition:transform 0.2s;opacity:0.4
+  }
+  .ref-row-open::after{transform:translateY(-50%) rotate(45deg)}
+  .ref-row-open{background:rgba(11,95,216,0.02)}
+  [data-theme="dark"] .ref-row-open{background:rgba(255,255,255,0.02)}
+
+  /* Detail panel — single column stacked */
+  .ref-detail{padding:0 16px 16px}
+  .ref-detail-grid{grid-template-columns:1fr!important;gap:20px}
+  .ref-detail-row{flex-direction:column;align-items:flex-start;gap:2px}
+  .ref-detail-row span:first-child{font-size:11px;text-transform:uppercase;letter-spacing:0.05em}
+  .ref-detail-row span:last-child{font-size:14px;text-align:left}
+
+  /* Bulk bar — hide on mobile */
+  .ref-bulk-bar{display:none!important}
+
+  /* Pager — larger touch targets */
+  .ref-pager .ref-page-btn{min-width:36px;min-height:36px;font-size:13px}
 }
 
 body.portal-mode #site-nav,
