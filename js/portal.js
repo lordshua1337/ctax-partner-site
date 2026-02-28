@@ -179,8 +179,11 @@ function portalNav(el, secId) {
   if (secId === 'portal-sec-challenge') {
     if (typeof chInit === 'function') chInit();
   }
+  // Destroy page builder editor when navigating away, init when entering
   if (secId === 'portal-sec-page-builder') {
     if (typeof pbInit === 'function') pbInit();
+  } else {
+    if (typeof pbDestroy === 'function') pbDestroy();
   }
 
   // Pro gate check (shows overlay on locked sections)
