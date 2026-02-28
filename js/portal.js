@@ -1539,6 +1539,42 @@ function cmdkExecute(idx) {
   }
 }
 
+// ── SMART INSIGHTS BANNER ──────────────────────────────────
+var _dibInsights = [
+  { title: 'Conversion tip', body: 'Partners at your tier who maintain 80%+ conversion for 3 consecutive months unlock Gold-tier pricing. You\'re on track -- keep it up.' },
+  { title: 'Referral momentum', body: 'You\'ve submitted 4 referrals this month. The average partner submits 6. One more strong week puts you above average.' },
+  { title: 'Revenue milestone', body: 'You\'re $1,200 away from your next earnings tier. Submitting 2 more qualified referrals this month should get you there.' },
+  { title: 'Engagement insight', body: 'Partners who complete the Business Planner earn 32% more in their first 90 days. Yours is ready to go in the sidebar.' },
+  { title: 'Payout reminder', body: 'Your next scheduled payout is in 5 business days. Make sure your bank details are up to date in Settings.' },
+  { title: 'Training opportunity', body: 'A new CE Webinar drops next Tuesday: "Overcoming IRS Objections." Partners who attend close 18% more referrals.' }
+];
+var _dibIdx = 0;
+
+function dibNextInsight() {
+  _dibIdx = (_dibIdx + 1) % _dibInsights.length;
+  var titleEl = document.getElementById('dib-title');
+  var bodyEl = document.getElementById('dib-body');
+  if (!titleEl || !bodyEl) return;
+  var banner = document.getElementById('dash-insights-banner');
+  if (banner) banner.style.opacity = '0';
+  setTimeout(function() {
+    titleEl.textContent = _dibInsights[_dibIdx].title;
+    bodyEl.textContent = _dibInsights[_dibIdx].body;
+    if (banner) banner.style.opacity = '1';
+  }, 200);
+}
+
+function dibDismiss() {
+  var banner = document.getElementById('dash-insights-banner');
+  if (!banner) return;
+  banner.style.opacity = '0';
+  banner.style.maxHeight = '0';
+  banner.style.padding = '0 20px';
+  banner.style.marginBottom = '0';
+  banner.style.border = 'none';
+  setTimeout(function() { banner.style.display = 'none'; }, 300);
+}
+
 // Keyboard listener for Cmd+K and navigation
 document.addEventListener('keydown', function(e) {
   var overlay = document.getElementById('cmdk-overlay');

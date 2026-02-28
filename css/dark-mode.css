@@ -402,6 +402,16 @@
 [data-theme="dark"] .cmdk-footer{border-top-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.3)}
 [data-theme="dark"] .cmdk-footer kbd{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4)}
 
+/* ── Smart Insights Banner Dark Mode ── */
+[data-theme="dark"] .dash-insights-banner{background:linear-gradient(135deg,rgba(75,163,255,0.06),rgba(0,200,224,0.04));border-color:rgba(75,163,255,0.1)}
+[data-theme="dark"] .dib-icon{background:rgba(75,163,255,0.1);color:#4BA3FF}
+[data-theme="dark"] .dib-title{color:#e0e4ec}
+[data-theme="dark"] .dib-body{color:rgba(255,255,255,0.55)}
+[data-theme="dark"] .dib-next{background:#141e30;border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .dib-next:hover{border-color:#4BA3FF;color:#4BA3FF}
+[data-theme="dark"] .dib-dismiss{color:rgba(255,255,255,0.25)}
+[data-theme="dark"] .dib-dismiss:hover{color:#e0e4ec}
+
 /* ── Guided Tour Dark Mode ── */
 [data-theme="dark"] .tour-overlay{background:rgba(0,0,0,0.7)}
 [data-theme="dark"] .tour-tooltip{background:linear-gradient(135deg,#0a1525 0%,#060d18 100%);border-color:rgba(75,163,255,0.15)}
