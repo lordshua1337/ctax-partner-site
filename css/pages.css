@@ -2673,6 +2673,28 @@ body.portal-mode{padding-bottom:0}
 @keyframes successPop{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
 [data-theme="dark"] .sub-success-title{color:#e0e4ec}
 
+/* Mobile submit form */
+@media(max-width:768px){
+  .sub-steps{gap:0;padding:0;margin-bottom:24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .sub-step-label{font-size:10px}
+  .sub-step-num{width:28px;height:28px;font-size:12px}
+  .sub-step-line{min-width:24px}
+  .sub-field-grid{grid-template-columns:1fr!important;gap:14px}
+  .sub-field-full{grid-column:auto}
+  .sub-input,.sub-select,.sub-textarea{min-height:48px;font-size:16px!important;padding:12px 14px}
+  .sub-input-prefix .sub-input{padding-left:28px}
+  .sub-checkboxes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .sub-check{min-height:44px;display:flex;align-items:center;padding:10px 12px}
+  .sub-upload-zone{padding:32px 16px;min-height:80px}
+  .sub-nav{position:sticky;bottom:68px;background:var(--white);padding:12px 0;border-top:1px solid var(--off2);z-index:10;gap:10px}
+  .sub-btn-back,.sub-btn-next{flex:1;text-align:center;min-height:48px;font-size:15px}
+  .sub-btn-submit{min-height:48px;font-size:15px}
+  .sub-review-grid{grid-template-columns:1fr}
+  .sub-success-icon{width:80px;height:80px}
+  .sub-success-title{font-size:28px}
+  [data-theme="dark"] .sub-nav{background:#0c1220;border-top-color:rgba(255,255,255,0.06)}
+}
+
 /* ═══ Documents: Search, type colors, drag animation ═══ */
 .doc-search{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--off2);border-radius:8px;background:var(--white);margin-bottom:16px}
 .doc-search svg{flex-shrink:0;color:var(--slate)}
