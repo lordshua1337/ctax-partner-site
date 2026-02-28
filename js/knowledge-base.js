@@ -140,12 +140,25 @@ async function askKnowledgeBase() {
 
 // Revenue Calculator
 var _calcTier=1;
+var _tierRanges = {
+  1: { min: 50, max: 999, step: 50, value: 500 },
+  2: { min: 1000, max: 10000, step: 500, value: 3000 },
+  3: { min: 10000, max: 50000, step: 1000, value: 20000 }
+};
 function selectTier(t){
   _calcTier=t;
   [1,2,3].forEach(function(n){
     var b=document.getElementById('tier-btn-'+n);
     if(b) b.classList.toggle('active',n===t);
   });
+  var range = _tierRanges[t];
+  var sl = document.getElementById('sl-clients');
+  if (sl && range) {
+    sl.min = range.min;
+    sl.max = range.max;
+    sl.step = range.step;
+    sl.value = range.value;
+  }
   calcUpdate();
 }
 function calcUpdate(){

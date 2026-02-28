@@ -463,14 +463,52 @@ function formatPhone(input) {
 }
 
 // --- Revenue Calculator ---
+var _portalTier = 'direct';
+var _portalTierConfig = {
+  direct:     { rate: 8,  refMax: 20,  refDefault: 5,  name: 'Direct',     next: 'Enterprise', nextRate: 13 },
+  enterprise: { rate: 13, refMax: 50,  refDefault: 15, name: 'Enterprise', next: 'Strategic',  nextRate: 18 },
+  strategic:  { rate: 18, refMax: 100, refDefault: 30, name: 'Strategic',  next: null,         nextRate: null }
+};
+
+function setCalcTier(btn, tier) {
+  document.querySelectorAll('.calc-tier-pill').forEach(function(p) { p.classList.remove('calc-tier-pill-active'); });
+  btn.classList.add('calc-tier-pill-active');
+  _portalTier = tier;
+
+  var cfg = _portalTierConfig[tier];
+  var sl = document.getElementById('calc-ref');
+  if (sl) {
+    sl.min = 1;
+    sl.max = cfg.refMax;
+    sl.value = cfg.refDefault;
+  }
+  var lblMin = document.getElementById('calc-ref-min');
+  var lblMid = document.getElementById('calc-ref-mid');
+  var lblMax = document.getElementById('calc-ref-max');
+  if (lblMin) lblMin.textContent = '1';
+  if (lblMid) lblMid.textContent = Math.round(cfg.refMax / 2);
+  if (lblMax) lblMax.textContent = cfg.refMax;
+
+  // Lock commission rate slider to tier rate
+  var rateSl = document.getElementById('calc-rate');
+  if (rateSl) rateSl.value = cfg.rate;
+
+  calcProjection();
+}
+
 function calcProjection() {
+  var cfg = _portalTierConfig[_portalTier];
   var refs = parseInt(document.getElementById('calc-ref').value) || 5;
   var debt = parseInt(document.getElementById('calc-debt').value) || 25000;
-  var rate = parseInt(document.getElementById('calc-rate').value) || 8;
+  var rate = cfg.rate;
 
   document.getElementById('calc-ref-val').textContent = refs;
   document.getElementById('calc-debt-val').textContent = '$' + debt.toLocaleString();
   document.getElementById('calc-rate-val').textContent = rate + '%';
+
+  // Sync rate slider to tier
+  var rateSl = document.getElementById('calc-rate');
+  if (rateSl && parseInt(rateSl.value) !== rate) rateSl.value = rate;
 
   var monthly = refs * debt * (rate / 100);
   var annual = monthly * 12;
@@ -480,20 +518,47 @@ function calcProjection() {
   animateCalcValue('calc-annual', annual);
   animateCalcValue('calc-3yr', threeYr);
 
-  var currentAnnual = refs * debt * (rate / 100) * 12;
-  var nextAnnual = refs * debt * ((rate + 2) / 100) * 12;
+  // Tier comparison
+  var currentAnnual = annual;
+  var curName = document.getElementById('calc-tier-current-name');
+  var curPct = document.getElementById('calc-tier-current-pct');
+  if (curName) curName.textContent = cfg.name;
+  if (curPct) curPct.textContent = rate + '% commission';
   document.getElementById('calc-tier-current').textContent = '$' + Math.round(currentAnnual).toLocaleString() + '/yr';
-  document.getElementById('calc-tier-next').textContent = '$' + Math.round(nextAnnual).toLocaleString() + '/yr';
-  document.getElementById('calc-tier-bonus').textContent = '$' + Math.round(nextAnnual - currentAnnual).toLocaleString();
+
+  var nextName = document.getElementById('calc-tier-next-name');
+  var nextPct = document.getElementById('calc-tier-next-pct');
+  var diffEl = document.getElementById('calc-tier-diff');
+
+  if (cfg.next) {
+    var nextAnnual = refs * debt * (cfg.nextRate / 100) * 12;
+    if (nextName) nextName.textContent = cfg.next;
+    if (nextPct) nextPct.textContent = cfg.nextRate + '% commission';
+    document.getElementById('calc-tier-next').textContent = '$' + Math.round(nextAnnual).toLocaleString() + '/yr';
+    document.getElementById('calc-tier-bonus').textContent = '$' + Math.round(nextAnnual - currentAnnual).toLocaleString();
+    if (diffEl) diffEl.innerHTML = 'Upgrading to ' + cfg.next + ' means <strong id="calc-tier-bonus">$' + Math.round(nextAnnual - currentAnnual).toLocaleString() + '</strong> more per year';
+  } else {
+    if (nextName) nextName.textContent = '--';
+    if (nextPct) nextPct.textContent = 'Max tier';
+    document.getElementById('calc-tier-next').textContent = '--';
+    if (diffEl) diffEl.innerHTML = 'You are at the <strong>highest tier</strong> -- maximum revenue share';
+  }
 
   // Growth bars
-  var volumes = [5, 10, 20, 50];
-  var maxVal = 50 * debt * (rate / 100) * 12;
-  volumes.forEach(function(vol) {
+  var maxRef = cfg.refMax;
+  var volumes = [Math.round(maxRef * 0.15), Math.round(maxRef * 0.35), Math.round(maxRef * 0.6), maxRef];
+  var maxVal = maxRef * debt * (rate / 100) * 12;
+  volumes.forEach(function(vol, i) {
     var val = vol * debt * (rate / 100) * 12;
     var pct = Math.max(4, (val / maxVal) * 100);
-    var bar = document.getElementById('calc-grow-' + vol);
-    var label = document.getElementById('calc-grow-' + vol + '-val');
+    var ids = ['calc-grow-3', 'calc-grow-5', 'calc-grow-10', 'calc-grow-20'];
+    var bar = document.getElementById(ids[i]);
+    var label = document.getElementById(ids[i] + '-val');
+    var rowLabel = bar ? bar.closest('.calc-grow-row') : null;
+    if (rowLabel) {
+      var lbl = rowLabel.querySelector('.calc-grow-label');
+      if (lbl) lbl.textContent = vol + '/mo';
+    }
     if (bar) bar.style.width = pct + '%';
     if (label) {
       if (val >= 1000000) label.textContent = '$' + (val / 1000000).toFixed(1) + 'M';

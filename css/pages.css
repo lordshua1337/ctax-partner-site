@@ -1852,6 +1852,13 @@ body.portal-mode{padding-bottom:0}
 .calc-range::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--blue);cursor:pointer;box-shadow:0 2px 6px rgba(11,95,216,0.3)}
 .calc-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--blue);cursor:pointer;border:none;box-shadow:0 2px 6px rgba(11,95,216,0.3)}
 .calc-range-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--mist)}
+.calc-tier-pills{display:flex;gap:8px}
+.calc-tier-pill{flex:1;padding:10px 12px;border:1.5px solid var(--off2);border-radius:9px;background:var(--white);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--navy);transition:all 0.18s;text-align:center}
+.calc-tier-pill:hover{border-color:var(--blue);background:rgba(11,95,216,0.04)}
+.calc-tier-pill-active{border-color:var(--blue);background:linear-gradient(135deg,rgba(11,95,216,0.08),rgba(0,200,224,0.04));color:var(--blue);box-shadow:0 0 0 1px rgba(11,95,216,0.15)}
+[data-theme="dark"] .calc-tier-pill{background:#141e30;border-color:rgba(255,255,255,0.1);color:#e0e4ec}
+[data-theme="dark"] .calc-tier-pill:hover{border-color:rgba(75,163,255,0.4);background:rgba(11,95,216,0.12)}
+[data-theme="dark"] .calc-tier-pill-active{border-color:var(--blue);background:linear-gradient(135deg,rgba(11,95,216,0.18),rgba(0,200,224,0.08));color:rgba(75,163,255,0.9);box-shadow:0 0 0 1px rgba(11,95,216,0.3)}
 
 .calc-tier-compare{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:20px}
 .calc-tier-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px}
