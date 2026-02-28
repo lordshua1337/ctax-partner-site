@@ -7,11 +7,13 @@ function toggleMobileNav(){
   var drawer=document.getElementById('mobileNavDrawer');
   btn.classList.toggle('open');
   drawer.classList.toggle('open');
+  var isOpen = btn.classList.contains('open');
+  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 }
 function closeMobileNav(){
   var btn=document.getElementById('navHamburger');
   var drawer=document.getElementById('mobileNavDrawer');
-  if(btn) btn.classList.remove('open');
+  if(btn) { btn.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
   if(drawer) drawer.classList.remove('open');
 }
 
