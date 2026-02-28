@@ -9,6 +9,18 @@ html{scroll-behavior:smooth}
   --white:#FFFFFF;--off:#F5F7FA;--off2:#EEF1F7;
   --mist:#D8DDE8;--slate:#8A95AA;--ink:#1C2333;--body:#3D4760;
 }
+/* ── TIER COLOR OVERRIDES ── */
+/* Default = Enterprise (blue). Direct = fire. Strategic = emerald. */
+[data-tier="direct"]{
+  --blue:#E84400;--blue2:#FF5500;--sky:#FF8C42;
+  --cyan:#FF6B00;--teal:#FFAA00;
+  --cyan-text:#CC5500;--teal-text:#AA7700;
+}
+[data-tier="strategic"]{
+  --blue:#059669;--blue2:#10B981;--sky:#34D399;
+  --cyan:#06D6A0;--teal:#00E5CC;
+  --cyan-text:#047857;--teal-text:#0C8C6E;
+}
 body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);line-height:1.6;overflow-x:hidden;padding-bottom:56px}
 
 

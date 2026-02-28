@@ -340,6 +340,184 @@ function toggleDarkMode(){
   }
 })();
 
+// ── TIER TOGGLE ──────────────────────────────────────
+// Cycles through: enterprise (default/blue) → direct (fire) → strategic (emerald)
+var TIER_ORDER = ['enterprise', 'direct', 'strategic'];
+var TIER_CONFIG = {
+  enterprise: { icon: 'E', badge: 'ENTERPRISE PARTNERS', title: 'Community Tax Partners \u2014 Enterprise Partners', copy: null },
+  direct:     { icon: 'D', badge: 'DIRECT PARTNERS', title: 'Community Tax Partners \u2014 Direct Partners', copy: {
+    // Hero
+    'hero-h1-1': 'Turn Tax Problems',
+    'hero-h1-2': 'Extra Income.',
+    'hero-sub': 'Your clients already trust you. When they owe the IRS, send them our way \u2014 we handle everything and you earn a referral fee. No extra staff, no extra work.',
+    'hero-cta1': 'Start Earning Today',
+    'hero-cta2': 'See How It Works',
+    // Partnership Model
+    'pship-heading': 'You run your business.<br>We handle the IRS.',
+    'pship-keep1': 'Your client relationship',
+    'pship-keep2': 'Your reputation',
+    'pship-keep3': 'Your tax prep income',
+    'pship-keep4': 'Their trust in you',
+    'pship-provide1': 'IRS representation',
+    'pship-provide2': 'The heavy lifting',
+    'pship-provide3': 'Your referral check',
+    'pship-provide4': 'Peace of mind',
+    'pship-quote': '\u201CYou spotted the problem. We fix it. You get paid.\u201D',
+    // Flip Cards
+    'flip1-title': 'The Problem',
+    'flip1-body': 'A client sits down and owes the IRS. You can\u2019t help them \u2014 and they don\u2019t come back. You lose the return, the relationship, and the referral.',
+    'flip2-title': 'The Fix',
+    'flip2-body': 'We take it from here. Licensed tax pros negotiate with the IRS, settle the debt, and get your client back on track \u2014 while you stay their go-to person.',
+    'flip3-title': 'The Payoff',
+    'flip3-body': 'Keep the client. Finish the return. Earn a referral fee. No extra work, no extra risk.',
+    // Testimonials
+    'testi-heading': 'What preparers are saying.',
+    'testi1-quote': 'I was skeptical at first \u2014 another referral program, right? But my first client got their $47K debt settled in two months. I got a check and the client still comes back to me every year.',
+    'testi1-avatar': 'TN',
+    'testi1-name': 'T. Nguyen',
+    'testi1-role': 'Tax Preparer \u00B7 Solo Practice \u00B7 CA',
+    'testi1-stat': 'First referral settled in under 2 months',
+    'testi2-quote': 'I used to tell clients \u201Csorry, can\u2019t help you with that.\u201D Now I say \u201CI know exactly who to call.\u201D It\u2019s a better look and I make money doing it.',
+    'testi2-avatar': 'DJ',
+    'testi2-name': 'D. Jackson',
+    'testi2-role': 'Enrolled Agent \u00B7 200 Returns/Year \u00B7 GA',
+    'testi2-stat': 'Turning away fewer clients with tax debt',
+    'testi3-quote': 'My clients are regular people \u2014 they\u2019re scared of the IRS. Being able to hand them off to a real team that actually fixes it? That\u2019s the best thing I\u2019ve added to my practice in years.',
+    'testi3-avatar': 'SM',
+    'testi3-name': 'S. Martinez',
+    'testi3-role': 'Tax Preparer \u00B7 Family Practice \u00B7 AZ',
+    'testi3-stat': 'Clients trust the referral and come back',
+    // Explore Cards
+    'explore1-desc': 'Why thousands of tax preparers are adding resolution referrals to their practice.',
+    'explore2-desc': 'Tax preparers, enrolled agents, and small firms like yours.',
+    'explore3-desc': 'See what Direct partners get \u2014 and how to level up.',
+    'explore4-desc': 'Quick answers to the questions every new partner asks.',
+    // Footer
+    'footer-tag': 'Built for tax preparers who want to help more clients and earn more \u2014 without doing more.'
+  }},
+  strategic:  { icon: 'S', badge: 'STRATEGIC PARTNERS', title: 'Community Tax Partners \u2014 Strategic Partners', copy: {
+    // Hero
+    'hero-h1-1': 'Turn Tax Debt',
+    'hero-h1-2': 'a Revenue Line.',
+    'hero-sub': 'Add a new revenue stream without adding headcount. Community Tax resolves your clients\u2019 IRS debt while you retain the relationship and earn revenue share at scale.',
+    'hero-cta1': 'Schedule a Call',
+    'hero-cta2': 'View the ROI',
+    // Partnership Model
+    'pship-heading': 'You keep the relationship.<br>We deliver the resolution.',
+    'pship-keep1': 'Client ownership at scale',
+    'pship-keep2': 'Your brand and positioning',
+    'pship-keep3': 'Existing revenue streams',
+    'pship-keep4': 'Strategic account control',
+    'pship-provide1': 'Licensed IRS representation',
+    'pship-provide2': 'Full-service resolution ops',
+    'pship-provide3': 'Revenue share at volume',
+    'pship-provide4': 'End-to-end case execution',
+    'pship-quote': '\u201CYour network. Our infrastructure. Shared upside.\u201D',
+    // Flip Cards
+    'flip1-title': 'The Gap',
+    'flip1-body': 'IRS liabilities stall deals, block closings, and create churn. Without a resolution path, your team loses the client and the revenue attached to them.',
+    'flip2-title': 'The Solution',
+    'flip2-body': 'Community Tax plugs into your existing workflow. We resolve the debt, you retain the client, and both sides generate revenue. No new hires, no new ops.',
+    'flip3-title': 'The Result',
+    'flip3-body': 'Retain the account. Unlock new revenue per client. Scale without adding overhead or operational complexity.',
+    // Testimonials
+    'testi-heading': 'What leaders are saying.',
+    'testi1-quote': 'We evaluated three resolution partners before choosing Community Tax. The difference was execution speed and reporting transparency. Our team was fully integrated within two weeks.',
+    'testi1-avatar': 'RK',
+    'testi1-name': 'R. Kapoor',
+    'testi1-role': 'COO \u00B7 Regional Accounting Network \u00B7 Northeast',
+    'testi1-stat': 'Fully integrated in under 2 weeks',
+    'testi2-quote': 'The partner program created a net-new revenue category for us. We projected $200K annually \u2014 we hit that in seven months with zero incremental headcount.',
+    'testi2-avatar': 'LO',
+    'testi2-name': 'L. Okafor',
+    'testi2-role': 'VP Partnerships \u00B7 Lending Platform',
+    'testi2-stat': 'Hit $200K target in 7 months',
+    'testi3-quote': 'We needed a white-label resolution capability without building it internally. Community Tax gave us that \u2014 branded to our firm, managed on their end, revenue flowing to ours.',
+    'testi3-avatar': 'CW',
+    'testi3-name': 'C. Whitfield',
+    'testi3-role': 'Managing Director \u00B7 Wealth Advisory \u00B7 Strategic Tier',
+    'testi3-stat': 'White-label resolution without internal build',
+    // Explore Cards
+    'explore1-desc': 'The business case for a resolution partnership at scale.',
+    'explore2-desc': 'Enterprise platforms, advisory networks, and firms with high-volume client bases.',
+    'explore3-desc': 'Compare tiers and understand the Strategic advantage.',
+    'explore4-desc': 'Compliance, structure, and integration details for your team.',
+    // Footer
+    'footer-tag': 'Built for organizations that want scalable tax resolution revenue \u2014 without building the operation.'
+  }}
+};
+
+function cycleTier() {
+  var current = document.documentElement.getAttribute('data-tier') || 'enterprise';
+  var idx = TIER_ORDER.indexOf(current);
+  var next = TIER_ORDER[(idx + 1) % TIER_ORDER.length];
+
+  if (next === 'enterprise') {
+    document.documentElement.removeAttribute('data-tier');
+  } else {
+    document.documentElement.setAttribute('data-tier', next);
+  }
+  localStorage.setItem('ctax_tier', next);
+  applyTierText(next);
+}
+
+// Keys where we need innerHTML (contain <br> or other markup)
+var TIER_HTML_KEYS = { 'pship-heading': true, 'testi-heading': true };
+
+function applyTierText(tier) {
+  var cfg = TIER_CONFIG[tier] || TIER_CONFIG.enterprise;
+  var icon = document.getElementById('tier-icon');
+  var badge = document.getElementById('tier-badge');
+  if (icon) icon.textContent = cfg.icon;
+  if (badge) badge.textContent = cfg.badge;
+  document.title = cfg.title;
+
+  var copy = cfg.copy;
+  if (!copy) return;
+  document.querySelectorAll('[data-tier-key]').forEach(function(el) {
+    var key = el.getAttribute('data-tier-key');
+    if (copy[key] !== undefined) {
+      if (TIER_HTML_KEYS[key]) {
+        el.innerHTML = copy[key];
+      } else {
+        el.textContent = copy[key];
+      }
+    }
+  });
+}
+
+// Capture Enterprise defaults from the DOM so toggling back restores original HTML
+function captureEnterpriseDefaults() {
+  var defaults = {};
+  document.querySelectorAll('[data-tier-key]').forEach(function(el) {
+    var key = el.getAttribute('data-tier-key');
+    if (TIER_HTML_KEYS[key]) {
+      defaults[key] = el.innerHTML;
+    } else {
+      defaults[key] = el.textContent;
+    }
+  });
+  TIER_CONFIG.enterprise.copy = defaults;
+}
+
+(function() {
+  var saved = localStorage.getItem('ctax_tier');
+  if (saved && saved !== 'enterprise') {
+    document.documentElement.setAttribute('data-tier', saved);
+  }
+
+  // Capture defaults after DOM is ready, then apply saved tier
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      captureEnterpriseDefaults();
+      applyTierText(saved || 'enterprise');
+    });
+  } else {
+    captureEnterpriseDefaults();
+    applyTierText(saved || 'enterprise');
+  }
+})();
+
 // ── SMOOTH PAGE TRANSITIONS ──────────────────────────────────────
 // Enhance existing showPage with animation class
 (function(){

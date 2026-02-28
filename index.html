@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0A1628">
-<title>Community Tax — Enterprise Partner Program</title>
+<title>Community Tax Partners — Enterprise Partners</title>
 <meta name="description" content="Join 10,000+ financial professionals earning revenue from IRS tax resolution referrals. Community Tax handles everything - you earn 8-18% revenue share with zero overhead.">
 <meta name="keywords" content="tax resolution partner program, IRS tax debt referral, CPA partner program, financial advisor referral, tax resolution revenue share">
 <meta name="author" content="Community Tax LLC">
@@ -366,6 +366,7 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
       </div>
     </div>
     <button id="dark-mode-toggle" onclick="toggleDarkMode()" class="nav-icon-btn" title="Toggle dark mode" aria-label="Toggle dark mode"><span id="dark-mode-icon">&#9790;</span></button>
+    <button id="tier-toggle" onclick="cycleTier()" class="nav-icon-btn" title="Switch partner tier" aria-label="Switch partner tier"><span id="tier-icon">E</span></button>
     <button class="nav-cta-outline" onclick="showPage('contact')">Start Referral</button>
     <button class="nav-cta" onclick="showPage('portal')">Dashboard</button>
   </div>
@@ -439,15 +440,15 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
 <div class="hero-wrap">
   <canvas id="hero-mesh" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
   <div class="hero-inner-center">
-    <div class="h-badge hero-reveal" style="--reveal-d:0">STRATEGIC PARTNERSHIPS</div>
+    <div class="h-badge hero-reveal" style="--reveal-d:0" id="tier-badge">ENTERPRISE PARTNERS</div>
     <h1 class="h-title">
-      <span class="h-title-line hero-reveal" style="--reveal-d:1">Turn Tax Debt</span>
-      <span class="h-title-line hero-reveal" style="--reveal-d:2">Into <span class="h-title-gradient">Your Edge.</span></span>
+      <span class="h-title-line hero-reveal" style="--reveal-d:1" data-tier-key="hero-h1-1">Turn Tax Debt</span>
+      <span class="h-title-line hero-reveal" style="--reveal-d:2">Into <span class="h-title-gradient" data-tier-key="hero-h1-2">Your Edge.</span></span>
     </h1>
-    <p class="h-sub hero-reveal" style="--reveal-d:3">Keep your clients, your brand, and your revenue stream. Community Tax resolves the debt — you stay the trusted advisor and earn the referral fee.</p>
+    <p class="h-sub hero-reveal" style="--reveal-d:3" data-tier-key="hero-sub">Keep your clients, your brand, and your revenue stream. Community Tax resolves the debt — you stay the trusted advisor and earn the referral fee.</p>
     <div class="h-cta-row hero-reveal" style="--reveal-d:4">
-      <button class="h-cta-primary" onclick="showPage('apply')">Become a Partner</button>
-      <button class="h-cta-secondary" onclick="openExploreModal()">Explore the Program</button>
+      <button class="h-cta-primary" onclick="showPage('apply')" data-tier-key="hero-cta1">Become a Partner</button>
+      <button class="h-cta-secondary" onclick="openExploreModal()" data-tier-key="hero-cta2">Explore the Program</button>
     </div>
     <div class="h-stats hero-reveal" style="--reveal-d:5">
       <div class="h-stat"><div class="h-stat-n hero-counter" data-prefix="$" data-target="2.3" data-suffix="B">$0B</div><div class="h-stat-l">Tax Debt Resolved</div></div>
@@ -470,26 +471,26 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
     <div class="pship-box">
       <div class="tc">
         <span class="eyebrow eyebrow-lt">The Partnership Model</span>
-        <h2 class="disp mt8" style="color:#fff">You keep the client.<br>We do the work.</h2>
+        <h2 class="disp mt8" style="color:#fff" data-tier-key="pship-heading">You keep the client.<br>We do the work.</h2>
       </div>
       <div class="pship-grid">
         <div class="pship-col">
           <div class="pship-col-hd blue">You Keep</div>
-          <div class="pship-item"><span class="pship-dot b"></span>Your client relationship</div>
-          <div class="pship-item"><span class="pship-dot b"></span>Your brand identity</div>
-          <div class="pship-item"><span class="pship-dot b"></span>Tax prep revenue</div>
-          <div class="pship-item"><span class="pship-dot b"></span>Client trust &amp; loyalty</div>
+          <div class="pship-item"><span class="pship-dot b"></span><span data-tier-key="pship-keep1">Your client relationship</span></div>
+          <div class="pship-item"><span class="pship-dot b"></span><span data-tier-key="pship-keep2">Your brand identity</span></div>
+          <div class="pship-item"><span class="pship-dot b"></span><span data-tier-key="pship-keep3">Tax prep revenue</span></div>
+          <div class="pship-item"><span class="pship-dot b"></span><span data-tier-key="pship-keep4">Client trust &amp; loyalty</span></div>
         </div>
         <div class="pship-divider"></div>
         <div class="pship-col">
           <div class="pship-col-hd teal">We Provide</div>
-          <div class="pship-item"><span class="pship-dot t"></span>IRS representation</div>
-          <div class="pship-item"><span class="pship-dot t"></span>Full resolution expertise</div>
-          <div class="pship-item"><span class="pship-dot t"></span>Revenue share</div>
-          <div class="pship-item"><span class="pship-dot t"></span>Complete execution</div>
+          <div class="pship-item"><span class="pship-dot t"></span><span data-tier-key="pship-provide1">IRS representation</span></div>
+          <div class="pship-item"><span class="pship-dot t"></span><span data-tier-key="pship-provide2">Full resolution expertise</span></div>
+          <div class="pship-item"><span class="pship-dot t"></span><span data-tier-key="pship-provide3">Revenue share</span></div>
+          <div class="pship-item"><span class="pship-dot t"></span><span data-tier-key="pship-provide4">Complete execution</span></div>
         </div>
       </div>
-      <div class="pship-quote">"Partner-owned relationship. Community Tax-performed expertise."</div>
+      <div class="pship-quote" data-tier-key="pship-quote">"Partner-owned relationship. Community Tax-performed expertise."</div>
     </div>
 </section>
 <section class="sec bg-w">
@@ -504,11 +505,11 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
           <div class="flip-front">
             <div class="vi vi-lt"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></div>
             <span class="eyebrow eyebrow-md" style="font-size:15px">What Happens Today</span>
-            <h4 class="flip-title">The Problem</h4>
+            <h4 class="flip-title" data-tier-key="flip1-title">The Problem</h4>
             <span class="flip-hint">Hover to learn more</span>
           </div>
           <div class="flip-back">
-            <p>Tax debt disrupts client journeys — loans stall, filings end, clients disengage. You lose the transaction and the relationship.</p>
+            <p data-tier-key="flip1-body">Tax debt disrupts client journeys — loans stall, filings end, clients disengage. You lose the transaction and the relationship.</p>
           </div>
         </div>
       </div>
@@ -517,11 +518,11 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
           <div class="flip-front flip-front-dk">
             <div class="vi vi-dk"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
             <span class="eyebrow eyebrow-lt" style="font-size:15px">Community Tax's Role</span>
-            <h4 class="flip-title" style="color:#fff">The Solution</h4>
+            <h4 class="flip-title" style="color:#fff" data-tier-key="flip2-title">The Solution</h4>
             <span class="flip-hint" style="color:rgba(255,255,255,0.4)">Hover to learn more</span>
           </div>
           <div class="flip-back flip-back-dk">
-            <p>We resolve the tax debt on your client's behalf — while you remain the trusted advisor. A relationship-ending event becomes a relationship-preserving experience.</p>
+            <p data-tier-key="flip2-body">We resolve the tax debt on your client's behalf — while you remain the trusted advisor. A relationship-ending event becomes a relationship-preserving experience.</p>
           </div>
         </div>
       </div>
@@ -530,11 +531,11 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
           <div class="flip-front">
             <div class="vi vi-lt"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
             <span class="eyebrow eyebrow-md" style="font-size:15px">What It Means For You</span>
-            <h4 class="flip-title">The Outcome</h4>
+            <h4 class="flip-title" data-tier-key="flip3-title">The Outcome</h4>
             <span class="flip-hint">Hover to learn more</span>
           </div>
           <div class="flip-back">
-            <p>Complete the original service. Keep the client. Earn referral revenue. Grow without operational complexity.</p>
+            <p data-tier-key="flip3-body">Complete the original service. Keep the client. Earn referral revenue. Grow without operational complexity.</p>
           </div>
         </div>
       </div>
@@ -557,41 +558,41 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
   <div class="con">
     <div class="text-center mb48 reveal">
       <span class="eyebrow" style="color:var(--sky)">Partner Voices</span>
-      <h2 class="disp mt8" style="color:#fff">What partners say about<br>the program.</h2>
+      <h2 class="disp mt8" style="color:#fff" data-tier-key="testi-heading">What partners say about<br>the program.</h2>
     </div>
     <div class="testi-grid">
       <div class="testi-card reveal">
-        <p class="testi-quote">The onboarding was faster than any referral program I've run. We had our first closed case within three weeks. My team barely has to think about it — we refer, they handle everything.</p>
+        <p class="testi-quote" data-tier-key="testi1-quote">The onboarding was faster than any referral program I've run. We had our first closed case within three weeks. My team barely has to think about it — we refer, they handle everything.</p>
         <div class="testi-attr">
-          <div class="testi-avatar">MR</div>
+          <div class="testi-avatar" data-tier-key="testi1-avatar">MR</div>
           <div>
-            <div class="testi-name">M. Rodriguez</div>
-            <div class="testi-role">ERO Owner · 600+ Client Base · Texas</div>
+            <div class="testi-name" data-tier-key="testi1-name">M. Rodriguez</div>
+            <div class="testi-role" data-tier-key="testi1-role">ERO Owner · 600+ Client Base · Texas</div>
           </div>
         </div>
-        <span class="testi-stat"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Onboarded and active in under 3 weeks</span>
+        <span class="testi-stat"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> <span data-tier-key="testi1-stat">Onboarded and active in under 3 weeks</span></span>
       </div>
       <div class="testi-card reveal reveal-delay-2">
-        <p class="testi-quote">Before this program, I was sending clients to competitors and watching them leave. Now I have a path for every tax debt situation — and I keep the relationship every time.</p>
+        <p class="testi-quote" data-tier-key="testi2-quote">Before this program, I was sending clients to competitors and watching them leave. Now I have a path for every tax debt situation — and I keep the relationship every time.</p>
         <div class="testi-attr">
-          <div class="testi-avatar">JK</div>
+          <div class="testi-avatar" data-tier-key="testi2-avatar">JK</div>
           <div>
-            <div class="testi-name">J. Kim</div>
-            <div class="testi-role">CPA · Regional Accounting Firm · Illinois</div>
+            <div class="testi-name" data-tier-key="testi2-name">J. Kim</div>
+            <div class="testi-role" data-tier-key="testi2-role">CPA · Regional Accounting Firm · Illinois</div>
           </div>
         </div>
-        <span class="testi-stat"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg> New revenue stream within the first year</span>
+        <span class="testi-stat"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg> <span data-tier-key="testi2-stat">New revenue stream within the first year</span></span>
       </div>
       <div class="testi-card reveal reveal-delay-3">
-        <p class="testi-quote">Our lending platform was losing qualified applicants at the IRS liability stage. This partnership turned those losses into a new revenue line. The ROI was immediate and measurable.</p>
+        <p class="testi-quote" data-tier-key="testi3-quote">Our lending platform was losing qualified applicants at the IRS liability stage. This partnership turned those losses into a new revenue line. The ROI was immediate and measurable.</p>
         <div class="testi-attr">
-          <div class="testi-avatar">AT</div>
+          <div class="testi-avatar" data-tier-key="testi3-avatar">AT</div>
           <div>
-            <div class="testi-name">A. Thomas</div>
-            <div class="testi-role">VP of Partnerships · Fintech Platform · Enterprise Tier</div>
+            <div class="testi-name" data-tier-key="testi3-name">A. Thomas</div>
+            <div class="testi-role" data-tier-key="testi3-role">VP of Partnerships · Fintech Platform · Enterprise Tier</div>
           </div>
         </div>
-        <span class="testi-stat"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Fewer lost applicants at the liability stage</span>
+        <span class="testi-stat"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> <span data-tier-key="testi3-stat">Fewer lost applicants at the liability stage</span></span>
       </div>
     </div>
   </div>
@@ -607,25 +608,25 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
       <div class="card scroll-reveal" style="cursor:pointer;animation-delay:0s" role="link" tabindex="0" onclick="showPage('why')" onkeydown="if(event.key==='Enter'){showPage('why')}">
         <div style="margin-bottom:14px;color:var(--blue);opacity:0.8"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
         <h5 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:7px">Why Community Tax</h5>
-        <p style="font-size:15px;color:var(--body);line-height:1.6;margin-bottom:14px">The market problem, value proposition, and the cost of inaction.</p>
+        <p style="font-size:15px;color:var(--body);line-height:1.6;margin-bottom:14px" data-tier-key="explore1-desc">The market problem, value proposition, and the cost of inaction.</p>
         <span style="font-size:15px;color:var(--blue);font-weight:600">Learn More →</span>
       </div>
       <div class="card scroll-reveal" style="cursor:pointer;animation-delay:0.1s" role="link" tabindex="0" onclick="showPage('segments')" onkeydown="if(event.key==='Enter'){showPage('segments')}">
         <div style="margin-bottom:14px;color:var(--blue);opacity:0.8"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="11" rx="1"/><path d="M3 10l9-7 9 7"/><line x1="12" y1="10" x2="12" y2="21"/><line x1="7" y1="10" x2="7" y2="21"/><line x1="17" y1="10" x2="17" y2="21"/></svg></div>
         <h5 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:7px">Who We Serve</h5>
-        <p style="font-size:15px;color:var(--body);line-height:1.6;margin-bottom:14px">Fintech platforms, CPAs, tax preparers, advisors, and law firms.</p>
+        <p style="font-size:15px;color:var(--body);line-height:1.6;margin-bottom:14px" data-tier-key="explore2-desc">Fintech platforms, CPAs, tax preparers, advisors, and law firms.</p>
         <span style="font-size:15px;color:var(--blue);font-weight:600">View Segments →</span>
       </div>
       <div class="card scroll-reveal" style="cursor:pointer;animation-delay:0.2s" role="link" tabindex="0" onclick="showPage('tiers')" onkeydown="if(event.key==='Enter'){showPage('tiers')}">
         <div style="margin-bottom:14px;color:var(--blue);opacity:0.8"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
         <h5 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:7px">Partner Tiers</h5>
-        <p style="font-size:15px;color:var(--body);line-height:1.6;margin-bottom:14px">Strategic, Enterprise, and Direct — find the right tier.</p>
+        <p style="font-size:15px;color:var(--body);line-height:1.6;margin-bottom:14px" data-tier-key="explore3-desc">Strategic, Enterprise, and Direct — find the right tier.</p>
         <span style="font-size:15px;color:var(--blue);font-weight:600">Compare Tiers →</span>
       </div>
       <div class="card scroll-reveal" style="cursor:pointer;animation-delay:0.3s" role="link" tabindex="0" onclick="showPage('faq')" onkeydown="if(event.key==='Enter'){showPage('faq')}">
         <div style="margin-bottom:14px;color:var(--blue);opacity:0.8"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
         <h5 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:7px">Partner FAQ</h5>
-        <p style="font-size:15px;color:var(--body);line-height:1.6;margin-bottom:14px">Everything you need to know before your first referral.</p>
+        <p style="font-size:15px;color:var(--body);line-height:1.6;margin-bottom:14px" data-tier-key="explore4-desc">Everything you need to know before your first referral.</p>
         <span style="font-size:15px;color:var(--blue);font-weight:600">Read FAQ →</span>
       </div>
     </div>
@@ -786,7 +787,7 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
       <!-- Brand -->
       <div style="display:flex;flex-direction:column;gap:24px">
         <div><img src="images/logo-white.svg" alt="Community Tax" height="24" width="220" loading="lazy" style="display:block"></div>
-        <p class="ft-tag">Built for financial professionals who want to add IRS tax resolution to their practice — without adding complexity.</p>
+        <p class="ft-tag" data-tier-key="footer-tag">Built for financial professionals who want to add IRS tax resolution to their practice — without adding complexity.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(214,120,50,0.25);font-size:11px;font-weight:600;letter-spacing:0.06em">
             <svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="url(#claude-pill-grad)"><defs><linearGradient id="claude-pill-grad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E8692A"/><stop offset="1" stop-color="#F5C842"/></linearGradient></defs><path d="M12 2L2 19.5h4.5L12 8.5l5.5 11H22L12 2z"/></svg>
