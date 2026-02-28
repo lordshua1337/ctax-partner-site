@@ -1518,37 +1518,23 @@ body.portal-mode{padding-bottom:0}
 .pni-badge-red{background:rgba(220,38,38,0.15);color:#ef4444}
 .pni-badge-green{background:rgba(16,185,129,0.15);color:#10b981}
 
-/* Accent nav items (default / non-branded mode only) */
-.portal-nav-dashboard{background:linear-gradient(135deg,#0B5FD8,#00E5CC);color:#fff;font-weight:600}
-.portal-nav-dashboard svg{stroke:#fff}
-.portal-nav-dashboard:hover{background:linear-gradient(135deg,#0952c0,#00d4bc);color:#fff;opacity:0.92}
+/* Accent nav text + icon colors (default / non-branded mode only) */
+.portal-nav-dashboard{background:linear-gradient(135deg,#0B5FD8,#00E5CC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:600}
+.portal-nav-dashboard svg{stroke:#0B5FD8}
 
-.portal-nav-referrals{background:linear-gradient(135deg,#E84400,#FF6B00);color:#fff;font-weight:600}
-.portal-nav-referrals svg{stroke:#fff}
-.portal-nav-referrals:hover{background:linear-gradient(135deg,#d63d00,#f06200);color:#fff;opacity:0.92}
+.portal-nav-referrals{background:linear-gradient(135deg,#E84400,#FF6B00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:600}
+.portal-nav-referrals svg{stroke:#E84400}
 
-.portal-nav-earnings{background:linear-gradient(135deg,#059669,#06D6A0);color:#fff;font-weight:600}
-.portal-nav-earnings svg{stroke:#fff}
-.portal-nav-earnings:hover{background:linear-gradient(135deg,#048a5e,#05c492);color:#fff;opacity:0.92}
+.portal-nav-earnings{background:linear-gradient(135deg,#059669,#06D6A0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:600}
+.portal-nav-earnings svg{stroke:#059669}
 
-/* When active, keep the same gradient + add a subtle glow */
-.portal-nav-dashboard.pni-active{background:linear-gradient(135deg,#0B5FD8,#00E5CC);color:#fff;box-shadow:0 2px 12px rgba(11,95,216,0.4)}
-.portal-nav-referrals.pni-active{background:linear-gradient(135deg,#E84400,#FF6B00);color:#fff;box-shadow:0 2px 12px rgba(232,68,0,0.4)}
-.portal-nav-earnings.pni-active{background:linear-gradient(135deg,#059669,#06D6A0);color:#fff;box-shadow:0 2px 12px rgba(5,150,105,0.4)}
-
-/* Disable accent gradients in branded mode — let the brand color take over */
+/* Disable gradient text in branded mode — use brand color */
 .portal-branded .portal-nav-dashboard,
 .portal-branded .portal-nav-referrals,
-.portal-branded .portal-nav-earnings{background:none;font-weight:500;box-shadow:none;color:var(--pa)}
+.portal-branded .portal-nav-earnings{background:none;-webkit-background-clip:unset;-webkit-text-fill-color:unset;background-clip:unset;font-weight:500;color:var(--pa)}
 .portal-branded .portal-nav-dashboard svg,
 .portal-branded .portal-nav-referrals svg,
 .portal-branded .portal-nav-earnings svg{stroke:var(--pa);opacity:0.6}
-.portal-branded .portal-nav-dashboard:hover,
-.portal-branded .portal-nav-referrals:hover,
-.portal-branded .portal-nav-earnings:hover{background:rgba(var(--pa-rgb),0.06);opacity:1}
-.portal-branded .portal-nav-dashboard.pni-active,
-.portal-branded .portal-nav-referrals.pni-active,
-.portal-branded .portal-nav-earnings.pni-active{background:rgba(var(--pa-rgb),0.1)!important;box-shadow:none;font-weight:600}
 
 .portal-sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,0.06)}
 
