@@ -141,6 +141,9 @@ function portalNav(el, secId) {
 
   // Entrance animation for section content
   if (sec) portalAnimateEntrance(sec);
+
+  // Sync mobile bottom nav highlight
+  mobNavSync(secId);
 }
 
 function portalAnimateEntrance(sec) {
@@ -1187,3 +1190,27 @@ document.addEventListener('click', function(e) {
     results.classList.remove('portal-sr-open');
   }
 });
+
+// --- Mobile bottom nav ---
+var mobNavMap = {
+  'portal-sec-dashboard': 'portal-sec-dashboard',
+  'portal-sec-referrals': 'portal-sec-referrals',
+  'portal-sec-submit': 'portal-sec-submit',
+  'portal-sec-earnings': 'portal-sec-earnings',
+  'portal-sec-payouts': 'portal-sec-earnings'
+};
+
+function mobNavSync(secId) {
+  var mapped = mobNavMap[secId] || '';
+  document.querySelectorAll('.mob-bnav-tab').forEach(function(tab) {
+    var isActive = tab.getAttribute('data-mob-sec') === mapped;
+    tab.classList.toggle('mob-bnav-tab-active', isActive);
+  });
+}
+
+function mobNavTap(tab, secId) {
+  var sidebarLink = document.querySelector('.portal-nav-item[onclick*="' + secId + '"]');
+  if (sidebarLink) {
+    portalNav(sidebarLink, secId);
+  }
+}

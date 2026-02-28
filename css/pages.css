@@ -2363,13 +2363,56 @@ body.portal-mode{padding-bottom:0}
 @media(max-width:768px){
   .portal-sidebar{left:-260px;transition:left 0.25s ease}
   .portal-sidebar.portal-sb-open{left:0;box-shadow:4px 0 24px rgba(0,0,0,0.3)}
-  .portal-main{margin-left:0}
+  .portal-main{margin-left:0;padding-bottom:68px}
   .portal-hamburger{display:flex}
   .portal-topbar{justify-content:space-between}
+  .portal-topbar .portal-search-wrap{flex:1;min-width:0}
+  .portal-topbar .dash-quick-submit{display:none}
+  .portal-topbar .portal-demo-badge{display:none}
   .portal-section{padding:24px 16px}
   #portal-sec-dashboard .dash-kpi-row{grid-template-columns:1fr 1fr!important}
   #portal-sec-dashboard .dash-table-head,
   #portal-sec-dashboard .dash-table-row{grid-template-columns:1fr!important;font-size:12px!important}
+}
+
+/* ═══ MOBILE BOTTOM NAV ═══ */
+.mob-bottom-nav{display:none}
+@media(max-width:768px){
+  .mob-bottom-nav{
+    display:flex;position:fixed;bottom:0;left:0;right:0;height:60px;
+    background:var(--white);border-top:1px solid var(--off2);
+    z-index:9000;align-items:stretch;
+    box-shadow:0 -2px 12px rgba(0,0,0,0.06);
+    padding:0;padding-bottom:env(safe-area-inset-bottom,0)
+  }
+  .mob-bnav-tab{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:2px;border:none;background:none;color:var(--slate);cursor:pointer;
+    font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;
+    min-height:44px;padding:4px 0;position:relative;
+    transition:color 0.15s
+  }
+  .mob-bnav-tab svg{width:20px;height:20px;stroke-width:1.8}
+  .mob-bnav-tab-active{color:var(--blue)}
+  .mob-bnav-tab-active svg{stroke:var(--blue)}
+  .mob-bnav-label{font-size:10px;line-height:1;margin-top:1px}
+  .mob-bnav-fab{position:relative;flex:1.1}
+  .mob-bnav-fab-circle{
+    width:52px;height:52px;border-radius:50%;
+    background:linear-gradient(135deg,#0B5FD8,#4BA3FF);
+    display:flex;align-items:center;justify-content:center;
+    position:absolute;top:-18px;left:50%;transform:translateX(-50%);
+    box-shadow:0 4px 16px rgba(11,95,216,0.35);
+    transition:transform 0.15s,box-shadow 0.15s
+  }
+  .mob-bnav-fab-circle svg{stroke:#fff;width:24px;height:24px}
+  .mob-bnav-fab .mob-bnav-label{margin-top:22px;color:var(--blue);font-weight:700}
+  .mob-bnav-fab:active .mob-bnav-fab-circle{transform:translateX(-50%) scale(0.93)}
+  [data-theme="dark"] .mob-bottom-nav{background:#0f1724;border-top-color:rgba(255,255,255,0.06);box-shadow:0 -2px 16px rgba(0,0,0,0.3)}
+  [data-theme="dark"] .mob-bnav-tab{color:rgba(255,255,255,0.4)}
+  [data-theme="dark"] .mob-bnav-tab-active{color:#4BA3FF}
+  [data-theme="dark"] .mob-bnav-tab-active svg{stroke:#4BA3FF}
+  [data-theme="dark"] .mob-bnav-fab .mob-bnav-label{color:#4BA3FF}
 }
 
 /* ═══ CROSS-CUTTING: Toast Notification System ═══ */
