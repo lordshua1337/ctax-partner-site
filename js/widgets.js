@@ -990,7 +990,7 @@ function stopPlayback() {
   if (iconPlay) iconPlay.style.display = '';
   if (iconPause) iconPause.style.display = 'none';
   if (eq) eq.style.display = 'none';
-  if (nowEl) nowEl.textContent = 'Paused';
+  if (nowEl) nowEl.textContent = 'Community Soul';
   updateTunesGrid();
 }
 
@@ -1003,8 +1003,8 @@ function updatePlaybackUI(station) {
   if (iconPlay) iconPlay.style.display = 'none';
   if (iconPause) iconPause.style.display = '';
   if (eq) eq.style.display = 'flex';
-  if (nowEl) nowEl.textContent = station.name;
-  if (subEl) subEl.textContent = station.desc;
+  if (nowEl) nowEl.textContent = 'Community Soul';
+  if (subEl) subEl.textContent = 'Powered by SomaFM';
   // Update active state in picker if open
   var picks = document.querySelectorAll('.jazz-pick');
   picks.forEach(function(p, i) {
@@ -1126,7 +1126,7 @@ function updateTunesGrid() {
     var station = TUNES_STATIONS[_jazzStation];
     var nowEl = document.getElementById('jazz-now');
     var subEl = document.getElementById('jazz-station-sub');
-    if (nowEl) nowEl.textContent = station.name;
-    if (subEl) subEl.textContent = station.desc;
+    if (nowEl) nowEl.textContent = 'Community Soul';
+    if (subEl) subEl.textContent = 'Powered by SomaFM';
   }
 })();
