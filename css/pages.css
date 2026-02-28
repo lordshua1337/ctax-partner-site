@@ -3606,7 +3606,7 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 .jazz-info{flex:1;min-width:0;cursor:pointer}
 .jazz-info:hover .jazz-now{color:var(--cyan)}
 .jazz-now{font-size:13px;font-weight:600;color:#fff;letter-spacing:0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color 0.15s}
-.jazz-station{font-size:11px;color:rgba(255,255,255,0.4);margin-top:1px}
+.jazz-station{font-size:11px;color:rgba(255,255,255,0.4);margin-top:1px;transition:opacity 0.3s ease}
 
 .jazz-eq{display:flex;align-items:flex-end;gap:2px;height:18px;flex-shrink:0}
 .jazz-eq-bar{width:3px;background:var(--cyan);border-radius:1px;animation:jazzEq 0.8s ease-in-out infinite alternate}

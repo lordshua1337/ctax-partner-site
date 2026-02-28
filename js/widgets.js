@@ -931,6 +931,40 @@ var TUNES_STATIONS = [
 ];
 var _jazzPlaying = false;
 var _jazzStation = 0;
+var _tunesMessages = [
+  'Powered by SomaFM',
+  'We appreciate you.',
+  'For over 15 years, we\u2019ve guided Americans through tough times \u2014 just like you.',
+  'Over $2.3 billion in tax debt resolved. Experience you can trust.',
+  'Questions? Your rep is just a click away \u2192',
+  'You keep the client. We do the work.',
+  'Built for professionals who care about their clients.',
+  'Your referrals change lives. Thank you.',
+  'Earn more. Do less. Help people.'
+];
+var _tunesMsgIdx = 0;
+var _tunesMsgTimer = null;
+
+function startTunesMessages() {
+  if (_tunesMsgTimer) return;
+  _tunesMsgIdx = 0;
+  _tunesMsgTimer = setInterval(function() {
+    _tunesMsgIdx = (_tunesMsgIdx + 1) % _tunesMessages.length;
+    var subEl = document.getElementById('jazz-station-sub');
+    if (!subEl) return;
+    subEl.style.opacity = '0';
+    setTimeout(function() {
+      subEl.textContent = _tunesMessages[_tunesMsgIdx];
+      subEl.style.opacity = '1';
+    }, 300);
+  }, 6000);
+}
+
+function stopTunesMessages() {
+  if (_tunesMsgTimer) { clearInterval(_tunesMsgTimer); _tunesMsgTimer = null; }
+  var subEl = document.getElementById('jazz-station-sub');
+  if (subEl) { subEl.textContent = 'Powered by SomaFM'; subEl.style.opacity = '1'; }
+}
 
 function toggleTunes() {
   var toggle = document.getElementById('tunes-toggle');
@@ -991,6 +1025,7 @@ function stopPlayback() {
   if (iconPause) iconPause.style.display = 'none';
   if (eq) eq.style.display = 'none';
   if (nowEl) nowEl.textContent = 'Community Soul';
+  stopTunesMessages();
   updateTunesGrid();
 }
 
@@ -1004,7 +1039,8 @@ function updatePlaybackUI(station) {
   if (iconPause) iconPause.style.display = '';
   if (eq) eq.style.display = 'flex';
   if (nowEl) nowEl.textContent = 'Community Soul';
-  if (subEl) subEl.textContent = 'Powered by SomaFM';
+  if (subEl) subEl.textContent = _tunesMessages[0];
+  startTunesMessages();
   // Update active state in picker if open
   var picks = document.querySelectorAll('.jazz-pick');
   picks.forEach(function(p, i) {
