@@ -560,6 +560,33 @@ function pbShowPanel(panel) {
   });
 }
 
+function pbUndo() {
+  if (!pbEditor) return;
+  pbEditor.UndoManager.undo();
+}
+
+function pbRedo() {
+  if (!pbEditor) return;
+  pbEditor.UndoManager.redo();
+}
+
+function pbPreview() {
+  if (!pbEditor) return;
+  var html = pbEditor.getHtml();
+  var css = pbEditor.getCss({ avoidProtected: true });
+  var fullHtml = '<!DOCTYPE html><html lang="en"><head>';
+  fullHtml += '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">';
+  fullHtml += '<title>Preview</title>';
+  fullHtml += '<style>' + PB_CANVAS_CSS + '\n' + (css || '') + '</style>';
+  fullHtml += '</head><body>' + html + '</body></html>';
+  var win = window.open('', '_blank');
+  if (win) {
+    win.document.open();
+    win.document.write(fullHtml);
+    win.document.close();
+  }
+}
+
 // Helper: inject canvas styles into the GrapesJS iframe
 function pbInjectCanvasStyles() {
   if (!pbEditor) return;
