@@ -185,6 +185,10 @@ function portalNav(el, secId) {
   } else {
     if (typeof pbDestroy === 'function') pbDestroy();
   }
+  // Render My Pages grid when entering that section
+  if (secId === 'portal-sec-my-pages') {
+    if (typeof pbRenderMyPages === 'function') pbRenderMyPages();
+  }
 
   // Pro gate check (shows overlay on locked sections)
   if (typeof proCheckGate === 'function') proCheckGate(secId);

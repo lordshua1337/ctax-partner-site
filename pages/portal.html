@@ -67,6 +67,10 @@
           Page Builder
           <span class="pni-badge pni-badge-green">New</span>
         </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-my-pages')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          My Pages
+        </a>
         <a class="portal-nav-item" id="nav-tunes" onclick="portalNav(this,'portal-sec-tunes')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
           Tunes
@@ -3634,9 +3638,17 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
               Templates
             </button>
-            <button class="pb-tool-btn" onclick="pbPreview()" title="Preview full page">
+            <button class="pb-tool-btn" id="pb-preview-toggle" onclick="pbTogglePreview()" title="Split-pane live preview">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+              Live Preview
+            </button>
+            <button class="pb-tool-btn" onclick="pbPreview()" title="Preview in new window">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               Preview
+            </button>
+            <button class="pb-tool-btn pb-tool-btn-publish" onclick="pbOpenPublishModal()" title="Publish this page">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Publish
             </button>
             <button class="pb-tool-btn pb-tool-btn-primary" onclick="pbExportHTML()" title="Download as HTML file">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -3649,6 +3661,13 @@
         <div class="pb-body">
           <div class="pb-canvas-area">
             <div id="gjs"></div>
+          </div>
+          <!-- Split-pane live preview -->
+          <div class="pb-preview-pane" id="pb-preview-pane" style="display:none">
+            <div class="pb-preview-header">
+              <span class="pb-preview-label">Live Preview</span>
+            </div>
+            <iframe id="pb-preview-iframe" class="pb-preview-iframe" sandbox="allow-same-origin"></iframe>
           </div>
           <aside class="pb-sidebar">
             <div class="pb-panel-tabs">
@@ -3664,6 +3683,45 @@
           </aside>
         </div>
       </div>
+
+      <!-- Publish modal -->
+      <div class="pb-pub-overlay" id="pb-publish-modal" onclick="if(event.target===this)pbClosePublishModal()">
+        <div class="pb-pub-modal">
+          <div class="pb-pub-header">
+            <h3>Publish Landing Page</h3>
+            <button class="pb-pub-close" onclick="pbClosePublishModal()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="pb-pub-body">
+            <label class="pb-pub-label" for="pb-pub-title">Page Title</label>
+            <input class="pb-pub-input" type="text" id="pb-pub-title" placeholder="My Tax Practice" maxlength="80">
+            <label class="pb-pub-label" for="pb-pub-slug">URL Slug</label>
+            <div class="pb-pub-slug-row">
+              <span class="pb-pub-slug-prefix">#lp/</span>
+              <input class="pb-pub-input pb-pub-slug-input" type="text" id="pb-pub-slug" placeholder="my-tax-practice" maxlength="60">
+            </div>
+            <p class="pb-pub-hint">Lowercase letters, numbers, and hyphens only.</p>
+            <p class="pb-pub-error" id="pb-pub-error"></p>
+          </div>
+          <div class="pb-pub-footer">
+            <button class="pb-pub-btn-cancel" onclick="pbClosePublishModal()">Cancel</button>
+            <button class="pb-pub-btn-publish" onclick="pbPublish()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Publish
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ MY PAGES SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-my-pages">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">My Pages</h2>
+        <p class="portal-sec-desc">Manage your published landing pages. View, edit, or unpublish pages from here.</p>
+      </div>
+      <div class="pb-mp-grid" id="pb-my-pages-grid"></div>
     </div>
 
     <!-- ═══ TUNES SECTION ═══ -->

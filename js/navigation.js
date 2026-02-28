@@ -32,6 +32,18 @@ function showPage(id, skipHistory){
   }
 }
 function _activatePage(id, skipHistory){
+  // Handle landing page routes: lp/slug
+  if (id.indexOf('lp/') === 0) {
+    var slug = id.substring(3);
+    renderLandingPage(slug);
+    if (!skipHistory) {
+      history.pushState({ page: id }, '', '#' + id);
+    }
+    return;
+  }
+  // Exiting a landing page — clean up
+  exitLandingPage();
+
   document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active');});
   var targetId = id;
   var p=document.getElementById('page-'+id);
@@ -78,7 +90,13 @@ function _activatePage(id, skipHistory){
 // Browser back/forward button support
 window.addEventListener('popstate', function(e) {
   var pageId = (e.state && e.state.page) ? e.state.page : 'home';
+  // Handle lp/ routes from popstate
+  if (pageId.indexOf('lp/') === 0) {
+    _activatePage(pageId, true);
+    return;
+  }
   // Skip history push since we're restoring from history
+  exitLandingPage();
   var current = document.querySelector('.page.active');
   if (current) {
     current.classList.remove('active', 'page-exit');
@@ -119,9 +137,16 @@ function updatePageSEO(id) {
   if (metaDesc) metaDesc.setAttribute('content', seo.desc);
 }
 
-// Always start on home — ignore hash on fresh load
+// Handle initial page load — check for lp/ deep links, otherwise start on home
 (function initDeepLink() {
-  history.replaceState({ page: 'home' }, '', window.location.pathname);
+  var hash = window.location.hash.replace('#', '');
+  if (hash.indexOf('lp/') === 0) {
+    // Deep link to a landing page — render it after DOM is ready
+    history.replaceState({ page: hash }, '', '#' + hash);
+    setTimeout(function() { _activatePage(hash, true); }, 100);
+  } else {
+    history.replaceState({ page: 'home' }, '', window.location.pathname);
+  }
 })();
 function switchSeg(id,btn){
   document.querySelectorAll('.seg-panel').forEach(function(p){p.classList.remove('active');});
@@ -219,6 +244,70 @@ document.addEventListener('keydown',function(e){
   if(e.key==='ArrowRight')shiftCard(1);
   if(e.key==='ArrowLeft')shiftCard(-1);
 });
+
+// ══════════════════════════════════════════
+//  Landing Page Viewer
+// ══════════════════════════════════════════
+function renderLandingPage(slug) {
+  var lpEl = document.getElementById('page-lp');
+  if (!lpEl) return;
+
+  // Hide all other pages and site chrome
+  var current = document.querySelector('.page.active');
+  if (current) {
+    current.classList.remove('active');
+    current.style.display = 'none';
+    setTimeout(function(){ current.style.display = ''; }, 50);
+  }
+  document.body.classList.add('lp-active');
+
+  // Look up the page in localStorage
+  var page = (typeof pbFindPage === 'function') ? pbFindPage(slug) : null;
+
+  if (!page) {
+    // 404 for landing pages
+    lpEl.innerHTML = '<div class="lp-back-bar">' +
+      '<button class="lp-back-btn" onclick="exitLandingPage();showPage(\'portal\')">' +
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back to Portal</button>' +
+      '<span class="lp-slug">#lp/' + (slug || '') + '</span>' +
+      '</div>' +
+      '<div class="lp-404"><h2>404</h2><p>This landing page doesn\'t exist.</p>' +
+      '<button class="lp-back-btn" onclick="exitLandingPage();showPage(\'portal\')" style="border-color:#d1d5db;color:#374151">Go to Portal</button></div>';
+    lpEl.classList.add('active');
+    document.title = 'Page Not Found';
+    return;
+  }
+
+  // Build full HTML for the iframe
+  var canvasCss = (typeof PB_CANVAS_CSS !== 'undefined') ? PB_CANVAS_CSS : '';
+  var fullHtml = '<!DOCTYPE html><html lang="en"><head>' +
+    '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">' +
+    '<title>' + page.title + '</title>' +
+    '<style>' + canvasCss + '\n' + (page.css || '') + '</style>' +
+    '</head><body>' + (page.html || '') + '</body></html>';
+
+  lpEl.innerHTML = '<div class="lp-back-bar">' +
+    '<button class="lp-back-btn" onclick="exitLandingPage();showPage(\'portal\')">' +
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back to Portal</button>' +
+    '<span class="lp-slug">#lp/' + slug + '</span>' +
+    '</div>' +
+    '<iframe class="lp-iframe" sandbox="allow-same-origin allow-scripts"></iframe>';
+
+  // Use srcdoc via JS to avoid HTML attribute escaping issues
+  var iframe = lpEl.querySelector('.lp-iframe');
+  if (iframe) iframe.srcdoc = fullHtml;
+
+  lpEl.classList.add('active');
+  document.title = page.title + ' — Community Tax Partners';
+}
+
+function exitLandingPage() {
+  var lpEl = document.getElementById('page-lp');
+  if (!lpEl) return;
+  lpEl.classList.remove('active');
+  lpEl.innerHTML = '';
+  document.body.classList.remove('lp-active');
+}
 
 // Partner Fit Quiz
 (function(){
