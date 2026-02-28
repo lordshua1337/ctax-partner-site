@@ -40,6 +40,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);l
 .nav-cta-outline{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.04em;padding:8px 20px;border-radius:7px;border:1.5px solid var(--mist);cursor:pointer;background:transparent;color:var(--body);transition:border-color 0.18s,color 0.18s}
 .nav-icon-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;border:none;background:transparent;cursor:pointer;color:var(--slate);transition:background 0.18s,color 0.18s}
 .nav-hamburger{display:none}
+.nav-cta-mobile{display:none}
 .hero-wrap{min-height:calc(100vh - 64px);background:#f8f9fc;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 40px 0}
 .hero-inner-center{position:relative;z-index:2;max-width:860px;width:100%;display:flex;flex-direction:column;align-items:center}
 .h-badge{display:inline-flex;align-items:center;padding:6px 20px;border-radius:30px;font-size:10px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#d0d8e4;position:relative;margin-bottom:24px;border:1.5px solid transparent;background:linear-gradient(#0a1628,#0a1628) padding-box,linear-gradient(135deg,#5a6a7e 0%,#a0b0c4 30%,#e0e8f0 50%,#a0b0c4 70%,#5a6a7e 100%) border-box;overflow:hidden}
@@ -68,7 +69,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);l
 .notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:#ef4444}
 .notif-panel{display:none}
 .skip-nav{position:absolute;top:-100%}
-@media(max-width:1024px){.nav-links{display:none}.nav-right .nav-cta-outline,.nav-right .nav-cta{display:none}.nav-hamburger{display:flex;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:8px}.nav-hamburger span{width:18px;height:2px;background:var(--ink);border-radius:2px}}
+@media(max-width:1024px){.nav-links{display:none}.nav-right .nav-cta-outline,.nav-right .nav-cta{display:none}.nav-cta-mobile{display:inline-flex}.nav-hamburger{display:flex;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:8px}.nav-hamburger span{width:18px;height:2px;background:var(--ink);border-radius:2px}}
 @media(max-width:768px){#site-nav{padding:0 16px;height:60px}.page{padding-top:60px}.hero-wrap{padding:48px 0}.h-cta-row{flex-direction:column;width:100%;max-width:320px}.h-cta-primary,.h-cta-secondary{width:100%;text-align:center}}
 [data-theme="dark"]{--white:#0c1220;--off:#111827;--off2:#1a2234;--mist:#2a3650;--slate:#7889a4;--ink:#e8ecf2;--body:#b0b8cc}
 [data-theme="dark"] body{background:#0c1220;color:#e8ecf2}
@@ -310,6 +311,7 @@ try{if(localStorage.getItem('ctax_theme')==='dark')document.documentElement.setA
       </div>
     </div>
   </div>
+  <button class="nav-cta nav-cta-mobile" onclick="showPage('apply')">Become a Partner</button>
   <button class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -342,7 +344,8 @@ try{if(localStorage.getItem('ctax_theme')==='dark')document.documentElement.setA
     <a class="mob-link" onclick="showPage('resources');closeMobileNav()">Resources</a>
     <a class="mob-link" onclick="showPage('faq');closeMobileNav()">FAQ</a>
   </div>
-  <div style="padding:12px 0">
+  <div style="padding:12px 0;display:flex;flex-direction:column;gap:10px">
+    <button class="btn btn-s" style="width:100%" onclick="showPage('portal');closeMobileNav()">Partner Dashboard</button>
     <button class="btn btn-p" style="width:100%" onclick="showPage('apply');closeMobileNav()">Become a Partner</button>
   </div>
 </div>
