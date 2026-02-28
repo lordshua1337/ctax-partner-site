@@ -180,9 +180,12 @@ function portalNav(el, secId) {
     if (typeof chInit === 'function') chInit();
   }
   // Destroy page builder editor when navigating away, init when entering
+  // Toggle immersive mode for page builder
   if (secId === 'portal-sec-page-builder') {
+    document.body.classList.add('pb-immersive');
     if (typeof pbInit === 'function') pbInit();
   } else {
+    document.body.classList.remove('pb-immersive');
     if (typeof pbDestroy === 'function') pbDestroy();
   }
   // Render My Pages grid when entering that section

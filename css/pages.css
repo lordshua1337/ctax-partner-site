@@ -4468,6 +4468,39 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 .pb-preset-swatch-active{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,0.3)}
 
 /* ═══════════════════════════════════════════════
+   IMMERSIVE MODE
+   ═══════════════════════════════════════════════ */
+body.pb-immersive .portal-sidebar{display:none}
+body.pb-immersive .portal-topbar{display:none}
+body.pb-immersive .portal-main{margin-left:0}
+body.pb-immersive #portal-sec-page-builder .portal-sec-header{display:none}
+body.pb-immersive .pb-wrap{border:none;border-radius:0}
+body.pb-immersive .pb-body{height:calc(100vh - 38px)}
+body.pb-immersive .pb-toolbar{border-radius:0}
+
+/* Back button in immersive toolbar */
+.pb-back-btn{display:none;align-items:center;gap:5px;padding:4px 10px;font-size:11px;font-weight:600;border:1px solid rgba(255,255,255,0.08);border-radius:6px;background:transparent;color:rgba(255,255,255,0.45);cursor:pointer;transition:all 0.15s;letter-spacing:0.01em;margin-right:4px}
+.pb-back-btn:hover{background:rgba(255,255,255,0.06);color:#fff;border-color:rgba(255,255,255,0.15)}
+.pb-back-btn svg{opacity:0.6;transition:opacity 0.15s}
+.pb-back-btn:hover svg{opacity:1}
+body.pb-immersive .pb-back-btn{display:flex}
+
+/* Hide floating widgets in immersive mode */
+body.pb-immersive .rp-fab,
+body.pb-immersive .rp-card,
+body.pb-immersive .jazz-bar,
+body.pb-immersive .scroll-to-top{display:none!important}
+
+/* Dark mode immersive */
+[data-theme="dark"] body.pb-immersive .portal-main{background:#111}
+
+/* Mobile immersive */
+@media(max-width:900px){
+  body.pb-immersive .pb-body{height:calc(100vh - 38px);flex-direction:column}
+  body.pb-immersive .pb-sidebar{width:100%;max-height:200px}
+}
+
+/* ═══════════════════════════════════════════════
    MY PAGES DASHBOARD
    ═══════════════════════════════════════════════ */
 .pb-mp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}

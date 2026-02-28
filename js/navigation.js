@@ -35,6 +35,8 @@ function _activatePage(id, skipHistory){
   // Handle landing page routes: lp/slug
   if (id.indexOf('lp/') === 0) {
     var slug = id.substring(3);
+    // Exit immersive builder mode if active
+    document.body.classList.remove('pb-immersive');
     renderLandingPage(slug);
     if (!skipHistory) {
       history.pushState({ page: id }, '', '#' + id);

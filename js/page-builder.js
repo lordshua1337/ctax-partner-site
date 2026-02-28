@@ -680,6 +680,68 @@ function pbEscapeAttr(str) {
 }
 
 // ══════════════════════════════════════════
+//  Exit builder (back to portal dashboard)
+// ══════════════════════════════════════════
+function pbExitBuilder() {
+  var nav = document.querySelector('[onclick*="portal-sec-dashboard"]');
+  if (nav && typeof portalNav === 'function') {
+    portalNav(nav, 'portal-sec-dashboard');
+  }
+}
+
+// ══════════════════════════════════════════
+//  Preview as live page
+// ══════════════════════════════════════════
+// Auto-publishes to a preview slot, exits the builder,
+// navigates to My Pages, then opens the live viewer.
+function pbPreviewLive() {
+  if (!pbEditor) return;
+
+  var slug = pbEditingSlug || '_preview';
+  var title = 'Preview';
+
+  // If editing a named page, use its title
+  if (pbEditingSlug) {
+    var existing = pbFindPage(pbEditingSlug);
+    if (existing) title = existing.title;
+  }
+
+  // Save current canvas to the page slot
+  var html = pbEditor.getHtml();
+  var css = pbEditor.getCss({ avoidProtected: true });
+  var now = new Date().toISOString();
+  var pages = pbGetPages();
+
+  var page = {
+    slug: slug,
+    title: title,
+    html: html,
+    css: css,
+    publishedAt: now,
+    updatedAt: now
+  };
+
+  // Update existing or add new
+  var found = false;
+  var updatedPages = pages.map(function(p) {
+    if (p.slug === slug) {
+      found = true;
+      return Object.assign({}, p, { html: html, css: css, updatedAt: now });
+    }
+    return p;
+  });
+  if (!found) {
+    updatedPages = pages.concat([page]);
+  }
+  pbSetPages(updatedPages);
+
+  // Navigate to the live page viewer (exits immersive mode automatically)
+  if (typeof showPage === 'function') {
+    showPage('lp/' + slug);
+  }
+}
+
+// ══════════════════════════════════════════
 //  Lifecycle
 // ══════════════════════════════════════════
 function pbDestroy() {

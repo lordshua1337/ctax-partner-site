@@ -3610,6 +3610,11 @@
         <!-- Top toolbar -->
         <div class="pb-toolbar">
           <div class="pb-toolbar-left">
+            <button class="pb-back-btn" onclick="pbExitBuilder()" title="Back to Portal">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Portal
+            </button>
+            <span class="pb-sep"></span>
             <div class="pb-device-group">
               <button class="pb-device-btn pb-device-active" data-device="Desktop" onclick="pbSetDevice('Desktop')" title="Desktop">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
@@ -3649,7 +3654,7 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
               Live Preview
             </button>
-            <button class="pb-tool-btn" onclick="pbPreview()" title="Preview in new window">
+            <button class="pb-tool-btn" onclick="pbPreviewLive()" title="Preview as a live page">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               Preview
             </button>
