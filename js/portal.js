@@ -179,6 +179,9 @@ function portalNav(el, secId) {
   if (secId === 'portal-sec-challenge') {
     if (typeof chInit === 'function') chInit();
   }
+  if (secId === 'portal-sec-page-builder') {
+    if (typeof pbInit === 'function') pbInit();
+  }
 
   // Pro gate check (shows overlay on locked sections)
   if (typeof proCheckGate === 'function') proCheckGate(secId);

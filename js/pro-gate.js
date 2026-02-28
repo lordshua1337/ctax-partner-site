@@ -31,7 +31,8 @@ var PRO_GATED_SECTIONS = [
   'portal-sec-ai-scripts',
   'portal-sec-ai-admaker',
   'portal-sec-ai-qualifier',
-  'portal-sec-ai-kb'
+  'portal-sec-ai-kb',
+  'portal-sec-page-builder'
 ];
 
 // Offer stack items shown in the paywall modal
