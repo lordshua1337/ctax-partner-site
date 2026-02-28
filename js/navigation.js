@@ -59,6 +59,8 @@ function _activatePage(id, skipHistory){
     } else {
       document.body.classList.remove('portal-mode');
     }
+    // Update SEO metadata for SPA navigation
+    updatePageSEO(targetId);
     // Push browser history so back/forward buttons work
     if (!skipHistory) {
       history.pushState({ page: targetId }, '', '#' + targetId);
@@ -83,6 +85,37 @@ window.addEventListener('popstate', function(e) {
   }
   _activatePage(pageId, true);
 });
+
+// SEO: per-page title and meta description for SPA navigation
+var pageSEO = {
+  home:       { title: 'Community Tax — Enterprise Partner Program | Earn 8-18% Revenue Share', desc: 'Join 10,000+ financial professionals earning revenue from IRS tax resolution referrals. Community Tax handles everything — you earn 8-18% revenue share with zero overhead.' },
+  why:        { title: 'Why Community Tax — Tax Resolution Partner Program Benefits', desc: '18.6 million Americans owe $316B in overdue taxes. Partner with Community Tax to resolve client tax debt, keep relationships, and earn referral revenue.' },
+  how:        { title: 'How It Works — Tax Resolution Referral Process | Community Tax', desc: 'From first conversation to sustained revenue. Our six-phase partner lifecycle maximizes revenue potential and eliminates wasted investment from day one.' },
+  segments:   { title: 'Who We Serve — CPAs, Advisors, Law Firms, Fintech | Community Tax', desc: 'Whether you are a solo CPA or an enterprise fintech platform, Community Tax has a partnership structure designed for your business model and client base.' },
+  tiers:      { title: 'Partner Tiers — Direct, Enterprise, Strategic | Community Tax', desc: 'Three tiers engineered for your model. Compare sales benefits, technical integrations, and revenue share rates across Direct, Enterprise, and Strategic partnerships.' },
+  stories:    { title: 'Partner Success Stories — Real Revenue Results | Community Tax', desc: 'See how financial professionals across the country are growing their practice and earning referral revenue with Community Tax partnerships.' },
+  compare:    { title: 'Compare Tax Resolution Options — In-House vs Community Tax', desc: 'Side-by-side comparison of handling IRS tax resolution in-house, partnering with other programs, or choosing Community Tax.' },
+  apply:      { title: 'Apply to Become a Partner — Community Tax Partner Program', desc: 'Submit your application to join 10,000+ active partners. We evaluate fit, recommend a tier, and walk through revenue structure. 1-day response time.' },
+  contact:    { title: 'Contact Us — Community Tax Partner Support', desc: 'Questions about the partner program? Reach our partner support team for program questions, technical support, or general inquiries.' },
+  faq:        { title: 'Partner FAQ — Tax Resolution Referral Program Questions', desc: 'Answers to common questions about the Community Tax partner program, revenue share, client identification, IRS programs, and referral tracking.' },
+  resources:  { title: 'Partner Resources — Knowledge Base, Templates, Guides | Community Tax', desc: 'Search the partner knowledge base, qualify clients, browse templates, and access onboarding guides for Community Tax referral partners.' },
+  calculator: { title: 'Revenue Calculator — Model Your Referral Earnings | Community Tax', desc: 'Calculate your potential annual revenue from tax resolution referrals. Interactive calculator with scenario modeling and tier comparison.' },
+  scripts:    { title: 'AI Script Builder — Custom Referral Scripts | Community Tax', desc: 'Generate custom referral scripts for emails, phone calls, and client conversations. AI-powered script builder tuned for tax resolution.' },
+  admaker:    { title: 'Ad Maker — Co-Branded Marketing Ads | Community Tax', desc: 'Create professional co-branded ads for social media, email, and print. Upload your logo and generate ready-to-use marketing materials.' },
+  webinars:   { title: 'CE Webinars — IRS-Approved Continuing Education | Community Tax', desc: '500+ hours of on-demand continuing education for tax professionals. Tax resolution, ethics, federal law updates — all free for active partners.' },
+  dashboard:  { title: 'Partner Dashboard Preview — Real-Time Tracking | Community Tax', desc: 'Preview the partner portal with real-time case tracking, pipeline velocity, commission accruals, and conversion metrics.' },
+  onboarding: { title: 'Partner Onboarding Checklist — Get Started | Community Tax', desc: 'Step-by-step onboarding checklist to get your Community Tax partnership up and running quickly.' },
+  portal:     { title: 'Partner Portal — Community Tax Dashboard', desc: 'Access your partner portal for referral tracking, earnings, payouts, and client management.' },
+  privacy:    { title: 'Privacy Policy — Community Tax', desc: 'Community Tax privacy policy covering data collection, usage, and protection for partner program participants.' },
+  terms:      { title: 'Terms of Use — Community Tax', desc: 'Terms of use governing the Community Tax partner program website and services.' },
+  '404':      { title: 'Page Not Found — Community Tax', desc: '' }
+};
+function updatePageSEO(id) {
+  var seo = pageSEO[id] || pageSEO.home;
+  document.title = seo.title;
+  var metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.setAttribute('content', seo.desc);
+}
 
 // Set initial history state — always start on home, clear any stale hash
 history.replaceState({ page: 'home' }, '', window.location.pathname);

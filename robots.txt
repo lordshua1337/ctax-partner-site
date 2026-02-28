@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://partners.communitytax.com/sitemap.xml
+
+# Disallow node_modules and dev files
+Disallow: /node_modules/
+Disallow: /.git/
