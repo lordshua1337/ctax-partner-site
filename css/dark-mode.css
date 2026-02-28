@@ -8,6 +8,7 @@
   --mist:#2a3650;--slate:#7889a4;--ink:#e8ecf2;--body:#b0b8cc;
   --cyan-text:#00C8E0;--teal-text:#00E5CC;
 }
+[data-theme="dark"] :focus-visible{outline-color:var(--sky)}
 
 /* ── Body & page backgrounds ── */
 [data-theme="dark"] body{background:#0c1220;color:#e8ecf2}
