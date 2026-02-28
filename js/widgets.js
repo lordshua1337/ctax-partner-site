@@ -344,7 +344,7 @@ function toggleDarkMode(){
 // Cycles through: enterprise (default/blue) → direct (fire) → strategic (emerald)
 var TIER_ORDER = ['enterprise', 'direct', 'strategic'];
 var TIER_CONFIG = {
-  enterprise: { icon: 'E', badge: 'ENTERPRISE PARTNERS', title: 'Community Tax Partners \u2014 Enterprise Partners', copy: null },
+  enterprise: { icon: 'E', badge: 'ENTERPRISE PARTNERS', title: 'Community Tax Partners \u2014 Enterprise Partners', copy: null, actions: null },
   direct:     { icon: 'D', badge: 'DIRECT PARTNERS', title: 'Community Tax Partners \u2014 Direct Partners', copy: {
     // Hero
     'hero-h1-1': 'Turn Tax Problems',
@@ -394,7 +394,7 @@ var TIER_CONFIG = {
     'explore4-desc': 'Quick answers to the questions every new partner asks.',
     // Footer
     'footer-tag': 'Built for tax preparers who want to help more clients and earn more \u2014 without doing more.'
-  }},
+  }, actions: null },
   strategic:  { icon: 'S', badge: 'STRATEGIC PARTNERS', title: 'Community Tax Partners \u2014 Strategic Partners', copy: {
     // Hero
     'hero-h1-1': 'Turn Tax Debt',
@@ -444,6 +444,8 @@ var TIER_CONFIG = {
     'explore4-desc': 'Compliance, structure, and integration details for your team.',
     // Footer
     'footer-tag': 'Built for organizations that want scalable tax resolution revenue \u2014 without building the operation.'
+  }, actions: {
+    'hero-cta2': function(){ showPage('calculator'); }
   }}
 };
 
@@ -484,11 +486,22 @@ function applyTierText(tier) {
       }
     }
   });
+
+  // Swap onclick actions where defined
+  var actions = cfg.actions || TIER_CONFIG.enterprise.actions;
+  if (!actions) return;
+  document.querySelectorAll('[data-tier-key]').forEach(function(el) {
+    var key = el.getAttribute('data-tier-key');
+    if (actions[key]) {
+      el.onclick = actions[key];
+    }
+  });
 }
 
 // Capture Enterprise defaults from the DOM so toggling back restores original HTML
 function captureEnterpriseDefaults() {
   var defaults = {};
+  var defaultActions = {};
   document.querySelectorAll('[data-tier-key]').forEach(function(el) {
     var key = el.getAttribute('data-tier-key');
     if (TIER_HTML_KEYS[key]) {
@@ -496,8 +509,13 @@ function captureEnterpriseDefaults() {
     } else {
       defaults[key] = el.textContent;
     }
+    // Capture onclick if the element has one
+    if (el.onclick) {
+      defaultActions[key] = el.onclick;
+    }
   });
   TIER_CONFIG.enterprise.copy = defaults;
+  TIER_CONFIG.enterprise.actions = defaultActions;
 }
 
 (function() {
