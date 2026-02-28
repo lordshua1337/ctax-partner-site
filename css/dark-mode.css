@@ -447,6 +447,17 @@
 [data-theme="dark"] .dib-dismiss{color:rgba(255,255,255,0.25)}
 [data-theme="dark"] .dib-dismiss:hover{color:#e0e4ec}
 
+/* ── Keyboard Shortcuts Help Dark Mode ── */
+[data-theme="dark"] .kbd-help-overlay{background:rgba(0,0,0,0.6)}
+[data-theme="dark"] .kbd-help-modal{background:#141e30;box-shadow:0 24px 80px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.06)}
+[data-theme="dark"] .kbd-help-header{border-bottom-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .kbd-help-title{color:#e0e4ec}
+[data-theme="dark"] .kbd-help-close{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .kbd-help-close:hover{background:rgba(255,255,255,0.06);color:#e0e4ec}
+[data-theme="dark"] .kbd-help-row{border-bottom-color:rgba(255,255,255,0.04)}
+[data-theme="dark"] .kbd-help-key{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .kbd-help-desc{color:rgba(255,255,255,0.55)}
+
 /* ── Scroll to Top Dark Mode ── */
 [data-theme="dark"] .stt-btn{background:#141e30;border-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.3)}
 [data-theme="dark"] .stt-btn:hover{color:#4BA3FF;border-color:#4BA3FF}

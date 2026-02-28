@@ -1793,3 +1793,85 @@ document.addEventListener('keydown', function(e) {
     return;
   }
 });
+
+// ── KEYBOARD SHORTCUTS HELP ──────────────────────────────────
+var SHORTCUT_DATA = [
+  { keys: ['Cmd', 'K'], desc: 'Open command bar' },
+  { keys: ['?'], desc: 'Show keyboard shortcuts' },
+  { keys: ['Esc'], desc: 'Close any overlay' },
+  { keys: ['D'], desc: 'Go to Dashboard' },
+  { keys: ['R'], desc: 'Go to Referrals' },
+  { keys: ['E'], desc: 'Go to Earnings' },
+  { keys: ['S'], desc: 'Submit a Referral' },
+  { keys: ['T'], desc: 'Toggle Tunes' }
+];
+
+function kbdHelpOpen() {
+  var existing = document.getElementById('kbd-help-overlay');
+  if (existing) { existing.classList.add('kbd-help-open'); return; }
+
+  var overlay = document.createElement('div');
+  overlay.id = 'kbd-help-overlay';
+  overlay.className = 'kbd-help-overlay kbd-help-open';
+  overlay.onclick = function(e) { if (e.target === overlay) kbdHelpClose(); };
+
+  var html = '<div class="kbd-help-modal">';
+  html += '<div class="kbd-help-header"><div class="kbd-help-title">Keyboard Shortcuts</div><button class="kbd-help-close" onclick="kbdHelpClose()">&times;</button></div>';
+  html += '<div class="kbd-help-list">';
+  SHORTCUT_DATA.forEach(function(s) {
+    html += '<div class="kbd-help-row">';
+    html += '<div class="kbd-help-keys">';
+    s.keys.forEach(function(k) { html += '<kbd class="kbd-help-key">' + k + '</kbd>'; });
+    html += '</div>';
+    html += '<div class="kbd-help-desc">' + s.desc + '</div>';
+    html += '</div>';
+  });
+  html += '</div></div>';
+  overlay.innerHTML = html;
+  document.body.appendChild(overlay);
+}
+
+function kbdHelpClose() {
+  var overlay = document.getElementById('kbd-help-overlay');
+  if (overlay) overlay.classList.remove('kbd-help-open');
+}
+
+// Global shortcut keys (single-key, no modifier, not inside input)
+document.addEventListener('keydown', function(e) {
+  // Skip if user is typing in an input/textarea/select
+  var tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) return;
+  // Skip if any overlay is open
+  var cmdkOpen = document.querySelector('.cmdk-open');
+  if (cmdkOpen) return;
+  var kbdOpen = document.querySelector('.kbd-help-open');
+
+  if (e.key === '?' && !e.metaKey && !e.ctrlKey) {
+    e.preventDefault();
+    if (kbdOpen) kbdHelpClose(); else kbdHelpOpen();
+    return;
+  }
+
+  if (kbdOpen) {
+    if (e.key === 'Escape') { kbdHelpClose(); return; }
+    return;
+  }
+
+  // Single-key nav shortcuts
+  var shortcuts = {
+    'd': 'portal-sec-dashboard',
+    'r': 'portal-sec-referrals',
+    'e': 'portal-sec-earnings',
+    's': 'portal-sec-submit'
+  };
+  if (shortcuts[e.key]) {
+    e.preventDefault();
+    var nav = document.querySelector('[onclick*="' + shortcuts[e.key] + '"]');
+    if (nav) portalNav(nav, shortcuts[e.key]);
+    return;
+  }
+  if (e.key === 't' && typeof toggleTunes === 'function') {
+    e.preventDefault();
+    toggleTunes();
+  }
+});
