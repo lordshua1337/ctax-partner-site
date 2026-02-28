@@ -1,0 +1,16 @@
+{
+  "name": "Community Tax Partner Program",
+  "short_name": "CTax Partners",
+  "description": "Enterprise partner portal for IRS tax resolution referrals. Track referrals, earn commissions, access AI tools.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A1628",
+  "theme_color": "#0B5FD8",
+  "icons": [
+    {
+      "src": "images/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
