@@ -121,7 +121,8 @@
       <div class="portal-search-wrap">
         <div class="portal-search">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" class="portal-search-input" id="portal-global-search" placeholder="Search referrals, documents, tickets..." oninput="portalGlobalSearch(this.value)">
+          <input type="text" class="portal-search-input" id="portal-global-search" placeholder="Search referrals, documents, tickets..." oninput="portalGlobalSearch(this.value)" onclick="cmdkOpen()">
+          <kbd class="portal-search-kbd" onclick="cmdkOpen()">Cmd+K</kbd>
         </div>
         <div class="portal-search-results" id="portal-search-results"></div>
       </div>
@@ -3258,6 +3259,22 @@
       <div class="jazz-picker-list" id="jazz-picker-list"></div>
     </div>
     <audio id="jazz-audio" preload="none"></audio>
+  </div>
+
+  <!-- Command Bar (Cmd+K) -->
+  <div class="cmdk-overlay" id="cmdk-overlay" onclick="cmdkClose()">
+    <div class="cmdk-modal" onclick="event.stopPropagation()">
+      <div class="cmdk-search-row">
+        <svg class="cmdk-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="cmdk-input" id="cmdk-input" placeholder="Type a command or search..." oninput="cmdkFilter(this.value)" autocomplete="off">
+        <kbd class="cmdk-esc">esc</kbd>
+      </div>
+      <div class="cmdk-list" id="cmdk-list"></div>
+      <div class="cmdk-footer">
+        <span><kbd>enter</kbd> to select</span>
+        <span><kbd>esc</kbd> to close</span>
+      </div>
+    </div>
   </div>
 
   <!-- Toast Container -->
