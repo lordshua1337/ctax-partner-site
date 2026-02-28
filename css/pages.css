@@ -1912,10 +1912,18 @@ body.portal-mode{padding-bottom:0}
 
 /* Documents mobile */
 @media(max-width:768px){
-  .doc-stats{flex-direction:column;align-items:flex-start;gap:8px}
-  .doc-stat-sep{width:100%;height:1px}
-  .doc-table-head,.doc-row{grid-template-columns:2fr 1fr 0.8fr;font-size:12px}
-  .doc-table-head>:nth-child(1),.doc-row>:nth-child(1),.doc-table-head>:nth-child(5),.doc-row>:nth-child(5),.doc-table-head>:nth-child(6),.doc-row>:nth-child(6){display:none}
+  .doc-stats{
+    display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    gap:16px;padding:12px 16px;flex-wrap:nowrap
+  }
+  .doc-stat-sep{display:none}
+  .doc-stats>div{white-space:nowrap;flex-shrink:0}
+  .doc-table-head,.doc-row{grid-template-columns:2fr 0.8fr 0.8fr;font-size:12px}
+  .doc-table-head>:nth-child(1),.doc-row>:nth-child(1),
+  .doc-table-head>:nth-child(4),.doc-row>:nth-child(4),
+  .doc-table-head>:nth-child(5),.doc-row>:nth-child(5),
+  .doc-table-head>:nth-child(6),.doc-row>:nth-child(6){display:none}
+  .doc-tabs{-webkit-overflow-scrolling:touch}
 }
 
 /* ── REVENUE CALCULATOR SECTION ── */
@@ -1996,6 +2004,10 @@ body.portal-mode{padding-bottom:0}
 /* Calculator mobile */
 @media(max-width:768px){
   .calc-layout{grid-template-columns:1fr}
+  .calc-tier-pills{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;gap:6px}
+  .calc-tier-pill{white-space:nowrap;flex-shrink:0;min-width:auto}
+  .calc-range::-webkit-slider-thumb{width:32px;height:32px}
+  .calc-range::-moz-range-thumb{width:32px;height:32px}
   .calc-tier-row{flex-direction:column}
   .calc-tier-arrow{transform:rotate(90deg)}
 }
@@ -2096,6 +2108,8 @@ body.portal-mode{padding-bottom:0}
   .ce-progress-row{flex-direction:column;text-align:center}
   .ce-progress-meta{flex-direction:column;gap:4px;align-items:center}
   .ce-grid{grid-template-columns:1fr}
+  .ce-card .ce-video-wrap{position:relative;padding-top:56.25%;height:0}
+  .ce-card .ce-video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%}
 }
 
 /* ── MARKETING KIT SECTION ── */
@@ -2160,7 +2174,10 @@ body.portal-mode{padding-bottom:0}
 /* Marketing mobile */
 @media(max-width:768px){
   .mk-grid{grid-template-columns:1fr}
+  .mk-card{width:100%}
   .mk-preview{height:110px}
+  .mk-tabs{-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+  .mk-tab{white-space:nowrap;flex-shrink:0}
 }
 
 /* ── TRAINING SECTION ── */
@@ -2248,6 +2265,10 @@ body.portal-mode{padding-bottom:0}
 @media(max-width:768px){
   .trn-grid{grid-template-columns:1fr}
   .trn-bottom-row{grid-template-columns:1fr}
+  .trn-onboard-bar{width:100%}
+  .trn-check-item{padding:12px 0}
+  .trn-video-wrap{position:relative;padding-top:56.25%;height:0}
+  .trn-video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%}
 }
 
 /* ── SETTINGS SECTION ── */
@@ -2338,6 +2359,8 @@ body.portal-mode{padding-bottom:0}
 /* Settings mobile */
 @media(max-width:768px){
   .set-form-grid{grid-template-columns:1fr}
+  .set-field-full{grid-column:auto}
+  .set-input{min-height:44px;font-size:16px}
   .set-team-head,.set-team-row{grid-template-columns:1.5fr 0.8fr 0.8fr;font-size:12px}
   .set-team-head>:nth-child(4),.set-team-head>:nth-child(5),.set-team-row>:nth-child(4),.set-team-row>:nth-child(5){display:none}
   .set-tier-card{flex-direction:column;align-items:flex-start}
@@ -2430,8 +2453,11 @@ body.portal-mode{padding-bottom:0}
 @media(max-width:768px){
   .sup-top-row{grid-template-columns:1fr}
   .sup-field-row{grid-template-columns:1fr}
+  .sup-input,.sup-select,.sup-textarea{min-height:44px;font-size:16px}
   .sup-tickets-head,.sup-ticket-row{grid-template-columns:1fr 2fr 0.8fr;font-size:12px}
   .sup-tickets-head>:nth-child(4),.sup-tickets-head>:nth-child(5),.sup-ticket-row>:nth-child(4),.sup-ticket-row>:nth-child(5){display:none}
+  .sup-manager-actions{flex-direction:column}
+  .sup-manager-actions a,.sup-manager-actions button{width:100%;text-align:center;min-height:44px}
 }
 
 /* Mobile portal */
@@ -3300,17 +3326,20 @@ body.portal-mode{padding-bottom:0}
   .pb-tab{padding:10px 14px;font-size:12px;white-space:nowrap}
   .pb-card-grid{grid-template-columns:1fr}
   .pb-network-grid{grid-template-columns:1fr}
+  .pb-card{width:100%}
   .pb-script-text{font-size:14px;line-height:1.7;padding:14px 16px}
   .pb-obj-a{font-size:14px;line-height:1.7}
   .pb-streak{flex-direction:column;gap:14px}
   .pb-streak-right{width:100%;justify-content:flex-start}
   .pb-quiz-scenario{font-size:14px;padding:14px 16px}
+  .pb-tl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .bp-form-grid{grid-template-columns:1fr}
   .bp-insights-row{grid-template-columns:1fr}
   .bp-whatif-row{grid-template-columns:1fr}
   .bp-action-bar{flex-direction:column;align-items:flex-start}
   .bp-drip-bar{flex-direction:column;gap:12px;align-items:flex-start}
-  .bp-generate-btn-wrap{position:sticky;bottom:0;background:var(--white);padding:12px 0;border-top:1px solid var(--off2);z-index:5}
+  .bp-generate-btn-wrap{position:sticky;bottom:68px;background:var(--white);padding:12px 0;border-top:1px solid var(--off2);z-index:5}
+  .bp-month{margin-bottom:24px}
 }
 
 /* --- Guided Tour --- */
