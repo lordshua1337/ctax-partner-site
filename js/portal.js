@@ -135,9 +135,27 @@ function refBulkExport() {
 function portalNav(el, secId) {
   document.querySelectorAll('.portal-nav-item').forEach(function(a) { a.classList.remove('pni-active'); });
   el.classList.add('pni-active');
-  document.querySelectorAll('.portal-section').forEach(function(s) { s.classList.remove('portal-sec-active'); });
-  var sec = document.getElementById(secId);
-  if (sec) sec.classList.add('portal-sec-active');
+
+  // Fade transition between sections
+  var currentSec = document.querySelector('.portal-sec-active');
+  var nextSec = document.getElementById(secId);
+  if (currentSec && nextSec && currentSec !== nextSec) {
+    currentSec.classList.add('portal-sec-exit');
+    setTimeout(function() {
+      document.querySelectorAll('.portal-section').forEach(function(s) {
+        s.classList.remove('portal-sec-active');
+        s.classList.remove('portal-sec-exit');
+      });
+      nextSec.classList.add('portal-sec-active');
+      nextSec.classList.add('portal-sec-enter');
+      setTimeout(function() { nextSec.classList.remove('portal-sec-enter'); }, 250);
+    }, 120);
+  } else {
+    document.querySelectorAll('.portal-section').forEach(function(s) { s.classList.remove('portal-sec-active'); });
+    if (nextSec) nextSec.classList.add('portal-sec-active');
+  }
+  var sec = nextSec;
+
   document.querySelector('.portal-sidebar').classList.remove('portal-sb-open');
   document.querySelector('.portal-main').scrollTo(0, 0);
 
@@ -1569,6 +1587,25 @@ function cmdkExecute(idx) {
     showPage('admaker');
   }
 }
+
+// ── SCROLL TO TOP ───────────────────────────────────────────
+function sttScrollTop() {
+  var main = document.querySelector('.portal-main');
+  if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+(function() {
+  var main = document.querySelector('.portal-main');
+  var btn = document.getElementById('stt-btn');
+  if (!main || !btn) return;
+  main.addEventListener('scroll', function() {
+    if (main.scrollTop > 400) {
+      btn.classList.add('stt-visible');
+    } else {
+      btn.classList.remove('stt-visible');
+    }
+  });
+})();
 
 // ── PARTNER LEADERBOARD ─────────────────────────────────────
 var DLB_DATA = {

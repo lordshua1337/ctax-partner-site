@@ -447,6 +447,10 @@
 [data-theme="dark"] .dib-dismiss{color:rgba(255,255,255,0.25)}
 [data-theme="dark"] .dib-dismiss:hover{color:#e0e4ec}
 
+/* ── Scroll to Top Dark Mode ── */
+[data-theme="dark"] .stt-btn{background:#141e30;border-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.3)}
+[data-theme="dark"] .stt-btn:hover{color:#4BA3FF;border-color:#4BA3FF}
+
 /* ── Guided Tour Dark Mode ── */
 [data-theme="dark"] .tour-overlay{background:rgba(0,0,0,0.7)}
 [data-theme="dark"] .tour-tooltip{background:linear-gradient(135deg,#0a1525 0%,#060d18 100%);border-color:rgba(75,163,255,0.15)}

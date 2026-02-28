@@ -1558,7 +1558,16 @@ body.portal-mode{padding-bottom:0}
 
 /* Sections */
 .portal-section{display:none;padding:32px 28px 180px}
-.portal-sec-active{display:block}
+.portal-sec-active{display:block;animation:secFadeIn 0.25s ease}
+.portal-sec-exit{opacity:0;transition:opacity 0.12s ease}
+.portal-sec-enter{animation:secFadeIn 0.25s ease}
+@keyframes secFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* Scroll-to-top */
+.stt-btn{position:fixed;bottom:80px;right:24px;width:40px;height:40px;border-radius:50%;border:1px solid var(--off2);background:var(--white);box-shadow:0 2px 12px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--slate);opacity:0;pointer-events:none;transition:all 0.25s ease;z-index:999}
+.stt-btn:hover{color:var(--blue);border-color:var(--blue);box-shadow:0 4px 16px rgba(11,95,216,0.12)}
+.stt-visible{opacity:1;pointer-events:auto}
+
 .portal-sec-header{margin-bottom:28px}
 .portal-sec-title{font-family:'DM Serif Display',serif;font-size:26px;color:var(--navy);margin-bottom:6px;letter-spacing:-0.01em}
 .portal-sec-desc{font-size:14px;color:var(--body);line-height:1.6;margin-bottom:24px}
