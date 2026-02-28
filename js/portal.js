@@ -1410,7 +1410,38 @@ function showAchievementToast(msg) {
   if (!toast) return;
   toast.textContent = msg;
   toast.classList.add('mob-achieve-show');
+  fireConfetti();
   setTimeout(function() { toast.classList.remove('mob-achieve-show'); }, 3000);
+}
+
+// ── CONFETTI ──────────────────────────────────────────────
+function fireConfetti() {
+  var count = 80;
+  var colors = ['#0B5FD8', '#00C8E0', '#4BA3FF', '#FFD700', '#FF6B35', '#059669', '#8B5CF6'];
+  var container = document.createElement('div');
+  container.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:999999;overflow:hidden';
+  document.body.appendChild(container);
+
+  for (var i = 0; i < count; i++) {
+    var piece = document.createElement('div');
+    var size = Math.random() * 8 + 4;
+    var color = colors[Math.floor(Math.random() * colors.length)];
+    var left = Math.random() * 100;
+    var delay = Math.random() * 400;
+    var duration = Math.random() * 1500 + 1500;
+    var drift = (Math.random() - 0.5) * 200;
+    var rotation = Math.random() * 720 - 360;
+    var shape = Math.random() > 0.5 ? '50%' : '0';
+
+    piece.style.cssText = 'position:absolute;top:-12px;left:' + left + '%;width:' + size + 'px;height:' + (size * 0.6) + 'px;background:' + color + ';border-radius:' + shape + ';opacity:1;animation:confettiFall ' + duration + 'ms ease-out ' + delay + 'ms forwards';
+    piece.style.setProperty('--cf-drift', drift + 'px');
+    piece.style.setProperty('--cf-rot', rotation + 'deg');
+    container.appendChild(piece);
+  }
+
+  setTimeout(function() {
+    if (container.parentNode) container.parentNode.removeChild(container);
+  }, 3000);
 }
 
 // ── COMMAND BAR (Cmd+K) ──────────────────────────────────────

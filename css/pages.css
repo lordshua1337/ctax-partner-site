@@ -2817,6 +2817,13 @@ body.portal-mode{padding-bottom:0}
 .dib-dismiss{width:28px;height:28px;border-radius:6px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mist);flex-shrink:0;transition:color 0.15s}
 .dib-dismiss:hover{color:var(--navy)}
 
+/* Confetti Animation */
+@keyframes confettiFall{
+  0%{transform:translateY(0) translateX(0) rotate(0);opacity:1}
+  75%{opacity:1}
+  100%{transform:translateY(100vh) translateX(var(--cf-drift,0)) rotate(var(--cf-rot,360deg));opacity:0}
+}
+
 /* Referral Link Generator */
 .rlg-wrap{background:var(--white);border:1px solid var(--off2);border-radius:14px;padding:24px;margin-bottom:24px}
 .rlg-header{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:20px;flex-wrap:wrap}
