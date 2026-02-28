@@ -920,18 +920,12 @@ function rpRate(n) {
 
 // ── TUNES / MUSIC WIDGET ──────────────────────────────────────
 var TUNES_STATIONS = [
-  { id: 'beatblender', name: 'Beat Blender', desc: 'Deep house & downtempo chill', color: '#f59e0b', url: 'https://ice2.somafm.com/beatblender-128-mp3' },
-  { id: 'groovesalad', name: 'Groove Salad', desc: 'Ambient & downtempo beats', color: '#22c55e', url: 'https://ice2.somafm.com/groovesalad-128-mp3' },
-  { id: 'lush', name: 'Lush', desc: 'Mellow vocals, electronic warmth', color: '#ec4899', url: 'https://ice2.somafm.com/lush-128-mp3' },
-  { id: 'bossa', name: 'Bossa Beyond', desc: 'Smooth Brazilian rhythms', color: '#10b981', url: 'https://ice2.somafm.com/bossa-128-mp3' },
-  { id: 'secretagent', name: 'Secret Agent', desc: 'Cinematic, mysterious, stylish', color: '#dc2626', url: 'https://ice2.somafm.com/secretagent-128-mp3' },
-  { id: 'sonicuniverse', name: 'Sonic Universe', desc: 'Jazz explorations & fusion', color: '#0891b2', url: 'https://ice2.somafm.com/sonicuniverse-128-mp3' },
-  { id: '7soul', name: 'Seven Soul', desc: 'Vintage soul from original 45s', color: '#a855f7', url: 'https://ice2.somafm.com/7soul-128-mp3' },
-  { id: 'indiepop', name: 'Indie Pop', desc: 'New & classic indie pop tracks', color: '#3b82f6', url: 'https://ice2.somafm.com/indiepop-128-mp3' },
-  { id: 'seventies', name: 'Left Coast 70s', desc: 'Mellow album rock from the 70s', color: '#e87b35', url: 'https://ice2.somafm.com/seventies-128-mp3' },
-  { id: 'folkfwd', name: 'Folk Forward', desc: 'Indie folk, alt-folk & folk classics', color: '#65a30d', url: 'https://ice2.somafm.com/folkfwd-128-mp3' },
-  { id: 'illstreet', name: 'Illinois Street Lounge', desc: 'Classic lounge & exotica', color: '#E84400', url: 'https://ice2.somafm.com/illstreet-128-mp3' },
-  { id: 'thistle', name: 'Thistle Radio', desc: 'Celtic roots & branches', color: '#059669', url: 'https://ice2.somafm.com/thistle-128-mp3' }
+  { id: 'beatblender', name: 'Chill Beats', desc: 'Downtempo & deep house', color: '#f59e0b', url: 'https://ice2.somafm.com/beatblender-128-mp3' },
+  { id: 'jazz24', name: 'Jazz', desc: 'Straight-ahead jazz radio', color: '#0891b2', url: 'https://live.wostreaming.net/direct/ppm-jazz24mp3-ibc1' },
+  { id: 'classical', name: 'Classical', desc: 'Classical public radio', color: '#6366f1', url: 'https://stream.wqxr.org/wqxr' },
+  { id: '7soul', name: 'Soul & Motown', desc: 'Vintage soul from original 45s', color: '#a855f7', url: 'https://ice2.somafm.com/7soul-128-mp3' },
+  { id: 'seventies', name: '70s Rock', desc: 'Mellow album rock from the 70s', color: '#e87b35', url: 'https://ice2.somafm.com/seventies-128-mp3' },
+  { id: 'bossa', name: 'Bossa Nova', desc: 'Smooth Brazilian rhythms', color: '#10b981', url: 'https://ice2.somafm.com/bossa-128-mp3' }
 ];
 var _jazzPlaying = false;
 var _jazzStation = 0;
@@ -1008,7 +1002,7 @@ function updatePlaybackUI(station) {
   if (iconPause) iconPause.style.display = '';
   if (eq) eq.style.display = 'flex';
   if (nowEl) nowEl.textContent = station.name;
-  if (subEl) subEl.textContent = 'SomaFM \u00B7 ' + station.desc;
+  if (subEl) subEl.textContent = station.desc;
   // Update active state in picker if open
   var picks = document.querySelectorAll('.jazz-pick');
   picks.forEach(function(p, i) {
@@ -1131,6 +1125,6 @@ function updateTunesGrid() {
     var nowEl = document.getElementById('jazz-now');
     var subEl = document.getElementById('jazz-station-sub');
     if (nowEl) nowEl.textContent = station.name;
-    if (subEl) subEl.textContent = 'SomaFM \u00B7 ' + station.desc;
+    if (subEl) subEl.textContent = station.desc;
   }
 })();
