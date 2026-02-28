@@ -61,6 +61,10 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
           Revenue Calculator
         </a>
+        <a class="portal-nav-item" id="nav-tunes" onclick="portalNav(this,'portal-sec-tunes')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          Tunes
+        </a>
       </div>
 
       <div class="portal-nav-group">
@@ -97,10 +101,6 @@
     </nav>
 
     <div class="portal-sidebar-footer">
-      <a class="portal-nav-item" onclick="openJazzBar()" id="jazz-sidebar-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-        Jazz Radio
-      </a>
       <a class="portal-nav-item" onclick="showPage('home')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Back to Site
@@ -146,6 +146,12 @@
           </div>
         </div>
         <span class="portal-demo-badge">Demo Mode</span>
+        <label class="tunes-toggle" id="tunes-toggle">
+          <span class="tunes-label">Tunes</span>
+          <div class="tunes-switch" onclick="toggleTunes()">
+            <div class="tunes-track"><div class="tunes-thumb" id="tunes-thumb"></div></div>
+          </div>
+        </label>
         <div class="portal-avatar">JH</div>
       </div>
     </div>
@@ -3079,6 +3085,20 @@
       </div>
     </div>
 
+    <!-- ═══ TUNES SECTION ═══ -->
+    <div class="portal-section" id="portal-sec-tunes">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Tunes</h2>
+        <p class="portal-sec-desc">Pick a vibe. Free streaming radio powered by SomaFM — jazz, ambient, lounge, chill, and more.</p>
+      </div>
+
+      <div class="tunes-grid" id="tunes-grid"></div>
+
+      <div class="tunes-powered">
+        Powered by <a href="https://somafm.com" target="_blank" rel="noopener">SomaFM</a> — listener-supported, commercial-free internet radio.
+      </div>
+    </div>
+
   </main>
 
   <!-- Mobile Bottom Navigation -->
@@ -3149,53 +3169,92 @@
   <!-- Resolution Pro Contact Card -->
   <div class="rp-card" id="rp-card">
     <button class="rp-close" onclick="closeResolutionPro()" aria-label="Close">&times;</button>
-    <div class="rp-header">
+    <div class="rp-hero">
       <div class="rp-avatar-ring">
-        <img class="rp-avatar" src="images/resolution-pro.jpg" alt="Sarah Mitchell" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" width="56" height="56">
+        <img class="rp-avatar" src="images/resolution-pro.jpg" alt="Sarah Mitchell" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" width="72" height="72">
         <div class="rp-avatar-fallback" style="display:none">SM</div>
       </div>
-      <div class="rp-info">
-        <div class="rp-name">Sarah Mitchell</div>
-        <div class="rp-title">Resolution Specialist</div>
-        <div class="rp-status"><span class="rp-dot"></span>Available now</div>
+      <div class="rp-status"><span class="rp-dot"></span>Available now</div>
+    </div>
+    <div class="rp-name">Sarah Mitchell</div>
+    <div class="rp-title">Your Resolution Specialist</div>
+    <p class="rp-bio">13 years resolving IRS cases. Former revenue officer who switched sides to help people. I treat every referral like my own client — fast updates, no runaround, real results.</p>
+    <div class="rp-quick-actions">
+      <a class="rp-quick" href="tel:+13125551947" title="Call Sarah">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        <span>Call</span>
+      </a>
+      <a class="rp-quick" href="mailto:s.mitchell@communitytax.com" title="Email Sarah">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span>Email</span>
+      </a>
+      <button class="rp-quick" onclick="rpShowMessage()" title="Send a message">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <span>Message</span>
+      </button>
+      <button class="rp-quick rp-quick-heart" id="rp-like-btn" onclick="rpToggleLike()" title="Send Sarah a like">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        <span>Like</span>
+      </button>
+    </div>
+    <!-- Direct Message Panel -->
+    <div class="rp-msg-panel" id="rp-msg-panel" style="display:none">
+      <textarea class="rp-msg-input" id="rp-msg-input" placeholder="Write Sarah a message..." rows="3"></textarea>
+      <div class="rp-msg-actions">
+        <button class="rp-msg-cancel" onclick="rpHideMessage()">Cancel</button>
+        <button class="rp-msg-send" onclick="rpSendMessage()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Send
+        </button>
       </div>
     </div>
-    <p class="rp-bio">13 years in IRS resolution. Former revenue officer turned partner advocate. I make sure your referrals close fast and your clients feel taken care of.</p>
-    <div class="rp-actions">
-      <a class="rp-btn rp-btn-call" href="tel:+13125551947">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-        (312) 555-1947
-      </a>
-      <a class="rp-btn rp-btn-email" href="mailto:s.mitchell@communitytax.com">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Email Sarah
-      </a>
+    <!-- Rating Panel -->
+    <div class="rp-rating" id="rp-rating">
+      <div class="rp-rating-label">Rate your experience with Sarah</div>
+      <div class="rp-stars" id="rp-stars">
+        <button class="rp-star" onclick="rpRate(1)" data-star="1">&#9733;</button>
+        <button class="rp-star" onclick="rpRate(2)" data-star="2">&#9733;</button>
+        <button class="rp-star" onclick="rpRate(3)" data-star="3">&#9733;</button>
+        <button class="rp-star" onclick="rpRate(4)" data-star="4">&#9733;</button>
+        <button class="rp-star" onclick="rpRate(5)" data-star="5">&#9733;</button>
+      </div>
+    </div>
+    <div class="rp-phone-line">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      (312) 555-1947
     </div>
   </div>
   <button class="rp-fab" id="rp-fab" onclick="toggleResolutionPro()" aria-label="Contact your resolution pro">
-    <svg class="rp-fab-icon" id="rp-fab-icon-person" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    <svg class="rp-fab-icon" id="rp-fab-icon-x" style="display:none" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    <span class="rp-fab-label">Your Pro</span>
+    <div class="rp-fab-avatar">
+      <img src="images/resolution-pro.jpg" alt="" width="40" height="40" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <span class="rp-fab-initials" style="display:none">SM</span>
+    </div>
+    <span class="rp-fab-pulse"></span>
   </button>
 
-  <!-- Jazz Radio Widget -->
+  <!-- Tunes Bar -->
   <div class="jazz-bar" id="jazz-bar">
-    <button class="jazz-play" id="jazz-play" onclick="toggleJazz()" aria-label="Play jazz radio">
+    <button class="jazz-play" id="jazz-play" onclick="toggleJazz()" aria-label="Play/pause">
       <svg class="jazz-icon-play" id="jazz-icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       <svg class="jazz-icon-pause" id="jazz-icon-pause" style="display:none" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
     </button>
-    <div class="jazz-info">
-      <div class="jazz-now" id="jazz-now">Jazz FM</div>
-      <div class="jazz-station">SomaFM &middot; illinois street lounge</div>
+    <div class="jazz-info" onclick="toggleStationPicker()">
+      <div class="jazz-now" id="jazz-now">Illinois Street Lounge</div>
+      <div class="jazz-station" id="jazz-station-sub">SomaFM &middot; exotica &amp; lounge</div>
+    </div>
+    <div class="jazz-eq" id="jazz-eq" style="display:none">
+      <div class="jazz-eq-bar"></div><div class="jazz-eq-bar"></div><div class="jazz-eq-bar"></div><div class="jazz-eq-bar"></div><div class="jazz-eq-bar"></div>
     </div>
     <div class="jazz-vol-wrap">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg>
       <input type="range" class="jazz-vol" id="jazz-vol" min="0" max="100" value="40" oninput="setJazzVolume(this.value)">
     </div>
-    <button class="jazz-close" onclick="closeJazzBar()" aria-label="Close music player">&times;</button>
-    <audio id="jazz-audio" preload="none">
-      <source src="https://ice2.somafm.com/illstreet-128-mp3" type="audio/mpeg">
-    </audio>
+    <!-- Station Picker -->
+    <div class="jazz-picker" id="jazz-picker" style="display:none">
+      <div class="jazz-picker-title">Choose your vibe</div>
+      <div class="jazz-picker-list" id="jazz-picker-list"></div>
+    </div>
+    <audio id="jazz-audio" preload="none"></audio>
   </div>
 
   <!-- Toast Container -->

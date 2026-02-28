@@ -851,126 +851,284 @@ function dismissToast(toast) {
 // ── RESOLUTION PRO CONTACT CARD ──────────────────────────────────────
 function toggleResolutionPro() {
   var card = document.getElementById('rp-card');
-  var iconPerson = document.getElementById('rp-fab-icon-person');
-  var iconX = document.getElementById('rp-fab-icon-x');
   if (!card) return;
-  var isOpen = card.classList.contains('rp-open');
   card.classList.toggle('rp-open');
-  if (iconPerson) iconPerson.style.display = isOpen ? '' : 'none';
-  if (iconX) iconX.style.display = isOpen ? 'none' : '';
 }
 
 function closeResolutionPro() {
   var card = document.getElementById('rp-card');
-  var iconPerson = document.getElementById('rp-fab-icon-person');
-  var iconX = document.getElementById('rp-fab-icon-x');
   if (card) card.classList.remove('rp-open');
-  if (iconPerson) iconPerson.style.display = '';
-  if (iconX) iconX.style.display = 'none';
 }
 
-// ── JAZZ RADIO WIDGET ──────────────────────────────────────
+function rpShowMessage() {
+  var panel = document.getElementById('rp-msg-panel');
+  if (panel) { panel.style.display = 'block'; document.getElementById('rp-msg-input').focus(); }
+}
+
+function rpHideMessage() {
+  var panel = document.getElementById('rp-msg-panel');
+  if (panel) panel.style.display = 'none';
+}
+
+function rpSendMessage() {
+  var input = document.getElementById('rp-msg-input');
+  if (!input || !input.value.trim()) return;
+  if (typeof showToast === 'function') showToast('Message sent to Sarah!', 'success');
+  input.value = '';
+  rpHideMessage();
+}
+
+function rpToggleLike() {
+  var btn = document.getElementById('rp-like-btn');
+  if (!btn) return;
+  var liked = btn.classList.toggle('rp-liked');
+  localStorage.setItem('ctax_rp_liked', liked ? '1' : '0');
+  if (liked && typeof showToast === 'function') showToast('Sarah appreciates the love!', 'success');
+}
+
+function rpRate(n) {
+  var stars = document.querySelectorAll('.rp-star');
+  var ratingWrap = document.getElementById('rp-rating');
+  stars.forEach(function(s) {
+    var v = parseInt(s.getAttribute('data-star'));
+    s.classList.toggle('rp-star-filled', v <= n);
+    s.classList.remove('rp-star-active');
+  });
+  if (ratingWrap) ratingWrap.classList.add('rp-rated');
+  localStorage.setItem('ctax_rp_rating', n);
+  if (typeof showToast === 'function') showToast('Thanks for rating Sarah ' + n + '/5!', 'success');
+}
+
+// Restore RP state on load
+(function() {
+  var liked = localStorage.getItem('ctax_rp_liked');
+  var rating = localStorage.getItem('ctax_rp_rating');
+  if (liked === '1') {
+    var btn = document.getElementById('rp-like-btn');
+    if (btn) btn.classList.add('rp-liked');
+  }
+  if (rating) {
+    var n = parseInt(rating);
+    var stars = document.querySelectorAll('.rp-star');
+    var ratingWrap = document.getElementById('rp-rating');
+    stars.forEach(function(s) {
+      s.classList.toggle('rp-star-filled', parseInt(s.getAttribute('data-star')) <= n);
+    });
+    if (ratingWrap) ratingWrap.classList.add('rp-rated');
+  }
+})();
+
+// ── TUNES / MUSIC WIDGET ──────────────────────────────────────
+var TUNES_STATIONS = [
+  { id: 'illstreet', name: 'Illinois Street Lounge', desc: 'Exotica & vintage lounge', color: '#E84400', url: 'https://ice2.somafm.com/illstreet-128-mp3' },
+  { id: 'groovesalad', name: 'Groove Salad', desc: 'Ambient & downtempo beats', color: '#22c55e', url: 'https://ice2.somafm.com/groovesalad-128-mp3' },
+  { id: 'dronezone', name: 'Drone Zone', desc: 'Atmospheric textures, minimal beats', color: '#7c3aed', url: 'https://ice2.somafm.com/dronezone-128-mp3' },
+  { id: 'deepspaceone', name: 'Deep Space One', desc: 'Deep ambient & space music', color: '#0ea5e9', url: 'https://ice2.somafm.com/deepspaceone-128-mp3' },
+  { id: 'secretagent', name: 'Secret Agent', desc: 'Cinematic, mysterious, stylish', color: '#dc2626', url: 'https://ice2.somafm.com/secretagent-128-mp3' },
+  { id: 'lush', name: 'Lush', desc: 'Mellow vocals, electronic warmth', color: '#ec4899', url: 'https://ice2.somafm.com/lush-128-mp3' },
+  { id: 'beatblender', name: 'Beat Blender', desc: 'Deep house & downtempo chill', color: '#f59e0b', url: 'https://ice2.somafm.com/beatblender-128-mp3' },
+  { id: 'spacestation', name: 'Space Station Soma', desc: 'Spaced-out ambient electronica', color: '#6366f1', url: 'https://ice2.somafm.com/spacestation-128-mp3' },
+  { id: 'sonicuniverse', name: 'Sonic Universe', desc: 'Eclectic jazz explorations', color: '#0891b2', url: 'https://ice2.somafm.com/sonicuniverse-128-mp3' },
+  { id: 'bossa', name: 'Bossa Beyond', desc: 'Smooth Brazilian rhythms', color: '#10b981', url: 'https://ice2.somafm.com/bossa-128-mp3' }
+];
 var _jazzPlaying = false;
+var _jazzStation = 0;
+
+function toggleTunes() {
+  var toggle = document.getElementById('tunes-toggle');
+  var bar = document.getElementById('jazz-bar');
+  if (!toggle || !bar) return;
+  var isOn = toggle.classList.toggle('tunes-on');
+  if (isOn) {
+    bar.classList.add('jazz-visible');
+    adjustFabForTunes(true);
+    if (!_jazzPlaying) playStation(_jazzStation);
+    localStorage.setItem('ctax_tunes', '1');
+    if (typeof showToast === 'function') {
+      showToast('Head to the Tunes tab in your menu to change stations', 'info');
+    }
+  } else {
+    stopPlayback();
+    bar.classList.remove('jazz-visible');
+    adjustFabForTunes(false);
+    closePicker();
+    localStorage.setItem('ctax_tunes', '0');
+  }
+}
 
 function toggleJazz() {
+  if (_jazzPlaying) {
+    stopPlayback();
+  } else {
+    playStation(_jazzStation);
+  }
+}
+
+function playStation(idx) {
   var audio = document.getElementById('jazz-audio');
-  var bar = document.getElementById('jazz-bar');
+  if (!audio) return;
+  var station = TUNES_STATIONS[idx];
+  _jazzStation = idx;
+  audio.src = station.url;
+  audio.volume = (document.getElementById('jazz-vol') || {}).value / 100 || 0.4;
+  audio.play().then(function() {
+    _jazzPlaying = true;
+    updatePlaybackUI(station);
+    localStorage.setItem('ctax_tunes_station', idx);
+  }).catch(function() {
+    var nowEl = document.getElementById('jazz-now');
+    if (nowEl) nowEl.textContent = 'Tap play to start';
+  });
+}
+
+function stopPlayback() {
+  var audio = document.getElementById('jazz-audio');
+  if (audio) audio.pause();
+  _jazzPlaying = false;
   var iconPlay = document.getElementById('jazz-icon-play');
   var iconPause = document.getElementById('jazz-icon-pause');
+  var eq = document.getElementById('jazz-eq');
   var nowEl = document.getElementById('jazz-now');
-  if (!audio) return;
+  if (iconPlay) iconPlay.style.display = '';
+  if (iconPause) iconPause.style.display = 'none';
+  if (eq) eq.style.display = 'none';
+  if (nowEl) nowEl.textContent = 'Paused';
+  updateTunesGrid();
+}
 
-  // Show the bar if hidden
-  if (bar && !bar.classList.contains('jazz-visible')) {
-    bar.classList.add('jazz-visible');
-    adjustFabForJazz(true);
-  }
-
-  if (_jazzPlaying) {
-    audio.pause();
-    _jazzPlaying = false;
-    if (iconPlay) iconPlay.style.display = '';
-    if (iconPause) iconPause.style.display = 'none';
-    if (nowEl) nowEl.textContent = 'Paused';
-    removeEqBars();
-  } else {
-    audio.volume = (document.getElementById('jazz-vol') || {}).value / 100 || 0.4;
-    audio.play().then(function() {
-      _jazzPlaying = true;
-      if (iconPlay) iconPlay.style.display = 'none';
-      if (iconPause) iconPause.style.display = '';
-      if (nowEl) nowEl.textContent = 'Now Playing';
-      addEqBars();
-    }).catch(function() {
-      if (nowEl) nowEl.textContent = 'Tap to play';
-    });
-  }
-
-  localStorage.setItem('ctax_jazz', _jazzPlaying ? '1' : '0');
+function updatePlaybackUI(station) {
+  var iconPlay = document.getElementById('jazz-icon-play');
+  var iconPause = document.getElementById('jazz-icon-pause');
+  var eq = document.getElementById('jazz-eq');
+  var nowEl = document.getElementById('jazz-now');
+  var subEl = document.getElementById('jazz-station-sub');
+  if (iconPlay) iconPlay.style.display = 'none';
+  if (iconPause) iconPause.style.display = '';
+  if (eq) eq.style.display = 'flex';
+  if (nowEl) nowEl.textContent = station.name;
+  if (subEl) subEl.textContent = 'SomaFM \u00B7 ' + station.desc;
+  // Update active state in picker if open
+  var picks = document.querySelectorAll('.jazz-pick');
+  picks.forEach(function(p, i) {
+    p.classList.toggle('jazz-pick-active', i === _jazzStation);
+  });
+  updateTunesGrid();
 }
 
 function setJazzVolume(val) {
   var audio = document.getElementById('jazz-audio');
   if (audio) audio.volume = val / 100;
-  localStorage.setItem('ctax_jazz_vol', val);
+  localStorage.setItem('ctax_tunes_vol', val);
 }
 
-function openJazzBar() {
-  var bar = document.getElementById('jazz-bar');
-  if (bar && !bar.classList.contains('jazz-visible')) {
-    bar.classList.add('jazz-visible');
-    adjustFabForJazz(true);
-  }
-  if (!_jazzPlaying) toggleJazz();
-}
-
-function closeJazzBar() {
-  var audio = document.getElementById('jazz-audio');
-  var bar = document.getElementById('jazz-bar');
-  if (audio && _jazzPlaying) { audio.pause(); _jazzPlaying = false; }
-  if (bar) bar.classList.remove('jazz-visible');
-  adjustFabForJazz(false);
-  localStorage.setItem('ctax_jazz', '0');
-}
-
-function adjustFabForJazz(visible) {
+function adjustFabForTunes(visible) {
   var fab = document.getElementById('rp-fab');
   var card = document.getElementById('rp-card');
   if (fab) fab.style.bottom = visible ? '68px' : '';
-  if (card) card.style.bottom = visible ? '124px' : '';
+  if (card) card.style.bottom = visible ? '132px' : '';
 }
 
-function addEqBars() {
-  var info = document.querySelector('.jazz-info');
-  if (!info || document.querySelector('.jazz-eq')) return;
-  var eq = document.createElement('div');
-  eq.className = 'jazz-eq';
-  for (var i = 0; i < 5; i++) {
-    var bar = document.createElement('div');
-    bar.className = 'jazz-eq-bar';
-    eq.appendChild(bar);
+// Station picker
+function toggleStationPicker() {
+  var picker = document.getElementById('jazz-picker');
+  if (!picker) return;
+  if (picker.style.display === 'none' || !picker.style.display) {
+    buildPickerList();
+    picker.style.display = 'block';
+  } else {
+    picker.style.display = 'none';
   }
-  info.appendChild(eq);
 }
 
-function removeEqBars() {
-  var eq = document.querySelector('.jazz-eq');
-  if (eq) eq.remove();
+function closePicker() {
+  var picker = document.getElementById('jazz-picker');
+  if (picker) picker.style.display = 'none';
 }
 
-// Show jazz bar on portal if previously playing
+function buildPickerList() {
+  var list = document.getElementById('jazz-picker-list');
+  if (!list) return;
+  list.innerHTML = '';
+  TUNES_STATIONS.forEach(function(station, i) {
+    var btn = document.createElement('button');
+    btn.className = 'jazz-pick' + (i === _jazzStation ? ' jazz-pick-active' : '');
+    btn.innerHTML = '<span class="jazz-pick-dot" style="background:' + station.color + '"></span>' +
+      '<span class="jazz-pick-name">' + station.name + '</span>' +
+      '<span class="jazz-pick-desc">' + station.desc + '</span>';
+    btn.onclick = function() {
+      _jazzStation = i;
+      if (_jazzPlaying) {
+        playStation(i);
+      } else {
+        playStation(i);
+      }
+      closePicker();
+    };
+    list.appendChild(btn);
+  });
+}
+
+// Build tunes section station grid
+function buildTunesGrid() {
+  var grid = document.getElementById('tunes-grid');
+  if (!grid || grid.children.length > 0) return;
+  TUNES_STATIONS.forEach(function(station, i) {
+    var card = document.createElement('div');
+    card.className = 'tunes-card' + (i === _jazzStation && _jazzPlaying ? ' tunes-card-active' : '');
+    card.setAttribute('data-station-idx', i);
+    card.innerHTML =
+      '<div class="tunes-card-dot" style="background:' + station.color + '"></div>' +
+      '<div class="tunes-card-info">' +
+        '<div class="tunes-card-name">' + station.name + '</div>' +
+        '<div class="tunes-card-desc">' + station.desc + '</div>' +
+      '</div>' +
+      '<div class="tunes-card-playing"><span></span><span></span><span></span></div>';
+    card.onclick = function() {
+      // Enable tunes if not already on
+      var toggle = document.getElementById('tunes-toggle');
+      var bar = document.getElementById('jazz-bar');
+      if (toggle && !toggle.classList.contains('tunes-on')) {
+        toggle.classList.add('tunes-on');
+        if (bar) bar.classList.add('jazz-visible');
+        adjustFabForTunes(true);
+        localStorage.setItem('ctax_tunes', '1');
+      }
+      playStation(i);
+      updateTunesGrid();
+    };
+    grid.appendChild(card);
+  });
+}
+
+function updateTunesGrid() {
+  var cards = document.querySelectorAll('.tunes-card');
+  cards.forEach(function(card) {
+    var idx = parseInt(card.getAttribute('data-station-idx'));
+    card.classList.toggle('tunes-card-active', idx === _jazzStation && _jazzPlaying);
+  });
+}
+
+// Restore tunes state on load
 (function() {
-  var saved = localStorage.getItem('ctax_jazz');
-  var vol = localStorage.getItem('ctax_jazz_vol');
+  var tunesOn = localStorage.getItem('ctax_tunes');
+  var vol = localStorage.getItem('ctax_tunes_vol');
+  var stationIdx = localStorage.getItem('ctax_tunes_station');
+  if (stationIdx !== null) _jazzStation = parseInt(stationIdx) || 0;
   if (vol) {
     var slider = document.getElementById('jazz-vol');
     if (slider) slider.value = vol;
   }
-  if (saved === '1') {
+  if (tunesOn === '1') {
+    var toggle = document.getElementById('tunes-toggle');
     var bar = document.getElementById('jazz-bar');
-    if (bar) {
-      bar.classList.add('jazz-visible');
-      adjustFabForJazz(true);
-    }
+    if (toggle) toggle.classList.add('tunes-on');
+    if (bar) bar.classList.add('jazz-visible');
+    adjustFabForTunes(true);
+    // Update display with station name but don't autoplay (browser blocks it)
+    var station = TUNES_STATIONS[_jazzStation];
+    var nowEl = document.getElementById('jazz-now');
+    var subEl = document.getElementById('jazz-station-sub');
+    if (nowEl) nowEl.textContent = station.name;
+    if (subEl) subEl.textContent = 'SomaFM \u00B7 ' + station.desc;
   }
 })();

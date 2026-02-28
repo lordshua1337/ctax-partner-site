@@ -144,6 +144,7 @@ function portalNav(el, secId) {
   // Lazy-init animations on section reveal
   if (secId === 'portal-sec-earnings') initEarningsAnimation();
   if (secId === 'portal-sec-ce') initCeRingAnimation();
+  if (secId === 'portal-sec-tunes' && typeof buildTunesGrid === 'function') buildTunesGrid();
 
   // Entrance animation for section content
   if (sec) portalAnimateEntrance(sec);
