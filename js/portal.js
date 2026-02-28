@@ -144,7 +144,19 @@ function portalNav(el, secId) {
   // Lazy-init animations on section reveal
   if (secId === 'portal-sec-earnings') initEarningsAnimation();
   if (secId === 'portal-sec-ce') initCeRingAnimation();
-  if (secId === 'portal-sec-tunes' && typeof buildTunesGrid === 'function') buildTunesGrid();
+  if (secId === 'portal-sec-tunes') {
+    if (typeof buildTunesGrid === 'function') buildTunesGrid();
+    // Auto-enable tunes bar when visiting the section
+    var tunesToggle = document.getElementById('tunes-toggle');
+    var tunesBar = document.getElementById('jazz-bar');
+    if (tunesToggle && !tunesToggle.classList.contains('tunes-on')) {
+      tunesToggle.classList.add('tunes-on');
+      if (tunesBar) tunesBar.classList.add('jazz-visible');
+      if (typeof adjustFabForTunes === 'function') adjustFabForTunes(true);
+      if (typeof playStation === 'function' && !_jazzPlaying) playStation(_jazzStation);
+      localStorage.setItem('ctax_tunes', '1');
+    }
+  }
 
   // Entrance animation for section content
   if (sec) portalAnimateEntrance(sec);

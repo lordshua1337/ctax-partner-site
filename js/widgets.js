@@ -920,16 +920,18 @@ function rpRate(n) {
 
 // ── TUNES / MUSIC WIDGET ──────────────────────────────────────
 var TUNES_STATIONS = [
-  { id: 'illstreet', name: 'Illinois Street Lounge', desc: 'Exotica & vintage lounge', color: '#E84400', url: 'https://ice2.somafm.com/illstreet-128-mp3' },
-  { id: 'groovesalad', name: 'Groove Salad', desc: 'Ambient & downtempo beats', color: '#22c55e', url: 'https://ice2.somafm.com/groovesalad-128-mp3' },
-  { id: 'dronezone', name: 'Drone Zone', desc: 'Atmospheric textures, minimal beats', color: '#7c3aed', url: 'https://ice2.somafm.com/dronezone-128-mp3' },
-  { id: 'deepspaceone', name: 'Deep Space One', desc: 'Deep ambient & space music', color: '#0ea5e9', url: 'https://ice2.somafm.com/deepspaceone-128-mp3' },
-  { id: 'secretagent', name: 'Secret Agent', desc: 'Cinematic, mysterious, stylish', color: '#dc2626', url: 'https://ice2.somafm.com/secretagent-128-mp3' },
-  { id: 'lush', name: 'Lush', desc: 'Mellow vocals, electronic warmth', color: '#ec4899', url: 'https://ice2.somafm.com/lush-128-mp3' },
   { id: 'beatblender', name: 'Beat Blender', desc: 'Deep house & downtempo chill', color: '#f59e0b', url: 'https://ice2.somafm.com/beatblender-128-mp3' },
-  { id: 'spacestation', name: 'Space Station Soma', desc: 'Spaced-out ambient electronica', color: '#6366f1', url: 'https://ice2.somafm.com/spacestation-128-mp3' },
-  { id: 'sonicuniverse', name: 'Sonic Universe', desc: 'Eclectic jazz explorations', color: '#0891b2', url: 'https://ice2.somafm.com/sonicuniverse-128-mp3' },
-  { id: 'bossa', name: 'Bossa Beyond', desc: 'Smooth Brazilian rhythms', color: '#10b981', url: 'https://ice2.somafm.com/bossa-128-mp3' }
+  { id: 'groovesalad', name: 'Groove Salad', desc: 'Ambient & downtempo beats', color: '#22c55e', url: 'https://ice2.somafm.com/groovesalad-128-mp3' },
+  { id: 'lush', name: 'Lush', desc: 'Mellow vocals, electronic warmth', color: '#ec4899', url: 'https://ice2.somafm.com/lush-128-mp3' },
+  { id: 'bossa', name: 'Bossa Beyond', desc: 'Smooth Brazilian rhythms', color: '#10b981', url: 'https://ice2.somafm.com/bossa-128-mp3' },
+  { id: 'secretagent', name: 'Secret Agent', desc: 'Cinematic, mysterious, stylish', color: '#dc2626', url: 'https://ice2.somafm.com/secretagent-128-mp3' },
+  { id: 'sonicuniverse', name: 'Sonic Universe', desc: 'Jazz explorations & fusion', color: '#0891b2', url: 'https://ice2.somafm.com/sonicuniverse-128-mp3' },
+  { id: '7soul', name: 'Seven Soul', desc: 'Vintage soul from original 45s', color: '#a855f7', url: 'https://ice2.somafm.com/7soul-128-mp3' },
+  { id: 'indiepop', name: 'Indie Pop', desc: 'New & classic indie pop tracks', color: '#3b82f6', url: 'https://ice2.somafm.com/indiepop-128-mp3' },
+  { id: 'seventies', name: 'Left Coast 70s', desc: 'Mellow album rock from the 70s', color: '#e87b35', url: 'https://ice2.somafm.com/seventies-128-mp3' },
+  { id: 'folkfwd', name: 'Folk Forward', desc: 'Indie folk, alt-folk & folk classics', color: '#65a30d', url: 'https://ice2.somafm.com/folkfwd-128-mp3' },
+  { id: 'illstreet', name: 'Illinois Street Lounge', desc: 'Classic lounge & exotica', color: '#E84400', url: 'https://ice2.somafm.com/illstreet-128-mp3' },
+  { id: 'thistle', name: 'Thistle Radio', desc: 'Celtic roots & branches', color: '#059669', url: 'https://ice2.somafm.com/thistle-128-mp3' }
 ];
 var _jazzPlaying = false;
 var _jazzStation = 0;
@@ -970,7 +972,7 @@ function playStation(idx) {
   var station = TUNES_STATIONS[idx];
   _jazzStation = idx;
   audio.src = station.url;
-  audio.volume = (document.getElementById('jazz-vol') || {}).value / 100 || 0.4;
+  audio.volume = (document.getElementById('jazz-vol') || {}).value / 100 || 0.1;
   audio.play().then(function() {
     _jazzPlaying = true;
     updatePlaybackUI(station);
