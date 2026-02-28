@@ -207,40 +207,6 @@
         <p class="portal-sec-desc">Real-time overview of your referral performance, earnings, and activity.</p>
       </div>
 
-      <!-- Performance Hub -->
-      <div id="dash-performance-hub">
-        <div class="dash-vel-wrap">
-          <div class="dash-vel-header">
-            <div>
-              <div class="dash-hub-label">REFERRAL VELOCITY</div>
-              <div class="dash-hub-title">Your Performance vs. Network</div>
-            </div>
-            <div class="dash-vel-legend">
-              <span class="dash-leg"><span class="dash-leg-line dash-leg-you"></span> You</span>
-              <span class="dash-leg"><span class="dash-leg-line dash-leg-group"></span> Your Group</span>
-              <span class="dash-leg"><span class="dash-leg-line dash-leg-network"></span> Network Avg</span>
-              <span class="dash-live-badge"><span class="dash-live-dot-sm"></span> LIVE</span>
-            </div>
-          </div>
-          <div id="dash-velocity-chart" class="dash-vel-chart"></div>
-        </div>
-
-        <div class="dash-hub-row">
-          <div class="dash-bonus-wrap">
-            <div class="dash-hub-label">MONTHLY BONUS TRACKER</div>
-            <div class="dash-hub-subtitle">4 referrals this month unlocks your bonus tier</div>
-            <div class="dash-bonus-center">
-              <div id="dash-bonus-tracker"></div>
-            </div>
-          </div>
-          <div class="dash-insights-wrap">
-            <div class="dash-hub-label">COMPETITIVE INSIGHTS</div>
-            <div class="dash-hub-subtitle">How you stack up against your peers</div>
-            <div id="dash-peer-insights" class="dash-insights-list"></div>
-          </div>
-        </div>
-      </div>
-
       <!-- Partner Leaderboard -->
       <div class="dash-leaderboard">
         <div class="dlb-header">
@@ -289,6 +255,40 @@
             <div class="dlb-info"><div class="dlb-name">You</div><div class="dlb-tier">Silver Partner</div></div>
             <div class="dlb-metric">12 referrals</div>
             <div class="dlb-badge dlb-badge-you">You</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Hub -->
+      <div id="dash-performance-hub">
+        <div class="dash-vel-wrap">
+          <div class="dash-vel-header">
+            <div>
+              <div class="dash-hub-label">REFERRAL VELOCITY</div>
+              <div class="dash-hub-title">Your Performance vs. Network</div>
+            </div>
+            <div class="dash-vel-legend">
+              <span class="dash-leg"><span class="dash-leg-line dash-leg-you"></span> You</span>
+              <span class="dash-leg"><span class="dash-leg-line dash-leg-group"></span> Your Group</span>
+              <span class="dash-leg"><span class="dash-leg-line dash-leg-network"></span> Network Avg</span>
+              <span class="dash-live-badge"><span class="dash-live-dot-sm"></span> LIVE</span>
+            </div>
+          </div>
+          <div id="dash-velocity-chart" class="dash-vel-chart"></div>
+        </div>
+
+        <div class="dash-hub-row">
+          <div class="dash-bonus-wrap">
+            <div class="dash-hub-label">MONTHLY BONUS TRACKER</div>
+            <div class="dash-hub-subtitle">4 referrals this month unlocks your bonus tier</div>
+            <div class="dash-bonus-center">
+              <div id="dash-bonus-tracker"></div>
+            </div>
+          </div>
+          <div class="dash-insights-wrap">
+            <div class="dash-hub-label">COMPETITIVE INSIGHTS</div>
+            <div class="dash-hub-subtitle">How you stack up against your peers</div>
+            <div id="dash-peer-insights" class="dash-insights-list"></div>
           </div>
         </div>
       </div>
@@ -3487,27 +3487,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Quick Notes -->
-  <div class="qn-wrap" id="qn-wrap">
-    <div class="qn-header">
-      <div class="qn-title">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        Quick Notes
-      </div>
-      <button class="qn-minimize" onclick="qnToggle()" aria-label="Minimize notes">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      </button>
-    </div>
-    <textarea class="qn-textarea" id="qn-textarea" placeholder="Jot down client names, ideas, reminders..." oninput="qnSave()"></textarea>
-    <div class="qn-footer">
-      <span class="qn-chars" id="qn-chars">0 chars</span>
-      <span class="qn-saved" id="qn-saved"></span>
-    </div>
-  </div>
-  <button class="qn-fab" id="qn-fab" onclick="qnToggle()" aria-label="Open quick notes">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-  </button>
 
   <!-- Scroll to Top -->
   <button class="stt-btn" id="stt-btn" onclick="sttScrollTop()" aria-label="Scroll to top">
