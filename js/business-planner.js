@@ -667,20 +667,47 @@ function bpToggleDrip(enabled) {
   }
 }
 
-// Print roadmap as PDF using browser print dialog
+// Export roadmap as PDF using html2pdf.js
 function bpPrintRoadmap() {
   var result = document.getElementById('bp-result');
   if (!result) return;
 
-  // Add a print-mode class to body so CSS can target it
-  document.body.classList.add('bp-printing');
+  if (typeof html2pdf === 'undefined') {
+    showToast('PDF library still loading -- try again in a moment.', 'warning');
+    return;
+  }
 
-  // Brief delay to let CSS apply, then trigger print
-  setTimeout(function() {
-    window.print();
-    // Remove print class after dialog closes
-    document.body.classList.remove('bp-printing');
-  }, 100);
+  // Hide action buttons and checkboxes during capture
+  var actionBar = result.querySelector('.bp-action-bar');
+  var checks = result.querySelectorAll('.bp-task-check');
+  var dripBar = result.querySelector('.bp-drip-bar');
+  if (actionBar) actionBar.style.display = 'none';
+  if (dripBar) dripBar.style.display = 'none';
+  checks.forEach(function(c) { c.style.display = 'none'; });
+
+  var opt = {
+    margin: [12, 16, 12, 16],
+    filename: '90-Day-Growth-Roadmap.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+    jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' },
+    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+  };
+
+  showToast('Generating PDF...', 'info');
+
+  html2pdf().set(opt).from(result).save().then(function() {
+    // Restore hidden elements
+    if (actionBar) actionBar.style.display = '';
+    if (dripBar) dripBar.style.display = '';
+    checks.forEach(function(c) { c.style.display = ''; });
+    showToast('PDF downloaded!', 'success');
+  }).catch(function() {
+    if (actionBar) actionBar.style.display = '';
+    if (dripBar) dripBar.style.display = '';
+    checks.forEach(function(c) { c.style.display = ''; });
+    showToast('PDF export failed -- try again.', 'error');
+  });
 }
 
 function bpResetPlanner() {

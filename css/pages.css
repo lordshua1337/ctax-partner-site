@@ -3826,21 +3826,8 @@ body:has(.tour-overlay) .portal-topbar{
   .tour-tooltip{left:50%;width:calc(100vw - 32px);max-width:360px;padding:22px 20px 18px}
 }
 
-/* Print styles for roadmap PDF export */
+/* Print styles */
 @media print{
-  body:not(.bp-printing) #bp-result{/* only apply when printing from roadmap */}
-  .bp-printing *{visibility:hidden}
-  .bp-printing #bp-result,.bp-printing #bp-result *{visibility:visible}
-  .bp-printing #bp-result{position:absolute;left:0;top:0;width:100%;padding:20px}
-  .bp-printing .bp-action-bar,.bp-printing .bp-task-check{display:none}
-  .bp-printing .bp-insight-card{break-inside:avoid}
-  .bp-printing .bp-month{break-inside:avoid}
-  .bp-printing .bp-task{break-inside:avoid}
-  .bp-printing .bp-progress-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .bp-printing .bp-type-setup,.bp-printing .bp-type-action,.bp-printing .bp-type-marketing,.bp-printing .bp-type-growth{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .bp-printing .bp-month-num{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .bp-printing .bp-tool-link{color:var(--blue);text-decoration:underline}
-
   /* Playbook print cheat sheet */
   .pb-printing *{visibility:hidden}
   .pb-printing #portal-sec-playbook,.pb-printing #portal-sec-playbook *{visibility:visible}
