@@ -464,6 +464,8 @@ function submitReferral() {
   var refNum = 'REF-2026-' + String(Math.floor(Math.random() * 9000) + 1000).padStart(4, '0');
   document.getElementById('sub-success-id').textContent = 'Referral #' + refNum + ' submitted successfully.';
   showToast('Referral submitted successfully!', 'success');
+  // Fire celebration confetti
+  if (typeof fireConfetti === 'function') fireConfetti();
   // Update gamification streak
   if (typeof updateStreak === 'function') updateStreak();
 }
@@ -1888,7 +1890,8 @@ var SHORTCUT_DATA = [
   { keys: ['R'], desc: 'Go to Referrals' },
   { keys: ['E'], desc: 'Go to Earnings' },
   { keys: ['S'], desc: 'Submit a Referral' },
-  { keys: ['T'], desc: 'Toggle Tunes' }
+  { keys: ['T'], desc: 'Toggle Tunes' },
+  { keys: ['N'], desc: 'Toggle Quick Notes' }
 ];
 
 function kbdHelpOpen() {
@@ -1958,5 +1961,10 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 't' && typeof toggleTunes === 'function') {
     e.preventDefault();
     toggleTunes();
+    return;
+  }
+  if (e.key === 'n' && typeof qnToggle === 'function') {
+    e.preventDefault();
+    qnToggle();
   }
 });
