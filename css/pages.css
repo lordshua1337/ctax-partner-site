@@ -2885,6 +2885,35 @@ body.portal-mode{padding-bottom:0}
   100%{transform:translateY(100vh) translateX(var(--cf-drift,0)) rotate(var(--cf-rot,360deg));opacity:0}
 }
 
+/* Monthly Goal Tracker */
+.dash-goal-tracker{display:flex;gap:28px;background:var(--white);border:1px solid var(--off2);border-radius:14px;padding:24px;margin-bottom:24px;align-items:center}
+.dgt-left{text-align:center;flex-shrink:0}
+.dgt-header{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:14px}
+.dgt-title{font-size:15px;font-weight:700;color:var(--navy)}
+.dgt-edit{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--mist);cursor:pointer;transition:color 0.15s}
+.dgt-edit:hover{color:var(--blue)}
+.dgt-ring-wrap{position:relative;width:140px;height:140px;margin:0 auto}
+.dgt-ring-fill{transition:stroke-dashoffset 1s ease}
+.dgt-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dgt-ring-val{font-size:32px;font-weight:800;color:var(--navy);line-height:1}
+.dgt-ring-of{font-size:12px;color:var(--mist);margin-top:2px}
+.dgt-sub{font-size:12px;color:var(--mist);margin-top:10px}
+.dgt-right{flex:1;min-width:0}
+.dgt-stat-row{display:flex;gap:16px;margin-bottom:18px}
+.dgt-stat{flex:1;padding:14px;background:var(--off1);border-radius:10px}
+.dgt-stat-val{font-size:18px;font-weight:700;color:var(--navy)}
+.dgt-stat-label{font-size:11px;color:var(--mist);margin-top:2px}
+.dgt-pace{margin-bottom:14px}
+.dgt-pace-label{font-size:13px;color:var(--body);margin-bottom:8px}
+.dgt-pace-bar{width:100%;height:6px;background:var(--off1);border-radius:3px;overflow:hidden}
+.dgt-pace-fill{height:100%;background:linear-gradient(90deg,var(--blue),#00C8E0);border-radius:3px;transition:width 1s ease}
+.dgt-streak-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--slate);padding:10px 14px;background:rgba(11,95,216,0.03);border-radius:8px;border:1px solid rgba(11,95,216,0.06)}
+.dgt-streak-row svg{color:var(--blue);flex-shrink:0}
+@media(max-width:640px){
+  .dash-goal-tracker{flex-direction:column;text-align:center}
+  .dgt-stat-row{flex-direction:column}
+}
+
 /* Partner Leaderboard */
 .dash-leaderboard{background:var(--white);border:1px solid var(--off2);border-radius:14px;padding:24px;margin-bottom:24px}
 .dlb-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px;flex-wrap:wrap}

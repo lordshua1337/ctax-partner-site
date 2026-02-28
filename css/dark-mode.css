@@ -447,6 +447,21 @@
 [data-theme="dark"] .dib-dismiss{color:rgba(255,255,255,0.25)}
 [data-theme="dark"] .dib-dismiss:hover{color:#e0e4ec}
 
+/* ── Monthly Goal Tracker Dark Mode ── */
+[data-theme="dark"] .dash-goal-tracker{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .dgt-title{color:#e0e4ec}
+[data-theme="dark"] .dgt-edit{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .dgt-edit:hover{color:#4BA3FF}
+[data-theme="dark"] .dgt-ring-val{color:#e0e4ec}
+[data-theme="dark"] .dgt-ring-of{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .dgt-sub{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .dgt-stat{background:rgba(255,255,255,0.04)}
+[data-theme="dark"] .dgt-stat-val{color:#e0e4ec}
+[data-theme="dark"] .dgt-stat-label{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .dgt-pace-label{color:rgba(255,255,255,0.55)}
+[data-theme="dark"] .dgt-pace-bar{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .dgt-streak-row{background:rgba(75,163,255,0.06);border-color:rgba(75,163,255,0.1);color:rgba(255,255,255,0.55)}
+
 /* ── Case Detail Drawer Dark Mode ── */
 [data-theme="dark"] .cdd-overlay{background:rgba(0,0,0,0.55)}
 [data-theme="dark"] .cdd-drawer{background:#0d1726;box-shadow:-8px 0 40px rgba(0,0,0,0.4)}

@@ -426,6 +426,50 @@
         </button>
       </div>
 
+      <!-- Monthly Goal Tracker -->
+      <div class="dash-goal-tracker">
+        <div class="dgt-left">
+          <div class="dgt-header">
+            <div class="dgt-title">Monthly Goal</div>
+            <div class="dgt-edit" onclick="dgtEditGoal()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit
+            </div>
+          </div>
+          <div class="dgt-ring-wrap">
+            <svg class="dgt-ring" width="140" height="140" viewBox="0 0 140 140">
+              <circle cx="70" cy="70" r="58" fill="none" stroke="var(--off2)" stroke-width="8"/>
+              <circle class="dgt-ring-fill" cx="70" cy="70" r="58" fill="none" stroke="var(--blue)" stroke-width="8" stroke-linecap="round" stroke-dasharray="364.42" stroke-dashoffset="145.77" transform="rotate(-90 70 70)"/>
+            </svg>
+            <div class="dgt-ring-center">
+              <div class="dgt-ring-val">6</div>
+              <div class="dgt-ring-of">of 10</div>
+            </div>
+          </div>
+          <div class="dgt-sub">referrals this month</div>
+        </div>
+        <div class="dgt-right">
+          <div class="dgt-stat-row">
+            <div class="dgt-stat">
+              <div class="dgt-stat-val">$4,800</div>
+              <div class="dgt-stat-label">Earned this month</div>
+            </div>
+            <div class="dgt-stat">
+              <div class="dgt-stat-val">$8,000</div>
+              <div class="dgt-stat-label">Projected at pace</div>
+            </div>
+          </div>
+          <div class="dgt-pace">
+            <div class="dgt-pace-label">On pace to hit goal by <strong>Feb 28</strong></div>
+            <div class="dgt-pace-bar"><div class="dgt-pace-fill" style="width:60%"></div></div>
+          </div>
+          <div class="dgt-streak-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 8.5 3 12.5 3 15.5a9 9 0 0018 0C21 12.5 17.5 8.5 12 2z"/></svg>
+            <span>4 more referrals to unlock your monthly bonus</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Quick Links -->
       <div class="dash-quick-links">
         <div class="dash-quick-links-title">Tools and Resources</div>

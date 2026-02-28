@@ -1588,6 +1588,27 @@ function cmdkExecute(idx) {
   }
 }
 
+// ── MONTHLY GOAL TRACKER ────────────────────────────────────
+function dgtEditGoal() {
+  var current = 10;
+  var input = prompt('Set your monthly referral goal:', current);
+  if (input === null) return;
+  var goal = parseInt(input, 10);
+  if (isNaN(goal) || goal < 1) return;
+  var valEl = document.querySelector('.dgt-ring-of');
+  if (valEl) valEl.textContent = 'of ' + goal;
+  // Update ring progress (6 of new goal)
+  var progress = 6;
+  var pct = Math.min(progress / goal, 1);
+  var circumference = 364.42;
+  var offset = circumference * (1 - pct);
+  var fill = document.querySelector('.dgt-ring-fill');
+  if (fill) fill.style.strokeDashoffset = offset;
+  var paceBar = document.querySelector('.dgt-pace-fill');
+  if (paceBar) paceBar.style.width = (pct * 100) + '%';
+  if (typeof showToast === 'function') showToast('Goal updated to ' + goal + ' referrals', 'success');
+}
+
 // ── CASE DETAIL DRAWER ──────────────────────────────────────
 function cddOpen(clientName) {
   var overlay = document.getElementById('cdd-overlay');
