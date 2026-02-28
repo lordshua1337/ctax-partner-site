@@ -1513,6 +1513,40 @@ body.portal-mode{padding-bottom:0}
 .portal-nav-item svg{stroke:currentColor;flex-shrink:0}
 .pni-active{background:rgba(255,255,255,0.06);color:#fff}
 .pni-active svg{stroke:#fff}
+/* Nav badges */
+.pni-badge{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:0.04em;padding:2px 7px;border-radius:4px;line-height:1.4;flex-shrink:0}
+.pni-badge-red{background:rgba(220,38,38,0.15);color:#ef4444}
+.pni-badge-green{background:rgba(16,185,129,0.15);color:#10b981}
+
+/* Accent nav items (default / non-branded mode only) */
+.portal-nav-dashboard{background:linear-gradient(135deg,rgba(11,95,216,0.12) 0%,rgba(0,229,204,0.08) 100%);color:rgba(255,255,255,0.9)}
+.portal-nav-dashboard svg{stroke:rgba(255,255,255,0.85)}
+.portal-nav-dashboard:hover{background:linear-gradient(135deg,rgba(11,95,216,0.18) 0%,rgba(0,229,204,0.12) 100%);color:#fff}
+
+.portal-nav-referrals{background:linear-gradient(135deg,rgba(232,68,0,0.14) 0%,rgba(255,140,50,0.10) 100%);color:rgba(255,255,255,0.9)}
+.portal-nav-referrals svg{stroke:rgba(255,255,255,0.85)}
+.portal-nav-referrals:hover{background:linear-gradient(135deg,rgba(232,68,0,0.22) 0%,rgba(255,140,50,0.15) 100%);color:#fff}
+
+.portal-nav-earnings{background:linear-gradient(135deg,rgba(16,185,129,0.14) 0%,rgba(0,229,204,0.08) 100%);color:rgba(255,255,255,0.9)}
+.portal-nav-earnings svg{stroke:rgba(255,255,255,0.85)}
+.portal-nav-earnings:hover{background:linear-gradient(135deg,rgba(16,185,129,0.22) 0%,rgba(0,229,204,0.12) 100%);color:#fff}
+
+/* When active, boost the gradient opacity */
+.portal-nav-dashboard.pni-active{background:linear-gradient(135deg,rgba(11,95,216,0.22) 0%,rgba(0,229,204,0.14) 100%);color:#fff}
+.portal-nav-referrals.pni-active{background:linear-gradient(135deg,rgba(232,68,0,0.28) 0%,rgba(255,140,50,0.18) 100%);color:#fff}
+.portal-nav-earnings.pni-active{background:linear-gradient(135deg,rgba(16,185,129,0.28) 0%,rgba(0,229,204,0.14) 100%);color:#fff}
+
+/* Disable accent gradients in branded mode — let the brand color take over */
+.portal-branded .portal-nav-dashboard,
+.portal-branded .portal-nav-referrals,
+.portal-branded .portal-nav-earnings{background:none}
+.portal-branded .portal-nav-dashboard:hover,
+.portal-branded .portal-nav-referrals:hover,
+.portal-branded .portal-nav-earnings:hover{background:rgba(var(--pa-rgb),0.06)}
+.portal-branded .portal-nav-dashboard.pni-active,
+.portal-branded .portal-nav-referrals.pni-active,
+.portal-branded .portal-nav-earnings.pni-active{background:rgba(var(--pa-rgb),0.1)!important}
+
 .portal-sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,0.06)}
 
 /* Main content area */
@@ -1551,6 +1585,8 @@ body.portal-mode{padding-bottom:0}
 [data-theme="dark"] .portal-branded .portal-brand-preview{background:rgba(255,255,255,0.05)}
 [data-theme="dark"] .portal-branded .portal-sidebar-footer{border-top-color:rgba(255,255,255,0.06)!important}
 [data-theme="dark"] .portal-branded .portal-sidebar-footer .portal-nav-item{color:rgba(255,255,255,0.35)}
+[data-theme="dark"] .pni-badge-red{background:rgba(239,68,68,0.12);color:#f87171}
+[data-theme="dark"] .pni-badge-green{background:rgba(16,185,129,0.12);color:#34d399}
 [data-theme="dark"] .portal-branded .portal-sec-title{color:#e0e4ec}
 [data-theme="dark"] .portal-sec-desc{color:rgba(255,255,255,0.5)}
 [data-theme="dark"] .portal-placeholder{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.35)}
