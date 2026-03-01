@@ -691,8 +691,13 @@
 
   function formatSection(html) {
     if (!html) return '<p style="color:rgba(255,255,255,0.5);font-style:italic">No content generated for this section.</p>';
-    // Strip any "SECTION X -- TITLE" headers the AI may have included literally
-    var cleaned = html.replace(/^SECTION\s+\d+\s*[-–—:]+\s*[A-Z\s]+\n*/i, '').trim();
+    // Strip any "SECTION X" / "SECTION X -- TITLE" headers the AI may have included literally
+    // Also strip numbered headers like "2." or "## Section Title" at the start
+    var cleaned = html
+      .replace(/^(?:SECTION\s+\d+\s*(?:[-–—:]+\s*[^\n]*)?\n*)/i, '')
+      .replace(/^(?:#+\s+[^\n]*\n*)/i, '')
+      .replace(/^\d+\.\s+[^\n]*\n*/i, '')
+      .trim();
     if (!cleaned) return '<p style="color:rgba(255,255,255,0.5);font-style:italic">No content generated for this section.</p>';
     // The AI returns HTML with <b> tags, we just need to wrap in paragraphs
     // Split on double newlines for paragraph breaks
