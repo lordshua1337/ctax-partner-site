@@ -1,140 +1,134 @@
-<!-- AI Tools: Cinematic Scroll Experience -->
+<!-- AI Tools: Snap-Scroll Cinematic Experience -->
 <div class="ait-cinema" id="ait-cinema">
 
   <!-- Starfield layer -->
   <div class="ait-stars" id="ait-stars"></div>
 
-  <!-- ACT 1: Pinned Hero with scroll-linked fade -->
-  <div class="ait-hero-pin" id="ait-hero-pin">
-    <div class="ait-orb"></div>
-    <div class="ait-hero-pin-content" id="ait-hero-pin-content">
-      <div class="ait-hero-badge">AI-Powered Partner Tools</div>
-      <h1 class="ait-hero-headline">Know Your<br>Ideal Client</h1>
-      <p class="ait-hero-sub">The most powerful thing AI can do for your business isn't write copy or build ads. It's help you understand exactly who to talk to.</p>
-      <div class="ait-scroll-cue" id="ait-scroll-cue">
-        <span>Scroll to begin</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-    </div>
-  </div>
-  <div class="ait-hero-scroll-space"></div>
+  <!-- SNAP CONTAINER: Each child is a 100vh snap section -->
+  <div class="ait-snap-container" id="ait-snap-container">
 
-  <!-- SCENE 1: Problem statement -->
-  <div class="ait-scene" data-scene="text">
-    <div class="ait-scene-pin">
-      <p class="ait-scene-text">Most partners spend weeks<br>guessing who to call.</p>
-    </div>
-    <div class="ait-scene-scroll-space"></div>
-  </div>
-
-  <!-- SCENE 2: Pain amplification -->
-  <div class="ait-scene" data-scene="text">
-    <div class="ait-scene-pin">
-      <p class="ait-scene-text ait-scene-text-dim">Cold outreach. Generic pitches.<br>Conversations that go nowhere.</p>
-    </div>
-    <div class="ait-scene-scroll-space"></div>
-  </div>
-
-  <!-- SCENE 3: The shift -->
-  <div class="ait-scene" data-scene="text">
-    <div class="ait-scene-pin">
-      <p class="ait-scene-text ait-scene-text-accent">What if you knew exactly<br>who your ideal referral client was?</p>
-    </div>
-    <div class="ait-scene-scroll-space"></div>
-  </div>
-
-  <!-- SCENE 4: Proof - 6 Questions -->
-  <div class="ait-scene" data-scene="text">
-    <div class="ait-scene-pin">
-      <div class="ait-proof-card-solo">
-        <div class="ait-proof-num">6</div>
-        <div class="ait-proof-label">Questions</div>
-        <div class="ait-proof-desc">About your practice, clients, and goals</div>
-      </div>
-    </div>
-    <div class="ait-scene-scroll-space"></div>
-  </div>
-
-  <!-- SCENE 5: Proof - 60 Seconds -->
-  <div class="ait-scene" data-scene="text">
-    <div class="ait-scene-pin">
-      <div class="ait-proof-card-solo">
-        <div class="ait-proof-num">60s</div>
-        <div class="ait-proof-label">To Complete</div>
-        <div class="ait-proof-desc">Quick answers, zero guesswork</div>
-      </div>
-    </div>
-    <div class="ait-scene-scroll-space"></div>
-  </div>
-
-  <!-- SCENE 6: Proof - 1 Custom ICP -->
-  <div class="ait-scene" data-scene="text">
-    <div class="ait-scene-pin">
-      <div class="ait-proof-card-solo">
-        <div class="ait-proof-num">1</div>
-        <div class="ait-proof-label">Custom ICP</div>
-        <div class="ait-proof-desc">Red flags, scripts, action plan -- all yours</div>
-      </div>
-    </div>
-    <div class="ait-scene-scroll-space"></div>
-  </div>
-
-  <!-- SCENE 5: Value 1 - Spot the signals -->
-  <div class="ait-scene" data-scene="value1">
-    <div class="ait-scene-pin">
-      <div class="ait-value-card">
-        <div class="ait-value-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <!-- SNAP 1: Hero -->
+    <div class="ait-snap-section" data-snap="hero">
+      <div class="ait-orb"></div>
+      <div class="ait-snap-content ait-snap-visible" id="ait-hero-content">
+        <div class="ait-hero-badge">AI-Powered Partner Tools</div>
+        <h1 class="ait-hero-headline">Know Your<br>Ideal Client</h1>
+        <p class="ait-hero-sub">The most powerful thing AI can do for your business isn't write copy or build ads. It's help you understand exactly who to talk to.</p>
+        <div class="ait-scroll-cue" id="ait-scroll-cue">
+          <span>Scroll to begin</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <h3 class="ait-value-title">Spot the signals</h3>
-        <p class="ait-value-desc">Learn the exact red flags that tell you a client needs IRS resolution help -- before they even bring it up.</p>
       </div>
     </div>
-    <div class="ait-scene-scroll-space"></div>
-  </div>
 
-  <!-- SCENE 6: Value 2 - Know what to say -->
-  <div class="ait-scene" data-scene="value2">
-    <div class="ait-scene-pin">
-      <div class="ait-value-card">
-        <div class="ait-value-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    <!-- SNAP 2: Problem statement -->
+    <div class="ait-snap-section" data-snap="text">
+      <div class="ait-snap-content">
+        <p class="ait-scene-text">Most partners spend weeks<br>guessing who to call.</p>
+      </div>
+    </div>
+
+    <!-- SNAP 3: Pain amplification -->
+    <div class="ait-snap-section" data-snap="text">
+      <div class="ait-snap-content">
+        <p class="ait-scene-text ait-scene-text-dim">Cold outreach. Generic pitches.<br>Conversations that go nowhere.</p>
+      </div>
+    </div>
+
+    <!-- SNAP 4: The shift -->
+    <div class="ait-snap-section" data-snap="text">
+      <div class="ait-snap-content">
+        <p class="ait-scene-text ait-scene-text-accent">What if you knew exactly<br>who your ideal referral client was?</p>
+      </div>
+    </div>
+
+    <!-- SNAP 5: Proof - 6 Questions -->
+    <div class="ait-snap-section" data-snap="proof">
+      <div class="ait-snap-content">
+        <div class="ait-proof-card-solo">
+          <div class="ait-proof-num">6</div>
+          <div class="ait-proof-label">Questions</div>
+          <div class="ait-proof-desc">About your practice, clients, and goals</div>
         </div>
-        <h3 class="ait-value-title">Know what to say</h3>
-        <p class="ait-value-desc">Get conversation starters tailored to your practice type. Natural, not salesy. Words that open doors.</p>
       </div>
     </div>
-    <div class="ait-scene-scroll-space"></div>
-  </div>
 
-  <!-- SCENE 7: Value 3 - Act with a plan -->
-  <div class="ait-scene" data-scene="value3">
-    <div class="ait-scene-pin">
-      <div class="ait-value-card">
-        <div class="ait-value-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <!-- SNAP 6: Proof - 60 Seconds -->
+    <div class="ait-snap-section" data-snap="proof">
+      <div class="ait-snap-content">
+        <div class="ait-proof-card-solo">
+          <div class="ait-proof-num">60s</div>
+          <div class="ait-proof-label">To Complete</div>
+          <div class="ait-proof-desc">Quick answers, zero guesswork</div>
         </div>
-        <h3 class="ait-value-title">Act with a plan</h3>
-        <p class="ait-value-desc">Walk away with a 30-day action plan designed for your specific practice. Day one starts the moment you finish.</p>
       </div>
     </div>
-    <div class="ait-scene-scroll-space"></div>
-  </div>
 
-  <!-- SCENE 8: CTA Bridge -->
-  <div class="ait-scene ait-scene-bridge" data-scene="cta">
-    <div class="ait-scene-pin">
-      <h2 class="ait-bridge-headline">Ready to meet your<br>ideal client?</h2>
-      <p class="ait-bridge-sub">Answer 6 questions. Get a profile you can use today.</p>
-      <button class="ait-bridge-btn" onclick="icpScrollToBuilder()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        Build My ICP
-      </button>
+    <!-- SNAP 7: Proof - 1 Custom ICP -->
+    <div class="ait-snap-section" data-snap="proof">
+      <div class="ait-snap-content">
+        <div class="ait-proof-card-solo">
+          <div class="ait-proof-num">1</div>
+          <div class="ait-proof-label">Custom ICP</div>
+          <div class="ait-proof-desc">Red flags, scripts, action plan -- all yours</div>
+        </div>
+      </div>
     </div>
-    <div class="ait-scene-scroll-space ait-scene-scroll-space-short"></div>
-  </div>
 
-  <!-- The Builder (questionnaire + results) -->
+    <!-- SNAP 8: Value 1 - Spot the signals -->
+    <div class="ait-snap-section" data-snap="value">
+      <div class="ait-snap-content">
+        <div class="ait-value-card">
+          <div class="ait-value-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </div>
+          <h3 class="ait-value-title">Spot the signals</h3>
+          <p class="ait-value-desc">Learn the exact red flags that tell you a client needs IRS resolution help -- before they even bring it up.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SNAP 9: Value 2 - Know what to say -->
+    <div class="ait-snap-section" data-snap="value">
+      <div class="ait-snap-content">
+        <div class="ait-value-card">
+          <div class="ait-value-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <h3 class="ait-value-title">Know what to say</h3>
+          <p class="ait-value-desc">Get conversation starters tailored to your practice type. Natural, not salesy. Words that open doors.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SNAP 10: Value 3 - Act with a plan -->
+    <div class="ait-snap-section" data-snap="value">
+      <div class="ait-snap-content">
+        <div class="ait-value-card">
+          <div class="ait-value-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3 class="ait-value-title">Act with a plan</h3>
+          <p class="ait-value-desc">Walk away with a 30-day action plan designed for your specific practice. Day one starts the moment you finish.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SNAP 11: CTA Bridge -->
+    <div class="ait-snap-section ait-snap-section-cta" data-snap="cta">
+      <div class="ait-snap-content ait-snap-visible">
+        <h2 class="ait-bridge-headline">Ready to meet your<br>ideal client?</h2>
+        <p class="ait-bridge-sub">Answer 6 questions. Get a profile you can use today.</p>
+        <button class="ait-bridge-btn" onclick="icpScrollToBuilder()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          Build My ICP
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /ait-snap-container -->
+
+  <!-- The Builder (questionnaire + results) -- UNCHANGED below this line -->
   <section class="ait-builder" id="ait-builder">
     <div class="ait-builder-inner">
       <div class="ait-builder-head">
@@ -336,19 +330,13 @@
           <div class="ait-iq-panel" id="ait-iq-panel-disqualify"></div>
         </div>
 
-        <!-- Action Plan -->
-        <div class="ait-iq-action-plan" id="ait-iq-action-plan"></div>
-
-        <!-- CTAs -->
-        <div class="ait-iq-ctas">
-          <button class="ait-iq-btn-primary" onclick="icpDownloadPdf()">
+        <!-- Actions -->
+        <div class="ait-iq-actions">
+          <button class="ait-iq-btn-primary" id="ait-iq-download-btn" onclick="icpDownloadPdf()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download PDF
           </button>
-          <button class="ait-iq-btn-secondary" onclick="icpReset()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 105.64-11.36L1 10"/></svg>
-            Start Over
-          </button>
+          <button class="ait-iq-btn-secondary" onclick="icpStartOver()">Start Over</button>
         </div>
       </div>
 

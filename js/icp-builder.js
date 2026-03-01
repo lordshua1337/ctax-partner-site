@@ -234,110 +234,56 @@
     container.appendChild(frag);
   };
 
-  // Cinematic scroll: content rises from bottom, holds at center, exits up top.
-  // No scale -- pure vertical movement + opacity. Like reading a teleprompter.
-  // 250vh spacer = ~25 scrolls per scene (scrollable = 250vh):
-  //   Enter (0-0.06): rises from +40vh below center to center (~1.5 scrolls)
-  //   Hold  (0.06-0.94): sits dead center, full opacity (~22 scrolls of reading)
-  //   Exit  (0.94-1.0): slides up to -40vh above center (~1.5 scrolls)
+  // Snap-scroll reveal: CSS scroll-snap handles the snapping,
+  // IntersectionObserver handles animating content in/out.
+  // Each .ait-snap-section is 100vh, snapped via scroll-snap-type: y mandatory.
+  // When a section is >60% visible, its .ait-snap-content gets .ait-snap-visible.
+  // When it leaves, the class is removed so it re-animates on return.
   window._aitInitScrollReveal = function() {
     if (window._aitInitStars) window._aitInitStars();
 
-    var hero = document.getElementById('ait-hero-pin');
-    var heroContent = document.getElementById('ait-hero-pin-content');
-    var scrollCue = document.getElementById('ait-scroll-cue');
-    var sceneEls = document.querySelectorAll('.ait-scene');
-    var ticking = false;
+    var container = document.getElementById('ait-snap-container');
+    if (!container) return;
 
-    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
-    function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+    var sections = container.querySelectorAll('.ait-snap-section');
+    if (!sections.length) return;
 
-    var scenes = [];
-    function cacheGeometry() {
-      scenes = [];
-      var scrollY = window.scrollY;
-      for (var i = 0; i < sceneEls.length; i++) {
-        var el = sceneEls[i];
-        var pin = el.querySelector('.ait-scene-pin');
-        if (!pin) continue;
-        var rect = el.getBoundingClientRect();
-        scenes.push({
-          pin: pin,
-          top: rect.top + scrollY,
-          height: rect.height,
-          isCta: el.dataset.scene === 'cta'
-        });
-      }
-    }
-    cacheGeometry();
-    var resizeTimer;
-    window.addEventListener('resize', function() {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(cacheGeometry, 200);
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        var content = entry.target.querySelector('.ait-snap-content');
+        if (!content) return;
+
+        if (entry.isIntersecting) {
+          // Small delay so the snap finishes before animation starts
+          setTimeout(function() {
+            content.classList.add('ait-snap-visible');
+          }, 80);
+        } else {
+          content.classList.remove('ait-snap-visible');
+        }
+      });
+    }, {
+      root: container,
+      threshold: 0.6
     });
 
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function() {
-        var scrollY = window.scrollY;
-        var vh = window.innerHeight;
+    sections.forEach(function(section) {
+      observer.observe(section);
+    });
 
-        // Hero: slides up gently
-        if (hero && heroContent) {
-          var p = clamp(scrollY / (vh * 0.7), 0, 1);
-          var ep = ease(p);
-          heroContent.style.opacity = 1 - ep;
-          heroContent.style.transform = 'translate3d(0,' + (-ep * vh * 0.2) + 'px,0)';
-          if (scrollCue) scrollCue.style.opacity = clamp(1 - p * 4, 0, 1);
-        }
-
-        for (var i = 0; i < scenes.length; i++) {
-          var s = scenes[i];
-          var scrollable = s.height - vh;
-          if (scrollable <= 0) scrollable = 1;
-          var scrolledPast = scrollY - s.top;
-          var progress = clamp(scrolledPast / scrollable, 0, 1);
-          var belowView = s.top - scrollY - vh;
-
-          var opacity, ty;
-
-          if (belowView > 0) {
-            // Below viewport: invisible, waiting below center
-            opacity = 0;
-            ty = vh * 0.4;
-          } else if (progress < 0.06) {
-            // Rising up from bottom to center (~1.5 scrolls)
-            var t = ease(progress / 0.06);
-            opacity = t;
-            ty = vh * 0.4 * (1 - t);
-          } else if (progress < 0.94) {
-            // Holding dead center -- full opacity, zero movement (~22 scrolls)
-            opacity = 1;
-            ty = 0;
-          } else {
-            // Sliding up and out the top (~1.5 scrolls)
-            var t = ease((progress - 0.94) / 0.06);
-            opacity = 1 - t;
-            ty = -vh * 0.3 * t;
-          }
-
-          // CTA stays once it arrives
-          if (s.isCta && progress >= 0.06) {
-            opacity = 1;
-            ty = 0;
-          }
-
-          s.pin.style.opacity = opacity;
-          s.pin.style.transform = 'translate3d(0,' + ty + 'px,0)';
-        }
-
-        ticking = false;
-      });
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    // When user clicks "Build My ICP", scroll the snap container
+    // past all snap sections so the builder is in view, then
+    // scroll the page to the builder.
+    window.icpScrollToBuilder = function() {
+      var builder = document.getElementById('ait-builder');
+      if (!builder) return;
+      // Scroll snap container to bottom so it releases
+      container.scrollTop = container.scrollHeight;
+      // Then scroll page to builder
+      setTimeout(function() {
+        builder.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    };
   };
 
   // ---- Internal functions ----
