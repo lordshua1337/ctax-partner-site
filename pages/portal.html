@@ -156,19 +156,89 @@
       <button class="portal-hamburger" onclick="document.querySelector('.portal-sidebar').classList.toggle('portal-sb-open')">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
-      <div class="portal-search-wrap">
-        <div class="portal-search">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" class="portal-search-input" id="portal-global-search" placeholder="Search referrals, documents, tickets..." oninput="portalGlobalSearch(this.value)" onclick="cmdkOpen()">
-          <kbd class="portal-search-kbd" onclick="cmdkOpen()">Cmd+K</kbd>
-        </div>
-        <div class="portal-search-results" id="portal-search-results"></div>
+      <div class="portal-topbar-left">
+        <button class="gp-btn" onclick="gpShowCompare()">
+          <span class="gp-fold"></span>
+          <span class="gp-points">
+            <span class="gp-point"></span>
+            <span class="gp-point"></span>
+            <span class="gp-point"></span>
+            <span class="gp-point"></span>
+            <span class="gp-point"></span>
+            <span class="gp-point"></span>
+            <span class="gp-point"></span>
+            <span class="gp-point"></span>
+            <span class="gp-point"></span>
+            <span class="gp-point"></span>
+          </span>
+          <span class="gp-inner">
+            <svg class="gp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Go Pro
+          </span>
+        </button>
       </div>
       <div class="portal-topbar-right">
-        <button class="dash-quick-submit" onclick="portalNav(document.querySelector('[onclick*=portal-sec-submit]'),'portal-sec-submit')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Submit Referral
-        </button>
+        <span class="portal-demo-badge">Demo Mode</span>
+        <div class="pt-settings-wrap">
+          <button class="pt-settings-btn" onclick="ptToggleSettings()">
+            <span class="pt-bar pt-bar1"></span>
+            <span class="pt-bar pt-bar2"></span>
+            <span class="pt-bar pt-bar3"></span>
+          </button>
+          <div class="pt-settings-panel" id="pt-settings-panel">
+            <div class="pt-settings-row">
+              <span class="pt-settings-label">Theme</span>
+              <label class="dm-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+                <input type="checkbox" id="dm-input-portal" onchange="toggleDarkMode()">
+                <span class="dm-slider dm-round">
+                  <span class="dm-sun-moon">
+                    <svg class="dm-moon-dot" viewBox="0 0 100 100" style="left:6px;top:2px;position:absolute;width:4px;height:4px;z-index:4"><circle cx="50" cy="50" r="50"/></svg>
+                    <svg class="dm-moon-dot" viewBox="0 0 100 100" style="left:1px;top:7px;position:absolute;width:6px;height:6px;z-index:4"><circle cx="50" cy="50" r="50"/></svg>
+                    <svg class="dm-moon-dot" viewBox="0 0 100 100" style="left:11px;top:12px;position:absolute;width:2px;height:2px;z-index:4"><circle cx="50" cy="50" r="50"/></svg>
+                    <svg class="dm-light-ray" viewBox="0 0 100 100" style="left:-5px;top:-5px;position:absolute;width:28px;height:28px;z-index:-1;fill:white;opacity:0.1"><circle cx="50" cy="50" r="50"/></svg>
+                    <svg class="dm-light-ray" viewBox="0 0 100 100" style="left:-50%;top:-50%;position:absolute;width:36px;height:36px;z-index:-1;fill:white;opacity:0.1"><circle cx="50" cy="50" r="50"/></svg>
+                    <svg class="dm-light-ray" viewBox="0 0 100 100" style="left:-12px;top:-12px;position:absolute;width:42px;height:42px;z-index:-1;fill:white;opacity:0.1"><circle cx="50" cy="50" r="50"/></svg>
+                  </span>
+                  <span class="dm-clouds">
+                    <svg class="dm-cloud-light" viewBox="0 0 100 60" style="left:21px;top:10px;width:26px"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+                    <svg class="dm-cloud-light" viewBox="0 0 100 60" style="left:30px;top:6px;width:14px"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+                    <svg class="dm-cloud-dark" viewBox="0 0 100 60" style="left:12px;top:17px;width:20px"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+                    <svg class="dm-cloud-light" viewBox="0 0 100 60" style="left:25px;top:12px;width:26px"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+                    <svg class="dm-cloud-light" viewBox="0 0 100 60" style="left:34px;top:9px;width:14px"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+                    <svg class="dm-cloud-dark" viewBox="0 0 100 60" style="left:15px;top:18px;width:20px"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+                  </span>
+                  <span class="dm-stars">
+                    <svg class="dm-star" viewBox="0 0 20 20" style="width:6px;top:2px;left:3px;animation-delay:0.3s"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+                    <svg class="dm-star" viewBox="0 0 20 20" style="width:3px;top:11px;left:4px"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+                    <svg class="dm-star" viewBox="0 0 20 20" style="width:5px;top:14px;left:10px;animation-delay:0.6s"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+                    <svg class="dm-star" viewBox="0 0 20 20" style="width:7px;top:1px;left:14px;animation-delay:1.3s"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+                  </span>
+                </span>
+              </label>
+            </div>
+            <div class="pt-settings-row">
+              <span class="pt-settings-label">Tunes</span>
+              <div class="tn-switch" id="tunes-toggle" onclick="toggleTunes()">
+                <div class="tn-track">
+                  <!-- Staff lines (empty sheet music when off) -->
+                  <span class="tn-staff">
+                    <span class="tn-line"></span>
+                    <span class="tn-line"></span>
+                    <span class="tn-line"></span>
+                  </span>
+                  <!-- Music notes (animate when on) -->
+                  <span class="tn-notes">
+                    <svg class="tn-note tn-note1" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1014 17V7h4V3h-6z"/></svg>
+                    <svg class="tn-note tn-note2" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1014 17V7h4V3h-6z"/></svg>
+                    <svg class="tn-note tn-note3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1014 17V7h4V3h-6z"/></svg>
+                  </span>
+                  <!-- Thumb -->
+                  <span class="tn-thumb"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="portal-notif-wrap">
           <button class="portal-notif-btn" onclick="portalToggleNotif()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
@@ -186,19 +256,61 @@
             <div class="portal-notif-item">New CE webinar available: State Tax Compliance.<div class="portal-notif-time">1 week ago</div></div>
           </div>
         </div>
-        <span class="portal-demo-badge">Demo Mode</span>
-        <div class="tunes-toggle" id="tunes-toggle" onclick="toggleTunes()">
-          <span class="tunes-label">Tunes</span>
-          <div class="tunes-switch">
-            <div class="tunes-track"><div class="tunes-thumb" id="tunes-thumb"></div></div>
+        <div class="pt-profile-wrap">
+          <div class="portal-avatar" onclick="ptToggleProfile()">JH</div>
+          <div class="pt-profile-panel" id="pt-profile-panel">
+            <div class="pt-profile-header">
+              <div class="pt-profile-avatar">JH</div>
+              <div class="pt-profile-info">
+                <div class="pt-profile-name">Josh Hohenstein</div>
+                <div class="pt-profile-email">josh@example.com</div>
+              </div>
+            </div>
+            <div class="pt-profile-divider"></div>
+            <div class="pt-profile-progress">
+              <div class="pt-profile-progress-label">
+                <span>Profile Completion</span>
+                <span class="pt-profile-pct">65%</span>
+              </div>
+              <div class="pt-profile-bar"><div class="pt-profile-bar-fill" style="width:65%"></div></div>
+            </div>
+            <div class="pt-profile-divider"></div>
+            <button class="pt-profile-item" onclick="portalNav(document.querySelector('[onclick*=portal-sec-settings]'),'portal-sec-settings');ptCloseProfile()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Edit Profile
+            </button>
+            <button class="pt-profile-item" onclick="portalNav(document.querySelector('[onclick*=portal-sec-settings]'),'portal-sec-settings');ptCloseProfile()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              Security
+            </button>
+            <button class="pt-profile-item" onclick="portalNav(document.querySelector('[onclick*=portal-sec-payouts]'),'portal-sec-payouts');ptCloseProfile()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+              Payout Settings
+            </button>
+            <button class="pt-profile-item" onclick="portalNav(document.querySelector('[onclick*=portal-sec-support]'),'portal-sec-support');ptCloseProfile()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Help & Support
+            </button>
+            <div class="pt-profile-divider"></div>
+            <button class="pt-profile-item pt-profile-logout">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Sign Out
+            </button>
           </div>
         </div>
-        <div class="portal-avatar">JH</div>
+        <button class="sr-btn" onclick="portalNav(document.querySelector('[onclick*=portal-sec-submit]'),'portal-sec-submit')">
+          <span class="sr-edge"></span>
+          <span class="sr-edge"></span>
+          <span class="sr-edge"></span>
+          <span class="sr-edge"></span>
+          + Referral
+        </button>
       </div>
     </div>
 
     <!-- ═══ DASHBOARD SECTION ═══ -->
     <div class="portal-section portal-sec-active" id="portal-sec-dashboard">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Check KPIs each morning</strong> to spot trends before they become problems.</li><li><strong>Click any metric card</strong> to drill into the details behind the number.</li><li><strong>Use the pipeline tracker</strong> to follow every referral from submission to payout.</li></ul></div></div>
       <!-- Mobile Money Hero (hidden on desktop) -->
       <div class="mob-money-hero" id="mob-money-hero">
         <div class="mob-money-top">
@@ -232,7 +344,6 @@
           <div class="mob-milestone-text" id="mob-milestone-text">0 more referrals to Premium</div>
           <div class="mob-milestone-track"><div class="mob-milestone-fill" id="mob-milestone-fill" style="width:0%"></div></div>
         </div>
-        <button class="mob-money-cta" onclick="mobNavTap(this,'portal-sec-submit')">Submit New Referral</button>
       </div>
 
       <!-- Achievement toast (mobile only) -->
@@ -550,15 +661,10 @@
 
     <!-- ═══ REFERRALS SECTION ═══ -->
     <div class="portal-section" id="portal-sec-referrals">
-      <div class="portal-sec-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
-        <div>
-          <h2 class="portal-sec-title">Referrals</h2>
-          <p class="portal-sec-desc">Track every referral from submission to payout.</p>
-        </div>
-        <button class="ref-btn-primary" onclick="portalNav(document.querySelector('[onclick*=portal-sec-submit]'),'portal-sec-submit')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          New Referral
-        </button>
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Sort by status</strong> to surface referrals that need your attention right now.</li><li><strong>Click any row</strong> to see the full timeline and history for that referral.</li><li><strong>Follow up on older cases</strong> -- a quick nudge can restart a stalled deal.</li></ul></div></div>
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">Referrals</h2>
+        <p class="portal-sec-desc">Track every referral from submission to payout.</p>
       </div>
 
       <!-- KPI Row -->
@@ -1043,6 +1149,7 @@
 
     <!-- ═══ EARNINGS SECTION ═══ -->
     <div class="portal-section" id="portal-sec-earnings">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Review monthly trends</strong> to identify your highest-performing periods.</li><li><strong>Use the breakdown view</strong> to see which referral types earn the most.</li><li><strong>Export reports</strong> before tax season -- your accountant will thank you.</li></ul></div></div>
       <div class="portal-sec-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
         <div>
           <h2 class="portal-sec-title">Earnings</h2>
@@ -1156,6 +1263,7 @@
 
     <!-- ═══ PAYOUTS SECTION ═══ -->
     <div class="portal-section" id="portal-sec-payouts">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Keep your payment method current</strong> to avoid delays on your next payout.</li><li><strong>Download your 1099</strong> well before the filing deadline.</li><li><strong>Check the ledger</strong> for any pending or processing amounts.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">Payouts</h2>
         <p class="portal-sec-desc">Payout schedule, payment method management, tax documents (1099), and transaction ledger.</p>
@@ -1291,6 +1399,7 @@
 
     <!-- ═══ SUBMIT REFERRAL SECTION ═══ -->
     <div class="portal-section" id="portal-sec-submit">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Add as much detail as possible</strong> -- it speeds up processing significantly.</li><li><strong>Double-check contact info</strong> before hitting submit to avoid delays.</li><li><strong>You'll get notified</strong> the moment your referral is assigned to a specialist.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">Submit Referral</h2>
         <p class="portal-sec-desc">Quick-submit form for new client referrals with tax debt details, contact info, and file uploads.</p>
@@ -1477,6 +1586,7 @@
 
     <!-- ═══ DOCUMENTS SECTION ═══ -->
     <div class="portal-section" id="portal-sec-documents">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Upload signed authorizations immediately</strong> to keep cases moving fast.</li><li><strong>Organize by client name</strong> so you can find any file in seconds.</li><li><strong>Supported formats:</strong> PDF, JPG, and PNG up to 25 MB each.</li></ul></div></div>
       <div class="portal-sec-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
         <div>
           <h2 class="portal-sec-title">Documents</h2>
@@ -1607,6 +1717,7 @@
 
     <!-- ═══ CALCULATOR SECTION ═══ -->
     <div class="portal-section" id="portal-sec-calculator">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Adjust referral volume</strong> to see exactly how earnings scale at each tier.</li><li><strong>Try different tier levels</strong> to set realistic monthly growth goals.</li><li><strong>Share projections</strong> with your team to align on targets.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">Revenue Calculator</h2>
         <p class="portal-sec-desc">Model projected earnings based on referral volume, average debt size, and your commission tier.</p>
@@ -1717,6 +1828,7 @@
 
     <!-- ═══ CE WEBINARS SECTION ═══ -->
     <div class="portal-section" id="portal-sec-ce">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>CE credits boost your credibility</strong> with clients and prospects.</li><li><strong>Join live sessions</strong> to ask questions and get real-time answers.</li><li><strong>Completed credits auto-sync</strong> to your partner profile.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">CE Webinars</h2>
         <p class="portal-sec-desc">IRS-approved continuing education library with on-demand webinars and credit tracking.</p>
@@ -1887,6 +1999,7 @@
 
     <!-- ═══ MARKETING KIT SECTION ═══ -->
     <div class="portal-section" id="portal-sec-marketing">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Co-branded materials</strong> build trust faster than generic outreach.</li><li><strong>Personalize email templates</strong> -- even small tweaks boost open rates.</li><li><strong>Social assets are pre-sized</strong> for every major platform.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">Marketing Kit</h2>
         <p class="portal-sec-desc">Co-branded collateral, email templates, social assets, and interactive builder tools.</p>
@@ -2435,6 +2548,7 @@
 
     <!-- ═══ TRAINING SECTION ═══ -->
     <div class="portal-section" id="portal-sec-training">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Complete all modules</strong> to unlock your full partner toolkit.</li><li><strong>Each module takes ~5 minutes</strong> -- quick wins to get you started.</li><li><strong>Revisit any lesson</strong> anytime you need a refresher.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">Onboarding</h2>
         <p class="portal-sec-desc">Get up to speed with training modules, onboarding steps, and best practice videos.</p>
@@ -2583,6 +2697,7 @@
 
     <!-- ═══ REFERRAL PLAYBOOK SECTION ═══ -->
     <div class="portal-section" id="portal-sec-playbook">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Practice scripts out loud</strong> before your next client meeting.</li><li><strong>Use the objection handlers</strong> for the most common pushbacks you'll hear.</li><li><strong>Take quiz drills</strong> regularly to keep your pitch sharp.</li></ul></div></div>
       <div class="portal-sec-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
         <div>
           <h2 class="portal-sec-title">Referral Playbook</h2>
@@ -2957,6 +3072,7 @@
 
     <!-- ═══ BUSINESS PLANNER SECTION ═══ -->
     <div class="portal-section" id="portal-sec-planner">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Answer honestly</strong> for the most useful, personalized roadmap.</li><li><strong>Revisit your plan monthly</strong> to measure real progress against goals.</li><li><strong>Focus on the first 30 days</strong> before planning further out.</li></ul></div></div>
       <!-- Carousel Form -->
       <div id="bp-form-wrap">
         <div class="bpc-header">
@@ -3078,9 +3194,20 @@
 
     <!-- ═══ 30-DAY CHALLENGE SECTION ═══ -->
     <div class="portal-section" id="portal-sec-challenge">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Complete tasks daily</strong> to build momentum -- streaks compound fast.</li><li><strong>Each action is designed</strong> to generate a real referral opportunity.</li><li><strong>Check the leaderboard</strong> to see how you stack up against other partners.</li></ul></div></div>
       <div class="portal-sec-header">
-        <h2 class="portal-sec-title">30-Day Momentum Challenge</h2>
-        <p class="portal-sec-desc">Build unstoppable habits in 30 days. Complete daily actions from your growth roadmap, earn points, and level up your partner game.</p>
+        <h2 class="portal-sec-title">Your Partner Journey</h2>
+        <p class="portal-sec-desc">Every action you take moves you forward. Track your growth, build momentum, and become the partner you set out to be.</p>
+        <button class="ch-dl-btn" onclick="chPrintProgress()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Download Progress Report</button>
+      </div>
+
+      <!-- Identity + Motivation Banner -->
+      <div class="ch-identity" id="ch-identity">
+        <div class="ch-identity-left">
+          <div class="ch-identity-title" id="ch-identity-title">The Connector</div>
+          <div class="ch-identity-sub" id="ch-identity-sub">You're building real relationships that turn into real revenue.</div>
+        </div>
+        <div class="ch-identity-quote" id="ch-identity-quote">"The people who succeed in referral partnerships don't sell -- they solve problems their network already has."</div>
       </div>
 
       <!-- Challenge Hero / Status Card -->
@@ -3212,6 +3339,7 @@
 
     <!-- ═══ AI SCRIPT BUILDER (Portal Wrapper) ═══ -->
     <div class="portal-section" id="portal-sec-ai-scripts">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Pick a scenario</strong> that matches your next real conversation.</li><li><strong>Customize the tone</strong> so it sounds like you, not a robot.</li><li><strong>Save your favorites</strong> to reuse them with one click.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">AI Script Builder <span class="pni-badge">Pro</span></h2>
         <p class="portal-sec-desc">Generate referral conversation scripts, email templates, objection handlers, and follow-up sequences -- powered by AI and tailored to your practice.</p>
@@ -3238,6 +3366,7 @@
 
     <!-- ═══ AI AD MAKER (Portal Wrapper) ═══ -->
     <div class="portal-section" id="portal-sec-ai-admaker">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Choose your platform first</strong> -- sizing adjusts automatically.</li><li><strong>Use real client success stories</strong> for the most authentic ads.</li><li><strong>Download in high-res</strong> if you need print-quality materials.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">AI Ad Maker <span class="pni-badge">Pro</span></h2>
         <p class="portal-sec-desc">Create co-branded social media ads and marketing assets in seconds. Pick a template, customize the copy, and download -- ready to post.</p>
@@ -3256,6 +3385,7 @@
 
     <!-- ═══ AI CLIENT QUALIFIER (Portal Wrapper) ═══ -->
     <div class="portal-section" id="portal-sec-ai-qualifier">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Enter real client details</strong> for the most accurate qualification score.</li><li><strong>High-score leads convert faster</strong> -- prioritize them in your pipeline.</li><li><strong>Use the notes field</strong> to save context for your follow-up call.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">AI Client Qualifier <span class="pni-badge">Pro</span></h2>
         <p class="portal-sec-desc">Analyze a client's tax situation in seconds. Get a referral strength score, resolution path, estimated case value, and talking points for the conversation.</p>
@@ -3277,6 +3407,7 @@
 
     <!-- ═══ AI KNOWLEDGE BASE (Portal Wrapper) ═══ -->
     <div class="portal-section" id="portal-sec-ai-kb">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Ask in plain English</strong> -- the AI understands full questions and context.</li><li><strong>Try asking about</strong> commission tiers, timelines, or program policies.</li><li><strong>Bookmark answers</strong> you know you'll need to reference again.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">Knowledge Base <span class="pni-badge">Pro</span></h2>
         <p class="portal-sec-desc">AI-powered search across all partner program documentation. Ask anything about revenue share, referral process, IRS programs, or program policies.</p>
@@ -3302,6 +3433,7 @@
 
     <!-- ═══ SETTINGS SECTION ═══ -->
     <div class="portal-section" id="portal-sec-settings">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Complete your profile</strong> -- it builds trust with the internal team.</li><li><strong>Set notification preferences</strong> so you only get alerts that matter.</li><li><strong>Review your tier status</strong> for potential upgrade opportunities.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">Settings</h2>
         <p class="portal-sec-desc">Profile details, notification preferences, API keys, team member management, and tier info.</p>
@@ -3473,6 +3605,7 @@
 
     <!-- ═══ SUPPORT SECTION ═══ -->
     <div class="portal-section" id="portal-sec-support">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Search existing tickets first</strong> before creating a new one.</li><li><strong>Include screenshots</strong> when reporting issues for faster resolution.</li><li><strong>Pro subscribers</strong> get priority support with faster response times.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">Support</h2>
         <p class="portal-sec-desc">Dedicated partner support channel, ticket history, knowledge base, and your account manager contact.</p>
@@ -3601,6 +3734,7 @@
 
     <!-- ═══ PAGE BUILDER SECTION ═══ -->
     <div class="portal-section" id="portal-sec-page-builder">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Start from a template</strong> -- you can fully customize it after.</li><li><strong>Preview on mobile first</strong> -- most of your visitors browse on phones.</li><li><strong>Your referral link auto-embeds</strong> so every lead is tracked to you.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">Landing Page Builder</h2>
         <p class="portal-sec-desc">Design a custom referral or business landing page. Drag sections, style elements, and export a ready-to-deploy HTML file.</p>
@@ -3738,6 +3872,7 @@
 
     <!-- ═══ MY PAGES SECTION ═══ -->
     <div class="portal-section" id="portal-sec-my-pages">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Check analytics</strong> to see which landing pages actually convert.</li><li><strong>Duplicate a top performer</strong> and tweak the copy for a new audience.</li><li><strong>Unpublish stale pages</strong> you're no longer actively promoting.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">My Pages</h2>
         <p class="portal-sec-desc">Manage your published landing pages. View, edit, or unpublish pages from here.</p>
@@ -3747,6 +3882,7 @@
 
     <!-- ═══ TUNES SECTION ═══ -->
     <div class="portal-section" id="portal-sec-tunes">
+      <div class="pi-wrap"><button class="pi-btn" aria-label="Page tips"><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg2" height="20" viewBox="0 0 384 512"><path d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2l0 0c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4l0 0c19.8 27.1 39.7 54.4 49.2 86.2H272zM192 512c44.2 0 80-35.8 80-80V416H112v16c0 44.2 35.8 80 80 80zM112 176c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="pi-svg" height="20" viewBox="0 0 384 512"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"></path></svg></button><div class="pi-tooltip"><div class="pi-tooltip-title">Quick Tips</div><ul class="pi-tooltip-list"><li><strong>Pick a station</strong> that matches your work vibe -- focus or energy.</li><li><strong>Music keeps playing</strong> while you navigate to other portal pages.</li><li><strong>Lo-fi beats</strong> are great for deep-focus work sessions.</li></ul></div></div>
       <div class="portal-sec-header">
         <h2 class="portal-sec-title">Community Soul</h2>
         <p class="portal-sec-desc">Pick a vibe. Jazz, soul, folk, classical, and more — commercial-free radio while you work.</p>
@@ -4012,5 +4148,39 @@
 
   <!-- Toast Container -->
   <div class="portal-toast-wrap" id="portal-toast-wrap"></div>
+
+  <!-- Page Insights pulse (first 5 navigations per session) -->
+  <script>
+  (function(){
+    var key='pi-pulse-count';
+    var max=5;
+    function pulse(sec){
+      var n=+(sessionStorage.getItem(key)||0);
+      if(n>=max) return;
+      var btn=sec.querySelector('.pi-btn');
+      if(!btn) return;
+      sessionStorage.setItem(key,n+1);
+      btn.classList.remove('pi-pulse');
+      void btn.offsetWidth;
+      btn.classList.add('pi-pulse');
+      btn.addEventListener('animationend',function(){btn.classList.remove('pi-pulse')},{once:true});
+    }
+    var obs=new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.type==='attributes'&&m.attributeName==='class'){
+          var el=m.target;
+          if(el.classList.contains('portal-section')&&el.classList.contains('portal-sec-active')){
+            setTimeout(function(){pulse(el)},200);
+          }
+        }
+      });
+    });
+    document.querySelectorAll('.portal-section').forEach(function(sec){
+      obs.observe(sec,{attributes:true,attributeFilter:['class']});
+    });
+    var init=document.querySelector('.portal-sec-active');
+    if(init) setTimeout(function(){pulse(init)},600);
+  })();
+  </script>
 </div>
 

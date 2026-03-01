@@ -4641,6 +4641,22 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 .ch-lb-row-you{background:rgba(11,95,216,0.03);border:1px solid rgba(11,95,216,0.08)}
 .ch-lb-row-you:hover{background:rgba(11,95,216,0.06)}
 
+/* Identity + Motivation Banner */
+.ch-identity{display:flex;align-items:center;gap:28px;background:linear-gradient(135deg,rgba(11,95,216,0.06),rgba(0,200,224,0.04));border:1px solid rgba(11,95,216,0.12);border-radius:16px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden}
+.ch-identity::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,224,0.06),transparent 70%);pointer-events:none}
+.ch-identity-left{flex:1;min-width:0}
+.ch-identity-title{font-family:'DM Serif Display',serif;font-size:28px;color:var(--navy);line-height:1.2;margin-bottom:6px}
+.ch-identity-sub{font-size:14px;color:var(--body);line-height:1.5}
+.ch-identity-quote{flex:0 0 280px;font-size:13px;color:var(--slate);font-style:italic;line-height:1.65;padding-left:24px;border-left:3px solid rgba(11,95,216,0.15)}
+
+/* Milestone toast animation */
+.ch-milestone-pulse{animation:chMilestonePulse 0.6s ease}
+@keyframes chMilestonePulse{0%{transform:scale(1)}30%{transform:scale(1.02)}60%{transform:scale(0.99)}100%{transform:scale(1)}}
+
+/* Today card motivational sub */
+.ch-today-why{font-size:13px;color:var(--blue);font-weight:600;margin-top:8px;display:flex;align-items:center;gap:6px;opacity:0.8}
+.ch-today-why svg{stroke:var(--blue);flex-shrink:0}
+
 @media(max-width:768px){
   .ch-hero{flex-direction:column;padding:24px;gap:20px}
   .ch-hero-stats{grid-template-columns:1fr;gap:10px}
@@ -4648,6 +4664,9 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
   .ch-today-title{font-size:19px}
   .ch-today-actions{flex-direction:column}
   .ch-up-info{flex-direction:column;align-items:flex-start;gap:4px}
+  .ch-identity{flex-direction:column;gap:16px;padding:24px}
+  .ch-identity-title{font-size:22px}
+  .ch-identity-quote{flex:none;padding-left:16px;border-left-width:2px}
 }
 
 /* ═══ PRO GATING / PAYWALL ═══ */
