@@ -5323,10 +5323,10 @@ body.pb-immersive .scroll-to-top{display:none!important}
 @keyframes aitBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
 /* ── SCENE SYSTEM ── */
-/* 120vh spacer = ~12 scrolls. Fast enter (1), long hold (10), fast exit (1) */
+/* 250vh spacer = ~25 scrolls per scene. Quick enter (2), massive hold (20+), quick exit (2) */
 .ait-scene{position:relative}
 .ait-scene-pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;will-change:opacity,transform;transform:translate3d(0,40vh,0);opacity:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:2}
-.ait-scene-scroll-space{height:120vh;position:relative;z-index:1}
+.ait-scene-scroll-space{height:250vh;position:relative;z-index:1}
 .ait-scene-scroll-space-short{height:50vh}
 
 /* Scene text */

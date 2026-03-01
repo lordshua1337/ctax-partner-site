@@ -236,10 +236,10 @@
 
   // Cinematic scroll: content rises from bottom, holds at center, exits up top.
   // No scale -- pure vertical movement + opacity. Like reading a teleprompter.
-  // 120vh spacer = ~12 scrolls per scene:
-  //   Enter (0-0.15): rises from +40vh below center to center (~2 scrolls)
-  //   Hold  (0.15-0.85): sits dead center (~8 scrolls of reading)
-  //   Exit  (0.85-1.0): slides up to -40vh above center (~2 scrolls)
+  // 250vh spacer = ~25 scrolls per scene (scrollable = 250vh):
+  //   Enter (0-0.06): rises from +40vh below center to center (~1.5 scrolls)
+  //   Hold  (0.06-0.94): sits dead center, full opacity (~22 scrolls of reading)
+  //   Exit  (0.94-1.0): slides up to -40vh above center (~1.5 scrolls)
   window._aitInitScrollReveal = function() {
     if (window._aitInitStars) window._aitInitStars();
 
@@ -306,24 +306,24 @@
             // Below viewport: invisible, waiting below center
             opacity = 0;
             ty = vh * 0.4;
-          } else if (progress < 0.15) {
-            // Rising up from bottom to center (~2 scrolls)
-            var t = ease(progress / 0.15);
+          } else if (progress < 0.06) {
+            // Rising up from bottom to center (~1.5 scrolls)
+            var t = ease(progress / 0.06);
             opacity = t;
             ty = vh * 0.4 * (1 - t);
-          } else if (progress < 0.85) {
-            // Holding dead center (~8 scrolls)
+          } else if (progress < 0.94) {
+            // Holding dead center -- full opacity, zero movement (~22 scrolls)
             opacity = 1;
             ty = 0;
           } else {
-            // Sliding up and out the top (~2 scrolls)
-            var t = ease((progress - 0.85) / 0.15);
+            // Sliding up and out the top (~1.5 scrolls)
+            var t = ease((progress - 0.94) / 0.06);
             opacity = 1 - t;
             ty = -vh * 0.3 * t;
           }
 
           // CTA stays once it arrives
-          if (s.isCta && progress >= 0.15) {
+          if (s.isCta && progress >= 0.06) {
             opacity = 1;
             ty = 0;
           }
