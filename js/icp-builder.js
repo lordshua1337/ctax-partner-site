@@ -565,8 +565,8 @@
         method: 'POST',
         headers: getApiHeaders(),
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 3000,
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 2500,
           messages: [{ role: 'user', content: buildPrompt() }]
         })
       });
@@ -662,12 +662,17 @@
         '<span class="ait-iq-meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> ' + esc(_icpData.referral_frequency) + '</span>' +
       '</div>';
 
-    // Tab panels
-    document.getElementById('ait-iq-panel-who').innerHTML = formatSection(_sections.who);
-    document.getElementById('ait-iq-panel-flags').innerHTML = formatSection(_sections.flags);
-    document.getElementById('ait-iq-panel-convo').innerHTML = formatSection(_sections.convo);
-    document.getElementById('ait-iq-panel-convert').innerHTML = formatSection(_sections.convert);
-    document.getElementById('ait-iq-panel-disqualify').innerHTML = formatSection(_sections.disqualify);
+    // Tab panels with section headers
+    document.getElementById('ait-iq-panel-who').innerHTML =
+      '<h3 class="ait-iq-panel-title">Who Is Your Ideal Client?</h3>' + formatSection(_sections.who);
+    document.getElementById('ait-iq-panel-flags').innerHTML =
+      '<h3 class="ait-iq-panel-title">Red Flags to Watch For</h3>' + formatSection(_sections.flags);
+    document.getElementById('ait-iq-panel-convo').innerHTML =
+      '<h3 class="ait-iq-panel-title">How to Bring It Up</h3>' + formatSection(_sections.convo);
+    document.getElementById('ait-iq-panel-convert').innerHTML =
+      '<h3 class="ait-iq-panel-title">Why They Convert</h3>' + formatSection(_sections.convert);
+    document.getElementById('ait-iq-panel-disqualify').innerHTML =
+      '<h3 class="ait-iq-panel-title">Disqualifiers</h3>' + formatSection(_sections.disqualify);
 
     // Action Plan
     var apEl = document.getElementById('ait-iq-action-plan');

@@ -5386,7 +5386,10 @@ body.pb-immersive .scroll-to-top{display:none!important}
 
 /* Immersive mode -- hides site chrome */
 body.ait-immersive-active #site-nav,
-body.ait-immersive-active .page-breadcrumbs{display:none !important}
+body.ait-immersive-active .page-breadcrumbs,
+body.ait-immersive-active .ytd-bar,
+body.ait-immersive-active footer.ft,
+body.ait-immersive-active #scroll-progress{display:none !important}
 body.ait-immersive-active{overflow:hidden;background:#0a0a0a !important;padding-bottom:0 !important}
 body.ait-immersive-active .page{padding-top:0 !important}
 
@@ -5474,18 +5477,19 @@ body.ait-immersive-active .page{padding-top:0 !important}
 
 /* Tab Panels */
 .ait-iq-panels{margin-bottom:32px}
-.ait-iq-panel{display:none;padding:28px 4px;animation:fqFadeIn 0.35s ease}
+.ait-iq-panel{display:none;padding:28px 4px;animation:fqFadeIn 0.35s ease;text-align:left}
 .ait-iq-panel-active{display:block}
-.ait-iq-content-block{margin-bottom:16px;font-size:15px;color:rgba(255,255,255,0.75);line-height:1.7}
+.ait-iq-panel-title{font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin:0 0 20px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.ait-iq-content-block{margin-bottom:16px;font-size:15px;color:rgba(255,255,255,0.75);line-height:1.7;text-align:left}
 .ait-iq-content-block b{color:#fff;font-weight:600}
-.ait-iq-content-p{margin:0 0 14px;font-size:15px;color:rgba(255,255,255,0.75);line-height:1.7}
+.ait-iq-content-p{margin:0 0 14px;font-size:15px;color:rgba(255,255,255,0.75);line-height:1.7;text-align:left}
 .ait-iq-content-p b{color:#fff;font-weight:600}
 
 /* Action Plan Card */
 .ait-iq-action-plan{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:28px;margin-bottom:32px}
 .ait-iq-ap-head{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;color:#fff;margin-bottom:20px}
 .ait-iq-ap-head svg{color:var(--sky)}
-.ait-iq-ap-body{font-size:15px;color:rgba(255,255,255,0.75);line-height:1.7}
+.ait-iq-ap-body{font-size:15px;color:rgba(255,255,255,0.75);line-height:1.7;text-align:left}
 .ait-iq-ap-body b{color:#fff;font-weight:600}
 .ait-iq-ap-body .icpd-block,.ait-iq-ap-body .ait-iq-content-block{margin-bottom:12px}
 
