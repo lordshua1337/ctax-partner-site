@@ -234,14 +234,11 @@
     container.appendChild(frag);
   };
 
-  // Cinematic scroll: balanced zoom timing.
-  // With 100vh spacer (total scene = 200vh, scrollable = 100vh ≈ 10 scrolls):
-  //   Dead  (0.00-0.05):  invisible gap after previous scene (~0.5 scroll)
-  //   Enter (0.05-0.35):  zoom in 0.7->1.0 (~3 scrolls)
-  //   Hold  (0.35-0.60):  sit still, read it (~2.5 scrolls)
-  //   Exit  (0.60-0.90):  zoom out 1.0->1.12 (~3 scrolls)
-  //   Dead  (0.90-1.00):  invisible gap before next scene (~1 scroll)
-  // = ~2 scrolls of empty between scenes
+  // Cinematic scroll: FAST enter, LONG hold, FAST exit.
+  // 120vh spacer = ~12 scrolls per scene:
+  //   Enter (0.00-0.08):  zoom in fast (~1 scroll)
+  //   Hold  (0.08-0.88):  sit centered, read it (~9-10 scrolls)
+  //   Exit  (0.88-1.00):  zoom out fast (~1.5 scrolls)
   window._aitInitScrollReveal = function() {
     if (window._aitInitStars) window._aitInitStars();
 
@@ -304,32 +301,27 @@
 
           var opacity, scale;
 
-          if (belowView > 0 || progress < 0.05) {
-            // Dead zone: not visible yet
+          if (belowView > 0) {
             opacity = 0;
-            scale = 0.7;
-          } else if (progress < 0.35) {
-            // Zoom in: 0.05-0.35 (~3 scrolls)
-            var t = ease((progress - 0.05) / 0.30);
+            scale = 0.8;
+          } else if (progress < 0.08) {
+            // Fast zoom in: ~1 scroll
+            var t = ease(progress / 0.08);
             opacity = t;
-            scale = 0.7 + 0.3 * t;
-          } else if (progress < 0.60) {
-            // Hold: 0.35-0.60 (~2.5 scrolls)
+            scale = 0.8 + 0.2 * t;
+          } else if (progress < 0.88) {
+            // LONG hold: ~10 scrolls, content sits centered
             opacity = 1;
             scale = 1;
-          } else if (progress < 0.90) {
-            // Zoom out: 0.60-0.90 (~3 scrolls)
-            var t = ease((progress - 0.60) / 0.30);
-            opacity = 1 - t;
-            scale = 1 + 0.12 * t;
           } else {
-            // Dead zone: gap before next scene
-            opacity = 0;
-            scale = 1.12;
+            // Fast zoom out: ~1.5 scrolls
+            var t = ease((progress - 0.88) / 0.12);
+            opacity = 1 - t;
+            scale = 1 + 0.1 * t;
           }
 
           // CTA stays once it arrives
-          if (s.isCta && progress >= 0.35) {
+          if (s.isCta && progress >= 0.08) {
             opacity = 1;
             scale = 1;
           }
