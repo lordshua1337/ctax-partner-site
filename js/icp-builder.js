@@ -217,21 +217,41 @@
   window._aitInitStars = function() {
     var container = document.getElementById('ait-stars');
     if (!container || container.childNodes.length > 0) return;
-    var count = 80;
+    var count = 120;
     var frag = document.createDocumentFragment();
     for (var i = 0; i < count; i++) {
       var star = document.createElement('div');
-      var isLarge = Math.random() < 0.15;
+      var isLarge = Math.random() < 0.18;
       star.className = 'ait-star' + (isLarge ? ' ait-star-lg' : '');
       star.style.left = (Math.random() * 100) + '%';
       star.style.top = (Math.random() * 100) + '%';
-      star.style.setProperty('--dur', (2 + Math.random() * 4).toFixed(1) + 's');
-      star.style.setProperty('--lo', (0.05 + Math.random() * 0.15).toFixed(2));
-      star.style.setProperty('--hi', (0.4 + Math.random() * 0.5).toFixed(2));
+      star.style.setProperty('--dur', (1.5 + Math.random() * 3.5).toFixed(1) + 's');
+      star.style.setProperty('--lo', (0.08 + Math.random() * 0.12).toFixed(2));
+      star.style.setProperty('--hi', (0.5 + Math.random() * 0.5).toFixed(2));
       star.style.animationDelay = (Math.random() * -5).toFixed(1) + 's';
+      // Subtle blue/white color variation
+      if (Math.random() < 0.25) {
+        star.style.background = 'rgba(75,163,255,' + (0.6 + Math.random() * 0.4).toFixed(2) + ')';
+      } else if (Math.random() < 0.1) {
+        star.style.background = 'rgba(0,200,224,' + (0.5 + Math.random() * 0.4).toFixed(2) + ')';
+      }
       frag.appendChild(star);
     }
     container.appendChild(frag);
+
+    // Shooting stars (periodic)
+    function spawnShootingStar() {
+      var ss = document.createElement('div');
+      ss.className = 'ait-shooting-star';
+      ss.style.top = (Math.random() * 60) + '%';
+      ss.style.left = (Math.random() * 40 + 30) + '%';
+      ss.style.setProperty('--angle', (15 + Math.random() * 30) + 'deg');
+      container.appendChild(ss);
+      setTimeout(function() { ss.remove(); }, 1200);
+    }
+    setInterval(function() {
+      if (Math.random() < 0.5) spawnShootingStar();
+    }, 4000);
   };
 
   // Immersive snap-scroll experience.
