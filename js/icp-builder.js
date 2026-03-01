@@ -214,17 +214,48 @@
   };
 
   // Cinematic scroll controller: every scene pins + fades in/out via scroll progress
+  // Performance: cache scene offsets, avoid getBoundingClientRect in scroll loop,
+  // use translate3d for GPU compositing, no scale transforms on text
   window._aitInitScrollReveal = function() {
     var hero = document.getElementById('ait-hero-pin');
     var heroContent = document.getElementById('ait-hero-pin-content');
     var scrollCue = document.getElementById('ait-scroll-cue');
-    var scenes = document.querySelectorAll('.ait-scene');
+    var sceneEls = document.querySelectorAll('.ait-scene');
     var ticking = false;
 
     function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 
-    // Ease function for smoother transitions
-    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+    // Smooth ease -- slower start, gentle finish
+    function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+
+    // Cache scene geometry so we never call offsetTop/offsetHeight during scroll
+    var scenes = [];
+    function cacheGeometry() {
+      scenes = [];
+      var scrollY = window.scrollY;
+      for (var i = 0; i < sceneEls.length; i++) {
+        var el = sceneEls[i];
+        var pin = el.querySelector('.ait-scene-pin');
+        if (!pin) continue;
+        var rect = el.getBoundingClientRect();
+        scenes.push({
+          el: el,
+          pin: pin,
+          top: rect.top + scrollY,
+          height: rect.height,
+          isProof: el.dataset.scene === 'proof',
+          cards: el.dataset.scene === 'proof' ? el.querySelectorAll('.ait-proof-card') : null
+        });
+      }
+    }
+
+    cacheGeometry();
+    // Recache on resize (debounced)
+    var resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(cacheGeometry, 200);
+    });
 
     function onScroll() {
       if (ticking) return;
@@ -233,76 +264,69 @@
         var scrollY = window.scrollY;
         var vh = window.innerHeight;
 
-        // Hero: fade out + scale down as you scroll past
+        // Hero: pure opacity fade, gentle translate up
         if (hero && heroContent) {
-          var heroProgress = clamp(scrollY / (vh * 0.7), 0, 1);
-          heroContent.style.opacity = 1 - heroProgress;
-          heroContent.style.transform = 'scale(' + (1 - heroProgress * 0.15) + ')';
+          var heroP = clamp(scrollY / (vh * 0.8), 0, 1);
+          var heroEased = ease(heroP);
+          heroContent.style.opacity = 1 - heroEased;
+          heroContent.style.transform = 'translate3d(0,' + (-20 * heroEased) + 'px,0)';
           if (scrollCue) {
-            scrollCue.style.opacity = Math.max(1 - heroProgress * 4, 0);
+            scrollCue.style.opacity = clamp(1 - heroP * 3, 0, 1);
           }
         }
 
-        // Each scene: compute scroll progress through it
+        // Scenes: use cached offsets, no layout queries
         for (var i = 0; i < scenes.length; i++) {
-          var scene = scenes[i];
-          var pin = scene.querySelector('.ait-scene-pin');
-          if (!pin) continue;
+          var s = scenes[i];
+          var pin = s.pin;
+          var scrollableDistance = s.height - vh;
+          if (scrollableDistance <= 0) scrollableDistance = 1;
 
-          var rect = scene.getBoundingClientRect();
-          var sceneHeight = scene.offsetHeight;
-          var pinHeight = vh;
+          // How far the scene top has scrolled past the viewport top
+          var scrolledPast = scrollY - s.top;
+          // progress: 0 = scene top at viewport top, 1 = scene bottom at viewport bottom
+          var progress = clamp(scrolledPast / scrollableDistance, 0, 1);
+          // visibility: has the scene entered the viewport at all?
+          var distFromView = s.top - scrollY - vh;
 
-          // How far through this scene are we? 0 = just entered, 1 = fully past
-          var sceneTop = rect.top;
-          var progress = clamp(-sceneTop / (sceneHeight - pinHeight), 0, 1);
+          var opacity, ty;
 
-          // Fade zones: 0-0.15 fade in, 0.15-0.7 hold, 0.7-1.0 fade out
-          var opacity;
-          var translateY;
-          var scale;
-
-          if (sceneTop > vh) {
-            // Scene hasn't entered viewport yet
+          if (distFromView > 0) {
+            // Below viewport -- invisible
             opacity = 0;
-            translateY = 40;
-            scale = 0.97;
-          } else if (progress < 0.15) {
-            // Fading in
-            var fadeIn = easeOutCubic(progress / 0.15);
-            opacity = fadeIn;
-            translateY = 40 * (1 - fadeIn);
-            scale = 0.97 + 0.03 * fadeIn;
-          } else if (progress < 0.7) {
-            // Holding visible
+            ty = 60;
+          } else if (progress <= 0.25) {
+            // Fade in zone (wider = smoother)
+            var t = ease(progress / 0.25);
+            opacity = t;
+            ty = 60 * (1 - t);
+          } else if (progress <= 0.65) {
+            // Hold zone -- fully visible, no movement
             opacity = 1;
-            translateY = 0;
-            scale = 1;
+            ty = 0;
           } else {
-            // Fading out
-            var fadeOut = easeOutCubic((progress - 0.7) / 0.3);
-            opacity = 1 - fadeOut;
-            translateY = -30 * fadeOut;
-            scale = 1 - 0.04 * fadeOut;
+            // Fade out zone
+            var t = ease((progress - 0.65) / 0.35);
+            opacity = 1 - t;
+            ty = -40 * t;
           }
 
           pin.style.opacity = opacity;
-          pin.style.transform = 'translateY(' + translateY + 'px) scale(' + scale + ')';
+          pin.style.transform = 'translate3d(0,' + ty + 'px,0)';
 
-          // Proof cards: stagger in individually
-          if (scene.dataset.scene === 'proof') {
-            var cards = scene.querySelectorAll('.ait-proof-card');
-            for (var c = 0; c < cards.length; c++) {
-              var cardDelay = c * 0.05;
-              var cardProgress = clamp((progress - cardDelay) / 0.15, 0, 1);
-              if (progress >= 0.15) cardProgress = 1;
-              var cardFadeIn = easeOutCubic(cardProgress);
-              cards[c].style.opacity = opacity * cardFadeIn;
-              cards[c].style.transform = 'translateY(' + (24 * (1 - cardFadeIn)) + 'px)';
-              if (cardProgress >= 1 && opacity > 0.5) {
-                cards[c].classList.add('ait-proof-visible');
+          // Proof cards: stagger with wider delay
+          if (s.isProof && s.cards) {
+            for (var c = 0; c < s.cards.length; c++) {
+              var delay = c * 0.08;
+              var cardT = clamp((progress - delay) / 0.2, 0, 1);
+              if (progress >= 0.25) cardT = 1;
+              var cardEased = ease(cardT);
+              s.cards[c].style.opacity = opacity * cardEased;
+              s.cards[c].style.transform = 'translate3d(0,' + (30 * (1 - cardEased)) + 'px,0)';
+              if (cardEased >= 1 && opacity > 0.5) {
+                s.cards[c].classList.add('ait-proof-visible');
               } else {
-                cards[c].classList.remove('ait-proof-visible');
+                s.cards[c].classList.remove('ait-proof-visible');
               }
             }
           }
@@ -313,7 +337,6 @@
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    // Run once on load to set initial states
     onScroll();
   };
 

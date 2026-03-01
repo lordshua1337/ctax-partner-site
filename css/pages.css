@@ -5316,11 +5316,12 @@ body.pb-immersive .scroll-to-top{display:none!important}
 .ait-scroll-cue svg{animation:aitBounce 2.5s infinite}
 @keyframes aitBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-/* ── SCENE SYSTEM: Each scene pins its content to viewport ── */
+/* ── SCENE SYSTEM: Each scene pins + fades via scroll ── */
+/* GPU-composited: only opacity + translate3d touched by JS */
 .ait-scene{position:relative}
-.ait-scene-pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;will-change:opacity,transform;z-index:2}
-.ait-scene-scroll-space{height:80vh;position:relative;z-index:1}
-.ait-scene-scroll-space-short{height:40vh}
+.ait-scene-pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;will-change:opacity,transform;transform:translate3d(0,0,0);-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:2}
+.ait-scene-scroll-space{height:120vh;position:relative;z-index:1}
+.ait-scene-scroll-space-short{height:60vh}
 
 /* Scene text styles */
 .ait-scene-text{font-family:'DM Serif Display',serif;font-size:42px;line-height:1.3;color:#fff;margin:0;max-width:700px;letter-spacing:-0.01em}
@@ -5329,15 +5330,15 @@ body.pb-immersive .scroll-to-top{display:none!important}
 
 /* Proof cards */
 .ait-proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:660px;width:100%}
-.ait-proof-card{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:36px 24px;text-align:center;will-change:opacity,transform}
+.ait-proof-card{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:36px 24px;text-align:center;will-change:opacity,transform;transform:translate3d(0,0,0);-webkit-backface-visibility:hidden;backface-visibility:hidden}
 .ait-proof-card.ait-proof-visible{animation:aitFloat 4s ease-in-out infinite alternate}
 .ait-proof-num{font-family:'DM Serif Display',serif;font-size:48px;color:var(--sky);margin-bottom:10px}
 .ait-proof-label{font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
 .ait-proof-desc{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.5}
-@keyframes aitFloat{0%{transform:translateY(0)}100%{transform:translateY(-8px)}}
+@keyframes aitFloat{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(0,-8px,0)}}
 
 /* Value cards -- centered, large presentation */
-.ait-value-card{max-width:480px;text-align:center;will-change:opacity,transform}
+.ait-value-card{max-width:480px;text-align:center}
 .ait-value-icon{width:72px;height:72px;border-radius:18px;background:rgba(75,163,255,0.08);display:flex;align-items:center;justify-content:center;color:var(--sky);margin:0 auto 28px}
 .ait-value-title{font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;color:#fff;margin:0 0 16px}
 .ait-value-desc{font-size:17px;color:rgba(255,255,255,0.5);line-height:1.7;margin:0}
@@ -5363,7 +5364,7 @@ body.pb-immersive .scroll-to-top{display:none!important}
   .ait-scene-pin{padding:0 20px}
   .ait-orb{width:300px;height:300px}
   .ait-hero-scroll-space{height:40vh}
-  .ait-scene-scroll-space{height:60vh}
+  .ait-scene-scroll-space{height:80vh}
 }
 
 /* ── ICP BUILDER ─────────────────────────────────────────── */
