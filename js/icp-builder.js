@@ -520,7 +520,8 @@
       + '4. Client financial scale: ' + (_answers.scale || 'Not provided') + '\n'
       + '5. Geography: ' + (_answers.geography || 'Not provided') + '\n'
       + '6. Primary motivation: ' + (_answers.motivation || 'Not provided') + '\n\n'
-      + 'Respond in EXACTLY 7 sections separated by "---SECTION---":\n\n'
+      + 'Respond in EXACTLY 7 sections separated by "---SECTION---".\n'
+      + 'IMPORTANT: Do NOT include section headers like "SECTION 1" or "WHO THEY ARE" in your output. Just write the content directly. The sections are separated ONLY by the ---SECTION--- delimiter.\n\n'
       + 'SECTION 1 -- JSON (no other text):\n'
       + '{"icp_title": "short descriptive title for the ideal client e.g. The Overwhelmed Small Business Owner", "icp_tagline": "one sentence summary of who this person is", "fit_score": "HIGH or MEDIUM", "commission_range": "$X,XXX - $X,XXX per case", "referral_frequency": "X-X per month estimate"}\n\n'
       + 'SECTION 2 -- WHO THEY ARE (3-4 paragraphs, use <b>bold</b> for key terms, no markdown/asterisks):\n'
@@ -566,7 +567,7 @@
         headers: getApiHeaders(),
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
-          max_tokens: 2500,
+          max_tokens: 4000,
           messages: [{ role: 'user', content: buildPrompt() }]
         })
       });
@@ -690,9 +691,12 @@
 
   function formatSection(html) {
     if (!html) return '<p style="color:rgba(255,255,255,0.5);font-style:italic">No content generated for this section.</p>';
+    // Strip any "SECTION X -- TITLE" headers the AI may have included literally
+    var cleaned = html.replace(/^SECTION\s+\d+\s*[-–—:]+\s*[A-Z\s]+\n*/i, '').trim();
+    if (!cleaned) return '<p style="color:rgba(255,255,255,0.5);font-style:italic">No content generated for this section.</p>';
     // The AI returns HTML with <b> tags, we just need to wrap in paragraphs
     // Split on double newlines for paragraph breaks
-    var paragraphs = html.split(/\n\n+/);
+    var paragraphs = cleaned.split(/\n\n+/);
     return paragraphs.map(function(p) {
       var trimmed = p.trim();
       if (!trimmed) return '';
