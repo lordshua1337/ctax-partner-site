@@ -118,6 +118,11 @@ function onPageLoaded(id) {
   if (id === 'portal' && typeof tourShouldShow === 'function' && tourShouldShow()) {
     if (typeof tourStart === 'function') setTimeout(tourStart, 500);
   }
+  // Initialize ICP Builder + scroll reveals on ai-tools page
+  if (id === 'ai-tools') {
+    if (typeof window._icpInit === 'function') setTimeout(window._icpInit, 80);
+    if (typeof window._aitInitScrollReveal === 'function') setTimeout(window._aitInitScrollReveal, 100);
+  }
   // Initialize staggered card entrances on newly loaded page
   var el = document.getElementById('page-' + id);
   if (el && typeof window.initStagger === 'function') {
