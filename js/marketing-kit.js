@@ -478,7 +478,7 @@ function mkBackToPortal() {
 
 // Navigate from portal to Ad Builder page
 function mkGoToAdBuilder() {
-  showPage('admaker');
+  portalNav(document.querySelector('[onclick*="portal-sec-ai-admaker"]'),'portal-sec-ai-admaker');
 }
 
 

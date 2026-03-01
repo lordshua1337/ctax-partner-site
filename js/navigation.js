@@ -121,15 +121,13 @@ var pageSEO = {
   contact:    { title: 'Contact Us — Community Tax Partner Support', desc: 'Questions about the partner program? Reach our partner support team for program questions, technical support, or general inquiries.' },
   faq:        { title: 'Partner FAQ — Tax Resolution Referral Program Questions', desc: 'Answers to common questions about the Community Tax partner program, revenue share, client identification, IRS programs, and referral tracking.' },
   resources:  { title: 'Partner Resources — Knowledge Base, Templates, Guides | Community Tax', desc: 'Search the partner knowledge base, qualify clients, browse templates, and access onboarding guides for Community Tax referral partners.' },
-  calculator: { title: 'Revenue Calculator — Model Your Referral Earnings | Community Tax', desc: 'Calculate your potential annual revenue from tax resolution referrals. Interactive calculator with scenario modeling and tier comparison.' },
-  scripts:    { title: 'AI Script Builder — Custom Referral Scripts | Community Tax', desc: 'Generate custom referral scripts for emails, phone calls, and client conversations. AI-powered script builder tuned for tax resolution.' },
-  admaker:    { title: 'Ad Maker — Co-Branded Marketing Ads | Community Tax', desc: 'Create professional co-branded ads for social media, email, and print. Upload your logo and generate ready-to-use marketing materials.' },
   webinars:   { title: 'CE Webinars — IRS-Approved Continuing Education | Community Tax', desc: '500+ hours of on-demand continuing education for tax professionals. Tax resolution, ethics, federal law updates — all free for active partners.' },
   dashboard:  { title: 'Partner Dashboard Preview — Real-Time Tracking | Community Tax', desc: 'Preview the partner portal with real-time case tracking, pipeline velocity, commission accruals, and conversion metrics.' },
   onboarding: { title: 'Partner Onboarding Checklist — Get Started | Community Tax', desc: 'Step-by-step onboarding checklist to get your Community Tax partnership up and running quickly.' },
   portal:     { title: 'Partner Portal — Community Tax Dashboard', desc: 'Access your partner portal for referral tracking, earnings, payouts, and client management.' },
   privacy:    { title: 'Privacy Policy — Community Tax', desc: 'Community Tax privacy policy covering data collection, usage, and protection for partner program participants.' },
   terms:      { title: 'Terms of Use — Community Tax', desc: 'Terms of use governing the Community Tax partner program website and services.' },
+  'ai-tools': { title: 'AI-Powered Tools — Community Tax Partners', desc: 'Explore AI-powered partner tools built to help you identify ideal clients, craft referral scripts, create ads, and grow your revenue.' },
   '404':      { title: 'Page Not Found — Community Tax', desc: '' }
 };
 function updatePageSEO(id) {
@@ -137,6 +135,15 @@ function updatePageSEO(id) {
   document.title = seo.title;
   var metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) metaDesc.setAttribute('content', seo.desc);
+}
+
+// Navigate to portal and open a specific AI tool section
+function goPortalAI(secId){
+  showPage('portal');
+  setTimeout(function(){
+    var nav = document.querySelector('[onclick*="'+secId+'"]');
+    if(nav && typeof portalNav === 'function') portalNav(nav, secId);
+  }, 300);
 }
 
 // Handle initial page load — check for lp/ deep links, otherwise start on home

@@ -242,6 +242,101 @@ function proClosePaywall() {
   if (el) el.remove();
 }
 
+// --- Go Pro Comparison Modal ---
+// Two-column modal: Premium (free) vs Pro ($4.95/mo)
+
+var GP_PREMIUM_FEATURES = [
+  'Partner Dashboard',
+  'Referral submission',
+  'Earnings tracking',
+  'Payout history',
+  'CE webinars',
+  'Support center'
+];
+
+var GP_PRO_FEATURES = [
+  'AI Script Builder',
+  'AI Ad Maker',
+  'AI Client Qualifier',
+  'AI Knowledge Base',
+  'Marketing Kit',
+  'Referral Playbook',
+  'Business Planner',
+  '30-Day Challenge',
+  'Revenue Calculator',
+  'Document Manager',
+  'Landing Page Builder',
+  'Priority support',
+  'Future upgrades included',
+  'Increased commission potential'
+];
+
+function gpShowCompare() {
+  if (document.getElementById('gp-compare')) return;
+
+  var overlay = document.createElement('div');
+  overlay.id = 'gp-compare';
+  overlay.className = 'gp-compare-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) gpCloseCompare(); };
+
+  var checkSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+  var h = '<div class="gp-compare-modal">';
+
+  // Close button
+  h += '<button class="gp-compare-close" onclick="gpCloseCompare()">';
+  h += '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  h += '</button>';
+
+  // Header
+  h += '<div class="gp-compare-header">';
+  h += '<div class="gp-compare-title">Choose Your Plan</div>';
+  h += '<div class="gp-compare-subtitle">You\'re currently on Premium</div>';
+  h += '</div>';
+
+  // Grid
+  h += '<div class="gp-compare-grid">';
+
+  // -- Premium card --
+  h += '<div class="gp-compare-card">';
+  h += '<div class="gp-compare-badge gp-compare-badge-free">PREMIUM</div>';
+  h += '<div class="gp-compare-price">Free</div>';
+  h += '<ul class="gp-compare-list">';
+  GP_PREMIUM_FEATURES.forEach(function(f) {
+    h += '<li class="gp-compare-item">' + checkSvg + '<span>' + f + '</span></li>';
+  });
+  h += '</ul>';
+  h += '<button class="gp-compare-cta gp-compare-cta-disabled" disabled>Current Plan</button>';
+  h += '</div>';
+
+  // -- Pro card --
+  h += '<div class="gp-compare-card gp-compare-card-pro">';
+  h += '<div class="gp-compare-badge gp-compare-badge-pro">PRO</div>';
+  h += '<div class="gp-compare-price">' + PRO_PRICE + '<span class="gp-compare-period">/mo</span></div>';
+  h += '<div class="gp-compare-plus">Everything in Premium, plus:</div>';
+  h += '<ul class="gp-compare-list">';
+  GP_PRO_FEATURES.forEach(function(f) {
+    h += '<li class="gp-compare-item">' + checkSvg + '<span>' + f + '</span></li>';
+  });
+  h += '</ul>';
+  h += '<button class="gp-compare-cta gp-compare-cta-pro" onclick="proSubscribe(); gpCloseCompare();">Upgrade to Pro</button>';
+  h += '</div>';
+
+  h += '</div>'; // grid
+
+  // Footer
+  h += '<div class="gp-compare-footer">30-day money-back guarantee</div>';
+
+  h += '</div>'; // modal
+  overlay.innerHTML = h;
+  document.body.appendChild(overlay);
+}
+
+function gpCloseCompare() {
+  var el = document.getElementById('gp-compare');
+  if (el) el.remove();
+}
+
 // Initialize: set demo mode by default, update nav
 function proInit() {
   var state = proGetState();

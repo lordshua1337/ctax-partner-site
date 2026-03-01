@@ -209,11 +209,13 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
 
 <div id="cookie-consent" role="dialog" aria-label="Cookie consent" class="cc-banner">
   <div class="cc-card">
-    <div class="cc-left">
-      <img src="images/ctax-cookie.webp" alt="" class="cc-img" aria-hidden="true" width="80" height="80">
-    </div>
-    <div class="cc-right">
-      <p class="cc-text">Hey, we use cookies to improve your experience. By browsing this site you agree to our <a href="#privacy" onclick="event.preventDefault();showPage('privacy')" class="cc-link">Privacy Policy</a>.</p>
+    <span class="cc-icon">
+      <img src="images/ctax-cookie.webp" alt="" class="cc-img" aria-hidden="true" width="64" height="64">
+    </span>
+    <h5 class="cc-title">Your privacy matters to us</h5>
+    <p class="cc-text">We use cookies to improve your experience and personalize content. See our <a href="#privacy" onclick="event.preventDefault();showPage('privacy')" class="cc-link">Privacy Policy</a> for details.</p>
+    <div class="cc-footer">
+      <a href="#privacy" onclick="event.preventDefault();showPage('privacy')" class="cc-more">More Options</a>
       <button onclick="acceptCookies()" class="cc-btn">Okay</button>
     </div>
   </div>
@@ -294,24 +296,9 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
         <div class="dd-inner">
         <div class="dd-section">
           <div class="dd-label">AI-Powered</div>
-          <a class="dd-item" href="#calculator" onclick="event.preventDefault();showPage('calculator')">
-            <span class="dd-icon-wrap dd-ic-cyan"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 3h6v7l3.5 7.5a1 1 0 0 1-.9 1.5H6.4a1 1 0 0 1-.9-1.5L9 10V3z"/></svg></span>
-            <div><div class="dd-title">Revenue Lab</div><div class="dd-desc">AI revenue projections</div></div>
-            <span class="dd-arrow">&#8250;</span>
-          </a>
-          <a class="dd-item" href="#scripts" onclick="event.preventDefault();showPage('scripts')">
-            <span class="dd-icon-wrap dd-ic-navy"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
-            <div><div class="dd-title">Script Builder</div><div class="dd-desc">Custom referral scripts</div></div>
-            <span class="dd-arrow">&#8250;</span>
-          </a>
-          <a class="dd-item" href="#admaker" onclick="event.preventDefault();showPage('admaker')">
-            <span class="dd-icon-wrap dd-ic-cyan"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
-            <div><div class="dd-title">Ad Maker</div><div class="dd-desc">Co-branded social ads</div></div>
-            <span class="dd-arrow">&#8250;</span>
-          </a>
-          <a class="dd-item" href="#resources" onclick="event.preventDefault();showPage('resources')">
-            <span class="dd-icon-wrap dd-ic-teal"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-            <div><div class="dd-title">Client Qualifier</div><div class="dd-desc">Assess referral strength</div></div>
+          <a class="dd-item" href="#ai-tools" onclick="event.preventDefault();showPage('ai-tools')">
+            <span class="dd-icon-wrap dd-ic-cyan"><svg class="dd-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
+            <div><div class="dd-title">AI Tools</div><div class="dd-desc">Script Builder, Ad Maker, and more</div></div>
             <span class="dd-arrow">&#8250;</span>
           </a>
         </div>
@@ -368,7 +355,33 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
         </div>
       </div>
     </div>
-    <button id="dark-mode-toggle" onclick="toggleDarkMode()" class="nav-icon-btn" title="Toggle dark mode" aria-label="Toggle dark mode"><span id="dark-mode-icon">&#9790;</span></button>
+    <label class="dm-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="dm-input" onchange="toggleDarkMode()">
+      <span class="dm-slider dm-round">
+        <span class="dm-sun-moon">
+          <svg id="dm-moon-dot-1" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+          <svg id="dm-moon-dot-2" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+          <svg id="dm-moon-dot-3" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+          <svg id="dm-light-ray-1" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+          <svg id="dm-light-ray-2" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+          <svg id="dm-light-ray-3" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+        </span>
+        <span class="dm-clouds">
+          <svg id="dm-cloud-1" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+          <svg id="dm-cloud-2" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+          <svg id="dm-cloud-3" class="dm-cloud-dark" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+          <svg id="dm-cloud-4" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+          <svg id="dm-cloud-5" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+          <svg id="dm-cloud-6" class="dm-cloud-dark" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+        </span>
+        <span class="dm-stars">
+          <svg id="dm-star-1" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+          <svg id="dm-star-2" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+          <svg id="dm-star-3" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+          <svg id="dm-star-4" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+        </span>
+      </span>
+    </label>
     <button id="tier-toggle" onclick="cycleTier()" class="nav-icon-btn" title="Switch partner tier" aria-label="Switch partner tier"><span id="tier-icon">E</span></button>
     <button class="nav-cta-outline" onclick="showPage('contact')">Start Referral</button>
     <button class="nav-cta" onclick="showPage('portal')">Dashboard</button>
@@ -425,10 +438,7 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
   </div>
   <div class="mob-section">
     <div class="mob-label">AI Tools</div>
-    <a class="mob-link" href="#calculator" onclick="event.preventDefault();showPage('calculator');closeMobileNav()">Revenue Lab</a>
-    <a class="mob-link" href="#scripts" onclick="event.preventDefault();showPage('scripts');closeMobileNav()">Script Builder</a>
-    <a class="mob-link" href="#admaker" onclick="event.preventDefault();showPage('admaker');closeMobileNav()">Ad Maker</a>
-    <a class="mob-link" href="#resources" onclick="event.preventDefault();showPage('resources');closeMobileNav()">Client Qualifier</a>
+    <a class="mob-link" href="#ai-tools" onclick="event.preventDefault();showPage('ai-tools');closeMobileNav()">AI Tools</a>
     <a class="mob-link" href="#dashboard" onclick="event.preventDefault();showPage('dashboard');closeMobileNav()">Dashboard Preview</a>
     <a class="mob-link" href="#resources" onclick="event.preventDefault();showPage('resources');closeMobileNav()">Resources</a>
     <a class="mob-link" href="#faq" onclick="event.preventDefault();showPage('faq');closeMobileNav()">FAQ</a>
@@ -663,17 +673,6 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
 
 <!-- PARTNER AGREEMENT PAGE -->
 
-<div class="page" id="page-calculator">
-</div>
-<!-- END REVENUE CALCULATOR PAGE -->
-
-<!-- SCRIPT BUILDER PAGE -->
-<div class="page" id="page-scripts">
-</div>
-<!-- END SCRIPT BUILDER PAGE -->
-
-<div class="page" id="page-admaker">
-</div>
 
 
 
@@ -704,6 +703,10 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
 <div id="page-contact" class="page">
 </div>
 <!-- END CONTACT PAGE -->
+
+<!-- AI Tools Landing -->
+<div class="page" id="page-ai-tools">
+</div>
 
 <!-- 404 / Not Found -->
 <div class="page" id="page-404">
@@ -771,7 +774,7 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
           <div class="exp-card-num">04 / 04</div>
           <div class="exp-card-title">AI-Powered Partner Tools</div>
           <div class="exp-card-desc">Custom referral scripts, co-branded ad generation, client qualification scoring, and automated outreach templates. Built on Claude — tuned for tax resolution.</div>
-          <button class="exp-card-btn" onclick="closeAndNav('scripts')">Try Script Builder &rarr;</button>
+          <button class="exp-card-btn" onclick="closeAndNav('portal');setTimeout(function(){goPortalAI('portal-sec-ai-scripts')},400)">Try Script Builder &rarr;</button>
         </div>
 
       </div>
@@ -820,9 +823,7 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
       <div>
         <div class="ft-col-lbl">AI Tools</div>
         <div style="display:flex;flex-direction:column;gap:14px;margin-top:20px">
-          <a class="ft-link" href="#calculator" onclick="event.preventDefault();showPage('calculator')">Revenue Lab</a>
-          <a class="ft-link" href="#scripts" onclick="event.preventDefault();showPage('scripts')">Script Builder</a>
-          <a class="ft-link" href="#admaker" onclick="event.preventDefault();showPage('admaker')">Ad Maker</a>
+          <a class="ft-link" href="#ai-tools" onclick="event.preventDefault();showPage('ai-tools')">AI Tools</a>
           <a class="ft-link" href="#resources" onclick="event.preventDefault();showPage('resources')">Resources</a>
         </div>
       </div>
@@ -865,6 +866,7 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
 <script src="js/marketing-kit.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
 <script src="js/business-planner.js" defer></script>
+<script src="js/icp-builder.js" defer></script>
 <script src="js/challenge.js" defer></script>
 <script src="js/pro-gate.js" defer></script>
 <script src="js/ai-embed.js" defer></script>

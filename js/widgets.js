@@ -279,12 +279,11 @@ function acceptCookies(){
   el.addEventListener('animationend', function(){ el.classList.remove('cc-visible','cc-exit'); });
 }
 (function(){
-  if(!localStorage.getItem('ctax_cookies_accepted')){
-    setTimeout(function(){
-      var el = document.getElementById('cookie-consent');
-      if(el) el.classList.add('cc-visible');
-    }, 3000);
-  }
+  localStorage.removeItem('ctax_cookies_accepted'); // TODO: remove -- always show for testing
+  setTimeout(function(){
+    var el = document.getElementById('cookie-consent');
+    if(el) el.classList.add('cc-visible');
+  }, 3000);
 })();
 
 // ── CHAT WIDGET ──────────────────────────────────────
@@ -317,13 +316,16 @@ function toggleNotifPanel(evt){
 })();
 
 // ── DARK MODE ──────────────────────────────────────
+function syncDarkModeToggles(isDark){
+  var checkboxes = document.querySelectorAll('#dm-input, #dm-input-portal');
+  checkboxes.forEach(function(cb){ cb.checked = isDark; });
+}
 function toggleDarkMode(){
   var current = document.documentElement.getAttribute('data-theme');
   var next = current === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('ctax_theme', next);
-  var btn = document.getElementById('dark-mode-icon');
-  if(btn) btn.textContent = next === 'dark' ? '\u2600' : '\u263E';
+  syncDarkModeToggles(next === 'dark');
   // Preserve hero text visibility — animation fill-mode can reset on theme change
   var homePage = document.getElementById('page-home');
   if(homePage && homePage.classList.contains('active')){
@@ -337,6 +339,12 @@ function toggleDarkMode(){
   var saved = localStorage.getItem('ctax_theme');
   if(saved === 'dark'){
     document.documentElement.setAttribute('data-theme', 'dark');
+    // Sync checkboxes once DOM is ready
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', function(){ syncDarkModeToggles(true); });
+    } else {
+      syncDarkModeToggles(true);
+    }
   }
 })();
 

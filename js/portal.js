@@ -1165,6 +1165,44 @@ document.addEventListener('click', function(e) {
   }
 });
 
+// --- Settings dropdown ---
+function ptToggleSettings() {
+  var panel = document.getElementById('pt-settings-panel');
+  if (panel) panel.classList.toggle('active');
+}
+
+// Close settings panel on outside click
+document.addEventListener('click', function(e) {
+  var wrap = document.querySelector('.pt-settings-wrap');
+  var panel = document.getElementById('pt-settings-panel');
+  if (wrap && panel && !wrap.contains(e.target)) {
+    panel.classList.remove('active');
+  }
+});
+
+// --- Profile dropdown ---
+function ptToggleProfile() {
+  var panel = document.getElementById('pt-profile-panel');
+  if (panel) panel.classList.toggle('active');
+  // Close settings if open
+  var settings = document.getElementById('pt-settings-panel');
+  if (settings) settings.classList.remove('active');
+}
+
+function ptCloseProfile() {
+  var panel = document.getElementById('pt-profile-panel');
+  if (panel) panel.classList.remove('active');
+}
+
+// Close profile panel on outside click
+document.addEventListener('click', function(e) {
+  var wrap = document.querySelector('.pt-profile-wrap');
+  var panel = document.getElementById('pt-profile-panel');
+  if (wrap && panel && !wrap.contains(e.target)) {
+    panel.classList.remove('active');
+  }
+});
+
 // --- Portal-wide search ---
 function portalGlobalSearch(q) {
   var results = document.getElementById('portal-search-results');
@@ -1606,7 +1644,7 @@ function cmdkExecute(idx) {
   } else if (cmd.action === 'rp') {
     if (typeof toggleRpCard === 'function') toggleRpCard();
   } else if (cmd.action === 'admaker') {
-    showPage('admaker');
+    portalNav(document.querySelector('[onclick*="portal-sec-ai-admaker"]'),'portal-sec-ai-admaker');
   }
 }
 
