@@ -234,11 +234,12 @@
     container.appendChild(frag);
   };
 
-  // Cinematic scroll: FAST enter, LONG hold, FAST exit.
+  // Cinematic scroll: content rises from bottom, holds at center, exits up top.
+  // No scale -- pure vertical movement + opacity. Like reading a teleprompter.
   // 120vh spacer = ~12 scrolls per scene:
-  //   Enter (0.00-0.08):  zoom in fast (~1 scroll)
-  //   Hold  (0.08-0.88):  sit centered, read it (~9-10 scrolls)
-  //   Exit  (0.88-1.00):  zoom out fast (~1.5 scrolls)
+  //   Enter (0-0.15): rises from +40vh below center to center (~2 scrolls)
+  //   Hold  (0.15-0.85): sits dead center (~8 scrolls of reading)
+  //   Exit  (0.85-1.0): slides up to -40vh above center (~2 scrolls)
   window._aitInitScrollReveal = function() {
     if (window._aitInitStars) window._aitInitStars();
 
@@ -282,12 +283,12 @@
         var scrollY = window.scrollY;
         var vh = window.innerHeight;
 
-        // Hero
+        // Hero: slides up gently
         if (hero && heroContent) {
           var p = clamp(scrollY / (vh * 0.7), 0, 1);
           var ep = ease(p);
           heroContent.style.opacity = 1 - ep;
-          heroContent.style.transform = 'translate3d(0,0,0) scale(' + (1 + ep * 0.12) + ')';
+          heroContent.style.transform = 'translate3d(0,' + (-ep * vh * 0.2) + 'px,0)';
           if (scrollCue) scrollCue.style.opacity = clamp(1 - p * 4, 0, 1);
         }
 
@@ -299,35 +300,36 @@
           var progress = clamp(scrolledPast / scrollable, 0, 1);
           var belowView = s.top - scrollY - vh;
 
-          var opacity, scale;
+          var opacity, ty;
 
           if (belowView > 0) {
+            // Below viewport: invisible, waiting below center
             opacity = 0;
-            scale = 0.8;
-          } else if (progress < 0.08) {
-            // Fast zoom in: ~1 scroll
-            var t = ease(progress / 0.08);
+            ty = vh * 0.4;
+          } else if (progress < 0.15) {
+            // Rising up from bottom to center (~2 scrolls)
+            var t = ease(progress / 0.15);
             opacity = t;
-            scale = 0.8 + 0.2 * t;
-          } else if (progress < 0.88) {
-            // LONG hold: ~10 scrolls, content sits centered
+            ty = vh * 0.4 * (1 - t);
+          } else if (progress < 0.85) {
+            // Holding dead center (~8 scrolls)
             opacity = 1;
-            scale = 1;
+            ty = 0;
           } else {
-            // Fast zoom out: ~1.5 scrolls
-            var t = ease((progress - 0.88) / 0.12);
+            // Sliding up and out the top (~2 scrolls)
+            var t = ease((progress - 0.85) / 0.15);
             opacity = 1 - t;
-            scale = 1 + 0.1 * t;
+            ty = -vh * 0.3 * t;
           }
 
           // CTA stays once it arrives
-          if (s.isCta && progress >= 0.08) {
+          if (s.isCta && progress >= 0.15) {
             opacity = 1;
-            scale = 1;
+            ty = 0;
           }
 
           s.pin.style.opacity = opacity;
-          s.pin.style.transform = 'translate3d(0,0,0) scale(' + scale + ')';
+          s.pin.style.transform = 'translate3d(0,' + ty + 'px,0)';
         }
 
         ticking = false;
