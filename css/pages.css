@@ -5359,9 +5359,9 @@ body.ait-immersive-active #site-nav,
 body.ait-immersive-active .page-breadcrumbs{display:none !important}
 body.ait-immersive-active{overflow:hidden}
 
-/* Exit button */
-.ait-exit-btn{position:fixed;top:20px;right:20px;z-index:100;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:rgba(255,255,255,0.6);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
-.ait-exit-btn:hover{background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.3)}
+/* Exit -- ultra-subtle tiny grey X, barely visible unless hovered */
+.ait-exit-btn{position:fixed;top:14px;right:14px;z-index:100;width:24px;height:24px;border-radius:50%;border:none;background:transparent;color:rgba(255,255,255,0.12);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color 0.3s;padding:0}
+.ait-exit-btn:hover{color:rgba(255,255,255,0.35)}
 
 /* Snap section labels */
 .ait-snap-label{font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:20px}
@@ -5386,7 +5386,7 @@ body.ait-immersive-active{overflow:hidden}
   .ait-bridge-headline{font-size:28px}
   .ait-snap-content{padding:0 20px}
   .ait-orb{width:300px;height:300px}
-  .ait-exit-btn{top:12px;right:12px;width:36px;height:36px}
+  .ait-exit-btn{top:10px;right:10px;width:20px;height:20px}
   .ait-scene-sub{font-size:14px}
   .ait-snap-section-builder{padding:40px 16px 60px}
 }
