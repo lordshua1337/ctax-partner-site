@@ -66,7 +66,7 @@ async function qualifyClient() {
     + 'Give the partner specific things to say to this client. Frame each around the client\'s situation. Include how to bring up the $295 investigation fee naturally. Use plain, conversational language — not salesy.';
 
   try {
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    var resp = await fetch(CTAX_API_URL, {
       method: 'POST',
       headers: getApiHeaders(),
       body: JSON.stringify({

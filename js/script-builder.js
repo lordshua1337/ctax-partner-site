@@ -138,7 +138,7 @@ function renderEmail(text, containerId) {
 function generateEmailRationale(emailText) {
   var type = document.getElementById('sb-type') ? document.getElementById('sb-type').value : '';
   var style = document.getElementById('sb-style') ? document.getElementById('sb-style').value : '';
-  fetch('https://api.anthropic.com/v1/messages', {
+  fetch(CTAX_API_URL, {
     method: 'POST',
     headers: getApiHeaders(),
     body: JSON.stringify({
@@ -274,7 +274,7 @@ async function generateScript() {
     'SECTION 4 - DELIVERY TIPS\n4-5 short, specific tips for delivering this referral well given this specific situation and client. Plain bullet points, no headers.';
 
   try {
-    var response = await fetch('https://api.anthropic.com/v1/messages', {
+    var response = await fetch(CTAX_API_URL, {
       method: 'POST',
       headers: getApiHeaders(),
       body: JSON.stringify({
@@ -301,7 +301,7 @@ async function generateScript() {
     // Generate follow-up separately for speed
     var fuPrompt = 'Write a short, natural follow-up message (for ' + channel + ') from a ' + type + ' to a client who has been introduced to Community Tax but hasn\'t taken action yet. ' + style + ' tone. Client situation: ' + situation + '. 3-4 sentences max. Just the message text, no labels.';
 
-    fetch('https://api.anthropic.com/v1/messages', {
+    fetch(CTAX_API_URL, {
       method: 'POST',
       headers: getApiHeaders(),
       body: JSON.stringify({

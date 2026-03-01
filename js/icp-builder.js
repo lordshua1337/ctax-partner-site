@@ -516,7 +516,7 @@
     }, 2800);
 
     try {
-      var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      var resp = await fetch(CTAX_API_URL, {
         method: 'POST',
         headers: getApiHeaders(),
         body: JSON.stringify({

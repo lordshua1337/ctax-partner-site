@@ -80,7 +80,7 @@ async function generateProjection() {
     + '4 specific, actionable next steps tailored to a ' + type + '. Each line: <b>Action:</b> explanation.';
 
   try {
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    var resp = await fetch(CTAX_API_URL, {
       method: 'POST',
       headers: getApiHeaders(),
       body: JSON.stringify({

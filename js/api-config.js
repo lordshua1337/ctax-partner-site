@@ -1,35 +1,29 @@
 // --- API Configuration ---
-// WARNING: Client-side API key usage is for DEMO/DEVELOPMENT only.
-// For production, route all AI requests through a backend proxy.
-var CTAX_API_KEY = localStorage.getItem('ctax_api_key') || '';
+// All AI requests route through /api/chat serverless proxy.
+// The Anthropic API key is stored server-side in Vercel env vars.
+// No key is ever exposed to the browser.
+
+var CTAX_API_URL = 'https://ctax-api-proxy.vercel.app/api/chat';
+
+// Legacy compat -- these are still referenced by AI tool modules.
+// promptForApiKey now always returns true (no prompt needed).
+var CTAX_API_KEY = 'proxy';
 
 function promptForApiKey() {
-  var key = prompt(
-    'Enter your Anthropic API key to use AI tools.\n\n' +
-    'IMPORTANT: This key is stored in your browser (localStorage) ' +
-    'and is visible in network requests. Only use a development key ' +
-    'with spending limits enabled.\n\n' +
-    'Get a key at: console.anthropic.com'
-  );
-  if (key && key.trim()) {
-    CTAX_API_KEY = key.trim();
-    localStorage.setItem('ctax_api_key', CTAX_API_KEY);
-    return true;
-  }
-  return false;
+  return true;
 }
 
 function getApiHeaders() {
   return {
-    'Content-Type': 'application/json',
-    'anthropic-version': '2023-06-01',
-    'anthropic-dangerous-direct-browser-access': 'true',
-    'x-api-key': CTAX_API_KEY
+    'Content-Type': 'application/json'
   };
 }
 
+function getApiUrl() {
+  return CTAX_API_URL;
+}
+
 function clearApiKey() {
-  CTAX_API_KEY = '';
-  localStorage.removeItem('ctax_api_key');
+  // No-op -- key is server-side
 }
 // --- End API Configuration ---
