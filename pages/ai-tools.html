@@ -1,7 +1,7 @@
 <!-- AI Tools: Cinematic Scroll Experience -->
 <div class="ait-cinema" id="ait-cinema">
 
-  <!-- ACT 1: Pinned Hero -->
+  <!-- ACT 1: Pinned Hero with scroll-linked fade -->
   <div class="ait-hero-pin" id="ait-hero-pin">
     <div class="ait-orb"></div>
     <div class="ait-hero-pin-content" id="ait-hero-pin-content">
@@ -16,82 +16,108 @@
   </div>
   <div class="ait-hero-scroll-space"></div>
 
-  <!-- ACT 2: Problem + Proof -->
-  <section class="ait-act ait-act-problem">
-    <div class="ait-act-inner">
-      <div class="ait-stagger">
-        <p class="ait-big-text ait-stagger-child">Most partners spend weeks guessing who to call.</p>
-        <p class="ait-big-text ait-big-text-dim ait-stagger-child">Cold outreach. Generic pitches. Conversations that go nowhere.</p>
-      </div>
-      <div class="ait-shift-text ait-stagger" style="margin-top:80px">
-        <p class="ait-big-text ait-stagger-child">What if you knew exactly who your ideal referral client was?</p>
-      </div>
-      <div class="ait-proof-grid ait-stagger">
-        <div class="ait-proof-card ait-stagger-child">
+  <!-- SCENE 1: Problem statement (pinned, scroll-linked fade in/out) -->
+  <div class="ait-scene" data-scene="problem1">
+    <div class="ait-scene-pin">
+      <p class="ait-scene-text">Most partners spend weeks guessing who to call.</p>
+    </div>
+    <div class="ait-scene-scroll-space"></div>
+  </div>
+
+  <!-- SCENE 2: Pain amplification -->
+  <div class="ait-scene" data-scene="problem2">
+    <div class="ait-scene-pin">
+      <p class="ait-scene-text ait-scene-text-dim">Cold outreach. Generic pitches.<br>Conversations that go nowhere.</p>
+    </div>
+    <div class="ait-scene-scroll-space"></div>
+  </div>
+
+  <!-- SCENE 3: The shift -->
+  <div class="ait-scene" data-scene="shift">
+    <div class="ait-scene-pin">
+      <p class="ait-scene-text ait-scene-text-accent">What if you knew exactly who your ideal referral client was?</p>
+    </div>
+    <div class="ait-scene-scroll-space"></div>
+  </div>
+
+  <!-- SCENE 4: Proof cards (stagger in, hold, fade out together) -->
+  <div class="ait-scene ait-scene-wide" data-scene="proof">
+    <div class="ait-scene-pin">
+      <div class="ait-proof-grid">
+        <div class="ait-proof-card" data-proof="0">
           <div class="ait-proof-num">6</div>
           <div class="ait-proof-label">Questions</div>
           <div class="ait-proof-desc">About your practice, clients, and goals</div>
         </div>
-        <div class="ait-proof-card ait-stagger-child">
+        <div class="ait-proof-card" data-proof="1">
           <div class="ait-proof-num">60s</div>
           <div class="ait-proof-label">To Complete</div>
           <div class="ait-proof-desc">Quick answers, zero guesswork</div>
         </div>
-        <div class="ait-proof-card ait-stagger-child">
+        <div class="ait-proof-card" data-proof="2">
           <div class="ait-proof-num">1</div>
           <div class="ait-proof-label">Custom ICP</div>
           <div class="ait-proof-desc">Red flags, scripts, action plan -- all yours</div>
         </div>
       </div>
     </div>
-  </section>
+    <div class="ait-scene-scroll-space"></div>
+  </div>
 
-  <!-- ACT 3: Value Props -->
-  <section class="ait-act ait-act-value">
-    <div class="ait-act-inner ait-stagger">
-      <div class="ait-value-row ait-stagger-child">
+  <!-- SCENE 5: Value 1 - Spot the signals -->
+  <div class="ait-scene" data-scene="value1">
+    <div class="ait-scene-pin">
+      <div class="ait-value-card">
         <div class="ait-value-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         </div>
-        <div class="ait-value-content">
-          <h3 class="ait-value-title">Spot the signals</h3>
-          <p class="ait-value-desc">Learn the exact red flags that tell you a client needs IRS resolution help -- before they even bring it up.</p>
-        </div>
-      </div>
-      <div class="ait-value-row ait-stagger-child">
-        <div class="ait-value-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-        </div>
-        <div class="ait-value-content">
-          <h3 class="ait-value-title">Know what to say</h3>
-          <p class="ait-value-desc">Get conversation starters tailored to your practice type. Natural, not salesy. Words that open doors.</p>
-        </div>
-      </div>
-      <div class="ait-value-row ait-stagger-child">
-        <div class="ait-value-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        </div>
-        <div class="ait-value-content">
-          <h3 class="ait-value-title">Act with a plan</h3>
-          <p class="ait-value-desc">Walk away with a 30-day action plan designed for your specific practice. Day one starts the moment you finish.</p>
-        </div>
+        <h3 class="ait-value-title">Spot the signals</h3>
+        <p class="ait-value-desc">Learn the exact red flags that tell you a client needs IRS resolution help -- before they even bring it up.</p>
       </div>
     </div>
-  </section>
+    <div class="ait-scene-scroll-space"></div>
+  </div>
 
-  <!-- ACT 4: CTA Bridge -->
-  <section class="ait-act ait-act-bridge">
-    <div class="ait-act-inner ait-stagger">
-      <h2 class="ait-bridge-headline ait-stagger-child">Ready to meet your ideal client?</h2>
-      <p class="ait-bridge-sub ait-stagger-child">Answer 6 questions. Get a profile you can use today.</p>
-      <div class="ait-stagger-child">
-        <button class="ait-bridge-btn" onclick="icpScrollToBuilder()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          Build My ICP
-        </button>
+  <!-- SCENE 6: Value 2 - Know what to say -->
+  <div class="ait-scene" data-scene="value2">
+    <div class="ait-scene-pin">
+      <div class="ait-value-card">
+        <div class="ait-value-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <h3 class="ait-value-title">Know what to say</h3>
+        <p class="ait-value-desc">Get conversation starters tailored to your practice type. Natural, not salesy. Words that open doors.</p>
       </div>
     </div>
-  </section>
+    <div class="ait-scene-scroll-space"></div>
+  </div>
+
+  <!-- SCENE 7: Value 3 - Act with a plan -->
+  <div class="ait-scene" data-scene="value3">
+    <div class="ait-scene-pin">
+      <div class="ait-value-card">
+        <div class="ait-value-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h3 class="ait-value-title">Act with a plan</h3>
+        <p class="ait-value-desc">Walk away with a 30-day action plan designed for your specific practice. Day one starts the moment you finish.</p>
+      </div>
+    </div>
+    <div class="ait-scene-scroll-space"></div>
+  </div>
+
+  <!-- SCENE 8: CTA Bridge -->
+  <div class="ait-scene ait-scene-bridge" data-scene="cta">
+    <div class="ait-scene-pin">
+      <h2 class="ait-bridge-headline">Ready to meet your<br>ideal client?</h2>
+      <p class="ait-bridge-sub">Answer 6 questions. Get a profile you can use today.</p>
+      <button class="ait-bridge-btn" onclick="icpScrollToBuilder()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        Build My ICP
+      </button>
+    </div>
+    <div class="ait-scene-scroll-space ait-scene-scroll-space-short"></div>
+  </div>
 
   <!-- The Builder (questionnaire + results) -->
   <section class="ait-builder" id="ait-builder">

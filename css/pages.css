@@ -5299,20 +5299,12 @@ body.pb-immersive .scroll-to-top{display:none!important}
 
 .ait-cinema{background:#0a0a0a;color:#fff;position:relative}
 
-/* Acts: full-viewport sections */
-.ait-act{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 32px;position:relative;overflow:hidden}
-.ait-act-inner{max-width:680px;width:100%;text-align:center}
-
-/* Stagger reveal system -- children start hidden, get .in-view via JS */
-.ait-stagger-child{opacity:0;transform:translateY(32px);transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1)}
-.ait-stagger-child.in-view{opacity:1;transform:translateY(0)}
-
 /* ACT 1: Pinned Hero */
 .ait-hero-pin{position:sticky;top:0;z-index:1;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .ait-hero-pin-content{position:relative;z-index:2;text-align:center;max-width:680px;padding:0 32px;will-change:transform,opacity}
 .ait-hero-scroll-space{height:60vh;position:relative;z-index:2}
 
-/* Gradient orb -- visual centerpiece */
+/* Gradient orb */
 .ait-orb{position:absolute;top:50%;left:50%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(75,163,255,0.18),rgba(0,200,224,0.08),transparent 70%);filter:blur(60px);transform:translate(-50%,-50%);animation:aitOrbPulse 6s ease-in-out infinite alternate;pointer-events:none}
 @keyframes aitOrbPulse{0%{opacity:0.6;transform:translate(-50%,-50%) scale(1)}100%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}}
 
@@ -5324,34 +5316,37 @@ body.pb-immersive .scroll-to-top{display:none!important}
 .ait-scroll-cue svg{animation:aitBounce 2.5s infinite}
 @keyframes aitBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-/* ACT 2: Problem + Proof */
-.ait-act-problem{min-height:auto;padding:120px 32px 80px}
-.ait-big-text{font-family:'DM Serif Display',serif;font-size:36px;line-height:1.35;color:#fff;margin:0 0 20px}
-.ait-big-text-dim{color:rgba(255,255,255,0.35)}
+/* ── SCENE SYSTEM: Each scene pins its content to viewport ── */
+.ait-scene{position:relative}
+.ait-scene-pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;will-change:opacity,transform;z-index:2}
+.ait-scene-scroll-space{height:80vh;position:relative;z-index:1}
+.ait-scene-scroll-space-short{height:40vh}
 
-/* Proof cards: glassmorphism + float animation */
-.ait-proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;max-width:600px;margin-left:auto;margin-right:auto}
-.ait-proof-card{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px 20px;text-align:center;transition:box-shadow 0.4s}
-.ait-proof-card.in-view{animation:aitFloat 4s ease-in-out infinite alternate}
-.ait-proof-num{font-family:'DM Serif Display',serif;font-size:42px;color:var(--sky);margin-bottom:8px}
+/* Scene text styles */
+.ait-scene-text{font-family:'DM Serif Display',serif;font-size:42px;line-height:1.3;color:#fff;margin:0;max-width:700px;letter-spacing:-0.01em}
+.ait-scene-text-dim{color:rgba(255,255,255,0.35)}
+.ait-scene-text-accent{color:var(--sky);text-shadow:0 0 60px rgba(75,163,255,0.15)}
+
+/* Proof cards */
+.ait-proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:660px;width:100%}
+.ait-proof-card{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:36px 24px;text-align:center;will-change:opacity,transform}
+.ait-proof-card.ait-proof-visible{animation:aitFloat 4s ease-in-out infinite alternate}
+.ait-proof-num{font-family:'DM Serif Display',serif;font-size:48px;color:var(--sky);margin-bottom:10px}
 .ait-proof-label{font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
 .ait-proof-desc{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.5}
-@keyframes aitFloat{0%{transform:translateY(0)}100%{transform:translateY(-6px)}}
+@keyframes aitFloat{0%{transform:translateY(0)}100%{transform:translateY(-8px)}}
 
-/* ACT 3: Value Props */
-.ait-act-value{min-height:auto;padding:100px 32px}
-.ait-act-value .ait-act-inner{max-width:560px}
-.ait-value-row{display:flex;align-items:flex-start;gap:24px;text-align:left;padding:32px 0;border-left:3px solid rgba(75,163,255,0.15);padding-left:24px;margin-bottom:8px}
-.ait-value-row.in-view{border-left-color:var(--sky)}
-.ait-value-icon{width:56px;height:56px;flex-shrink:0;border-radius:14px;background:rgba(75,163,255,0.08);display:flex;align-items:center;justify-content:center;color:var(--sky)}
-.ait-value-title{font-size:20px;font-weight:700;color:#fff;margin:0 0 8px}
-.ait-value-desc{font-size:15px;color:rgba(255,255,255,0.5);line-height:1.65;margin:0}
+/* Value cards -- centered, large presentation */
+.ait-value-card{max-width:480px;text-align:center;will-change:opacity,transform}
+.ait-value-icon{width:72px;height:72px;border-radius:18px;background:rgba(75,163,255,0.08);display:flex;align-items:center;justify-content:center;color:var(--sky);margin:0 auto 28px}
+.ait-value-title{font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;color:#fff;margin:0 0 16px}
+.ait-value-desc{font-size:17px;color:rgba(255,255,255,0.5);line-height:1.7;margin:0}
 
-/* ACT 4: CTA Bridge */
-.ait-act-bridge{min-height:60vh;background:linear-gradient(180deg,transparent 0%,#0a1628 100%)}
-.ait-bridge-headline{font-family:'DM Serif Display',serif;font-size:40px;color:#fff;margin:0 0 16px;line-height:1.2;text-shadow:0 0 40px rgba(75,163,255,0.2)}
-.ait-bridge-sub{font-size:16px;color:rgba(255,255,255,0.5);margin:0 0 36px}
-.ait-bridge-btn{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border:none;border-radius:12px;background:var(--sky);color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.25s;box-shadow:0 4px 24px rgba(75,163,255,0.3);animation:aitBtnGlow 3s ease-in-out infinite alternate}
+/* CTA Bridge */
+.ait-scene-bridge .ait-scene-pin{background:linear-gradient(180deg,transparent 0%,#0a1628 100%)}
+.ait-bridge-headline{font-family:'DM Serif Display',serif;font-size:44px;color:#fff;margin:0 0 16px;line-height:1.2;text-shadow:0 0 40px rgba(75,163,255,0.2)}
+.ait-bridge-sub{font-size:17px;color:rgba(255,255,255,0.5);margin:0 0 40px}
+.ait-bridge-btn{display:inline-flex;align-items:center;gap:10px;padding:18px 40px;border:none;border-radius:12px;background:var(--sky);color:#fff;font-size:17px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.25s;box-shadow:0 4px 24px rgba(75,163,255,0.3);animation:aitBtnGlow 3s ease-in-out infinite alternate}
 .ait-bridge-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(75,163,255,0.5)}
 .ait-bridge-btn svg{transform:rotate(0);transition:transform 0.3s}
 .ait-bridge-btn:hover svg{transform:translateY(3px)}
@@ -5360,13 +5355,15 @@ body.pb-immersive .scroll-to-top{display:none!important}
 @media(max-width:768px){
   .ait-hero-headline{font-size:44px}
   .ait-hero-sub{font-size:16px}
-  .ait-big-text{font-size:26px}
+  .ait-scene-text{font-size:28px}
   .ait-proof-grid{grid-template-columns:1fr;max-width:280px}
-  .ait-value-row{flex-direction:column;gap:16px}
+  .ait-value-title{font-size:24px}
+  .ait-value-desc{font-size:15px}
   .ait-bridge-headline{font-size:28px}
-  .ait-act{padding:60px 20px}
+  .ait-scene-pin{padding:0 20px}
   .ait-orb{width:300px;height:300px}
   .ait-hero-scroll-space{height:40vh}
+  .ait-scene-scroll-space{height:60vh}
 }
 
 /* ── ICP BUILDER ─────────────────────────────────────────── */

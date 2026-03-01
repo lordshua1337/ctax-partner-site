@@ -213,53 +213,108 @@
     wireTextarea();
   };
 
-  // Cinematic scroll controller: sticky hero fade + staggered reveals
+  // Cinematic scroll controller: every scene pins + fades in/out via scroll progress
   window._aitInitScrollReveal = function() {
     var hero = document.getElementById('ait-hero-pin');
     var heroContent = document.getElementById('ait-hero-pin-content');
     var scrollCue = document.getElementById('ait-scroll-cue');
+    var scenes = document.querySelectorAll('.ait-scene');
     var ticking = false;
 
-    // Scroll-linked hero fade and scale (rAF throttled)
-    if (hero && heroContent) {
-      window.addEventListener('scroll', function() {
-        if (!ticking) {
-          requestAnimationFrame(function() {
-            var progress = Math.min(window.scrollY / (window.innerHeight * 0.8), 1);
-            heroContent.style.opacity = 1 - progress;
-            heroContent.style.transform = 'scale(' + (1 - progress * 0.12) + ')';
-            // Fade scroll cue faster
-            if (scrollCue) {
-              scrollCue.style.opacity = Math.max(1 - progress * 3, 0);
-            }
-            ticking = false;
-          });
-          ticking = true;
-        }
-      }, { passive: true });
-    }
+    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 
-    // IntersectionObserver for staggered reveals
-    var staggers = document.querySelectorAll('.ait-stagger');
-    if (staggers.length) {
-      var obs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            var children = entry.target.querySelectorAll('.ait-stagger-child');
-            children.forEach(function(child, i) {
-              setTimeout(function() {
-                child.classList.add('in-view');
-              }, i * 150);
-            });
-            obs.unobserve(entry.target);
+    // Ease function for smoother transitions
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function() {
+        var scrollY = window.scrollY;
+        var vh = window.innerHeight;
+
+        // Hero: fade out + scale down as you scroll past
+        if (hero && heroContent) {
+          var heroProgress = clamp(scrollY / (vh * 0.7), 0, 1);
+          heroContent.style.opacity = 1 - heroProgress;
+          heroContent.style.transform = 'scale(' + (1 - heroProgress * 0.15) + ')';
+          if (scrollCue) {
+            scrollCue.style.opacity = Math.max(1 - heroProgress * 4, 0);
           }
-        });
-      }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+        }
 
-      staggers.forEach(function(el) {
-        obs.observe(el);
+        // Each scene: compute scroll progress through it
+        for (var i = 0; i < scenes.length; i++) {
+          var scene = scenes[i];
+          var pin = scene.querySelector('.ait-scene-pin');
+          if (!pin) continue;
+
+          var rect = scene.getBoundingClientRect();
+          var sceneHeight = scene.offsetHeight;
+          var pinHeight = vh;
+
+          // How far through this scene are we? 0 = just entered, 1 = fully past
+          var sceneTop = rect.top;
+          var progress = clamp(-sceneTop / (sceneHeight - pinHeight), 0, 1);
+
+          // Fade zones: 0-0.15 fade in, 0.15-0.7 hold, 0.7-1.0 fade out
+          var opacity;
+          var translateY;
+          var scale;
+
+          if (sceneTop > vh) {
+            // Scene hasn't entered viewport yet
+            opacity = 0;
+            translateY = 40;
+            scale = 0.97;
+          } else if (progress < 0.15) {
+            // Fading in
+            var fadeIn = easeOutCubic(progress / 0.15);
+            opacity = fadeIn;
+            translateY = 40 * (1 - fadeIn);
+            scale = 0.97 + 0.03 * fadeIn;
+          } else if (progress < 0.7) {
+            // Holding visible
+            opacity = 1;
+            translateY = 0;
+            scale = 1;
+          } else {
+            // Fading out
+            var fadeOut = easeOutCubic((progress - 0.7) / 0.3);
+            opacity = 1 - fadeOut;
+            translateY = -30 * fadeOut;
+            scale = 1 - 0.04 * fadeOut;
+          }
+
+          pin.style.opacity = opacity;
+          pin.style.transform = 'translateY(' + translateY + 'px) scale(' + scale + ')';
+
+          // Proof cards: stagger in individually
+          if (scene.dataset.scene === 'proof') {
+            var cards = scene.querySelectorAll('.ait-proof-card');
+            for (var c = 0; c < cards.length; c++) {
+              var cardDelay = c * 0.05;
+              var cardProgress = clamp((progress - cardDelay) / 0.15, 0, 1);
+              if (progress >= 0.15) cardProgress = 1;
+              var cardFadeIn = easeOutCubic(cardProgress);
+              cards[c].style.opacity = opacity * cardFadeIn;
+              cards[c].style.transform = 'translateY(' + (24 * (1 - cardFadeIn)) + 'px)';
+              if (cardProgress >= 1 && opacity > 0.5) {
+                cards[c].classList.add('ait-proof-visible');
+              } else {
+                cards[c].classList.remove('ait-proof-visible');
+              }
+            }
+          }
+        }
+
+        ticking = false;
       });
     }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // Run once on load to set initial states
+    onScroll();
   };
 
   // ---- Internal functions ----
