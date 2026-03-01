@@ -5354,6 +5354,27 @@ body.pb-immersive .scroll-to-top{display:none!important}
 .ait-bridge-btn:hover svg{transform:translateY(3px)}
 @keyframes aitBtnGlow{0%{box-shadow:0 4px 24px rgba(75,163,255,0.3)}100%{box-shadow:0 4px 32px rgba(75,163,255,0.5)}}
 
+/* Immersive mode -- hides site chrome */
+body.ait-immersive-active #site-nav,
+body.ait-immersive-active .page-breadcrumbs{display:none !important}
+body.ait-immersive-active{overflow:hidden}
+
+/* Exit button */
+.ait-exit-btn{position:fixed;top:20px;right:20px;z-index:100;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:rgba(255,255,255,0.6);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.ait-exit-btn:hover{background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.3)}
+
+/* Snap section labels */
+.ait-snap-label{font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:20px}
+.ait-snap-label-accent{color:var(--sky)}
+
+/* Scene sub-text */
+.ait-scene-sub{font-size:16px;color:rgba(255,255,255,0.4);line-height:1.7;max-width:520px;margin:20px auto 0}
+.ait-scene-sub-dim{color:rgba(255,255,255,0.25)}
+
+/* Builder snap section -- taller than 100vh, free-scroll once reached */
+.ait-snap-section-builder{height:auto;min-height:100vh;align-items:flex-start;padding:60px 24px 80px}
+.ait-snap-content-builder{max-width:680px;width:100%;opacity:1;transform:none;transition:none}
+
 @media(max-width:768px){
   .ait-hero-headline{font-size:44px}
   .ait-hero-sub{font-size:16px}
@@ -5365,6 +5386,9 @@ body.pb-immersive .scroll-to-top{display:none!important}
   .ait-bridge-headline{font-size:28px}
   .ait-snap-content{padding:0 20px}
   .ait-orb{width:300px;height:300px}
+  .ait-exit-btn{top:12px;right:12px;width:36px;height:36px}
+  .ait-scene-sub{font-size:14px}
+  .ait-snap-section-builder{padding:40px 16px 60px}
 }
 
 /* ── ICP BUILDER ─────────────────────────────────────────── */

@@ -234,27 +234,34 @@
     container.appendChild(frag);
   };
 
-  // Snap-scroll reveal: CSS scroll-snap handles the snapping,
-  // IntersectionObserver handles animating content in/out.
-  // Each .ait-snap-section is 100vh, snapped via scroll-snap-type: y mandatory.
-  // When a section is >60% visible, its .ait-snap-content gets .ait-snap-visible.
-  // When it leaves, the class is removed so it re-animates on return.
+  // Immersive snap-scroll experience.
+  // CSS scroll-snap handles snapping between 100vh sections.
+  // IntersectionObserver handles fade-in animations.
+  // One-way scroll prevents going backward (it's a ride).
+  // When builder section is reached, snap is released for free-scroll.
   window._aitInitScrollReveal = function() {
     if (window._aitInitStars) window._aitInitStars();
 
     var container = document.getElementById('ait-snap-container');
     if (!container) return;
 
+    // Enter immersive mode -- hide site nav
+    document.body.classList.add('ait-immersive-active');
+
     var sections = container.querySelectorAll('.ait-snap-section');
     if (!sections.length) return;
 
+    var builderSection = document.querySelector('.ait-snap-section-builder');
+    var builderTop = builderSection ? builderSection.offsetTop : Infinity;
+    var inBuilder = false;
+
+    // IntersectionObserver for fade-in animations
     var observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         var content = entry.target.querySelector('.ait-snap-content');
         if (!content) return;
 
         if (entry.isIntersecting) {
-          // Small delay so the snap finishes before animation starts
           setTimeout(function() {
             content.classList.add('ait-snap-visible');
           }, 80);
@@ -271,19 +278,60 @@
       observer.observe(section);
     });
 
-    // When user clicks "Build My ICP", scroll the snap container
-    // past all snap sections so the builder is in view, then
-    // scroll the page to the builder.
-    window.icpScrollToBuilder = function() {
-      var builder = document.getElementById('ait-builder');
-      if (!builder) return;
-      // Scroll snap container to bottom so it releases
-      container.scrollTop = container.scrollHeight;
-      // Then scroll page to builder
-      setTimeout(function() {
-        builder.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    };
+    // When builder section is reached, disable snap for free-scroll
+    if (builderSection) {
+      var builderObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !inBuilder) {
+            inBuilder = true;
+            container.style.scrollSnapType = 'none';
+          }
+        });
+      }, { root: container, threshold: 0.2 });
+      builderObs.observe(builderSection);
+    }
+
+    // One-way scroll: prevent scrolling backward
+    container.addEventListener('wheel', function(e) {
+      if (e.deltaY < 0) {
+        // In builder zone, allow scroll-up within builder content
+        if (inBuilder && container.scrollTop > builderTop) {
+          return;
+        }
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Touch: prevent swipe-up (mobile)
+    var touchStartY = 0;
+    container.addEventListener('touchstart', function(e) {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    container.addEventListener('touchmove', function(e) {
+      var isScrollingUp = e.touches[0].clientY > touchStartY;
+      if (isScrollingUp) {
+        if (inBuilder && container.scrollTop > builderTop) {
+          return;
+        }
+        e.preventDefault();
+      }
+    }, { passive: false });
+  };
+
+  // Exit the immersive experience
+  window.aitExitImmersive = function() {
+    document.body.classList.remove('ait-immersive-active');
+    // Reset snap container
+    var container = document.getElementById('ait-snap-container');
+    if (container) {
+      container.style.scrollSnapType = '';
+      container.scrollTop = 0;
+    }
+    // Navigate to home
+    if (typeof showPage === 'function') {
+      showPage('dashboard');
+    }
   };
 
   // ---- Internal functions ----
