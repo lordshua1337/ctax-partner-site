@@ -548,7 +548,7 @@ function bpRenderRoadmap(roadmap) {
   // Portal Toolkit callout
   html += '<div class="bp-toolkit">';
   html += '<div class="bp-toolkit-header">';
-  html += '<div class="bp-toolkit-title">Your Portal Toolkit</div>';
+  html += '<div class="bp-toolkit-title">Your Launch Toolkit</div>';
   html += '<div class="bp-toolkit-desc">These tools are built into your partner portal. Use them alongside this roadmap to hit your targets faster.</div>';
   html += '</div>';
   html += '<div class="bp-toolkit-grid">';
@@ -751,81 +751,292 @@ function bpToggleDrip(enabled) {
   }
 }
 
-// Build branded cover page for PDF export
-function bpBuildCover() {
-  var inputs = bpLoadInputs();
-  var practiceLabel = inputs ? (BP_PRACTICE_TYPES[inputs.practiceType] || 'Your Practice') : 'Your Practice';
-  var refGoal = inputs ? (inputs.refGoal || 5) : 5;
-  var revenue = '$' + (refGoal * 420).toLocaleString();
-  var today = new Date();
-  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  var dateStr = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
+// ── PDF Document Builder ─────────────────────────────────────
+// Builds a proper formatted document instead of screenshotting the dashboard.
+// Cover page is edge-to-edge blue, then body pages use document typography.
 
-  var cover = document.createElement('div');
-  cover.className = 'bp-pdf-cover';
-  cover.innerHTML =
-    '<div class="bp-cover-inner">' +
-      '<div class="bp-cover-logo">' +
-        '<img src="images/logo-white.svg" alt="Community Tax" class="bp-cover-logo-img">' +
-      '</div>' +
-      '<div class="bp-cover-title">Your 90-Day<br>Growth Roadmap</div>' +
-      '<div class="bp-cover-divider"></div>' +
-      '<div class="bp-cover-meta">' +
-        '<div class="bp-cover-meta-row"><span class="bp-cover-label">Practice</span><span class="bp-cover-val">' + practiceLabel + '</span></div>' +
-        '<div class="bp-cover-meta-row"><span class="bp-cover-label">90-Day Goal</span><span class="bp-cover-val">' + refGoal + ' Referrals</span></div>' +
-        '<div class="bp-cover-meta-row"><span class="bp-cover-label">Projected Revenue</span><span class="bp-cover-val">' + revenue + '</span></div>' +
-        '<div class="bp-cover-meta-row"><span class="bp-cover-label">Generated</span><span class="bp-cover-val">' + dateStr + '</span></div>' +
-      '</div>' +
-      '<div class="bp-cover-footer">Personalized action plan built from your Business Planner inputs</div>' +
-    '</div>';
-  return cover;
+function bpBuildPdfDoc() {
+  var inputs = bpLoadInputs();
+  if (!inputs || !inputs.practiceType) return null;
+
+  var roadmap = bpBuildRoadmap(Object.assign({}, inputs, { season: bpGetSeason() }));
+  var practiceLabel = roadmap.practiceLabel;
+  var refGoal = inputs.refGoal || 5;
+  var revenue = '$' + (refGoal * 420).toLocaleString();
+  var proRevenue = '$' + (refGoal * 525).toLocaleString();
+  var clientCount = inputs.clientCount || 0;
+  var monthlyRef = Math.ceil(refGoal / 3);
+  var bestChannel = bpBestChannel(inputs);
+  var bestChannelDesc = bpBestChannelDesc(inputs);
+  var potentialLeads = Math.round(clientCount * 0.08);
+
+  var today = new Date();
+  var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var dateStr = monthNames[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
+
+  // Calculate end date (90 days out)
+  var endDate = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
+  var endDateStr = monthNames[endDate.getMonth()] + ' ' + endDate.getDate() + ', ' + endDate.getFullYear();
+
+  var doc = document.createElement('div');
+  doc.className = 'bp-pdf-doc';
+
+  var html = '';
+
+  // ── PAGE 1: COVER (edge-to-edge blue, no margins) ──
+  html += '<div class="bp-pdf-cover">';
+  html += '<div class="bp-cover-inner">';
+  html += '<div class="bp-cover-logo"><img src="images/logo-white.svg" alt="Community Tax" class="bp-cover-logo-img"></div>';
+  html += '<div class="bp-cover-title">Your 90-Day<br>Growth Roadmap</div>';
+  html += '<div class="bp-cover-divider"></div>';
+  html += '<div class="bp-cover-meta">';
+  html += '<div class="bp-cover-meta-row"><span class="bp-cover-label">Practice Type</span><span class="bp-cover-val">' + practiceLabel + '</span></div>';
+  html += '<div class="bp-cover-meta-row"><span class="bp-cover-label">Client Base</span><span class="bp-cover-val">' + (clientCount > 0 ? clientCount + ' Active Clients' : 'Getting Started') + '</span></div>';
+  html += '<div class="bp-cover-meta-row"><span class="bp-cover-label">90-Day Goal</span><span class="bp-cover-val">' + refGoal + ' Referrals</span></div>';
+  html += '<div class="bp-cover-meta-row"><span class="bp-cover-label">Projected Revenue</span><span class="bp-cover-val">' + revenue + '</span></div>';
+  html += '<div class="bp-cover-meta-row"><span class="bp-cover-label">Timeline</span><span class="bp-cover-val">' + dateStr + ' - ' + endDateStr + '</span></div>';
+  html += '</div>';
+  html += '<div class="bp-cover-footer">Personalized growth plan generated from your Business Planner inputs.<br>Community Tax Enterprise Partner Program</div>';
+  html += '</div></div>';
+
+  // ── PAGE 2+: EXECUTIVE SUMMARY ──
+  html += '<div class="bpd-page bpd-summary">';
+  html += '<div class="bpd-page-header"><span>90-Day Growth Roadmap</span><span>' + practiceLabel + '</span></div>';
+
+  html += '<h1 class="bpd-h1">Executive Summary</h1>';
+  html += '<p class="bpd-lead">This roadmap is your personalized 90-day action plan for building a sustainable referral pipeline through the Community Tax Enterprise Partner Program. Every task is tailored to your practice type, client base, and growth goals.</p>';
+
+  html += '<div class="bpd-summary-grid">';
+  html += '<div class="bpd-summary-card">';
+  html += '<div class="bpd-summary-val">' + revenue + '</div>';
+  html += '<div class="bpd-summary-label">Projected 90-Day Revenue</div>';
+  html += '<div class="bpd-summary-note">Based on ' + refGoal + ' referrals at $420 avg commission (Premium tier). Pro tier: ' + proRevenue + '.</div>';
+  html += '</div>';
+  html += '<div class="bpd-summary-card">';
+  html += '<div class="bpd-summary-val">' + (potentialLeads > 0 ? potentialLeads + ' Leads' : 'New Pipeline') + '</div>';
+  html += '<div class="bpd-summary-label">Client Base Potential</div>';
+  html += '<div class="bpd-summary-note">' + (potentialLeads > 0 ? 'Industry data shows ~8% of any client base has unresolved tax debt. With ' + clientCount + ' clients, roughly ' + potentialLeads + ' are already in your book.' : 'As you build your client base, expect roughly 8% to have unresolved tax debt -- your primary referral source.') + '</div>';
+  html += '</div>';
+  html += '<div class="bpd-summary-card">';
+  html += '<div class="bpd-summary-val">' + bestChannel + '</div>';
+  html += '<div class="bpd-summary-label">Recommended Primary Channel</div>';
+  html += '<div class="bpd-summary-note">' + bestChannelDesc + '</div>';
+  html += '</div>';
+  html += '</div>';
+
+  // Why this works section
+  html += '<h2 class="bpd-h2">Why This Plan Works</h2>';
+  html += '<p class="bpd-body">This roadmap follows a proven three-phase approach used by the highest-earning partners in the program:</p>';
+  html += '<ul class="bpd-list">';
+  html += '<li><strong>Month 1 -- Foundation:</strong> Build awareness and start conversations. The goal is not volume -- it is developing the habit of identifying and referring tax debt cases. Partners who establish this habit early generate 3x more referrals over their first year.</li>';
+  html += '<li><strong>Month 2 -- Scale:</strong> Expand beyond your existing client base. Add referral network partners, launch digital outreach, and systematize what worked in Month 1. This is where the compounding effect kicks in.</li>';
+  html += '<li><strong>Month 3 -- Systematize:</strong> Turn your referral activity into a repeatable system. Document your process, train team members, and set up the infrastructure to sustain growth without relying on memory or motivation alone.</li>';
+  html += '</ul>';
+  html += '<p class="bpd-body">Each task includes specific context for your practice type (' + practiceLabel.toLowerCase() + ') and your stated goal of ' + refGoal + ' referrals in 90 days -- roughly ' + monthlyRef + ' per month.</p>';
+
+  html += '</div>'; // end page
+
+  // ── MONTH PAGES ──
+  var taskGlobalIndex = 0;
+  var monthInsights = [
+    {
+      title: 'Why Foundation Matters',
+      body: 'The biggest mistake new partners make is jumping straight to marketing without building referral awareness into their daily workflow. Month 1 is about wiring the habit into every client interaction. Partners who skip this phase and go straight to ads spend 2-3x more per referral and burn out faster. Start with the people who already trust you -- your existing clients.'
+    },
+    {
+      title: 'The Compounding Effect',
+      body: 'Month 2 is where effort turns into momentum. Every referral network contact you add becomes a recurring source -- a bankruptcy attorney who sends you one client this month might send three next month once they see the results. Every email campaign builds your reputation as someone who can help with tax debt. This is also when your best channel (' + bestChannel.toLowerCase() + ') starts producing consistent results.'
+    },
+    {
+      title: 'Systems Beat Motivation',
+      body: 'By Month 3, the initial excitement has worn off, but your pipeline should be growing. The partners who succeed long-term are the ones who build systems -- documented scripts, trained staff, automated email sequences, and regular check-ins with their referral network. A good system produces referrals even on the weeks when you are busy with other work.'
+    }
+  ];
+
+  roadmap.months.forEach(function(month, mi) {
+    html += '<div class="bpd-page bpd-month">';
+    html += '<div class="bpd-page-header"><span>90-Day Growth Roadmap</span><span>' + month.label + '</span></div>';
+
+    html += '<h1 class="bpd-h1">' + month.label + '</h1>';
+    html += '<p class="bpd-subtitle">' + month.subtitle + ' -- ' + month.tasks.length + ' action items</p>';
+
+    // Month insight box
+    html += '<div class="bpd-insight-box">';
+    html += '<div class="bpd-insight-title">' + monthInsights[mi].title + '</div>';
+    html += '<p class="bpd-insight-body">' + monthInsights[mi].body + '</p>';
+    html += '</div>';
+
+    // Tasks as numbered list with full descriptions
+    month.tasks.forEach(function(task, ti) {
+      var num = ti + 1;
+      var prioTag = task.priority === 'high' ? '<span class="bpd-prio-high">HIGH PRIORITY</span>' : '<span class="bpd-prio-med">MEDIUM</span>';
+      html += '<div class="bpd-task">';
+      html += '<div class="bpd-task-num">' + num + '</div>';
+      html += '<div class="bpd-task-content">';
+      html += '<div class="bpd-task-header">';
+      html += '<span class="bpd-task-title">' + task.title + '</span> ' + prioTag;
+      html += '</div>';
+      html += '<p class="bpd-task-desc">' + task.desc + '</p>';
+      html += '</div>';
+      html += '</div>';
+      taskGlobalIndex++;
+    });
+
+    // Monthly target reminder
+    html += '<div class="bpd-month-target">';
+    html += '<strong>Monthly Target:</strong> ' + monthlyRef + ' referrals submitted. ';
+    if (mi === 0) {
+      html += 'Focus on quality over quantity this month -- each conversation teaches you something.';
+    } else if (mi === 1) {
+      html += 'You should be hitting your stride. If you are behind, double down on the "every appointment" habit.';
+    } else {
+      html += 'Review your 90-day numbers against this plan. Set your Q2 target 25-50% higher.';
+    }
+    html += '</div>';
+
+    html += '</div>'; // end page
+  });
+
+  // ── WHAT-IF / GROWTH SCENARIOS PAGE ──
+  var currentRev = refGoal * 420;
+  var proRev = refGoal * 525;
+  var doubleRev = (refGoal * 2) * 420;
+  var yearRev = refGoal * 4 * 420;
+
+  html += '<div class="bpd-page bpd-scenarios">';
+  html += '<div class="bpd-page-header"><span>90-Day Growth Roadmap</span><span>Growth Scenarios</span></div>';
+
+  html += '<h1 class="bpd-h1">Growth Scenarios</h1>';
+  html += '<p class="bpd-lead">Here is what your referral business looks like at different performance levels. Small improvements compound quickly.</p>';
+
+  html += '<table class="bpd-table">';
+  html += '<thead><tr><th>Scenario</th><th>Referrals</th><th>Quarterly Revenue</th><th>Annual Projection</th></tr></thead>';
+  html += '<tbody>';
+  html += '<tr><td>Current Plan (Premium Tier)</td><td>' + refGoal + '</td><td>' + revenue + '</td><td>$' + yearRev.toLocaleString() + '</td></tr>';
+  html += '<tr><td>Upgrade to Pro Tier</td><td>' + refGoal + '</td><td>$' + proRev.toLocaleString() + '</td><td>$' + (proRev * 4).toLocaleString() + '</td></tr>';
+  html += '<tr><td>Double Your Referrals</td><td>' + (refGoal * 2) + '</td><td>$' + doubleRev.toLocaleString() + '</td><td>$' + (doubleRev * 4).toLocaleString() + '</td></tr>';
+  html += '<tr class="bpd-table-highlight"><td>Pro Tier + Double Referrals</td><td>' + (refGoal * 2) + '</td><td>$' + ((refGoal * 2) * 525).toLocaleString() + '</td><td>$' + ((refGoal * 2) * 525 * 4).toLocaleString() + '</td></tr>';
+  html += '</tbody></table>';
+
+  html += '<h2 class="bpd-h2">How to Move Up</h2>';
+  html += '<ul class="bpd-list">';
+  html += '<li><strong>Premium to Pro Tier:</strong> Consistently hit ' + refGoal + '+ referrals per quarter. Pro tier pays $525 per referral instead of $420 -- a 25% raise for the same effort. That is an extra $' + ((proRev - currentRev)).toLocaleString() + ' per quarter.</li>';
+  html += '<li><strong>Double Your Volume:</strong> Add one new referral per week beyond your current pace. The easiest way is adding a second channel (e.g., email campaigns if you are currently only doing in-person conversations). Partners who use 2+ channels average 2.3x more referrals.</li>';
+  html += '<li><strong>Maximize Both:</strong> The partners earning $50K+ annually almost always combine tier upgrades with consistent volume growth. It is not about working harder -- it is about building systems that produce referrals predictably.</li>';
+  html += '</ul>';
+
+  html += '</div>'; // end growth scenarios page
+
+  // ── YOUR LAUNCH TOOLKIT PAGE ──
+  html += '<div class="bpd-page bpd-toolkit">';
+  html += '<div class="bpd-page-header"><span>90-Day Growth Roadmap</span><span>Your Launch Toolkit</span></div>';
+
+  html += '<h1 class="bpd-h1">Your Launch Toolkit</h1>';
+  html += '<p class="bpd-lead">These tools are built into your partner portal and referenced throughout this roadmap. Each one is designed to save you time and increase your referral conversion rate.</p>';
+
+  html += '<div class="bpd-tools-grid">';
+  var toolDescs = [
+    { name: 'Landing Page Builder', desc: 'Create a professional, branded referral page in minutes. Share the link with clients and network contacts. Partners with a dedicated page convert 35% more referrals.' },
+    { name: 'AI Script Builder', desc: 'Generate custom word-for-word scripts for phone calls, emails, and in-person conversations. Tailored to your practice type and client scenarios.' },
+    { name: 'Ad Maker', desc: 'Create co-branded social media ads with your logo and Community Tax branding. Ready to post on Facebook, Instagram, and LinkedIn.' },
+    { name: 'Client Qualifier', desc: 'AI-powered tool that screens prospects before you refer them. Input a scenario and get instant guidance on eligibility, programs, and conversation approach.' },
+    { name: 'Marketing Kit', desc: 'Pre-built email templates, social posts, one-pagers, and presentation decks. Download, customize, and deploy.' },
+    { name: 'Revenue Calculator', desc: 'Model different referral scenarios to see projected earnings by tier, volume, and timeframe.' },
+    { name: 'CE Webinars', desc: 'IRS-approved continuing education on tax resolution topics. Deeper expertise means more confident referral conversations.' }
+  ];
+  toolDescs.forEach(function(tool) {
+    html += '<div class="bpd-tool-item">';
+    html += '<div class="bpd-tool-name">' + tool.name + '</div>';
+    html += '<div class="bpd-tool-desc">' + tool.desc + '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // 30-Day Challenge CTA
+  html += '<div class="bpd-challenge-cta">';
+  html += '<div class="bpd-challenge-cta-inner">';
+  html += '<h2 class="bpd-challenge-title">Start the 30-Day Momentum Challenge</h2>';
+  html += '<p class="bpd-challenge-desc">The single most impactful thing you can do right now. One small daily action for 30 days builds the referral habits that make this entire roadmap work. Partners who complete it generate 2.5x more referrals in their first quarter. It takes 5 minutes today.</p>';
+  html += '<p class="bpd-challenge-action">Open your Partner Portal and click <strong>30-Day Challenge</strong> in the Resources menu to begin.</p>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '</div>'; // end launch toolkit page
+
+  // ── FINAL PAGE: NEXT STEPS ──
+  html += '<div class="bpd-page bpd-nextsteps">';
+  html += '<div class="bpd-page-header"><span>90-Day Growth Roadmap</span><span>Next Steps</span></div>';
+
+  html += '<h1 class="bpd-h1">Your Next Steps</h1>';
+  html += '<p class="bpd-lead">You have the plan. Here is how to put it into action starting today.</p>';
+
+  html += '<div class="bpd-steps-list">';
+  html += '<div class="bpd-step-item"><div class="bpd-step-num">1</div><div class="bpd-step-body"><strong>Log into your Partner Portal</strong> and bookmark it. This is your home base for the next 90 days. Everything referenced in this document lives there.</div></div>';
+  html += '<div class="bpd-step-item"><div class="bpd-step-num">2</div><div class="bpd-step-body"><strong>Start the 30-Day Momentum Challenge</strong> -- it takes 5 minutes today and builds the daily habit that makes everything else in this plan easier.</div></div>';
+  html += '<div class="bpd-step-item"><div class="bpd-step-num">3</div><div class="bpd-step-body"><strong>Audit your client list this week.</strong> Identify your top 10 prospects who may have unresolved tax debt. These are your warmest leads and easiest first referrals.</div></div>';
+  html += '<div class="bpd-step-item"><div class="bpd-step-num">4</div><div class="bpd-step-body"><strong>Make your first referral conversation within 7 days.</strong> It does not have to be perfect. The goal is to start. Every top-earning partner says the same thing: the first one was the hardest.</div></div>';
+  html += '<div class="bpd-step-item"><div class="bpd-step-num">5</div><div class="bpd-step-body"><strong>Check back on this roadmap every Monday.</strong> Open the Business Planner in your portal, check off completed tasks, and review what is next. Consistency beats intensity.</div></div>';
+  html += '</div>';
+
+  html += '<div class="bpd-closing">';
+  html += '<p>This roadmap was generated on ' + dateStr + ' based on your specific inputs. As your practice grows and your results come in, regenerate it to get updated recommendations.</p>';
+  html += '<p><strong>Questions?</strong> Use the Knowledge Base in your portal or reach out to your partner success manager.</p>';
+  html += '<div class="bpd-closing-brand">Community Tax Enterprise Partner Program</div>';
+  html += '</div>';
+
+  html += '</div>'; // end page
+
+  doc.innerHTML = html;
+  return doc;
 }
 
 // Export roadmap as PDF using html2pdf.js
 function bpPrintRoadmap() {
-  var result = document.getElementById('bp-result');
-  if (!result) return;
-
   if (typeof html2pdf === 'undefined') {
     showToast('PDF library still loading -- try again in a moment.', 'warning');
     return;
   }
 
-  // Hide action buttons and checkboxes during capture
-  var actionBar = result.querySelector('.bp-action-bar');
-  var checks = result.querySelectorAll('.bp-task-check');
-  var dripBar = result.querySelector('.bp-drip-bar');
-  if (actionBar) actionBar.style.display = 'none';
-  if (dripBar) dripBar.style.display = 'none';
-  checks.forEach(function(c) { c.style.display = 'none'; });
+  var pdfDoc = bpBuildPdfDoc();
+  if (!pdfDoc) {
+    showToast('No roadmap data found -- generate a roadmap first.', 'warning');
+    return;
+  }
 
-  // Inject branded cover page at the top
-  var cover = bpBuildCover();
-  result.insertBefore(cover, result.firstChild);
+  // Temporarily zero out body margin so it doesn't affect the capture.
+  var origBodyMargin = document.body.style.margin;
+  var origBodyPadding = document.body.style.padding;
+  document.body.style.margin = '0';
+  document.body.style.padding = '0';
+  document.body.appendChild(pdfDoc);
+  window.scrollTo(0, 0);
 
   var opt = {
-    margin: [56, 43, 56, 43],
+    margin: 0,
     filename: '90-Day-Growth-Roadmap.pdf',
-    image: { type: 'jpeg', quality: 0.95 },
-    html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      letterRendering: true,
+      scrollY: -window.scrollY
+    },
     jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' },
-    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    pagebreak: { mode: ['css'] }
   };
 
-  showToast('Generating PDF...', 'info');
+  showToast('Generating PDF -- this may take a moment...', 'info');
 
-  html2pdf().set(opt).from(result).save().then(function() {
-    // Remove cover and restore hidden elements
-    if (cover.parentNode) cover.parentNode.removeChild(cover);
-    if (actionBar) actionBar.style.display = '';
-    if (dripBar) dripBar.style.display = '';
-    checks.forEach(function(c) { c.style.display = ''; });
+  html2pdf().set(opt).from(pdfDoc).save().then(function() {
+    if (pdfDoc.parentNode) document.body.removeChild(pdfDoc);
+    document.body.style.margin = origBodyMargin;
+    document.body.style.padding = origBodyPadding;
     showToast('PDF downloaded!', 'success');
-  }).catch(function() {
-    if (cover.parentNode) cover.parentNode.removeChild(cover);
-    if (actionBar) actionBar.style.display = '';
-    if (dripBar) dripBar.style.display = '';
-    checks.forEach(function(c) { c.style.display = ''; });
+  }).catch(function(err) {
+    console.error('PDF export error:', err);
+    if (pdfDoc.parentNode) document.body.removeChild(pdfDoc);
+    document.body.style.margin = origBodyMargin;
+    document.body.style.padding = origBodyPadding;
     showToast('PDF export failed -- try again.', 'error');
   });
 }

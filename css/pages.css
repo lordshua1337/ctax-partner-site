@@ -3866,30 +3866,231 @@ body:has(.tour-overlay) .portal-topbar{
   .tour-tooltip{left:50%;width:calc(100vw - 32px);max-width:360px;padding:22px 20px 18px}
 }
 
-/* PDF Cover Page */
-.bp-pdf-cover{
-  width:100%;min-height:279mm;
-  background:linear-gradient(155deg,#07111f 0%,#0d1f3c 40%,#122a52 100%);
-  display:flex;align-items:center;justify-content:center;
-  page-break-after:always;padding:40px;box-sizing:border-box;
+/* ── PDF Document Styles ──────────────────────────────────── */
+.bp-pdf-doc{
+  width:816px;margin:0;padding:0;
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  line-height:1.6;display:inline-block;
 }
-.bp-cover-inner{text-align:center;max-width:500px;width:100%}
+
+/* ── Cover page ── */
+.bp-pdf-cover{
+  width:100%;height:1056px;background:#0d1f3c;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  padding:0;margin:0;
+}
+.bp-cover-inner{text-align:center;max-width:460px;width:100%;padding:60px 40px}
 .bp-cover-logo{display:flex;align-items:center;justify-content:center;margin-bottom:48px}
-.bp-cover-logo-img{width:280px;height:auto}
+.bp-cover-logo-img{width:260px;height:auto}
 .bp-cover-title{
-  font-family:'DM Serif Display',serif;font-size:44px;color:#fff;
+  font-family:'DM Serif Display',serif;font-size:42px;color:#fff;
   line-height:1.15;margin-bottom:32px;letter-spacing:-0.01em;
 }
-.bp-cover-divider{width:60px;height:3px;background:linear-gradient(90deg,#0B5FD8,#00C8E0);margin:0 auto 36px;border-radius:2px}
+.bp-cover-divider{width:60px;height:3px;background:linear-gradient(90deg,#0B5FD8,#00C8E0);margin:0 auto 32px;border-radius:2px}
 .bp-cover-meta{
   background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
-  border-radius:12px;padding:24px 32px;margin-bottom:36px;text-align:left;
+  border-radius:10px;padding:20px 28px;margin-bottom:32px;text-align:left;
 }
-.bp-cover-meta-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
+.bp-cover-meta-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
 .bp-cover-meta-row:last-child{border-bottom:none}
-.bp-cover-label{font-size:13px;color:rgba(255,255,255,0.45);font-weight:500}
-.bp-cover-val{font-size:14px;color:#fff;font-weight:600}
-.bp-cover-footer{font-size:12px;color:rgba(255,255,255,0.3);font-style:italic}
+.bp-cover-label{font-size:12px;color:rgba(255,255,255,0.45);font-weight:500}
+.bp-cover-val{font-size:13px;color:#fff;font-weight:600}
+.bp-cover-footer{font-size:12px;color:rgba(255,255,255,0.35);font-style:italic;line-height:1.5}
+
+/* ── Shared base for body pages ── */
+.bpd-page{
+  padding:56px 48px 28px;box-sizing:border-box;width:100%;
+  background:#fff;color:#1a1a2e;
+  page-break-before:always;
+}
+
+/* ── Per-page overrides ── */
+.bpd-summary{page-break-before:auto}
+.bpd-month{}
+.bpd-scenarios{}
+.bpd-toolkit{}
+.bpd-nextsteps{}
+
+/* Page header (running header on each section) */
+.bpd-page-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-bottom:10px;margin-bottom:24px;
+  border-bottom:2px solid #0B5FD8;
+  font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;
+  page-break-after:avoid;
+}
+
+/* Typography -- headings avoid breaking away from their content */
+.bpd-h1{
+  font-family:'DM Serif Display',serif;font-size:26px;color:#0d1f3c;
+  margin:0 0 10px;line-height:1.2;letter-spacing:-0.01em;
+  page-break-after:avoid;
+}
+.bpd-h2{
+  font-size:16px;font-weight:700;color:#0d1f3c;
+  margin:28px 0 10px;line-height:1.3;
+  page-break-after:avoid;
+}
+.bpd-lead{
+  font-size:13px;color:#374151;line-height:1.7;margin:0 0 24px;
+}
+.bpd-body{
+  font-size:12px;color:#374151;line-height:1.7;margin:0 0 14px;
+}
+.bpd-subtitle{
+  font-size:12px;color:#6b7280;margin:0 0 20px;font-weight:500;
+}
+
+/* Summary cards -- stacked vertically so they never overflow width */
+.bpd-summary-grid{
+  display:flex;flex-direction:column;gap:12px;margin-bottom:28px;
+}
+.bpd-summary-card{
+  background:#f8fafc;border:1px solid #e5e7eb;border-radius:8px;
+  padding:16px 20px;display:flex;align-items:flex-start;gap:16px;
+  page-break-inside:avoid;
+}
+.bpd-summary-val{
+  font-family:'DM Serif Display',serif;font-size:22px;color:#0B5FD8;
+  flex-shrink:0;min-width:100px;
+}
+.bpd-summary-label{
+  font-size:10px;text-transform:uppercase;letter-spacing:0.04em;
+  color:#6b7280;font-weight:600;margin-bottom:4px;
+}
+.bpd-summary-note{
+  font-size:11px;color:#9ca3af;line-height:1.5;
+}
+
+/* Bulleted list */
+.bpd-list{
+  margin:0 0 18px;padding-left:18px;
+}
+.bpd-list li{
+  font-size:12px;color:#374151;line-height:1.7;margin-bottom:8px;
+}
+.bpd-list li strong{color:#0d1f3c}
+
+/* Monthly insight box -- never split across pages */
+.bpd-insight-box{
+  background:linear-gradient(135deg,#f0f4ff 0%,#e8f0fe 100%);
+  border-left:4px solid #0B5FD8;border-radius:0 8px 8px 0;
+  padding:16px 20px;margin-bottom:24px;
+  page-break-inside:avoid;
+}
+.bpd-insight-title{
+  font-size:13px;font-weight:700;color:#0d1f3c;margin-bottom:6px;
+}
+.bpd-insight-body{
+  font-size:11px;color:#374151;line-height:1.7;margin:0;
+}
+
+/* Task items -- never split across pages */
+.bpd-task{
+  display:flex;gap:12px;margin-bottom:16px;
+  page-break-inside:avoid;
+}
+.bpd-task-num{
+  flex-shrink:0;width:24px;height:24px;border-radius:50%;
+  background:#0B5FD8;color:#fff;font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;margin-top:2px;
+}
+.bpd-task-content{flex:1;min-width:0}
+.bpd-task-header{margin-bottom:3px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.bpd-task-title{font-size:12px;font-weight:700;color:#0d1f3c}
+.bpd-prio-high{
+  font-size:8px;text-transform:uppercase;letter-spacing:0.06em;
+  background:#fee2e2;color:#dc2626;padding:2px 5px;border-radius:3px;font-weight:700;
+}
+.bpd-prio-med{
+  font-size:8px;text-transform:uppercase;letter-spacing:0.06em;
+  background:#fef3c7;color:#d97706;padding:2px 5px;border-radius:3px;font-weight:700;
+}
+.bpd-task-desc{
+  font-size:10.5px;color:#4b5563;line-height:1.6;margin:0;
+}
+
+/* Monthly target box */
+.bpd-month-target{
+  background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;
+  padding:12px 16px;margin-top:20px;font-size:11px;color:#166534;line-height:1.6;
+  page-break-inside:avoid;
+}
+
+/* Comparison table */
+.bpd-table{
+  width:100%;border-collapse:collapse;margin:0 0 24px;font-size:11px;
+  page-break-inside:avoid;
+}
+.bpd-table th{
+  background:#f1f5f9;color:#0d1f3c;font-weight:700;text-align:left;
+  padding:8px 12px;border-bottom:2px solid #0B5FD8;font-size:10px;
+  text-transform:uppercase;letter-spacing:0.04em;
+}
+.bpd-table td{
+  padding:8px 12px;border-bottom:1px solid #e5e7eb;color:#374151;
+}
+.bpd-table-highlight td{
+  background:#eff6ff;font-weight:600;color:#0B5FD8;
+}
+
+/* Tools grid */
+.bpd-tools-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;
+}
+.bpd-tool-item{
+  background:#f8fafc;border:1px solid #e5e7eb;border-radius:6px;padding:12px 14px;
+  page-break-inside:avoid;
+}
+.bpd-tool-name{font-size:11px;font-weight:700;color:#0d1f3c;margin-bottom:3px}
+.bpd-tool-desc{font-size:10px;color:#6b7280;line-height:1.5}
+
+/* 30-Day Challenge CTA */
+.bpd-challenge-cta{
+  margin-top:28px;page-break-inside:avoid;
+}
+.bpd-challenge-cta-inner{
+  background:linear-gradient(135deg,#0d1f3c 0%,#122a52 100%);
+  border-radius:10px;padding:28px 32px;color:#fff;
+}
+.bpd-challenge-title{
+  font-family:'DM Serif Display',serif;font-size:18px;color:#fff;
+  margin:0 0 10px;line-height:1.3;
+}
+.bpd-challenge-desc{
+  font-size:12px;color:rgba(255,255,255,0.8);line-height:1.7;margin:0 0 12px;
+}
+.bpd-challenge-action{
+  font-size:12px;color:#00C8E0;margin:0;line-height:1.6;
+}
+.bpd-challenge-action strong{color:#fff}
+
+/* Next steps numbered list */
+.bpd-steps-list{margin:0 0 28px}
+.bpd-step-item{
+  display:flex;gap:12px;margin-bottom:16px;page-break-inside:avoid;
+}
+.bpd-step-num{
+  flex-shrink:0;width:28px;height:28px;border-radius:50%;
+  background:#0d1f3c;color:#fff;font-size:14px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.bpd-step-body{
+  flex:1;font-size:12px;color:#374151;line-height:1.7;padding-top:3px;
+}
+.bpd-step-body strong{color:#0d1f3c}
+
+/* Closing section */
+.bpd-closing{
+  margin-top:36px;padding-top:20px;border-top:1px solid #e5e7eb;
+  page-break-inside:avoid;
+}
+.bpd-closing p{font-size:11px;color:#6b7280;line-height:1.6;margin:0 0 10px}
+.bpd-closing strong{color:#374151}
+.bpd-closing-brand{
+  margin-top:20px;font-size:12px;font-weight:700;color:#0B5FD8;
+  letter-spacing:0.02em;
+}
 
 /* Print styles */
 @media print{
