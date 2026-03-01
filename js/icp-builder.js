@@ -213,9 +213,9 @@
     wireTextarea();
   };
 
-  // Cinematic scroll controller: every scene pins + fades in/out via scroll progress
-  // Performance: cache scene offsets, avoid getBoundingClientRect in scroll loop,
-  // use translate3d for GPU compositing, no scale transforms on text
+  // Cinematic scroll: Apple-style zoom. Text starts small + far, zooms toward
+  // you on scroll, holds at full size, then zooms past you and fades out.
+  // Every scroll tick = a frame of the zoom animation.
   window._aitInitScrollReveal = function() {
     var hero = document.getElementById('ait-hero-pin');
     var heroContent = document.getElementById('ait-hero-pin-content');
@@ -224,11 +224,9 @@
     var ticking = false;
 
     function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
-
-    // Smooth ease -- slower start, gentle finish
     function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
 
-    // Cache scene geometry so we never call offsetTop/offsetHeight during scroll
+    // Cache geometry once, recalc on resize
     var scenes = [];
     function cacheGeometry() {
       scenes = [];
@@ -239,18 +237,16 @@
         if (!pin) continue;
         var rect = el.getBoundingClientRect();
         scenes.push({
-          el: el,
           pin: pin,
           top: rect.top + scrollY,
           height: rect.height,
           isProof: el.dataset.scene === 'proof',
+          isCta: el.dataset.scene === 'cta',
           cards: el.dataset.scene === 'proof' ? el.querySelectorAll('.ait-proof-card') : null
         });
       }
     }
-
     cacheGeometry();
-    // Recache on resize (debounced)
     var resizeTimer;
     window.addEventListener('resize', function() {
       clearTimeout(resizeTimer);
@@ -264,66 +260,69 @@
         var scrollY = window.scrollY;
         var vh = window.innerHeight;
 
-        // Hero: pure opacity fade, gentle translate up
+        // Hero: zoom out as you scroll (starts at 1, scales up slightly, fades)
         if (hero && heroContent) {
-          var heroP = clamp(scrollY / (vh * 0.8), 0, 1);
-          var heroEased = ease(heroP);
-          heroContent.style.opacity = 1 - heroEased;
-          heroContent.style.transform = 'translate3d(0,' + (-20 * heroEased) + 'px,0)';
-          if (scrollCue) {
-            scrollCue.style.opacity = clamp(1 - heroP * 3, 0, 1);
-          }
+          var p = clamp(scrollY / (vh * 0.7), 0, 1);
+          var ep = ease(p);
+          heroContent.style.opacity = 1 - ep;
+          heroContent.style.transform = 'translate3d(0,0,0) scale(' + (1 + ep * 0.15) + ')';
+          if (scrollCue) scrollCue.style.opacity = clamp(1 - p * 4, 0, 1);
         }
 
-        // Scenes: use cached offsets, no layout queries
         for (var i = 0; i < scenes.length; i++) {
           var s = scenes[i];
-          var pin = s.pin;
-          var scrollableDistance = s.height - vh;
-          if (scrollableDistance <= 0) scrollableDistance = 1;
-
-          // How far the scene top has scrolled past the viewport top
+          var scrollable = s.height - vh;
+          if (scrollable <= 0) scrollable = 1;
           var scrolledPast = scrollY - s.top;
-          // progress: 0 = scene top at viewport top, 1 = scene bottom at viewport bottom
-          var progress = clamp(scrolledPast / scrollableDistance, 0, 1);
-          // visibility: has the scene entered the viewport at all?
-          var distFromView = s.top - scrollY - vh;
+          var progress = clamp(scrolledPast / scrollable, 0, 1);
+          var belowView = s.top - scrollY - vh;
 
-          var opacity, ty;
+          // Zoom model:
+          //   Enter (0-0.3):  scale 0.75 -> 1.0, opacity 0 -> 1 (zooming toward you)
+          //   Hold  (0.3-0.6): scale 1.0, opacity 1
+          //   Exit  (0.6-1.0): scale 1.0 -> 1.15, opacity 1 -> 0 (zooming past you)
+          var opacity, scale;
 
-          if (distFromView > 0) {
-            // Below viewport -- invisible
+          if (belowView > 0) {
+            // Not yet entered
             opacity = 0;
-            ty = 60;
-          } else if (progress <= 0.25) {
-            // Fade in zone (wider = smoother)
-            var t = ease(progress / 0.25);
+            scale = 0.75;
+          } else if (progress <= 0.3) {
+            // Zooming in toward you
+            var t = ease(progress / 0.3);
             opacity = t;
-            ty = 60 * (1 - t);
-          } else if (progress <= 0.65) {
-            // Hold zone -- fully visible, no movement
+            scale = 0.75 + 0.25 * t;
+          } else if (progress <= 0.6) {
+            // Holding at full size
             opacity = 1;
-            ty = 0;
+            scale = 1;
           } else {
-            // Fade out zone
-            var t = ease((progress - 0.65) / 0.35);
+            // Zooming past you
+            var t = ease((progress - 0.6) / 0.4);
             opacity = 1 - t;
-            ty = -40 * t;
+            scale = 1 + 0.15 * t;
           }
 
-          pin.style.opacity = opacity;
-          pin.style.transform = 'translate3d(0,' + ty + 'px,0)';
+          // CTA bridge: no exit zoom, just stays
+          if (s.isCta && progress > 0.3) {
+            opacity = 1;
+            scale = 1;
+          }
 
-          // Proof cards: stagger with wider delay
+          s.pin.style.opacity = opacity;
+          s.pin.style.transform = 'translate3d(0,0,0) scale(' + scale + ')';
+
+          // Proof cards: stagger zoom-in
           if (s.isProof && s.cards) {
             for (var c = 0; c < s.cards.length; c++) {
-              var delay = c * 0.08;
-              var cardT = clamp((progress - delay) / 0.2, 0, 1);
-              if (progress >= 0.25) cardT = 1;
-              var cardEased = ease(cardT);
-              s.cards[c].style.opacity = opacity * cardEased;
-              s.cards[c].style.transform = 'translate3d(0,' + (30 * (1 - cardEased)) + 'px,0)';
-              if (cardEased >= 1 && opacity > 0.5) {
+              var delay = c * 0.06;
+              var ct = clamp((progress - delay) / 0.25, 0, 1);
+              if (progress >= 0.3) ct = 1;
+              var ce = ease(ct);
+              var cardScale = 0.8 + 0.2 * ce;
+              s.cards[c].style.opacity = opacity * ce;
+              s.cards[c].style.transform = 'translate3d(0,0,0) scale(' + cardScale + ')';
+              if (ce >= 1 && opacity > 0.5) {
                 s.cards[c].classList.add('ait-proof-visible');
               } else {
                 s.cards[c].classList.remove('ait-proof-visible');

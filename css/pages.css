@@ -5320,8 +5320,8 @@ body.pb-immersive .scroll-to-top{display:none!important}
 /* GPU-composited: only opacity + translate3d touched by JS */
 .ait-scene{position:relative}
 .ait-scene-pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;will-change:opacity,transform;transform:translate3d(0,0,0);-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:2}
-.ait-scene-scroll-space{height:120vh;position:relative;z-index:1}
-.ait-scene-scroll-space-short{height:60vh}
+.ait-scene-scroll-space{height:80vh;position:relative;z-index:1}
+.ait-scene-scroll-space-short{height:40vh}
 
 /* Scene text styles */
 .ait-scene-text{font-family:'DM Serif Display',serif;font-size:42px;line-height:1.3;color:#fff;margin:0;max-width:700px;letter-spacing:-0.01em}
@@ -5344,7 +5344,7 @@ body.pb-immersive .scroll-to-top{display:none!important}
 .ait-value-desc{font-size:17px;color:rgba(255,255,255,0.5);line-height:1.7;margin:0}
 
 /* CTA Bridge */
-.ait-scene-bridge .ait-scene-pin{background:linear-gradient(180deg,transparent 0%,#0a1628 100%)}
+.ait-scene-bridge .ait-scene-pin{background:transparent}
 .ait-bridge-headline{font-family:'DM Serif Display',serif;font-size:44px;color:#fff;margin:0 0 16px;line-height:1.2;text-shadow:0 0 40px rgba(75,163,255,0.2)}
 .ait-bridge-sub{font-size:17px;color:rgba(255,255,255,0.5);margin:0 0 40px}
 .ait-bridge-btn{display:inline-flex;align-items:center;gap:10px;padding:18px 40px;border:none;border-radius:12px;background:var(--sky);color:#fff;font-size:17px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.25s;box-shadow:0 4px 24px rgba(75,163,255,0.3);animation:aitBtnGlow 3s ease-in-out infinite alternate}
@@ -5364,13 +5364,13 @@ body.pb-immersive .scroll-to-top{display:none!important}
   .ait-scene-pin{padding:0 20px}
   .ait-orb{width:300px;height:300px}
   .ait-hero-scroll-space{height:40vh}
-  .ait-scene-scroll-space{height:80vh}
+  .ait-scene-scroll-space{height:60vh}
 }
 
 /* ── ICP BUILDER ─────────────────────────────────────────── */
 
 /* Builder Section Wrapper */
-.ait-builder{padding:80px 24px 100px;background:linear-gradient(180deg,#0a1628 0%,#0d1f3c 100%);position:relative}
+.ait-builder{padding:80px 24px 100px;background:#0a0a0a;position:relative}
 .ait-builder-inner{max-width:680px;margin:0 auto}
 .ait-builder-head{text-align:center;margin-bottom:48px}
 .ait-builder-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--sky);margin-bottom:12px}
