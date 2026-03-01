@@ -213,37 +213,53 @@
     wireTextarea();
   };
 
-  // Scroll-reveal: IntersectionObserver for immersive scroll sections
+  // Cinematic scroll controller: sticky hero fade + staggered reveals
   window._aitInitScrollReveal = function() {
-    var reveals = document.querySelectorAll('.ait-reveal');
-    if (!reveals.length) return;
-
-    // Hide scroll cue when user scrolls past hero
+    var hero = document.getElementById('ait-hero-pin');
+    var heroContent = document.getElementById('ait-hero-pin-content');
     var scrollCue = document.getElementById('ait-scroll-cue');
-    if (scrollCue) {
-      var hideObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          scrollCue.style.opacity = entry.isIntersecting ? '1' : '0';
-          scrollCue.style.transition = 'opacity 0.4s ease';
-        });
-      }, { threshold: 0.5 });
-      var hero = document.getElementById('ait-act-hero');
-      if (hero) hideObserver.observe(hero);
+    var ticking = false;
+
+    // Scroll-linked hero fade and scale (rAF throttled)
+    if (hero && heroContent) {
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          requestAnimationFrame(function() {
+            var progress = Math.min(window.scrollY / (window.innerHeight * 0.8), 1);
+            heroContent.style.opacity = 1 - progress;
+            heroContent.style.transform = 'scale(' + (1 - progress * 0.12) + ')';
+            // Fade scroll cue faster
+            if (scrollCue) {
+              scrollCue.style.opacity = Math.max(1 - progress * 3, 0);
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
     }
 
-    // Reveal elements as they scroll into view
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('ait-visible');
-          observer.unobserve(entry.target); // Only animate once
-        }
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    // IntersectionObserver for staggered reveals
+    var staggers = document.querySelectorAll('.ait-stagger');
+    if (staggers.length) {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var children = entry.target.querySelectorAll('.ait-stagger-child');
+            children.forEach(function(child, i) {
+              setTimeout(function() {
+                child.classList.add('in-view');
+              }, i * 150);
+            });
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
 
-    reveals.forEach(function(el) {
-      observer.observe(el);
-    });
+      staggers.forEach(function(el) {
+        obs.observe(el);
+      });
+    }
   };
 
   // ---- Internal functions ----
