@@ -235,17 +235,17 @@
   };
 
   // Immersive snap-scroll experience.
-  // CSS scroll-snap handles snapping between 100vh sections.
-  // IntersectionObserver handles fade-in animations.
-  // One-way scroll prevents going backward (it's a ride).
-  // When builder section is reached, snap is released for free-scroll.
+  // Two-scroll pacing: requires 2 wheel events to advance.
+  // 3D card tilt on mousemove for holo cards.
+  // One-way scroll: no going back.
+  // Builder section releases snap for free-scroll.
   window._aitInitScrollReveal = function() {
     if (window._aitInitStars) window._aitInitStars();
 
     var container = document.getElementById('ait-snap-container');
     if (!container) return;
 
-    // Enter immersive mode -- hide site nav
+    // Enter immersive mode
     document.body.classList.add('ait-immersive-active');
 
     var sections = container.querySelectorAll('.ait-snap-section');
@@ -254,14 +254,22 @@
     var builderSection = document.querySelector('.ait-snap-section-builder');
     var builderTop = builderSection ? builderSection.offsetTop : Infinity;
     var inBuilder = false;
+    var currentIdx = 0;
+    var scrollCount = 0;
+    var scrollTimer = null;
+    var isScrolling = false;
 
-    // IntersectionObserver for fade-in animations
+    // IntersectionObserver for fade-in animations + tracking current section
     var observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         var content = entry.target.querySelector('.ait-snap-content');
         if (!content) return;
 
         if (entry.isIntersecting) {
+          // Track which section we're on
+          var idx = Array.prototype.indexOf.call(sections, entry.target);
+          if (idx >= 0) currentIdx = idx;
+
           setTimeout(function() {
             content.classList.add('ait-snap-visible');
           }, 80);
@@ -291,18 +299,44 @@
       builderObs.observe(builderSection);
     }
 
-    // One-way scroll: prevent scrolling backward
+    // Two-scroll pacing: prevent default wheel, count events,
+    // advance to next section only after 2 scroll-downs.
     container.addEventListener('wheel', function(e) {
-      if (e.deltaY < 0) {
-        // In builder zone, allow scroll-up within builder content
-        if (inBuilder && container.scrollTop > builderTop) {
+      e.preventDefault();
+
+      // In builder zone, allow free scrolling (but not backward past builder)
+      if (inBuilder) {
+        if (e.deltaY < 0 && container.scrollTop <= builderTop + 10) {
           return;
         }
-        e.preventDefault();
+        container.scrollTop += e.deltaY;
+        return;
+      }
+
+      // Block backward scroll entirely (one-way ride)
+      if (e.deltaY < 0) return;
+
+      // Block during animated scroll
+      if (isScrolling) return;
+
+      // Count scroll events
+      scrollCount++;
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(function() { scrollCount = 0; }, 600);
+
+      // Require 2 wheel events to advance
+      if (scrollCount >= 2) {
+        scrollCount = 0;
+        var nextIdx = Math.min(currentIdx + 1, sections.length - 1);
+        if (nextIdx !== currentIdx) {
+          isScrolling = true;
+          sections[nextIdx].scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(function() { isScrolling = false; }, 700);
+        }
       }
     }, { passive: false });
 
-    // Touch: prevent swipe-up (mobile)
+    // Touch: prevent swipe-up (mobile), allow swipe-down
     var touchStartY = 0;
     container.addEventListener('touchstart', function(e) {
       touchStartY = e.touches[0].clientY;
@@ -310,25 +344,43 @@
 
     container.addEventListener('touchmove', function(e) {
       var isScrollingUp = e.touches[0].clientY > touchStartY;
-      if (isScrollingUp) {
-        if (inBuilder && container.scrollTop > builderTop) {
-          return;
-        }
+      if (isScrollingUp && !inBuilder) {
+        e.preventDefault();
+      }
+      if (isScrollingUp && inBuilder && container.scrollTop <= builderTop + 10) {
         e.preventDefault();
       }
     }, { passive: false });
+
+    // 3D card tilt on mousemove
+    var tiltCards = document.querySelectorAll('[data-tilt]');
+    tiltCards.forEach(function(card) {
+      var inner = card.querySelector('.ait-holo-inner');
+      if (!inner) return;
+
+      card.addEventListener('mousemove', function(e) {
+        var rect = card.getBoundingClientRect();
+        var x = (e.clientX - rect.left) / rect.width;
+        var y = (e.clientY - rect.top) / rect.height;
+        var rotX = (0.5 - y) * 20;
+        var rotY = (x - 0.5) * 20;
+        inner.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+      });
+
+      card.addEventListener('mouseleave', function() {
+        inner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      });
+    });
   };
 
   // Exit the immersive experience
   window.aitExitImmersive = function() {
     document.body.classList.remove('ait-immersive-active');
-    // Reset snap container
     var container = document.getElementById('ait-snap-container');
     if (container) {
       container.style.scrollSnapType = '';
       container.scrollTop = 0;
     }
-    // Navigate to home
     if (typeof showPage === 'function') {
       showPage('dashboard');
     }
