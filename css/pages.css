@@ -5323,11 +5323,11 @@ body.pb-immersive .scroll-to-top{display:none!important}
 @keyframes aitBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
 /* ── SCENE SYSTEM ── */
-/* 150vh spacer = lots of dwell time, content holds for 2-3 extra scrolls */
+/* 100vh spacer = ~10 scrolls per scene. Zones: gap > zoom in > hold > zoom out > gap */
 .ait-scene{position:relative}
-.ait-scene-pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;will-change:opacity,transform;transform:translate3d(0,0,0) scale(0.75);-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:2}
-.ait-scene-scroll-space{height:150vh;position:relative;z-index:1}
-.ait-scene-scroll-space-short{height:60vh}
+.ait-scene-pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;will-change:opacity,transform;transform:translate3d(0,0,0) scale(0.7);opacity:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:2}
+.ait-scene-scroll-space{height:100vh;position:relative;z-index:1}
+.ait-scene-scroll-space-short{height:50vh}
 
 /* Scene text */
 .ait-scene-text{font-family:'DM Serif Display',serif;font-size:42px;line-height:1.3;color:#fff;margin:0;max-width:700px;letter-spacing:-0.01em}
@@ -5368,7 +5368,7 @@ body.pb-immersive .scroll-to-top{display:none!important}
   .ait-scene-pin{padding:0 20px}
   .ait-orb{width:300px;height:300px}
   .ait-hero-scroll-space{height:40vh}
-  .ait-scene-scroll-space{height:100vh}
+  .ait-scene-scroll-space{height:80vh}
 }
 
 /* ── ICP BUILDER ─────────────────────────────────────────── */
