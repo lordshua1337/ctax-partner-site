@@ -5387,7 +5387,8 @@ body.pb-immersive .scroll-to-top{display:none!important}
 /* Immersive mode -- hides site chrome */
 body.ait-immersive-active #site-nav,
 body.ait-immersive-active .page-breadcrumbs{display:none !important}
-body.ait-immersive-active{overflow:hidden}
+body.ait-immersive-active{overflow:hidden;background:#0a0a0a !important;padding-bottom:0 !important}
+body.ait-immersive-active .page{padding-top:0 !important}
 
 /* Exit -- ultra-subtle tiny grey X, barely visible unless hovered */
 .ait-exit-btn{position:fixed;top:14px;right:14px;z-index:100;width:24px;height:24px;border-radius:50%;border:none;background:transparent;color:rgba(255,255,255,0.12);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color 0.3s;padding:0}
