@@ -1,6 +1,9 @@
 <!-- AI Tools: Cinematic Scroll Experience -->
 <div class="ait-cinema" id="ait-cinema">
 
+  <!-- Starfield layer -->
+  <div class="ait-stars" id="ait-stars"></div>
+
   <!-- ACT 1: Pinned Hero with scroll-linked fade -->
   <div class="ait-hero-pin" id="ait-hero-pin">
     <div class="ait-orb"></div>
@@ -16,16 +19,16 @@
   </div>
   <div class="ait-hero-scroll-space"></div>
 
-  <!-- SCENE 1: Problem statement (pinned, scroll-linked fade in/out) -->
-  <div class="ait-scene" data-scene="problem1">
+  <!-- SCENE 1: Problem statement -->
+  <div class="ait-scene" data-scene="text">
     <div class="ait-scene-pin">
-      <p class="ait-scene-text">Most partners spend weeks guessing who to call.</p>
+      <p class="ait-scene-text">Most partners spend weeks<br>guessing who to call.</p>
     </div>
     <div class="ait-scene-scroll-space"></div>
   </div>
 
   <!-- SCENE 2: Pain amplification -->
-  <div class="ait-scene" data-scene="problem2">
+  <div class="ait-scene" data-scene="text">
     <div class="ait-scene-pin">
       <p class="ait-scene-text ait-scene-text-dim">Cold outreach. Generic pitches.<br>Conversations that go nowhere.</p>
     </div>
@@ -33,32 +36,44 @@
   </div>
 
   <!-- SCENE 3: The shift -->
-  <div class="ait-scene" data-scene="shift">
+  <div class="ait-scene" data-scene="text">
     <div class="ait-scene-pin">
-      <p class="ait-scene-text ait-scene-text-accent">What if you knew exactly who your ideal referral client was?</p>
+      <p class="ait-scene-text ait-scene-text-accent">What if you knew exactly<br>who your ideal referral client was?</p>
     </div>
     <div class="ait-scene-scroll-space"></div>
   </div>
 
-  <!-- SCENE 4: Proof cards (stagger in, hold, fade out together) -->
-  <div class="ait-scene ait-scene-wide" data-scene="proof">
+  <!-- SCENE 4: Proof - 6 Questions -->
+  <div class="ait-scene" data-scene="text">
     <div class="ait-scene-pin">
-      <div class="ait-proof-grid">
-        <div class="ait-proof-card" data-proof="0">
-          <div class="ait-proof-num">6</div>
-          <div class="ait-proof-label">Questions</div>
-          <div class="ait-proof-desc">About your practice, clients, and goals</div>
-        </div>
-        <div class="ait-proof-card" data-proof="1">
-          <div class="ait-proof-num">60s</div>
-          <div class="ait-proof-label">To Complete</div>
-          <div class="ait-proof-desc">Quick answers, zero guesswork</div>
-        </div>
-        <div class="ait-proof-card" data-proof="2">
-          <div class="ait-proof-num">1</div>
-          <div class="ait-proof-label">Custom ICP</div>
-          <div class="ait-proof-desc">Red flags, scripts, action plan -- all yours</div>
-        </div>
+      <div class="ait-proof-card-solo">
+        <div class="ait-proof-num">6</div>
+        <div class="ait-proof-label">Questions</div>
+        <div class="ait-proof-desc">About your practice, clients, and goals</div>
+      </div>
+    </div>
+    <div class="ait-scene-scroll-space"></div>
+  </div>
+
+  <!-- SCENE 5: Proof - 60 Seconds -->
+  <div class="ait-scene" data-scene="text">
+    <div class="ait-scene-pin">
+      <div class="ait-proof-card-solo">
+        <div class="ait-proof-num">60s</div>
+        <div class="ait-proof-label">To Complete</div>
+        <div class="ait-proof-desc">Quick answers, zero guesswork</div>
+      </div>
+    </div>
+    <div class="ait-scene-scroll-space"></div>
+  </div>
+
+  <!-- SCENE 6: Proof - 1 Custom ICP -->
+  <div class="ait-scene" data-scene="text">
+    <div class="ait-scene-pin">
+      <div class="ait-proof-card-solo">
+        <div class="ait-proof-num">1</div>
+        <div class="ait-proof-label">Custom ICP</div>
+        <div class="ait-proof-desc">Red flags, scripts, action plan -- all yours</div>
       </div>
     </div>
     <div class="ait-scene-scroll-space"></div>

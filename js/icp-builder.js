@@ -213,10 +213,33 @@
     wireTextarea();
   };
 
-  // Cinematic scroll: Apple-style zoom. Text starts small + far, zooms toward
-  // you on scroll, holds at full size, then zooms past you and fades out.
-  // Every scroll tick = a frame of the zoom animation.
+  // Generate starfield
+  window._aitInitStars = function() {
+    var container = document.getElementById('ait-stars');
+    if (!container || container.childNodes.length > 0) return;
+    var count = 80;
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < count; i++) {
+      var star = document.createElement('div');
+      var isLarge = Math.random() < 0.15;
+      star.className = 'ait-star' + (isLarge ? ' ait-star-lg' : '');
+      star.style.left = (Math.random() * 100) + '%';
+      star.style.top = (Math.random() * 100) + '%';
+      star.style.setProperty('--dur', (2 + Math.random() * 4).toFixed(1) + 's');
+      star.style.setProperty('--lo', (0.05 + Math.random() * 0.15).toFixed(2));
+      star.style.setProperty('--hi', (0.4 + Math.random() * 0.5).toFixed(2));
+      star.style.animationDelay = (Math.random() * -5).toFixed(1) + 's';
+      frag.appendChild(star);
+    }
+    container.appendChild(frag);
+  };
+
+  // Cinematic scroll: zoom toward you, long hold, zoom past you.
+  // With 150vh spacers, the hold zone gives 2-3 extra scrolls of dwell time.
   window._aitInitScrollReveal = function() {
+    // Init stars
+    if (window._aitInitStars) window._aitInitStars();
+
     var hero = document.getElementById('ait-hero-pin');
     var heroContent = document.getElementById('ait-hero-pin-content');
     var scrollCue = document.getElementById('ait-scroll-cue');
@@ -226,7 +249,6 @@
     function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
     function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
 
-    // Cache geometry once, recalc on resize
     var scenes = [];
     function cacheGeometry() {
       scenes = [];
@@ -240,9 +262,7 @@
           pin: pin,
           top: rect.top + scrollY,
           height: rect.height,
-          isProof: el.dataset.scene === 'proof',
-          isCta: el.dataset.scene === 'cta',
-          cards: el.dataset.scene === 'proof' ? el.querySelectorAll('.ait-proof-card') : null
+          isCta: el.dataset.scene === 'cta'
         });
       }
     }
@@ -260,15 +280,19 @@
         var scrollY = window.scrollY;
         var vh = window.innerHeight;
 
-        // Hero: zoom out as you scroll (starts at 1, scales up slightly, fades)
+        // Hero: zoom out gently
         if (hero && heroContent) {
           var p = clamp(scrollY / (vh * 0.7), 0, 1);
           var ep = ease(p);
           heroContent.style.opacity = 1 - ep;
-          heroContent.style.transform = 'translate3d(0,0,0) scale(' + (1 + ep * 0.15) + ')';
+          heroContent.style.transform = 'translate3d(0,0,0) scale(' + (1 + ep * 0.12) + ')';
           if (scrollCue) scrollCue.style.opacity = clamp(1 - p * 4, 0, 1);
         }
 
+        // Scenes: zoom model with generous hold
+        //   Enter (0-0.12): scale 0.7 -> 1.0, opacity 0 -> 1
+        //   Hold  (0.12-0.82): scale 1.0, opacity 1 (LONG dwell)
+        //   Exit  (0.82-1.0): scale 1.0 -> 1.12, opacity 1 -> 0
         for (var i = 0; i < scenes.length; i++) {
           var s = scenes[i];
           var scrollable = s.height - vh;
@@ -277,58 +301,32 @@
           var progress = clamp(scrolledPast / scrollable, 0, 1);
           var belowView = s.top - scrollY - vh;
 
-          // Zoom model:
-          //   Enter (0-0.3):  scale 0.75 -> 1.0, opacity 0 -> 1 (zooming toward you)
-          //   Hold  (0.3-0.6): scale 1.0, opacity 1
-          //   Exit  (0.6-1.0): scale 1.0 -> 1.15, opacity 1 -> 0 (zooming past you)
           var opacity, scale;
 
           if (belowView > 0) {
-            // Not yet entered
             opacity = 0;
-            scale = 0.75;
-          } else if (progress <= 0.3) {
-            // Zooming in toward you
-            var t = ease(progress / 0.3);
+            scale = 0.7;
+          } else if (progress <= 0.12) {
+            var t = ease(progress / 0.12);
             opacity = t;
-            scale = 0.75 + 0.25 * t;
-          } else if (progress <= 0.6) {
-            // Holding at full size
+            scale = 0.7 + 0.3 * t;
+          } else if (progress <= 0.82) {
             opacity = 1;
             scale = 1;
           } else {
-            // Zooming past you
-            var t = ease((progress - 0.6) / 0.4);
+            var t = ease((progress - 0.82) / 0.18);
             opacity = 1 - t;
-            scale = 1 + 0.15 * t;
+            scale = 1 + 0.12 * t;
           }
 
-          // CTA bridge: no exit zoom, just stays
-          if (s.isCta && progress > 0.3) {
+          // CTA stays visible once entered
+          if (s.isCta && progress > 0.12) {
             opacity = 1;
             scale = 1;
           }
 
           s.pin.style.opacity = opacity;
           s.pin.style.transform = 'translate3d(0,0,0) scale(' + scale + ')';
-
-          // Proof cards: stagger zoom-in
-          if (s.isProof && s.cards) {
-            for (var c = 0; c < s.cards.length; c++) {
-              var delay = c * 0.06;
-              var ct = clamp((progress - delay) / 0.25, 0, 1);
-              if (progress >= 0.3) ct = 1;
-              var ce = ease(ct);
-              var cardScale = 0.8 + 0.2 * ce;
-              s.cards[c].style.opacity = opacity * ce;
-              s.cards[c].style.transform = 'translate3d(0,0,0) scale(' + cardScale + ')';
-              if (ce >= 1 && opacity > 0.5) {
-                s.cards[c].classList.add('ait-proof-visible');
-              } else {
-                s.cards[c].classList.remove('ait-proof-visible');
-              }
-            }
-          }
         }
 
         ticking = false;

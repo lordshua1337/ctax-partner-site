@@ -5297,7 +5297,13 @@ body.pb-immersive .scroll-to-top{display:none!important}
 /* ── AI Tools Landing Page ── */
 /* ── CINEMATIC SCROLL EXPERIENCE ─────────────────────────── */
 
-.ait-cinema{background:#0a0a0a;color:#fff;position:relative}
+.ait-cinema{background:#0a0a0a;color:#fff;position:relative;overflow:hidden}
+
+/* ── STARFIELD ── */
+.ait-stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.ait-star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:aitTwinkle var(--dur) ease-in-out infinite alternate}
+.ait-star-lg{width:3px;height:3px;box-shadow:0 0 4px 1px rgba(180,210,255,0.3)}
+@keyframes aitTwinkle{0%{opacity:var(--lo)}100%{opacity:var(--hi)}}
 
 /* ACT 1: Pinned Hero */
 .ait-hero-pin{position:sticky;top:0;z-index:1;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -5305,7 +5311,7 @@ body.pb-immersive .scroll-to-top{display:none!important}
 .ait-hero-scroll-space{height:60vh;position:relative;z-index:2}
 
 /* Gradient orb */
-.ait-orb{position:absolute;top:50%;left:50%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(75,163,255,0.18),rgba(0,200,224,0.08),transparent 70%);filter:blur(60px);transform:translate(-50%,-50%);animation:aitOrbPulse 6s ease-in-out infinite alternate;pointer-events:none}
+.ait-orb{position:absolute;top:50%;left:50%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(75,163,255,0.18),rgba(0,200,224,0.08),transparent 70%);filter:blur(60px);transform:translate(-50%,-50%);animation:aitOrbPulse 6s ease-in-out infinite alternate;pointer-events:none;z-index:1}
 @keyframes aitOrbPulse{0%{opacity:0.6;transform:translate(-50%,-50%) scale(1)}100%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}}
 
 /* Hero typography */
@@ -5316,28 +5322,25 @@ body.pb-immersive .scroll-to-top{display:none!important}
 .ait-scroll-cue svg{animation:aitBounce 2.5s infinite}
 @keyframes aitBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-/* ── SCENE SYSTEM: Each scene pins + fades via scroll ── */
-/* GPU-composited: only opacity + translate3d touched by JS */
+/* ── SCENE SYSTEM ── */
+/* 150vh spacer = lots of dwell time, content holds for 2-3 extra scrolls */
 .ait-scene{position:relative}
-.ait-scene-pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;will-change:opacity,transform;transform:translate3d(0,0,0);-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:2}
-.ait-scene-scroll-space{height:80vh;position:relative;z-index:1}
-.ait-scene-scroll-space-short{height:40vh}
+.ait-scene-pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;will-change:opacity,transform;transform:translate3d(0,0,0) scale(0.75);-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:2}
+.ait-scene-scroll-space{height:150vh;position:relative;z-index:1}
+.ait-scene-scroll-space-short{height:60vh}
 
-/* Scene text styles */
+/* Scene text */
 .ait-scene-text{font-family:'DM Serif Display',serif;font-size:42px;line-height:1.3;color:#fff;margin:0;max-width:700px;letter-spacing:-0.01em}
 .ait-scene-text-dim{color:rgba(255,255,255,0.35)}
 .ait-scene-text-accent{color:var(--sky);text-shadow:0 0 60px rgba(75,163,255,0.15)}
 
-/* Proof cards */
-.ait-proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:660px;width:100%}
-.ait-proof-card{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:36px 24px;text-align:center;will-change:opacity,transform;transform:translate3d(0,0,0);-webkit-backface-visibility:hidden;backface-visibility:hidden}
-.ait-proof-card.ait-proof-visible{animation:aitFloat 4s ease-in-out infinite alternate}
-.ait-proof-num{font-family:'DM Serif Display',serif;font-size:48px;color:var(--sky);margin-bottom:10px}
-.ait-proof-label{font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
-.ait-proof-desc{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.5}
-@keyframes aitFloat{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(0,-8px,0)}}
+/* Solo proof card -- one idea at a time */
+.ait-proof-card-solo{background:rgba(255,255,255,0.04);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:48px 40px;text-align:center;max-width:320px}
+.ait-proof-num{font-family:'DM Serif Display',serif;font-size:64px;color:var(--sky);margin-bottom:12px;line-height:1}
+.ait-proof-label{font-size:14px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px}
+.ait-proof-desc{font-size:15px;color:rgba(255,255,255,0.45);line-height:1.6}
 
-/* Value cards -- centered, large presentation */
+/* Value cards */
 .ait-value-card{max-width:480px;text-align:center}
 .ait-value-icon{width:72px;height:72px;border-radius:18px;background:rgba(75,163,255,0.08);display:flex;align-items:center;justify-content:center;color:var(--sky);margin:0 auto 28px}
 .ait-value-title{font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;color:#fff;margin:0 0 16px}
@@ -5357,14 +5360,15 @@ body.pb-immersive .scroll-to-top{display:none!important}
   .ait-hero-headline{font-size:44px}
   .ait-hero-sub{font-size:16px}
   .ait-scene-text{font-size:28px}
-  .ait-proof-grid{grid-template-columns:1fr;max-width:280px}
+  .ait-proof-num{font-size:48px}
+  .ait-proof-card-solo{padding:36px 28px}
   .ait-value-title{font-size:24px}
   .ait-value-desc{font-size:15px}
   .ait-bridge-headline{font-size:28px}
   .ait-scene-pin{padding:0 20px}
   .ait-orb{width:300px;height:300px}
   .ait-hero-scroll-space{height:40vh}
-  .ait-scene-scroll-space{height:60vh}
+  .ait-scene-scroll-space{height:100vh}
 }
 
 /* ── ICP BUILDER ─────────────────────────────────────────── */
