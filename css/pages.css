@@ -5498,6 +5498,7 @@ body.ait-immersive-active .page{padding-top:0 !important}
 .ait-iq-back{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border:none;background:none;color:rgba(255,255,255,0.4);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:color 0.2s;margin-top:12px}
 .ait-iq-back:hover{color:rgba(255,255,255,0.7)}
 .ait-iq-continue{display:inline-block}
+.ait-iq-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}
 
 /* Error */
 .ait-iq-error{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);color:#f87171;padding:14px 20px;border-radius:10px;font-size:14px;margin-top:16px;line-height:1.5}

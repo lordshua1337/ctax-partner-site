@@ -304,6 +304,11 @@
 
             <!-- Error -->
             <div class="ait-iq-error" id="ait-iq-error" style="display:none"></div>
+
+            <!-- Demo link -->
+            <div style="text-align:center;margin-top:20px">
+              <a href="#" onclick="icpLoadDemo();return false" style="font-size:13px;color:rgba(255,255,255,0.35);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">or see a sample result</a>
+            </div>
           </div>
 
           <!-- STATE 2: Loading -->
@@ -318,11 +323,11 @@
           <div id="ait-iq-output" style="display:none">
             <div class="ait-iq-result-header" id="ait-iq-result-header"></div>
             <div class="ait-iq-tabs" id="ait-iq-tabs">
-              <button class="ait-iq-tab ait-iq-tab-active" onclick="icpSwitchTab('who')">Who They Are</button>
-              <button class="ait-iq-tab" onclick="icpSwitchTab('flags')">Red Flags</button>
-              <button class="ait-iq-tab" onclick="icpSwitchTab('convo')">How to Bring It Up</button>
-              <button class="ait-iq-tab" onclick="icpSwitchTab('convert')">Why They Convert</button>
-              <button class="ait-iq-tab" onclick="icpSwitchTab('disqualify')">Disqualifiers</button>
+              <button class="ait-iq-tab ait-iq-tab-active" data-tab="who" onclick="icpSwitchTab('who')">Who They Are</button>
+              <button class="ait-iq-tab" data-tab="flags" onclick="icpSwitchTab('flags')">Red Flags</button>
+              <button class="ait-iq-tab" data-tab="convo" onclick="icpSwitchTab('convo')">How to Bring It Up</button>
+              <button class="ait-iq-tab" data-tab="convert" onclick="icpSwitchTab('convert')">Why They Convert</button>
+              <button class="ait-iq-tab" data-tab="disqualify" onclick="icpSwitchTab('disqualify')">Disqualifiers</button>
             </div>
             <div class="ait-iq-panels">
               <div class="ait-iq-panel ait-iq-panel-active" id="ait-iq-panel-who"></div>
@@ -331,12 +336,17 @@
               <div class="ait-iq-panel" id="ait-iq-panel-convert"></div>
               <div class="ait-iq-panel" id="ait-iq-panel-disqualify"></div>
             </div>
+            <div class="ait-iq-action-plan" id="ait-iq-action-plan"></div>
             <div class="ait-iq-actions">
               <button class="ait-iq-btn-primary" id="ait-iq-download-btn" onclick="icpDownloadPdf()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Download PDF
               </button>
-              <button class="ait-iq-btn-secondary" onclick="icpStartOver()">Start Over</button>
+              <button class="ait-iq-btn-secondary" onclick="icpReset()">Start Over</button>
+            </div>
+            <div style="text-align:center;margin-top:40px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08)">
+              <p style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:16px">Ready to start making referrals?</p>
+              <button class="ait-iq-btn-primary" onclick="aitExitImmersive();setTimeout(function(){showPage('apply')},300)" style="background:linear-gradient(135deg,var(--sky),var(--cyan))">Apply to Become a Partner</button>
             </div>
           </div>
 

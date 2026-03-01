@@ -14,6 +14,43 @@
   var MULTI_STEP = 2;
   var TEXT_STEP = 4;
 
+  // Demo response for when API is unavailable or for showcase
+  var DEMO_RESPONSE = '{"icp_title": "The Overwhelmed Small Business Owner", "icp_tagline": "A self-employed professional drowning in IRS notices who trusts their CPA but doesn\'t know where to turn for resolution help.", "fit_score": "HIGH", "commission_range": "$2,500 - $4,000 per case", "referral_frequency": "3-5 per month"}'
+    + '\n---SECTION---\n'
+    + '<b>Your ideal referral client</b> is a small business owner -- typically a sole proprietor or single-member LLC -- earning between $75K and $200K annually. They\'re in their mid-30s to early 50s, running a service-based business like a contracting firm, consulting practice, or local retail operation. They\'re hardworking, but their bookkeeping has fallen behind, and now the IRS has come knocking.\n\n'
+    + 'This person has <b>unfiled returns from at least two years</b>, and their tax debt has quietly ballooned to $15K-$50K or more. They may have received CP14 notices, or even a CP504 (intent to levy). They\'re stressed, embarrassed, and avoiding the problem because they don\'t know what to do. They see their CPA as a trusted advisor -- not just a tax preparer -- and they\'re waiting for someone to tell them there\'s a path forward.\n\n'
+    + 'What makes this client especially valuable is that <b>they have income and assets</b> -- they\'re not judgment-proof. They can afford the $295 investigation fee without blinking, and their case is complex enough to generate strong resolution revenue. They\'re also likely to refer other business owners in their network once they see how the process works.'
+    + '\n---SECTION---\n'
+    + '<b>Signal:</b> Client mentions they "haven\'t gotten around to" filing for one or more years -- this casual language often masks significant anxiety about accumulated penalties.\n\n'
+    + '<b>Signal:</b> During routine tax prep, you discover estimated tax payments were missed for multiple quarters -- a pattern that suggests growing cash flow problems and potential IRS balances.\n\n'
+    + '<b>Signal:</b> Client asks about payment plans or "what happens if I can\'t pay" during a meeting about something else entirely -- they\'re testing the waters.\n\n'
+    + '<b>Signal:</b> You notice IRS correspondence in their documents -- CP14, CP501, CP504, or LT11 notices they haven\'t opened or have been ignoring.\n\n'
+    + '<b>Signal:</b> Client recently went through a major life event (divorce, business closure, health crisis) and mentions "the IRS situation" in passing as one of many problems they\'re juggling.\n\n'
+    + '<b>Signal:</b> Payroll tax deposits have been inconsistent or missed -- a serious red flag that can escalate to trust fund recovery penalties against the owner personally.'
+    + '\n---SECTION---\n'
+    + '<b>Trigger:</b> You\'re reviewing a client\'s financials and notice unfiled returns.\n<b>Script:</b> "I see we\'re missing returns for 2022 and 2023. That\'s actually more common than you\'d think, especially for business owners. I work with a national firm called Community Tax that specializes in exactly this -- they can negotiate with the IRS on your behalf and usually get penalties reduced significantly. Their initial review is only $295. Want me to connect you?"\n\n'
+    + '<b>Trigger:</b> Client brings up an IRS notice they received.\n<b>Script:</b> "These notices can feel scary, but they\'re actually pretty routine to resolve when you have the right team. I partner with Community Tax -- they\'ve resolved over $2.3 billion in tax debt. They can look at your full situation for $295 and tell you exactly what your options are. Would it help if I made an introduction?"\n\n'
+    + '<b>Trigger:</b> Client asks about setting up a payment plan with the IRS.\n<b>Script:</b> "Before you set up a payment plan on your own, it\'s worth having a resolution specialist look at your case. Sometimes there are better options -- like an Offer in Compromise or Currently Not Collectible status -- that could save you thousands. I work with Community Tax for situations like this. They\'d do a $295 investigation to map out your best path."\n\n'
+    + '<b>Trigger:</b> Year-end planning meeting reveals significant tax liability.\n<b>Script:</b> "Based on what I\'m seeing, your total exposure could be significant once penalties and interest are factored in. I want to make sure you have the best options on the table. I partner with Community Tax for exactly these situations -- they handle the IRS directly and have a strong track record. Can I set up a quick call for you?"'
+    + '\n---SECTION---\n'
+    + '<b>These clients convert because the pain is real and immediate.</b> Unlike theoretical financial planning, tax debt creates concrete, escalating consequences -- wage garnishment, bank levies, liens on property. Your clients are already feeling this pressure. When you offer a specific, credible path to resolution, the relief is palpable.\n\n'
+    + '<b>The trusted advisor effect is your biggest advantage.</b> These clients already trust you. When their CPA says "I work with a firm that handles this," it carries more weight than any Google ad or cold call ever could. You\'re not selling -- you\'re recommending. That distinction is why partner referrals close at 3-4x the rate of direct marketing leads.\n\n'
+    + '<b>The $295 investigation fee removes the biggest barrier.</b> Clients who owe $20K+ to the IRS are terrified of hearing "it\'ll cost $5,000 to fix this." The low investigation fee lets them take the first step without committing to a major expense. Once they see their options laid out clearly, 80%+ move forward with resolution -- which is where your $2,500-$4,000 commission per case comes in.'
+    + '\n---SECTION---\n'
+    + '<b>Warning:</b> Client owes less than $7,000 total -- below Community Tax\'s minimum threshold. These cases don\'t generate enough resolution fees to justify the engagement. Better to help them set up an IRS payment plan directly.\n\n'
+    + '<b>Warning:</b> Client is actively in bankruptcy proceedings -- tax debt may be dischargeable or handled by the bankruptcy trustee. Refer to a tax attorney first to determine if resolution services are appropriate.\n\n'
+    + '<b>Warning:</b> Client has no income and no assets (truly judgment-proof) -- while they may technically qualify, they\'re unlikely to pay the investigation fee or follow through. Focus on clients who have the means to engage.\n\n'
+    + '<b>Warning:</b> Client is already working with another tax resolution firm -- double representation creates conflicts and delays. If they\'re unhappy with their current firm, they need to formally disengage first.'
+    + '\n---SECTION---\n'
+    + '<b>Day 1-3:</b> Pull a list of all active clients who had balances due on their last return, unfiled years, or mentioned IRS issues in the past 12 months. Flag the top 10 most likely referral candidates.\n\n'
+    + '<b>Day 4-7:</b> Review the top 10 client files in detail. Note specific situations, debt amounts if known, and the best conversation entry point for each. Prioritize clients with upcoming meetings.\n\n'
+    + '<b>Day 8-10:</b> Have your first two referral conversations using the scripts above. Start with clients you have the strongest relationship with -- they\'ll be most receptive and give you practice.\n\n'
+    + '<b>Day 11-14:</b> Follow up with any clients who expressed interest but didn\'t commit. A simple "I wanted to check in on that IRS situation we discussed" is enough. Warm follow-ups convert at 2x the rate of first mentions.\n\n'
+    + '<b>Day 15-18:</b> Expand beyond your flagged list. During every routine meeting this week, listen for the red flag signals listed above. Even a brief mention of "IRS" or "back taxes" is an opening.\n\n'
+    + '<b>Day 19-21:</b> Set up a simple tracking system -- a spreadsheet or CRM tag for "IRS referral candidate." Track who you\'ve talked to, their response, and next steps. This prevents leads from falling through the cracks.\n\n'
+    + '<b>Day 22-25:</b> Send a targeted email to clients who haven\'t been in recently. Something like: "As we approach [quarter/year-end], I wanted to check in. If you have any outstanding IRS matters, I now work with a resolution specialist who can help." Keep it brief and non-alarming.\n\n'
+    + '<b>Day 26-30:</b> Review your results. Count conversations had, referrals made, and clients who engaged with Community Tax. Set your monthly referral target based on what you learned. Aim for 3-5 per month within 60 days.';
+
   var LOADING_MSGS = [
     'Analyzing your practice profile...',
     'Identifying ideal client characteristics...',
@@ -122,9 +159,9 @@
     tabs.forEach(function(t) { t.classList.remove('ait-iq-tab-active'); });
     panels.forEach(function(p) { p.classList.remove('ait-iq-panel-active'); });
 
-    // Find and activate the clicked tab
+    // Find and activate the clicked tab by data-tab attribute
     tabs.forEach(function(t) {
-      if (t.textContent.toLowerCase().indexOf(id === 'who' ? 'who' : id === 'flags' ? 'red' : id === 'convo' ? 'how' : id === 'convert' ? 'why' : 'disq') !== -1) {
+      if (t.getAttribute('data-tab') === id) {
         t.classList.add('ait-iq-tab-active');
       }
     });
@@ -163,6 +200,13 @@
 
     // Scroll back to builder
     window.icpScrollToBuilder();
+  };
+
+  window.icpLoadDemo = function() {
+    hideError();
+    document.getElementById('ait-iq-form').style.display = 'none';
+    document.getElementById('ait-iq-loading').style.display = 'none';
+    parseAndRender(DEMO_RESPONSE);
   };
 
   window.icpDownloadPdf = function() {
@@ -516,30 +560,38 @@
     }, 2800);
 
     try {
+      console.log('[ICP] Calling API at:', CTAX_API_URL);
       var resp = await fetch(CTAX_API_URL, {
         method: 'POST',
         headers: getApiHeaders(),
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
-          max_tokens: 2000,
+          max_tokens: 3000,
           messages: [{ role: 'user', content: buildPrompt() }]
         })
       });
 
+      console.log('[ICP] Response status:', resp.status);
       if (!resp.ok) {
+        var errBody = '';
+        try { errBody = await resp.text(); } catch(e) {}
+        console.error('[ICP] API error body:', errBody);
         throw new Error(resp.status === 401 ? '401' : 'API returned ' + resp.status);
       }
 
       var data = await resp.json();
+      console.log('[ICP] Response data:', data);
       if (data.error) throw new Error(data.error.message || 'API error');
 
       var text = data.content && data.content[0] ? data.content[0].text : '';
       if (!text) throw new Error('Empty response');
 
+      console.log('[ICP] Got text, length:', text.length);
       clearInterval(msgInterval);
       parseAndRender(text);
 
     } catch (err) {
+      console.error('[ICP] Error:', err);
       clearInterval(msgInterval);
       document.getElementById('ait-iq-loading').style.display = 'none';
       document.getElementById('ait-iq-form').style.display = 'block';
@@ -549,7 +601,7 @@
       var isAuth = err.message && err.message.indexOf('401') !== -1;
       var msg = isAuth
         ? 'Invalid API key. Please check your key and try again.'
-        : 'Unable to generate your ICP right now. Please try again in a moment.';
+        : 'Unable to generate your ICP right now. <a href="#" onclick="icpLoadDemo();return false" style="color:var(--sky);text-decoration:underline;font-weight:600">See a sample result</a> instead.';
       showError(msg);
     }
   }
@@ -619,7 +671,8 @@
 
     // Action Plan
     var apEl = document.getElementById('ait-iq-action-plan');
-    apEl.innerHTML =
+    if (!apEl) { console.warn('[ICP] ait-iq-action-plan element not found'); }
+    if (apEl) apEl.innerHTML =
       '<div class="ait-iq-ap-head">' +
         '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' +
         '<span>30-Day Action Plan</span>' +
