@@ -5321,7 +5321,7 @@ body.pb-immersive .scroll-to-top{display:none!important}
 @keyframes aitOrbPulse{0%{opacity:0.6;transform:translate(-50%,-50%) scale(1)}100%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}}
 
 /* Hero typography */
-.ait-hero-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--sky);border:1px solid rgba(75,163,255,0.2);padding:6px 18px;border-radius:20px;margin-bottom:32px}
+.ait-hero-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;background:linear-gradient(135deg,#4BA3FF,#00C8E0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;border:1px solid rgba(75,163,255,0.25);padding:6px 18px;border-radius:20px;margin-bottom:32px}
 .ait-hero-headline{font-family:'DM Serif Display',serif;font-size:72px;color:#fff;line-height:1.05;letter-spacing:-0.03em;margin:0 0 28px}
 .ait-hero-sub{font-size:18px;color:rgba(255,255,255,0.7);line-height:1.65;max-width:480px;margin:0 auto}
 .ait-scroll-cue{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:60px;color:rgba(255,255,255,0.4);font-size:13px;letter-spacing:0.06em;animation:aitBounce 2.5s infinite}
@@ -5329,9 +5329,9 @@ body.pb-immersive .scroll-to-top{display:none!important}
 @keyframes aitBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
 /* Scene text */
-.ait-scene-text{font-family:'DM Serif Display',serif;font-size:42px;line-height:1.3;color:#fff;margin:0;max-width:700px;letter-spacing:-0.01em}
-.ait-scene-text-dim{color:rgba(255,255,255,0.55)}
-.ait-scene-text-accent{color:var(--sky);text-shadow:0 0 40px rgba(75,163,255,0.25),0 0 80px rgba(75,163,255,0.1)}
+.ait-scene-text{font-family:'DM Serif Display',serif;font-size:42px;font-weight:700;line-height:1.3;color:#fff;margin:0;max-width:700px;letter-spacing:-0.01em}
+.ait-scene-text-dim{color:rgba(255,255,255,0.6)}
+.ait-scene-text-accent{background:linear-gradient(135deg,#4BA3FF,#00C8E0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 30px rgba(75,163,255,0.3))}
 
 /* ── HOLO CARDS (3D tilt, glow, scan, corners) ── */
 .ait-holo-card{width:220px;height:300px;perspective:800px;position:relative}
@@ -5374,8 +5374,8 @@ body.pb-immersive .scroll-to-top{display:none!important}
 .ait-holo-title{font-family:'DM Serif Display',serif;font-size:24px;color:#fff;margin:0 0 12px;position:relative;z-index:2}
 
 /* CTA Bridge */
-.ait-bridge-headline{font-family:'DM Serif Display',serif;font-size:44px;color:#fff;margin:0 0 16px;line-height:1.2;text-shadow:0 0 40px rgba(75,163,255,0.2)}
-.ait-bridge-sub{font-size:17px;color:rgba(255,255,255,0.7);margin:0 0 40px}
+.ait-bridge-headline{font-family:'DM Serif Display',serif;font-size:44px;color:#fff;margin:0 0 20px;line-height:1.2;text-shadow:0 0 40px rgba(75,163,255,0.15)}
+.ait-bridge-sub{font-size:17px;color:rgba(255,255,255,0.6);line-height:1.7;margin:0 0 40px;max-width:520px}
 .ait-bridge-btn{display:inline-flex;align-items:center;gap:10px;padding:18px 40px;border:none;border-radius:12px;background:var(--sky);color:#fff;font-size:17px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.25s;box-shadow:0 4px 24px rgba(75,163,255,0.3);animation:aitBtnGlow 3s ease-in-out infinite alternate}
 .ait-bridge-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(75,163,255,0.5)}
 .ait-bridge-btn svg{transform:rotate(0);transition:transform 0.3s}
@@ -5392,12 +5392,12 @@ body.ait-immersive-active{overflow:hidden}
 .ait-exit-btn:hover{color:rgba(255,255,255,0.35)}
 
 /* Snap section labels */
-.ait-snap-label{font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:20px}
-.ait-snap-label-accent{color:var(--sky)}
+.ait-snap-label{font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;background:linear-gradient(135deg,#4BA3FF,#00C8E0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:24px}
+.ait-snap-label-accent{background:linear-gradient(135deg,#4BA3FF,#00C8E0);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
 /* Scene sub-text */
-.ait-scene-sub{font-size:16px;color:rgba(255,255,255,0.65);line-height:1.7;max-width:520px;margin:20px auto 0}
-.ait-scene-sub-dim{color:rgba(255,255,255,0.45)}
+.ait-scene-sub{font-size:17px;color:rgba(255,255,255,0.6);line-height:1.7;max-width:520px;margin:24px auto 0}
+.ait-scene-sub-dim{color:rgba(255,255,255,0.5)}
 
 /* Builder snap section -- taller than 100vh, free-scroll once reached */
 .ait-snap-section-builder{height:auto;min-height:100vh;align-items:flex-start;padding:60px 24px 80px}
@@ -5426,7 +5426,7 @@ body.ait-immersive-active{overflow:hidden}
 .ait-builder{padding:80px 24px 100px;background:#0a0a0a;position:relative}
 .ait-builder-inner{max-width:680px;margin:0 auto}
 .ait-builder-head{text-align:center;margin-bottom:48px}
-.ait-builder-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--sky);margin-bottom:12px}
+.ait-builder-eyebrow{font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;background:linear-gradient(135deg,#4BA3FF,#00C8E0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
 .ait-builder-title{font-family:'DM Serif Display',serif;font-size:32px;color:#fff;margin:0 0 16px}
 .ait-builder-sub{font-size:15px;color:rgba(255,255,255,0.55);line-height:1.65;max-width:540px;margin:0 auto}
 
