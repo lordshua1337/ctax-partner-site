@@ -280,10 +280,10 @@ function acceptCookies(){
 }
 (function(){
   if (localStorage.getItem('ctax_cookies_accepted')) return;
-  // Skip cookie banner on portal pages
-  var page = document.querySelector('.page-content.active');
-  if (page && page.id === 'portal') return;
   setTimeout(function(){
+    // Skip cookie banner on portal pages
+    var page = document.querySelector('.page-content.active');
+    if (page && page.id === 'portal') return;
     var el = document.getElementById('cookie-consent');
     if(el) el.classList.add('cc-visible');
   }, 3000);

@@ -33,6 +33,11 @@ function pbInit() {
   }
 
   // Always show onboarding -- partner picks persona/template/theme each session
+  // Reset builder state so onboarding starts clean
+  localStorage.removeItem(PB_STORAGE_KEY);
+  localStorage.removeItem('ctax_pb_persona');
+  localStorage.removeItem('ctax_pb_theme');
+  localStorage.removeItem('ctax_pb_accent');
   var savedHtml = PB_TEMPLATES.referral.html;
   var savedCss = '';
   var isFirstVisit = true;
@@ -778,6 +783,54 @@ function pbOpenPublishModal() {
 function pbClosePublishModal() {
   var modal = document.getElementById('pb-publish-modal');
   if (modal) modal.classList.remove('pb-pub-modal-open');
+}
+
+// ── Bug Report ──
+function pbShowBugReport() {
+  var modal = document.getElementById('pb-bug-modal');
+  if (!modal) return;
+  var desc = document.getElementById('pb-bug-desc');
+  var steps = document.getElementById('pb-bug-steps');
+  var err = document.getElementById('pb-bug-error');
+  var success = document.getElementById('pb-bug-success');
+  if (desc) desc.value = '';
+  if (steps) steps.value = '';
+  if (err) err.textContent = '';
+  if (success) success.style.display = 'none';
+  modal.classList.add('pb-pub-modal-open');
+}
+
+function pbCloseBugReport() {
+  var modal = document.getElementById('pb-bug-modal');
+  if (modal) modal.classList.remove('pb-pub-modal-open');
+}
+
+function pbSubmitBugReport() {
+  var desc = (document.getElementById('pb-bug-desc') || {}).value || '';
+  var steps = (document.getElementById('pb-bug-steps') || {}).value || '';
+  var err = document.getElementById('pb-bug-error');
+  var success = document.getElementById('pb-bug-success');
+
+  if (!desc.trim()) {
+    if (err) err.textContent = 'Please describe the issue.';
+    return;
+  }
+  if (err) err.textContent = '';
+
+  // Store bug reports in localStorage for now
+  var reports = [];
+  try { reports = JSON.parse(localStorage.getItem('ctax_pb_bugs') || '[]'); } catch (e) {}
+  reports.push({
+    desc: desc.trim(),
+    steps: steps.trim(),
+    date: new Date().toISOString(),
+    theme: localStorage.getItem('ctax_pb_theme') || '',
+    persona: localStorage.getItem('ctax_pb_persona') || ''
+  });
+  localStorage.setItem('ctax_pb_bugs', JSON.stringify(reports));
+
+  if (success) success.style.display = 'block';
+  setTimeout(pbCloseBugReport, 1500);
 }
 
 function pbValidateSlug(slug) {
