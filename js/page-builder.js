@@ -507,41 +507,52 @@ function pbOnboardSelectTemplate(key) {
 
 function pbOnboardSelectTheme(id) {
   pbOnboardState.theme = id;
+  // Reset accent when theme changes so the theme default is used
+  pbOnboardState.accent = '';
   pbRenderOnboardStep(null, 3);
 }
 
 function pbOnboardSelectAccent(id) {
-  pbOnboardState.accent = id;
+  // Toggle: clicking same accent again deselects it (use theme default)
+  pbOnboardState.accent = (pbOnboardState.accent === id) ? '' : id;
   pbRenderOnboardStep(null, 3);
 }
 
 function pbOnboardBuild() {
   // Apply selections
   localStorage.setItem('ctax_pb_theme', pbOnboardState.theme);
+  // Only override accent if user explicitly picked one; otherwise use theme default
   if (pbOnboardState.accent) {
     localStorage.setItem('ctax_pb_accent', pbOnboardState.accent);
+  } else {
+    localStorage.removeItem('ctax_pb_accent');
   }
   localStorage.setItem('ctax_pb_persona', pbOnboardState.persona);
 
-  // Load template
+  // Load template into canvas
   pbLoadTemplate(pbOnboardState.template);
 
-  // Apply theme
-  if (typeof pbApplyThemeToCanvas === 'function') {
-    setTimeout(function() {
-      pbApplyThemeToCanvas();
-      // Apply persona copy
-      if (typeof pbApplyPersonaCopy === 'function') {
-        setTimeout(function() {
-          pbApplyPersonaCopy(pbOnboardState.persona);
-        }, 300);
-      }
-    }, 300);
-  }
-
-  // Close overlay
+  // Close overlay immediately so user sees the canvas
   var overlay = document.getElementById('pb-onboard-overlay');
   if (overlay) overlay.remove();
+
+  // Apply theme + persona copy after canvas has settled
+  // Use multiple attempts to handle GrapesJS frame reload timing
+  var _applyCount = 0;
+  function _applyThemeAndCopy() {
+    _applyCount++;
+    if (typeof pbApplyThemeToCanvas === 'function') {
+      pbApplyThemeToCanvas();
+    }
+    if (typeof pbApplyPersonaCopy === 'function') {
+      pbApplyPersonaCopy(pbOnboardState.persona);
+    }
+    // Re-apply once more after a delay to catch any frame reloads
+    if (_applyCount < 3) {
+      setTimeout(_applyThemeAndCopy, 500);
+    }
+  }
+  setTimeout(_applyThemeAndCopy, 400);
 
   if (typeof portalToast === 'function') {
     portalToast('Page built! Start customizing.', 'success');
