@@ -430,13 +430,13 @@ var PB_COPY = {
 //  The copy targets their CLIENTS, not the professional themselves.
 // ================================================================
 var PB_PERSONAS = [
-  { id: 'cpa', label: 'CPA', desc: 'Your clients see you for tax prep and accounting' },
-  { id: 'attorney', label: 'Attorney', desc: 'Your clients see you for legal matters' },
-  { id: 'financial_advisor', label: 'Financial Advisor', desc: 'Your clients see you for wealth management' },
-  { id: 'realtor', label: 'Realtor', desc: 'Your clients see you for real estate' },
-  { id: 'mortgage', label: 'Mortgage Broker', desc: 'Your clients see you for home loans' },
-  { id: 'insurance', label: 'Insurance Agent', desc: 'Your clients see you for coverage' },
-  { id: 'general', label: 'General', desc: 'Other type of professional' }
+  { id: 'cpa', label: 'CPA', desc: 'Your clients see you for tax prep and accounting', icon: '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>' },
+  { id: 'attorney', label: 'Attorney', desc: 'Your clients see you for legal matters', icon: '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="5" y1="16" x2="19" y2="16"/><line x1="5" y1="16" x2="5" y2="20"/><line x1="19" y1="16" x2="19" y2="20"/></svg>' },
+  { id: 'financial_advisor', label: 'Financial Advisor', desc: 'Your clients see you for wealth management', icon: '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>' },
+  { id: 'realtor', label: 'Realtor', desc: 'Your clients see you for real estate', icon: '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10L12 3l9 7v11H3z"/><rect x="9" y="14" width="6" height="7"/></svg>' },
+  { id: 'mortgage', label: 'Mortgage Broker', desc: 'Your clients see you for home loans', icon: '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="14" rx="2"/><line x1="2" y1="11" x2="22" y2="11"/><circle cx="17" cy="15" r="2"/></svg>' },
+  { id: 'insurance', label: 'Insurance Agent', desc: 'Your clients see you for coverage', icon: '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' },
+  { id: 'general', label: 'General', desc: 'Other type of professional', icon: '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>' }
 ];
 
 
