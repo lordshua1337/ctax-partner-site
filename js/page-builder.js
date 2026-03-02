@@ -38,6 +38,7 @@ function pbInit() {
   localStorage.removeItem('ctax_pb_persona');
   localStorage.removeItem('ctax_pb_theme');
   localStorage.removeItem('ctax_pb_accent');
+  localStorage.removeItem('ctax_pb_boho_palette');
   var savedHtml = PB_TEMPLATES.referral.html;
   var savedCss = '';
   var isFirstVisit = true;
@@ -272,6 +273,15 @@ function pbInjectCanvasStyles() {
     }
   }
 
+  // Inject Playfair Display for boho theme
+  var activeTheme = localStorage.getItem('ctax_pb_theme') || 'clean';
+  if (activeTheme === 'warm' && !doc.querySelector('link[href*="Playfair+Display"]')) {
+    var playfairLink = doc.createElement('link');
+    playfairLink.rel = 'stylesheet';
+    playfairLink.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap';
+    doc.head.appendChild(playfairLink);
+  }
+
   // Inject canvas styles if stylesheet link did not load
   if (doc.querySelector('style[data-pb-canvas]')) return;
   var links = doc.querySelectorAll('link[href*="pb-canvas"]');
@@ -363,13 +373,13 @@ function pbBuildPreview(sections) {
 // ================================================================
 //  Onboarding flow: persona -> template -> theme
 // ================================================================
-var pbOnboardState = { persona: 'cpa', template: 'leadcapture', theme: 'clean', accent: '' };
+var pbOnboardState = { persona: 'cpa', template: 'leadcapture', theme: 'clean', accent: '', bohoPalette: 'desert' };
 
 function pbShowOnboarding() {
   var existing = document.getElementById('pb-onboard-overlay');
   if (existing) existing.remove();
 
-  pbOnboardState = { persona: 'cpa', template: 'leadcapture', theme: 'clean', accent: '' };
+  pbOnboardState = { persona: 'cpa', template: 'leadcapture', theme: 'clean', accent: '', bohoPalette: 'desert' };
 
   var overlay = document.createElement('div');
   overlay.className = 'pb-tpl-overlay';
@@ -460,31 +470,71 @@ function pbRenderOnboardStep(modal, step) {
     h += '<div class="pb-tp-themes" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:0 24px;margin-bottom:24px">';
     PB_THEMES.forEach(function(theme) {
       var active = theme.id === pbOnboardState.theme ? ' pb-tp-card-active' : '';
+      // For warm theme, use the active boho palette preview colors
+      var previewBg = theme.preview.bg;
+      var previewHero = theme.preview.hero;
+      var previewAccent = theme.preview.accent;
+      if (theme.id === 'warm') {
+        var bPal = pbGetBohoPalette(pbOnboardState.bohoPalette);
+        previewBg = bPal.tokens['--pb-bg-0'];
+        previewHero = bPal.hero.bg1;
+        previewAccent = bPal.tokens['--pb-accent'];
+      }
       h += '<button class="pb-tp-card' + active + '" onclick="pbOnboardSelectTheme(\'' + theme.id + '\')" style="text-align:center">';
       h += '<div class="pb-tp-card-preview">';
-      h += '<div class="pb-tp-prev-bg" style="background:' + theme.preview.bg + '">';
-      h += '<div class="pb-tp-prev-hero" style="background:' + theme.preview.hero + '"></div>';
+      h += '<div class="pb-tp-prev-bg" style="background:' + previewBg + '">';
+      h += '<div class="pb-tp-prev-hero" style="background:' + previewHero + '"></div>';
       h += '<div class="pb-tp-prev-body">';
-      var lineColor = (theme.id === 'dark' || theme.id === 'patriot') ? 'rgba(255,255,255,0.1)' : '#e2e8f0';
+      var lineColor;
+      if (theme.id === 'dark' || theme.id === 'patriot') {
+        lineColor = 'rgba(255,255,255,0.1)';
+      } else if (theme.id === 'warm') {
+        lineColor = pbGetBohoPalette(pbOnboardState.bohoPalette).tokens['--pb-border'];
+      } else {
+        lineColor = '#e2e8f0';
+      }
       h += '<div class="pb-tp-prev-line" style="background:' + lineColor + '"></div>';
       h += '<div class="pb-tp-prev-line pb-tp-prev-line-short" style="background:' + lineColor + '"></div>';
       h += '</div>';
-      h += '<div class="pb-tp-prev-btn" style="background:' + theme.preview.accent + '"></div>';
+      h += '<div class="pb-tp-prev-btn" style="background:' + previewAccent + '"></div>';
       h += '</div></div>';
       h += '<div class="pb-tp-card-label">' + theme.label + '</div>';
       h += '</button>';
     });
     h += '</div>';
 
-    // Accent colors
-    h += '<div style="padding:0 24px;margin-bottom:24px">';
-    h += '<div class="pb-tp-section-label" style="margin-bottom:8px">Accent Color</div>';
-    h += '<div class="pb-tp-accents">';
-    PB_ACCENT_COLORS.forEach(function(ac) {
-      var active = ac.id === pbOnboardState.accent ? ' pb-tp-accent-active' : '';
-      h += '<button class="pb-tp-accent' + active + '" style="background:' + ac.color + '" title="' + ac.label + '" onclick="pbOnboardSelectAccent(\'' + ac.id + '\')"></button>';
-    });
-    h += '</div></div>';
+    // Accent colors -- only for clean and dark themes
+    var accentOk = (pbOnboardState.theme === 'clean' || pbOnboardState.theme === 'dark');
+    if (accentOk) {
+      h += '<div style="padding:0 24px;margin-bottom:24px">';
+      h += '<div class="pb-tp-section-label" style="margin-bottom:8px">Accent Color</div>';
+      h += '<div class="pb-tp-accents">';
+      PB_ACCENT_COLORS.forEach(function(ac) {
+        var active = ac.id === pbOnboardState.accent ? ' pb-tp-accent-active' : '';
+        h += '<button class="pb-tp-accent' + active + '" style="background:' + ac.color + '" title="' + ac.label + '" onclick="pbOnboardSelectAccent(\'' + ac.id + '\')"></button>';
+      });
+      h += '</div></div>';
+    }
+
+    // Boho palette picker -- only for warm theme
+    if (pbOnboardState.theme === 'warm') {
+      h += '<div style="padding:0 24px;margin-bottom:24px">';
+      h += '<div class="pb-tp-section-label" style="margin-bottom:8px">Color Palette</div>';
+      h += '<div class="pb-boho-palettes" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">';
+      PB_BOHO_PALETTES.forEach(function(pal) {
+        var active = pal.id === pbOnboardState.bohoPalette ? ' pb-boho-pal-active' : '';
+        h += '<button class="pb-boho-pal' + active + '" onclick="pbOnboardSelectBohoPalette(\'' + pal.id + '\')">';
+        h += '<div class="pb-boho-pal-swatches">';
+        pal.swatch.forEach(function(color) {
+          h += '<span class="pb-boho-swatch" style="background:' + color + '"></span>';
+        });
+        h += '</div>';
+        h += '<div class="pb-boho-pal-label">' + pal.label + '</div>';
+        h += '<div class="pb-boho-pal-desc">' + pal.desc + '</div>';
+        h += '</button>';
+      });
+      h += '</div></div>';
+    }
 
     h += '<div class="pb-onboard-footer">';
     h += '<button class="pb-btn-secondary" onclick="pbRenderOnboardStep(null, 2)">Back</button>';
@@ -509,6 +559,15 @@ function pbOnboardSelectTheme(id) {
   pbOnboardState.theme = id;
   // Reset accent when theme changes so the theme default is used
   pbOnboardState.accent = '';
+  // Reset boho palette to default when switching to warm
+  if (id === 'warm') {
+    pbOnboardState.bohoPalette = pbOnboardState.bohoPalette || 'desert';
+  }
+  pbRenderOnboardStep(null, 3);
+}
+
+function pbOnboardSelectBohoPalette(id) {
+  pbOnboardState.bohoPalette = id;
   pbRenderOnboardStep(null, 3);
 }
 
@@ -526,6 +585,10 @@ function pbOnboardBuild() {
     localStorage.setItem('ctax_pb_accent', pbOnboardState.accent);
   } else {
     localStorage.removeItem('ctax_pb_accent');
+  }
+  // Save boho palette if warm theme is selected
+  if (pbOnboardState.theme === 'warm') {
+    localStorage.setItem('ctax_pb_boho_palette', pbOnboardState.bohoPalette || 'desert');
   }
   localStorage.setItem('ctax_pb_persona', pbOnboardState.persona);
 
