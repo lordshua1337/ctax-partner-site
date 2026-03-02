@@ -32,23 +32,10 @@ function pbInit() {
     localStorage.setItem('ctax_pb_v5', '1');
   }
 
-  // Load saved state or show template chooser for first visit
-  var savedHtml = '';
+  // Always show onboarding -- partner picks persona/template/theme each session
+  var savedHtml = PB_TEMPLATES.referral.html;
   var savedCss = '';
-  var isFirstVisit = false;
-  try {
-    var saved = localStorage.getItem(PB_STORAGE_KEY);
-    if (saved) {
-      var parsed = JSON.parse(saved);
-      savedHtml = parsed.html || '';
-      savedCss = parsed.css || '';
-    }
-  } catch (e) { /* no saved state */ }
-
-  if (!savedHtml) {
-    savedHtml = PB_TEMPLATES.referral.html;
-    isFirstVisit = true;
-  }
+  var isFirstVisit = true;
 
   pbEditor = grapesjs.init({
     container: '#gjs',
