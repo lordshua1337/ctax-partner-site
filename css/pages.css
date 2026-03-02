@@ -5483,8 +5483,30 @@ body.ait-immersive-active .page{padding-top:0 !important}
 .ait-iq-panel-title{font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin:0 0 20px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.08)}
 .ait-iq-content-block{margin-bottom:16px;font-size:15px;color:rgba(255,255,255,0.75);line-height:1.7;text-align:left}
 .ait-iq-content-block b{color:#fff;font-weight:600}
-.ait-iq-content-p{margin:0 0 14px;font-size:15px;color:rgba(255,255,255,0.75);line-height:1.7;text-align:left}
+.ait-iq-content-p{margin:0 0 18px;font-size:15px;color:rgba(255,255,255,0.75);line-height:1.8;text-align:left}
 .ait-iq-content-p b{color:#fff;font-weight:600}
+.ait-iq-content-lead{font-size:16px;color:rgba(255,255,255,0.85);border-left:3px solid var(--sky);padding-left:16px}
+
+/* Structured item cards (signals, triggers, warnings, days) */
+.ait-iq-items{display:flex;flex-direction:column;gap:12px}
+.ait-iq-item{display:flex;gap:14px;padding:16px 18px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);transition:border-color 0.2s}
+.ait-iq-item:hover{border-color:rgba(255,255,255,0.12)}
+.ait-iq-item-number{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px}
+.ait-iq-item-signal .ait-iq-item-number{background:rgba(75,163,255,0.15);color:#4BA3FF}
+.ait-iq-item-trigger .ait-iq-item-number{background:rgba(52,211,153,0.15);color:#34D399}
+.ait-iq-item-warning .ait-iq-item-number{background:rgba(248,113,113,0.15);color:#F87171}
+.ait-iq-item-day .ait-iq-item-number{background:rgba(167,139,250,0.15);color:#A78BFA}
+.ait-iq-item-default .ait-iq-item-number{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5)}
+.ait-iq-item-content{flex:1;min-width:0}
+.ait-iq-item-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.ait-iq-item-signal .ait-iq-item-label{color:#4BA3FF}
+.ait-iq-item-trigger .ait-iq-item-label{color:#34D399}
+.ait-iq-item-warning .ait-iq-item-label{color:#F87171}
+.ait-iq-item-day .ait-iq-item-label{color:#A78BFA}
+.ait-iq-item-body{margin:0;font-size:14px;color:rgba(255,255,255,0.75);line-height:1.7}
+.ait-iq-item-body b{color:#fff;font-weight:600}
+.ait-iq-item-trigger-text{margin:0 0 4px;font-size:14px;color:rgba(255,255,255,0.85);line-height:1.6;font-weight:500}
+.ait-iq-item-script{margin:0;font-size:14px;color:rgba(255,255,255,0.65);line-height:1.7;font-style:italic;padding:10px 14px;background:rgba(255,255,255,0.02);border-radius:8px;border-left:2px solid rgba(52,211,153,0.3)}
 
 /* Action Plan Card */
 .ait-iq-action-plan{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:28px;margin-bottom:32px}
@@ -5493,6 +5515,8 @@ body.ait-immersive-active .page{padding-top:0 !important}
 .ait-iq-ap-body{font-size:15px;color:rgba(255,255,255,0.75);line-height:1.7;text-align:left}
 .ait-iq-ap-body b{color:#fff;font-weight:600}
 .ait-iq-ap-body .icpd-block,.ait-iq-ap-body .ait-iq-content-block{margin-bottom:12px}
+.ait-iq-ap-body .ait-iq-items{gap:10px}
+.ait-iq-ap-body .ait-iq-item{padding:14px 16px}
 
 /* Buttons */
 .ait-iq-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
@@ -5533,6 +5557,11 @@ body.ait-immersive-active .page{padding-top:0 !important}
 .icpd-block{margin-bottom:14px;page-break-inside:avoid}
 .icpd-divider{border:none;border-top:1px solid #e8e8ee;margin:28px 0}
 .icpd-disqualifiers b{color:#9f1239}
+.icpd-item{display:flex;gap:12px;padding:12px 14px;margin-bottom:10px;border-radius:8px;background:#f8f9fb;border:1px solid #e8e8ee;page-break-inside:avoid}
+.icpd-item-num{width:24px;height:24px;border-radius:6px;background:#e8f0fe;color:#2563eb;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+.icpd-item-body{flex:1;font-size:13px;line-height:1.6;color:#3a3a4a}
+.icpd-item-body b{color:#0d1f3c;font-weight:600}
+.icpd-item-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b7280;margin-bottom:4px}
 
 /* Closing Box */
 .icpd-closing{margin-top:32px;page-break-inside:avoid}
@@ -5552,6 +5581,10 @@ body.ait-immersive-active .page{padding-top:0 !important}
   .ait-iq-tabs{gap:2px}
   .ait-iq-tab{padding:10px 12px;font-size:12px}
   .ait-iq-panel{padding:20px 0}
+  .ait-iq-item{padding:14px;gap:10px}
+  .ait-iq-item-number{width:24px;height:24px;font-size:11px}
+  .ait-iq-item-script{padding:8px 10px}
+  .ait-iq-content-lead{padding-left:12px;font-size:15px}
   .ait-iq-action-plan{padding:20px}
   .ait-iq-ctas{flex-direction:column;align-items:stretch}
   .ait-iq-btn-primary,.ait-iq-btn-secondary{justify-content:center}

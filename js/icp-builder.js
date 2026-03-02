@@ -692,25 +692,95 @@
   function formatSection(html) {
     if (!html) return '<p style="color:rgba(255,255,255,0.5);font-style:italic">No content generated for this section.</p>';
     // Strip any "SECTION X" / "SECTION X -- TITLE" headers the AI may have included literally
-    // Also strip numbered headers like "2." or "## Section Title" at the start
     var cleaned = html
       .replace(/^(?:SECTION\s+\d+\s*(?:[-–—:]+\s*[^\n]*)?\n*)/i, '')
       .replace(/^(?:#+\s+[^\n]*\n*)/i, '')
       .replace(/^\d+\.\s+[^\n]*\n*/i, '')
       .trim();
     if (!cleaned) return '<p style="color:rgba(255,255,255,0.5);font-style:italic">No content generated for this section.</p>';
-    // The AI returns HTML with <b> tags, we just need to wrap in paragraphs
-    // Split on double newlines for paragraph breaks
-    var paragraphs = cleaned.split(/\n\n+/);
-    return paragraphs.map(function(p) {
-      var trimmed = p.trim();
-      if (!trimmed) return '';
-      // If it already contains block-level elements, don't wrap
-      if (trimmed.indexOf('<b>') === 0 || trimmed.indexOf('<p>') === 0) {
-        return '<div class="ait-iq-content-block">' + trimmed.replace(/\n/g, '<br>') + '</div>';
+
+    // Split on double newlines for blocks
+    var blocks = cleaned.split(/\n\n+/);
+    var out = '';
+    var hasCards = false;
+
+    // Detect if this section uses structured items (Signal/Trigger/Warning/Day patterns)
+    blocks.forEach(function(b) {
+      var t = b.trim();
+      if (!t) return;
+      if (/<b>\s*Signal/i.test(t) || /<b>\s*Trigger/i.test(t) || /<b>\s*Warning/i.test(t) || /<b>\s*Day\s+\d/i.test(t)) {
+        hasCards = true;
       }
-      return '<p class="ait-iq-content-p">' + trimmed.replace(/\n/g, '<br>') + '</p>';
-    }).join('');
+    });
+
+    if (hasCards) {
+      // Render structured items as visual cards
+      out += '<div class="ait-iq-items">';
+      var itemIdx = 0;
+      blocks.forEach(function(b) {
+        var t = b.trim();
+        if (!t) return;
+        itemIdx++;
+
+        // Detect item type for accent color
+        var type = 'default';
+        if (/<b>\s*Signal/i.test(t)) type = 'signal';
+        else if (/<b>\s*Trigger/i.test(t)) type = 'trigger';
+        else if (/<b>\s*Warning/i.test(t)) type = 'warning';
+        else if (/<b>\s*Day\s+\d/i.test(t)) type = 'day';
+
+        if (type !== 'default') {
+          // Split label from body at first </b> or first newline
+          var labelHtml = '';
+          var bodyHtml = t;
+
+          // For Trigger/Script pairs, split into two parts
+          if (type === 'trigger' && t.indexOf('<b>Script:</b>') !== -1) {
+            var triggerParts = t.split(/<b>Script:<\/b>/i);
+            var triggerLabel = triggerParts[0].replace(/<b>Trigger:<\/b>/i, '').trim().replace(/\n/g, ' ');
+            var scriptBody = (triggerParts[1] || '').trim().replace(/\n/g, '<br>');
+            out += '<div class="ait-iq-item ait-iq-item-' + type + '">'
+              + '<div class="ait-iq-item-number">' + itemIdx + '</div>'
+              + '<div class="ait-iq-item-content">'
+              + '<div class="ait-iq-item-label">Situation</div>'
+              + '<p class="ait-iq-item-trigger-text">' + triggerLabel + '</p>'
+              + '<div class="ait-iq-item-label" style="margin-top:12px">What to Say</div>'
+              + '<p class="ait-iq-item-script">' + scriptBody + '</p>'
+              + '</div></div>';
+          } else {
+            // Extract the bold label and the body
+            var labelMatch = t.match(/^<b>([^<]+)<\/b>\s*/i);
+            if (labelMatch) {
+              labelHtml = labelMatch[1].replace(/:$/, '');
+              bodyHtml = t.substring(labelMatch[0].length).trim().replace(/\n/g, '<br>');
+            } else {
+              bodyHtml = t.replace(/\n/g, '<br>');
+            }
+            out += '<div class="ait-iq-item ait-iq-item-' + type + '">'
+              + '<div class="ait-iq-item-number">' + itemIdx + '</div>'
+              + '<div class="ait-iq-item-content">'
+              + (labelHtml ? '<div class="ait-iq-item-label">' + labelHtml + '</div>' : '')
+              + '<p class="ait-iq-item-body">' + bodyHtml + '</p>'
+              + '</div></div>';
+          }
+        } else {
+          // Non-structured paragraph inside a structured section
+          out += '<p class="ait-iq-content-p">' + t.replace(/\n/g, '<br>') + '</p>';
+        }
+      });
+      out += '</div>';
+    } else {
+      // Narrative section: render as well-spaced paragraphs with pull-quotes for key insights
+      blocks.forEach(function(b, idx) {
+        var t = b.trim();
+        if (!t) return;
+        // Add a subtle lead-in accent on the first paragraph
+        var cls = idx === 0 ? 'ait-iq-content-p ait-iq-content-lead' : 'ait-iq-content-p';
+        out += '<p class="' + cls + '">' + t.replace(/\n/g, '<br>') + '</p>';
+      });
+    }
+
+    return out;
   }
 
   function esc(t) {
@@ -808,9 +878,48 @@
 
   function formatPdfSection(html) {
     if (!html) return '<p>No content available.</p>';
-    // Convert AI output to clean PDF paragraphs
-    var paragraphs = html.split(/\n\n+/);
-    return paragraphs.map(function(p) {
+    // Strip section headers
+    var cleaned = html
+      .replace(/^(?:SECTION\s+\d+\s*(?:[-–—:]+\s*[^\n]*)?\n*)/i, '')
+      .replace(/^(?:#+\s+[^\n]*\n*)/i, '')
+      .replace(/^\d+\.\s+[^\n]*\n*/i, '')
+      .trim();
+    if (!cleaned) return '<p>No content available.</p>';
+
+    var blocks = cleaned.split(/\n\n+/);
+    var hasCards = false;
+    blocks.forEach(function(b) {
+      if (/<b>\s*(?:Signal|Trigger|Warning|Day\s+\d)/i.test(b.trim())) hasCards = true;
+    });
+
+    if (hasCards) {
+      var out = '';
+      var idx = 0;
+      blocks.forEach(function(b) {
+        var t = b.trim();
+        if (!t) return;
+        idx++;
+        // For trigger/script pairs, format distinctly
+        if (/<b>\s*Trigger/i.test(t) && t.indexOf('<b>Script:</b>') !== -1) {
+          var parts = t.split(/<b>Script:<\/b>/i);
+          var trigger = parts[0].replace(/<b>Trigger:<\/b>/i, '').trim();
+          var script = (parts[1] || '').trim();
+          out += '<div class="icpd-item"><div class="icpd-item-num">' + idx + '</div>'
+            + '<div class="icpd-item-body">'
+            + '<div class="icpd-item-label">Situation</div>'
+            + '<p style="margin:0 0 8px">' + trigger.replace(/\n/g, ' ') + '</p>'
+            + '<div class="icpd-item-label">What to Say</div>'
+            + '<p style="margin:0;font-style:italic;color:#4a5568">' + script.replace(/\n/g, '<br>') + '</p>'
+            + '</div></div>';
+        } else {
+          out += '<div class="icpd-item"><div class="icpd-item-num">' + idx + '</div>'
+            + '<div class="icpd-item-body">' + t.replace(/\n/g, '<br>') + '</div></div>';
+        }
+      });
+      return out;
+    }
+
+    return blocks.map(function(p) {
       var trimmed = p.trim();
       if (!trimmed) return '';
       return '<div class="icpd-block">' + trimmed.replace(/\n/g, '<br>') + '</div>';
