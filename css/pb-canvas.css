@@ -51,15 +51,15 @@
   --pb-accent: #0B5FD8;
   --pb-accent-hover: #1470f0;
   --pb-accent-soft: rgba(11, 95, 216, 0.08);
-  --pb-accent-glow: rgba(11, 95, 216, 0.28);
+  --pb-accent-glow: rgba(11, 95, 216, 0.18);
 
   /* Shadows (layered) */
   --pb-shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
   --pb-shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
   --pb-shadow-lg: 0 12px 40px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
   --pb-shadow-xl: 0 24px 80px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.04);
-  --pb-shadow-glow: 0 4px 14px var(--pb-accent-glow);
-  --pb-shadow-glow-lg: 0 8px 28px var(--pb-accent-glow), 0 0 0 3px var(--pb-accent-soft);
+  --pb-shadow-glow: 0 2px 10px var(--pb-accent-glow);
+  --pb-shadow-glow-lg: 0 4px 18px var(--pb-accent-glow), 0 0 0 2px var(--pb-accent-soft);
 
   /* Border Radius */
   --pb-radius-sm: 8px;
@@ -117,8 +117,8 @@ a { color: var(--pb-accent); text-decoration: none; }
 }
 
 @keyframes pb-glow-pulse {
-  0%, 100% { box-shadow: 0 4px 14px var(--pb-accent-glow); }
-  50%      { box-shadow: 0 8px 28px var(--pb-accent-glow), 0 0 0 3px var(--pb-accent-soft); }
+  0%, 100% { box-shadow: 0 2px 10px var(--pb-accent-glow); }
+  50%      { box-shadow: 0 4px 18px var(--pb-accent-glow), 0 0 0 2px var(--pb-accent-soft); }
 }
 
 @keyframes pb-chevron-bounce {
@@ -258,12 +258,12 @@ a { color: var(--pb-accent); text-decoration: none; }
 .pb-hero-centered::before {
   content: '';
   position: absolute;
-  top: -30%;
+  top: -10%;
   left: 50%;
   transform: translateX(-50%);
-  width: 120%;
-  height: 120%;
-  background: radial-gradient(ellipse at center, var(--pb-accent-glow) 0%, transparent 60%);
+  width: 70%;
+  height: 70%;
+  background: radial-gradient(ellipse at center, var(--pb-accent-glow) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
 }
@@ -432,12 +432,12 @@ a { color: var(--pb-accent); text-decoration: none; }
 .pb-hero-dark::before {
   content: '';
   position: absolute;
-  top: -40%;
+  top: -5%;
   left: 50%;
   transform: translateX(-50%);
-  width: 140%;
-  height: 140%;
-  background: radial-gradient(ellipse at center, var(--pb-accent-glow) 0%, transparent 55%);
+  width: 75%;
+  height: 75%;
+  background: radial-gradient(ellipse at center, var(--pb-accent-glow) 0%, transparent 45%);
   pointer-events: none;
 }
 
@@ -1044,9 +1044,9 @@ a { color: var(--pb-accent); text-decoration: none; }
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(ellipse at center, var(--pb-accent-glow) 0%, transparent 50%);
+  width: 90%;
+  height: 90%;
+  background: radial-gradient(ellipse at center, var(--pb-accent-glow) 0%, transparent 45%);
   pointer-events: none;
 }
 
