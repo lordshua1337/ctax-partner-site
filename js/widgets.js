@@ -279,7 +279,10 @@ function acceptCookies(){
   el.addEventListener('animationend', function(){ el.classList.remove('cc-visible','cc-exit'); });
 }
 (function(){
-  localStorage.removeItem('ctax_cookies_accepted'); // TODO: remove -- always show for testing
+  if (localStorage.getItem('ctax_cookies_accepted')) return;
+  // Skip cookie banner on portal pages
+  var page = document.querySelector('.page-content.active');
+  if (page && page.id === 'portal') return;
   setTimeout(function(){
     var el = document.getElementById('cookie-consent');
     if(el) el.classList.add('cc-visible');
