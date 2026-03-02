@@ -290,9 +290,11 @@ function renderLandingPage(slug) {
   // Build full HTML for the iframe
   var canvasCss = (typeof PB_CANVAS_CSS !== 'undefined') ? PB_CANVAS_CSS : '';
   var presetCSS = (typeof pbGetPresetInlineCSS === 'function') ? pbGetPresetInlineCSS() : '';
+  var fontLinks = (typeof PB_FONT_LINKS !== 'undefined') ? PB_FONT_LINKS : '';
   var fullHtml = '<!DOCTYPE html><html lang="en"><head>' +
     '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">' +
     '<title>' + page.title + '</title>' +
+    fontLinks +
     '<style>' + presetCSS + '\n' + canvasCss + '\n' + (page.css || '') + '</style>' +
     '</head><body>' + (page.html || '') + '</body></html>';
 

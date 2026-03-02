@@ -9,9 +9,10 @@ var pbEditor = null;
 var pbPreviewActive = false;
 var pbEditingSlug = null;
 
-// PB_TEMPLATES, PB_ICONS, PB_SECTION_COLORS -- loaded from js/pb-templates.js
+// PB_TEMPLATES, PB_ICONS, PB_SECTION_COLORS, PB_FONT_LINKS -- loaded from js/pb-templates.js
 // PB_BLOCK_DEFS -- loaded from js/pb-blocks.js
-// PB_COLOR_PRESETS, pbApplyColorPreset, pbBuildPresetSwatches -- loaded from js/pb-color-presets.js
+// PB_THEMES, PB_ACCENT_COLORS -- loaded from js/pb-color-presets.js
+// PB_COPY, PB_PERSONAS, pbApplyPersonaCopy -- loaded from js/pb-copy.js
 
 // ══════════════════════════════════════════
 //  Initialize editor
@@ -20,10 +21,15 @@ function pbInit() {
   var container = document.getElementById('gjs');
   if (!container || pbEditor) return;
 
-  // Clear stale saves (one-time migration per version)
-  if (!localStorage.getItem('ctax_pb_v3')) {
+  // Clear stale saves (one-time migration to v5 client-facing copy)
+  if (!localStorage.getItem('ctax_pb_v5')) {
     localStorage.removeItem(PB_STORAGE_KEY);
-    localStorage.setItem('ctax_pb_v3', '1');
+    localStorage.removeItem('ctax_pb_v3');
+    localStorage.removeItem('ctax_pb_v4');
+    localStorage.removeItem('ctax_pb_persona');
+    localStorage.removeItem('ctax_pb_theme');
+    localStorage.removeItem('ctax_pb_accent');
+    localStorage.setItem('ctax_pb_v5', '1');
   }
 
   // Load saved state or show template chooser for first visit
@@ -120,9 +126,12 @@ function pbInit() {
   pbEditor.on('component:selected', pbShowColorBar);
   pbEditor.on('component:deselected', pbHideColorBar);
 
-  // Auto-show template chooser on first visit
+  // Setup variant picker browse buttons on block categories
+  setTimeout(pbSetupVariantPickers, 800);
+
+  // Auto-show onboarding on first visit
   if (isFirstVisit) {
-    setTimeout(pbShowTemplates, 400);
+    setTimeout(pbShowOnboarding, 400);
   }
 }
 
@@ -236,9 +245,11 @@ function pbPreview() {
   var html = pbEditor.getHtml();
   var css = pbEditor.getCss({ avoidProtected: true });
   var presetCSS = typeof pbGetPresetInlineCSS === 'function' ? pbGetPresetInlineCSS() : '';
+  var fontLinks = typeof PB_FONT_LINKS !== 'undefined' ? PB_FONT_LINKS : '';
   var fullHtml = '<!DOCTYPE html><html lang="en"><head>';
   fullHtml += '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">';
   fullHtml += '<title>Preview</title>';
+  fullHtml += fontLinks;
   fullHtml += '<style>' + presetCSS + '\n' + PB_CANVAS_CSS + '\n' + (css || '') + '</style>';
   fullHtml += '</head><body>' + html + '</body></html>';
   var win = window.open('', '_blank');
@@ -249,20 +260,36 @@ function pbPreview() {
   }
 }
 
-// Helper: inject canvas styles into the GrapesJS iframe
+// Helper: inject canvas styles + fonts into the GrapesJS iframe
 function pbInjectCanvasStyles() {
   if (!pbEditor) return;
   var frame = pbEditor.Canvas.getFrameEl();
   if (!frame) return;
   var doc = frame.contentDocument;
   if (!doc) return;
+
+  // Inject font links if not already present
+  if (!doc.querySelector('link[href*="DM+Sans"]')) {
+    var fontHtml = typeof PB_FONT_LINKS !== 'undefined' ? PB_FONT_LINKS : '';
+    if (fontHtml) {
+      var temp = doc.createElement('div');
+      temp.innerHTML = fontHtml;
+      while (temp.firstChild) {
+        doc.head.appendChild(temp.firstChild);
+      }
+    }
+  }
+
+  // Inject canvas styles if stylesheet link did not load
   if (doc.querySelector('style[data-pb-canvas]')) return;
   var links = doc.querySelectorAll('link[href*="pb-canvas"]');
   if (links.length > 0) return;
-  var style = doc.createElement('style');
-  style.setAttribute('data-pb-canvas', '1');
-  style.textContent = PB_CANVAS_CSS;
-  doc.head.appendChild(style);
+  if (typeof PB_CANVAS_CSS !== 'undefined' && PB_CANVAS_CSS) {
+    var style = doc.createElement('style');
+    style.setAttribute('data-pb-canvas', '1');
+    style.textContent = PB_CANVAS_CSS;
+    doc.head.appendChild(style);
+  }
 }
 
 // ══════════════════════════════════════════
@@ -273,10 +300,15 @@ function pbExportHTML() {
   var html = pbEditor.getHtml();
   var css = pbEditor.getCss({ avoidProtected: true });
 
+  // Auto-append compliance footer if not present
+  html = pbEnsureComplianceFooter(html);
+
   var presetCSS = typeof pbGetPresetInlineCSS === 'function' ? pbGetPresetInlineCSS() : '';
+  var fontLinks = typeof PB_FONT_LINKS !== 'undefined' ? PB_FONT_LINKS : '';
   var fullHtml = '<!DOCTYPE html>\n<html lang="en">\n<head>\n';
   fullHtml += '<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n';
   fullHtml += '<title>My Landing Page</title>\n';
+  fullHtml += fontLinks + '\n';
   fullHtml += '<style>\n' + presetCSS + '\n' + PB_CANVAS_CSS + '\n' + (css || '') + '\n</style>\n';
   fullHtml += '</head>\n<body>\n' + html + '\n</body>\n</html>';
 
@@ -303,6 +335,12 @@ function pbLoadTemplate(key) {
   pbInjectCanvasStyles();
   pbSave();
   pbUpdateCount();
+
+  // Lock compliance footer components after a short delay for DOM readiness
+  setTimeout(function() {
+    pbLockComplianceFooter();
+  }, 500);
+
   if (typeof portalToast === 'function') portalToast(t.label + ' loaded', 'success');
 }
 
@@ -330,7 +368,320 @@ function pbBuildPreview(sections) {
   return h;
 }
 
-// Full-screen template chooser gallery
+// ================================================================
+//  Onboarding flow: persona -> template -> theme
+// ================================================================
+var pbOnboardState = { persona: 'cpa', template: 'leadcapture', theme: 'clean', accent: '' };
+
+function pbShowOnboarding() {
+  var existing = document.getElementById('pb-onboard-overlay');
+  if (existing) existing.remove();
+
+  pbOnboardState = { persona: 'cpa', template: 'leadcapture', theme: 'clean', accent: '' };
+
+  var overlay = document.createElement('div');
+  overlay.className = 'pb-tpl-overlay';
+  overlay.id = 'pb-onboard-overlay';
+
+  var modal = document.createElement('div');
+  modal.className = 'pb-tpl-modal';
+  modal.id = 'pb-onboard-modal';
+
+  pbRenderOnboardStep(modal, 1);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function pbRenderOnboardStep(modal, step) {
+  if (!modal) modal = document.getElementById('pb-onboard-modal');
+  if (!modal) return;
+
+  var h = '';
+
+  if (step === 1) {
+    // Step 1: Persona
+    h += '<div class="pb-tpl-header">';
+    h += '<div><div class="pb-tpl-title">What type of professional are you?</div>';
+    h += '<div class="pb-tpl-subtitle">We will tailor the copy and messaging to your industry.</div></div>';
+    h += '</div>';
+    h += '<div class="pb-tpl-grid">';
+
+    var personas = typeof PB_PERSONAS !== 'undefined' ? PB_PERSONAS : [];
+    personas.forEach(function(p) {
+      var active = p.id === pbOnboardState.persona ? ' pb-tpl-card-active' : '';
+      h += '<div class="pb-tpl-card' + active + '" onclick="pbOnboardSelectPersona(\'' + p.id + '\')">';
+      h += '<div class="pb-tpl-preview" style="display:flex;align-items:center;justify-content:center;font-size:40px;min-height:80px;background:var(--portal-bg-tertiary, #f1f5f9)">' + p.icon + '</div>';
+      h += '<div class="pb-tpl-card-body" style="padding:12px">';
+      h += '<div class="pb-tpl-card-name">' + p.label + '</div>';
+      h += '<div class="pb-tpl-card-desc">' + p.desc + '</div>';
+      h += '</div></div>';
+    });
+
+    h += '</div>';
+    h += '<div class="pb-onboard-footer">';
+    h += '<button class="pb-btn" onclick="pbRenderOnboardStep(null, 2)">Next: Choose Template</button>';
+    h += '</div>';
+
+  } else if (step === 2) {
+    // Step 2: Template
+    h += '<div class="pb-tpl-header">';
+    h += '<div><div class="pb-tpl-title">What is the goal of your page?</div>';
+    h += '<div class="pb-tpl-subtitle">Pick a template structure. You can change everything later.</div></div>';
+    h += '<button class="pb-tpl-close" onclick="pbRenderOnboardStep(null, 1)" style="background:none;border:none;cursor:pointer;padding:8px">';
+    h += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back';
+    h += '</button>';
+    h += '</div>';
+    h += '<div class="pb-tpl-grid">';
+
+    var keys = Object.keys(PB_TEMPLATES);
+    keys.forEach(function(key) {
+      var t = PB_TEMPLATES[key];
+      var iconSvg = PB_ICONS[t.icon] || PB_ICONS.funnel;
+      var active = key === pbOnboardState.template ? ' pb-tpl-card-active' : '';
+      h += '<div class="pb-tpl-card' + active + '" onclick="pbOnboardSelectTemplate(\'' + key + '\')">';
+      h += pbBuildPreview(t.sections);
+      h += '<div class="pb-tpl-card-body">';
+      h += '<div class="pb-tpl-card-icon">' + iconSvg + '</div>';
+      h += '<div class="pb-tpl-card-info">';
+      h += '<div class="pb-tpl-card-name">' + t.label + '</div>';
+      h += '<div class="pb-tpl-card-desc">' + t.desc + '</div>';
+      h += '</div></div></div>';
+    });
+
+    h += '</div>';
+    h += '<div class="pb-onboard-footer">';
+    h += '<button class="pb-btn-secondary" onclick="pbRenderOnboardStep(null, 1)">Back</button>';
+    h += '<button class="pb-btn" onclick="pbRenderOnboardStep(null, 3)">Next: Pick a Look</button>';
+    h += '</div>';
+
+  } else if (step === 3) {
+    // Step 3: Theme + Accent
+    h += '<div class="pb-tpl-header">';
+    h += '<div><div class="pb-tpl-title">Pick a look</div>';
+    h += '<div class="pb-tpl-subtitle">Choose a visual style and accent color for your page.</div></div>';
+    h += '<button class="pb-tpl-close" onclick="pbRenderOnboardStep(null, 2)" style="background:none;border:none;cursor:pointer;padding:8px">';
+    h += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back';
+    h += '</button>';
+    h += '</div>';
+
+    // Theme cards
+    h += '<div class="pb-tp-themes" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:0 24px;margin-bottom:24px">';
+    PB_THEMES.forEach(function(theme) {
+      var active = theme.id === pbOnboardState.theme ? ' pb-tp-card-active' : '';
+      h += '<button class="pb-tp-card' + active + '" onclick="pbOnboardSelectTheme(\'' + theme.id + '\')" style="text-align:center">';
+      h += '<div class="pb-tp-card-preview">';
+      h += '<div class="pb-tp-prev-bg" style="background:' + theme.preview.bg + '">';
+      h += '<div class="pb-tp-prev-hero" style="background:' + theme.preview.hero + '"></div>';
+      h += '<div class="pb-tp-prev-body">';
+      var lineColor = (theme.id === 'dark' || theme.id === 'patriot') ? 'rgba(255,255,255,0.1)' : '#e2e8f0';
+      h += '<div class="pb-tp-prev-line" style="background:' + lineColor + '"></div>';
+      h += '<div class="pb-tp-prev-line pb-tp-prev-line-short" style="background:' + lineColor + '"></div>';
+      h += '</div>';
+      h += '<div class="pb-tp-prev-btn" style="background:' + theme.preview.accent + '"></div>';
+      h += '</div></div>';
+      h += '<div class="pb-tp-card-label">' + theme.label + '</div>';
+      h += '</button>';
+    });
+    h += '</div>';
+
+    // Accent colors
+    h += '<div style="padding:0 24px;margin-bottom:24px">';
+    h += '<div class="pb-tp-section-label" style="margin-bottom:8px">Accent Color</div>';
+    h += '<div class="pb-tp-accents">';
+    PB_ACCENT_COLORS.forEach(function(ac) {
+      var active = ac.id === pbOnboardState.accent ? ' pb-tp-accent-active' : '';
+      h += '<button class="pb-tp-accent' + active + '" style="background:' + ac.color + '" title="' + ac.label + '" onclick="pbOnboardSelectAccent(\'' + ac.id + '\')"></button>';
+    });
+    h += '</div></div>';
+
+    h += '<div class="pb-onboard-footer">';
+    h += '<button class="pb-btn-secondary" onclick="pbRenderOnboardStep(null, 2)">Back</button>';
+    h += '<button class="pb-btn pb-btn-glow" onclick="pbOnboardBuild()">Build My Page</button>';
+    h += '</div>';
+  }
+
+  modal.innerHTML = h;
+}
+
+function pbOnboardSelectPersona(id) {
+  pbOnboardState.persona = id;
+  pbRenderOnboardStep(null, 1);
+}
+
+function pbOnboardSelectTemplate(key) {
+  pbOnboardState.template = key;
+  pbRenderOnboardStep(null, 2);
+}
+
+function pbOnboardSelectTheme(id) {
+  pbOnboardState.theme = id;
+  pbRenderOnboardStep(null, 3);
+}
+
+function pbOnboardSelectAccent(id) {
+  pbOnboardState.accent = id;
+  pbRenderOnboardStep(null, 3);
+}
+
+function pbOnboardBuild() {
+  // Apply selections
+  localStorage.setItem('ctax_pb_theme', pbOnboardState.theme);
+  if (pbOnboardState.accent) {
+    localStorage.setItem('ctax_pb_accent', pbOnboardState.accent);
+  }
+  localStorage.setItem('ctax_pb_persona', pbOnboardState.persona);
+
+  // Load template
+  pbLoadTemplate(pbOnboardState.template);
+
+  // Apply theme
+  if (typeof pbApplyThemeToCanvas === 'function') {
+    setTimeout(function() {
+      pbApplyThemeToCanvas();
+      // Apply persona copy
+      if (typeof pbApplyPersonaCopy === 'function') {
+        setTimeout(function() {
+          pbApplyPersonaCopy(pbOnboardState.persona);
+        }, 300);
+      }
+    }, 300);
+  }
+
+  // Close overlay
+  var overlay = document.getElementById('pb-onboard-overlay');
+  if (overlay) overlay.remove();
+
+  if (typeof portalToast === 'function') {
+    portalToast('Page built! Start customizing.', 'success');
+  }
+}
+
+// ══════════════════════════════════════════
+//  Variant Picker Modal
+// ══════════════════════════════════════════
+
+// Group blocks by category for the variant picker
+function pbGetBlocksByCategory() {
+  if (typeof PB_BLOCK_DEFS === 'undefined') return {};
+  var cats = {};
+  PB_BLOCK_DEFS.forEach(function(def) {
+    var cat = def.category || 'Other';
+    if (!cats[cat]) cats[cat] = [];
+    cats[cat].push(def);
+  });
+  return cats;
+}
+
+function pbShowVariantPicker(category) {
+  var cats = pbGetBlocksByCategory();
+  var variants = cats[category];
+  if (!variants || variants.length === 0) return;
+
+  // If only 1 variant, insert directly
+  if (variants.length === 1) {
+    pbInsertBlockContent(variants[0].content);
+    return;
+  }
+
+  var existing = document.querySelector('.pb-variant-overlay');
+  if (existing) existing.remove();
+
+  var overlay = document.createElement('div');
+  overlay.className = 'pb-variant-overlay pb-variant-open';
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'pb-variant-modal';
+
+  var h = '<div class="pb-variant-header">';
+  h += '<h3>Choose a ' + category.replace(/s$/, '') + ' Style</h3>';
+  h += '<button class="pb-variant-close" onclick="this.closest(\'.pb-variant-overlay\').remove()">';
+  h += '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  h += '</button></div>';
+
+  h += '<div class="pb-variant-grid">';
+  variants.forEach(function(v) {
+    // Strip category prefix from label for cleaner display
+    var name = v.label.replace(/^[^:]+:\s*/, '') || v.label;
+    h += '<div class="pb-variant-card" onclick="pbPickVariant(\'' + v.id + '\')">';
+    h += '<div class="pb-variant-preview">' + (v.media || '') + '<div style="margin-top:4px">' + name + '</div></div>';
+    h += '<div class="pb-variant-name">' + name + '</div>';
+    h += '</div>';
+  });
+  h += '</div>';
+
+  modal.innerHTML = h;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function pbPickVariant(blockId) {
+  // Find the block definition
+  if (typeof PB_BLOCK_DEFS === 'undefined') return;
+  var def = null;
+  for (var i = 0; i < PB_BLOCK_DEFS.length; i++) {
+    if (PB_BLOCK_DEFS[i].id === blockId) { def = PB_BLOCK_DEFS[i]; break; }
+  }
+  if (!def) return;
+
+  pbInsertBlockContent(def.content);
+
+  // Close picker
+  var overlay = document.querySelector('.pb-variant-overlay');
+  if (overlay) overlay.remove();
+}
+
+function pbInsertBlockContent(html) {
+  if (!window.pbEditor) return;
+  var wrapper = window.pbEditor.getWrapper();
+  if (!wrapper) return;
+  wrapper.append(html);
+
+  // Lock compliance footer if just inserted
+  setTimeout(function() {
+    if (typeof pbLockComplianceFooter === 'function') {
+      pbLockComplianceFooter();
+    }
+  }, 200);
+}
+
+// Wire up category headings in the GrapesJS block sidebar
+function pbSetupVariantPickers() {
+  if (!window.pbEditor) return;
+  var panels = window.pbEditor.Panels;
+  // Listen for category titles being rendered in the blocks panel
+  // Use MutationObserver on the blocks container
+  var blocksEl = document.querySelector('#gjs .gjs-blocks-cs');
+  if (!blocksEl) return;
+
+  // Check periodically for category titles (GrapesJS renders them async)
+  var attempts = 0;
+  var checkInterval = setInterval(function() {
+    attempts++;
+    var catTitles = blocksEl.querySelectorAll('.gjs-block-category .gjs-title');
+    if (catTitles.length > 0 || attempts > 20) {
+      clearInterval(checkInterval);
+      catTitles.forEach(function(titleEl) {
+        var catName = titleEl.textContent.trim();
+        // Add a "Browse Variants" button next to category title
+        if (titleEl.querySelector('.pb-cat-browse')) return;
+        var btn = document.createElement('span');
+        btn.className = 'pb-cat-browse';
+        btn.textContent = 'Browse';
+        btn.style.cssText = 'margin-left:auto;font-size:10px;font-weight:600;color:#2563eb;cursor:pointer;padding:2px 6px;border-radius:4px;background:rgba(37,99,235,0.08)';
+        btn.onclick = function(e) {
+          e.stopPropagation();
+          pbShowVariantPicker(catName);
+        };
+        titleEl.style.display = 'flex';
+        titleEl.style.alignItems = 'center';
+        titleEl.appendChild(btn);
+      });
+    }
+  }, 300);
+}
+
+// Legacy: still show templates gallery when toolbar button is clicked
 function pbShowTemplates() {
   var existing = document.getElementById('pb-template-overlay');
   if (existing) existing.remove();
@@ -469,6 +820,19 @@ function pbPublish() {
     return;
   }
 
+  // Publish validation (CTA + form required)
+  var validation = pbValidateForPublish();
+  if (!validation.valid) {
+    if (errEl) errEl.textContent = validation.errors.join(' ');
+    return;
+  }
+
+  // Show claims warnings (non-blocking)
+  if (validation.warnings.length > 0) {
+    var proceed = confirm('Claims warnings found:\n\n' + validation.warnings.join('\n') + '\n\nPublish anyway?');
+    if (!proceed) return;
+  }
+
   // Check duplicate (allow same slug when editing that slug)
   var pages = pbGetPages();
   var duplicate = false;
@@ -484,6 +848,10 @@ function pbPublish() {
   }
 
   var html = pbEditor.getHtml();
+
+  // Auto-append compliance footer if not present
+  html = pbEnsureComplianceFooter(html);
+
   var css = pbEditor.getCss({ avoidProtected: true });
   var now = new Date().toISOString();
 
@@ -671,8 +1039,10 @@ function pbUpdatePreview() {
   var html = pbEditor.getHtml();
   var css = pbEditor.getCss({ avoidProtected: true });
   var presetCSS = typeof pbGetPresetInlineCSS === 'function' ? pbGetPresetInlineCSS() : '';
+  var fontLinks = typeof PB_FONT_LINKS !== 'undefined' ? PB_FONT_LINKS : '';
   var fullHtml = '<!DOCTYPE html><html lang="en"><head>';
   fullHtml += '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">';
+  fullHtml += fontLinks;
   fullHtml += '<style>' + presetCSS + '\n' + PB_CANVAS_CSS + '\n' + (css || '') + '</style>';
   fullHtml += '</head><body>' + html + '</body></html>';
   iframe.srcdoc = fullHtml;
@@ -903,6 +1273,99 @@ function pbPreviewLive() {
     showPage('lp/' + slug);
   }
 }
+
+// ══════════════════════════════════════════
+//  Compliance Footer (auto-append + locked)
+// ══════════════════════════════════════════
+
+var PB_COMPLIANCE_HTML = [
+  '<section class="pb-compliance-footer" data-pb-locked="true">',
+  '  <p>This page is published by an independent referral partner, not an employee or affiliate of Community Tax or the IRS.</p>',
+  '  <p>Results vary based on individual circumstances. No specific outcome is guaranteed.</p>',
+  '  <p>Community Tax is a licensed tax resolution firm. See ctax.com/disclosures for details.</p>',
+  '</section>'
+].join('\n');
+
+// Ensure compliance footer exists in the HTML string
+function pbEnsureComplianceFooter(html) {
+  if (!html) return html;
+  if (html.indexOf('pb-compliance-footer') !== -1) return html;
+  return html + '\n' + PB_COMPLIANCE_HTML;
+}
+
+// Lock compliance footer components (prevent deletion in GrapesJS)
+function pbLockComplianceFooter() {
+  if (!pbEditor) return;
+  var wrapper = pbEditor.getWrapper();
+  if (!wrapper) return;
+
+  wrapper.components().forEach(function(comp) {
+    var el = comp.getEl();
+    if (el && el.getAttribute && el.getAttribute('data-pb-locked') === 'true') {
+      comp.set('removable', false);
+      comp.set('copyable', false);
+      comp.set('draggable', false);
+      comp.set('badgable', true);
+      comp.set('layerable', true);
+    }
+  });
+}
+
+
+// ══════════════════════════════════════════
+//  Claims Validator
+// ══════════════════════════════════════════
+
+var PB_RED_FLAG_PATTERNS = [
+  { pattern: /settle\s+for\s+pennies/i, msg: '"Settle for pennies" -- potentially misleading claim.' },
+  { pattern: /pennies\s+on\s+the\s+dollar/i, msg: '"Pennies on the dollar" -- potentially misleading claim.' },
+  { pattern: /guaranteed\s+(results?|resolution|outcome)/i, msg: '"Guaranteed results" -- no outcome can be guaranteed.' },
+  { pattern: /guarantee[ds]?\s+.{0,20}(results?|resolution|outcome)/i, msg: 'Guarantee language near results -- no outcome can be guaranteed.' },
+  { pattern: /irs\s+(agent|officer|representative)/i, msg: 'Language that may imply IRS affiliation.' },
+  { pattern: /affiliated?\s+with\s+the\s+irs/i, msg: 'IRS affiliation claim -- partners are not IRS affiliates.' },
+  { pattern: /eliminat(e|ing)\s+(your\s+)?debt/i, msg: '"Eliminate debt" -- potentially misleading.' },
+  { pattern: /wipe\s+out/i, msg: '"Wipe out" -- potentially misleading language.' },
+  { pattern: /erase\s+(your\s+)?(tax\s+)?debt/i, msg: '"Erase debt" -- potentially misleading.' }
+];
+
+function pbScanClaims(html) {
+  var warnings = [];
+  PB_RED_FLAG_PATTERNS.forEach(function(rule) {
+    if (rule.pattern.test(html)) {
+      warnings.push(rule.msg);
+    }
+  });
+  return warnings;
+}
+
+
+// ══════════════════════════════════════════
+//  Publish Validation
+// ══════════════════════════════════════════
+
+function pbValidateForPublish() {
+  if (!pbEditor) return { valid: true, warnings: [], errors: [] };
+  var html = pbEditor.getHtml();
+  var errors = [];
+  var warnings = [];
+
+  // Check for at least one CTA button
+  if (html.indexOf('pb-btn') === -1) {
+    errors.push('Page has no CTA button. Add at least one call-to-action.');
+  }
+
+  // Check for at least one form
+  if (html.indexOf('<form') === -1 && html.indexOf('pb-form') === -1) {
+    errors.push('Page has no lead capture form. Add at least one form.');
+  }
+
+  // Scan for red-flag claims
+  var claimWarnings = pbScanClaims(html);
+  warnings = warnings.concat(claimWarnings);
+
+  return { valid: errors.length === 0, warnings: warnings, errors: errors };
+}
+
 
 // ══════════════════════════════════════════
 //  Lifecycle
