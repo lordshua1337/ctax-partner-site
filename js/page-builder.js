@@ -243,7 +243,7 @@ function pbPreview() {
   fullHtml += '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">';
   fullHtml += '<title>Preview</title>';
   fullHtml += fontLinks;
-  fullHtml += '<style>' + presetCSS + '\n' + PB_CANVAS_CSS + '\n' + (css || '') + '</style>';
+  fullHtml += '<style>' + PB_CANVAS_CSS + '\n' + presetCSS + '\n' + (css || '') + '</style>';
   fullHtml += '</head><body>' + html + '</body></html>';
   var win = window.open('', '_blank');
   if (win) {
@@ -311,7 +311,7 @@ function pbExportHTML() {
   fullHtml += '<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n';
   fullHtml += '<title>My Landing Page</title>\n';
   fullHtml += fontLinks + '\n';
-  fullHtml += '<style>\n' + presetCSS + '\n' + PB_CANVAS_CSS + '\n' + (css || '') + '\n</style>\n';
+  fullHtml += '<style>\n' + PB_CANVAS_CSS + '\n' + presetCSS + '\n' + (css || '') + '\n</style>\n';
   fullHtml += '</head>\n<body>\n' + html + '\n</body>\n</html>';
 
   var blob = new Blob([fullHtml], { type: 'text/html' });
@@ -1157,7 +1157,7 @@ function pbUpdatePreview() {
   var fullHtml = '<!DOCTYPE html><html lang="en"><head>';
   fullHtml += '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">';
   fullHtml += fontLinks;
-  fullHtml += '<style>' + presetCSS + '\n' + PB_CANVAS_CSS + '\n' + (css || '') + '</style>';
+  fullHtml += '<style>' + PB_CANVAS_CSS + '\n' + presetCSS + '\n' + (css || '') + '</style>';
   fullHtml += '</head><body>' + html + '</body></html>';
   iframe.srcdoc = fullHtml;
 }

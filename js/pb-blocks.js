@@ -20,8 +20,8 @@ var PB_BLOCK_DEFS = [
       '  <h1>Owe the IRS? There\'s a Path Forward.</h1>',
       '  <p class="pb-hero-sub">Your tax professional connected you with a licensed resolution team that has helped over 50,000 people settle IRS debt, stop penalties, and get a fresh start.</p>',
       '  <div class="pb-hero-actions">',
-      '    <a class="pb-btn pb-btn-glow">Get a Free Consultation</a>',
-      '    <a class="pb-btn-secondary">See How It Works</a>',
+      '    <a href="#" class="pb-btn pb-btn-glow">Get a Free Consultation</a>',
+      '    <a href="#" class="pb-btn-secondary">See How It Works</a>',
       '  </div>',
       '  <div class="pb-trust-row">',
       '    <div class="pb-trust-item"><span class="pb-trust-val">$2.3B+</span><span class="pb-trust-label">Resolved</span></div>',
@@ -44,8 +44,8 @@ var PB_BLOCK_DEFS = [
       '    <h1>Stop IRS Penalties Before They Get Worse</h1>',
       '    <p>You were referred here because there is a real solution. Our licensed team resolves IRS debt every day -- liens, levies, wage garnishments, and back taxes.</p>',
       '    <div class="pb-hero-actions">',
-      '      <a class="pb-btn">Request a Free Review</a>',
-      '      <a class="pb-btn-secondary">Learn More</a>',
+      '      <a href="#" class="pb-btn">Request a Free Review</a>',
+      '      <a href="#" class="pb-btn-secondary">Learn More</a>',
       '    </div>',
       '  </div>',
       '  <div class="pb-hero-split-img">',
@@ -66,8 +66,8 @@ var PB_BLOCK_DEFS = [
       '  <h1>IRS Debt Does Not Have to Control Your Life</h1>',
       '  <p class="pb-hero-sub">Your tax professional referred you to the team that has resolved over $2.3 billion in tax debt. Let us find the best solution for your situation.</p>',
       '  <div class="pb-hero-actions">',
-      '    <a class="pb-btn pb-btn-glow">Get Your Free Consultation</a>',
-      '    <a class="pb-btn-secondary">See How It Works</a>',
+      '    <a href="#" class="pb-btn pb-btn-glow">Get Your Free Consultation</a>',
+      '    <a href="#" class="pb-btn-secondary">See How It Works</a>',
       '  </div>',
       '  <div class="pb-trust-row">',
       '    <div class="pb-trust-item"><span class="pb-trust-val">$2.3B+</span><span class="pb-trust-label">Resolved</span></div>',
@@ -85,10 +85,10 @@ var PB_BLOCK_DEFS = [
     media: '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="6" y1="8" x2="6" y2="8.01" stroke-width="3"/><line x1="6" y1="11" x2="14" y2="11"/><line x1="6" y1="15" x2="11" y2="15"/></svg>',
     content: [
       '<section class="pb-hero-minimal">',
-      '  <div class="pb-accent-line"></div>',
+      '  <div class="pb-accent-line" aria-hidden="true"></div>',
       '  <h1>You Deserve a Fresh Start with the IRS</h1>',
       '  <p>Licensed tax professionals. Proven results. A free consultation to explore your options.</p>',
-      '  <a class="pb-btn">Get Started Free</a>',
+      '  <a href="#" class="pb-btn">Get Started Free</a>',
       '</section>'
     ].join('\n')
   },
@@ -102,7 +102,7 @@ var PB_BLOCK_DEFS = [
       '<section class="pb-hero-bold">',
       '  <h1>The IRS Is Not Going Away. But Your Debt Can Be Resolved.</h1>',
       '  <p>Your tax professional connected you with experts who have settled over $2.3 billion in IRS debt. Find out what they can do for you.</p>',
-      '  <a class="pb-btn pb-btn-glow">Get a Free Consultation</a>',
+      '  <a href="#" class="pb-btn pb-btn-glow">Get a Free Consultation</a>',
       '</section>'
     ].join('\n')
   },
@@ -119,11 +119,11 @@ var PB_BLOCK_DEFS = [
     content: [
       '<section class="pb-stats-row">',
       '  <div class="pb-stat"><span class="pb-stat-val pb-gradient-text">$2.3B</span><span class="pb-stat-label">Tax Debt Resolved</span></div>',
-      '  <div class="pb-stat-sep">&#8226;</div>',
+      '  <div class="pb-stat-sep" aria-hidden="true">&#8226;</div>',
       '  <div class="pb-stat"><span class="pb-stat-val pb-gradient-text">50K+</span><span class="pb-stat-label">People Helped</span></div>',
-      '  <div class="pb-stat-sep">&#8226;</div>',
+      '  <div class="pb-stat-sep" aria-hidden="true">&#8226;</div>',
       '  <div class="pb-stat"><span class="pb-stat-val pb-gradient-text">4.8/5</span><span class="pb-stat-label">Client Rating</span></div>',
-      '  <div class="pb-stat-sep">&#8226;</div>',
+      '  <div class="pb-stat-sep" aria-hidden="true">&#8226;</div>',
       '  <div class="pb-stat"><span class="pb-stat-val pb-gradient-text">14 Yrs</span><span class="pb-stat-label">Experience</span></div>',
       '</section>'
     ].join('\n')
@@ -156,9 +156,9 @@ var PB_BLOCK_DEFS = [
     content: [
       '<section class="pb-counter-strip">',
       '  <div class="pb-counter-item"><strong>$2.3B</strong> Resolved</div>',
-      '  <span class="pb-counter-sep">|</span>',
+      '  <span class="pb-counter-sep" aria-hidden="true">|</span>',
       '  <div class="pb-counter-item"><strong>50,000+</strong> Helped</div>',
-      '  <span class="pb-counter-sep">|</span>',
+      '  <span class="pb-counter-sep" aria-hidden="true">|</span>',
       '  <div class="pb-counter-item"><strong>4.8/5</strong> Rating</div>',
       '</section>'
     ].join('\n')
@@ -289,13 +289,13 @@ var PB_BLOCK_DEFS = [
     content: [
       '<section class="pb-testi-cards">',
       '  <div class="pb-testi-card">',
-      '    <div class="pb-testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>',
+      '    <div class="pb-testi-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>',
       '    <blockquote>"I was getting IRS letters every week and did not know what to do. My accountant said to call these guys. They took over, stopped the collections, and got my penalties removed. Huge relief."</blockquote>',
       '    <cite>Maria S.</cite>',
       '    <p class="pb-results-vary">Results vary. Not a guarantee of specific outcomes.</p>',
       '  </div>',
       '  <div class="pb-testi-card">',
-      '    <div class="pb-testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>',
+      '    <div class="pb-testi-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>',
       '    <blockquote>"I had three years of unfiled returns and a growing balance. They filed everything, negotiated with the IRS, and got me into a manageable payment plan. I can finally sleep at night."</blockquote>',
       '    <cite>David T.</cite>',
       '    <p class="pb-results-vary">Results vary. Not a guarantee of specific outcomes.</p>',
@@ -331,7 +331,7 @@ var PB_BLOCK_DEFS = [
       '<section class="pb-cta-dark">',
       '  <h2>Ready to Resolve Your Tax Debt?</h2>',
       '  <p>Join the 50,000+ people who have already taken control of their IRS situation. Your free consultation takes less than 15 minutes.</p>',
-      '  <a class="pb-btn pb-btn-glow">Get My Free Consultation</a>',
+      '  <a href="#" class="pb-btn pb-btn-glow">Get My Free Consultation</a>',
       '  <p class="pb-cta-trust">No cost. No obligation. 100% confidential.</p>',
       '</section>'
     ].join('\n')
@@ -346,7 +346,7 @@ var PB_BLOCK_DEFS = [
       '<section class="pb-cta-gradient">',
       '  <h2>Do Not Wait Until the IRS Takes Action</h2>',
       '  <p>Penalties and interest grow every day. The sooner you act, the more options you have. Talk to a licensed expert today.</p>',
-      '  <a class="pb-btn">Request a Free Review</a>',
+      '  <a href="#" class="pb-btn">Request a Free Review</a>',
       '</section>'
     ].join('\n')
   },
@@ -361,7 +361,7 @@ var PB_BLOCK_DEFS = [
       '  <div class="pb-cta-card">',
       '    <h2>Take the First Step Today</h2>',
       '    <p>A free, confidential consultation with a licensed tax professional. No commitment required -- just answers about your options.</p>',
-      '    <a class="pb-btn">Get Started Free</a>',
+      '    <a href="#" class="pb-btn">Get Started Free</a>',
       '  </div>',
       '</section>'
     ].join('\n')
@@ -381,12 +381,12 @@ var PB_BLOCK_DEFS = [
       '  <h2>Request Your Free Consultation</h2>',
       '  <p class="pb-section-sub">Fill out the form below and a licensed tax expert will contact you within 24 hours to discuss your options.</p>',
       '  <form class="pb-form">',
-      '    <label class="pb-form-label">Full Name</label>',
-      '    <input type="text" placeholder="John Smith"/>',
-      '    <label class="pb-form-label">Email Address</label>',
-      '    <input type="email" placeholder="john@example.com"/>',
-      '    <label class="pb-form-label">Phone Number</label>',
-      '    <input type="tel" placeholder="(555) 123-4567"/>',
+      '    <label class="pb-form-label" for="pb-name">Full Name</label>',
+      '    <input id="pb-name" type="text" placeholder="John Smith"/>',
+      '    <label class="pb-form-label" for="pb-email">Email Address</label>',
+      '    <input id="pb-email" type="email" placeholder="john@example.com"/>',
+      '    <label class="pb-form-label" for="pb-phone">Phone Number</label>',
+      '    <input id="pb-phone" type="tel" placeholder="(555) 123-4567"/>',
       '    <button type="button" class="pb-btn">Get My Free Consultation</button>',
       '    <p class="pb-form-security">&#128274; Your information is secure and never shared.</p>',
       '  </form>',
@@ -414,9 +414,12 @@ var PB_BLOCK_DEFS = [
       '  <div class="pb-form-card">',
       '    <h3>Get Started</h3>',
       '    <form class="pb-form">',
-      '      <input type="text" placeholder="Full Name"/>',
-      '      <input type="email" placeholder="Email Address"/>',
-      '      <input type="tel" placeholder="Phone Number"/>',
+      '      <label class="pb-form-label" for="pb-split-name">Full Name</label>',
+      '      <input id="pb-split-name" type="text" placeholder="Full Name"/>',
+      '      <label class="pb-form-label" for="pb-split-email">Email Address</label>',
+      '      <input id="pb-split-email" type="email" placeholder="Email Address"/>',
+      '      <label class="pb-form-label" for="pb-split-phone">Phone Number</label>',
+      '      <input id="pb-split-phone" type="tel" placeholder="Phone Number"/>',
       '      <button type="button" class="pb-btn">Request Free Review</button>',
       '      <p class="pb-form-security">&#128274; Secure and confidential</p>',
       '    </form>',
@@ -433,9 +436,12 @@ var PB_BLOCK_DEFS = [
     content: [
       '<section class="pb-form-minimal">',
       '  <form class="pb-form">',
-      '    <input type="text" placeholder="Full Name"/>',
-      '    <input type="email" placeholder="Email Address"/>',
-      '    <input type="tel" placeholder="Phone Number"/>',
+      '    <label class="pb-form-label" for="pb-min-name">Full Name</label>',
+      '    <input id="pb-min-name" type="text" placeholder="Full Name"/>',
+      '    <label class="pb-form-label" for="pb-min-email">Email Address</label>',
+      '    <input id="pb-min-email" type="email" placeholder="Email Address"/>',
+      '    <label class="pb-form-label" for="pb-min-phone">Phone Number</label>',
+      '    <input id="pb-min-phone" type="tel" placeholder="Phone Number"/>',
       '    <button type="button" class="pb-btn">Get My Free Consultation</button>',
       '  </form>',
       '</section>'
@@ -581,10 +587,10 @@ var PB_BLOCK_DEFS = [
       '  <h2>Your Path to Resolution</h2>',
       '  <p class="pb-section-sub">From your first call to a fresh start -- here is what to expect.</p>',
       '  <div class="pb-timeline-list">',
-      '    <div class="pb-timeline-item"><div class="pb-timeline-dot"></div><strong>Day 1: Free Consultation</strong><p>Talk to a licensed tax expert. No cost, no obligation. We review your situation and explain your options.</p></div>',
-      '    <div class="pb-timeline-item"><div class="pb-timeline-dot"></div><strong>Week 1: Case Investigation</strong><p>We pull your IRS transcripts and build a complete picture. You may owe less than you think.</p></div>',
-      '    <div class="pb-timeline-item"><div class="pb-timeline-dot"></div><strong>Months 1-6: IRS Negotiation</strong><p>Our team negotiates with the IRS on your behalf. You get regular updates and never have to call the IRS yourself.</p></div>',
-      '    <div class="pb-timeline-item"><div class="pb-timeline-dot"></div><strong>Resolution: Fresh Start</strong><p>Your case is resolved. Debt reduced or settled, penalties addressed, and you can move on with your life.</p></div>',
+      '    <div class="pb-timeline-item"><div class="pb-timeline-dot" aria-hidden="true"></div><strong>Day 1: Free Consultation</strong><p>Talk to a licensed tax expert. No cost, no obligation. We review your situation and explain your options.</p></div>',
+      '    <div class="pb-timeline-item"><div class="pb-timeline-dot" aria-hidden="true"></div><strong>Week 1: Case Investigation</strong><p>We pull your IRS transcripts and build a complete picture. You may owe less than you think.</p></div>',
+      '    <div class="pb-timeline-item"><div class="pb-timeline-dot" aria-hidden="true"></div><strong>Months 1-6: IRS Negotiation</strong><p>Our team negotiates with the IRS on your behalf. You get regular updates and never have to call the IRS yourself.</p></div>',
+      '    <div class="pb-timeline-item"><div class="pb-timeline-dot" aria-hidden="true"></div><strong>Resolution: Fresh Start</strong><p>Your case is resolved. Debt reduced or settled, penalties addressed, and you can move on with your life.</p></div>',
       '  </div>',
       '</section>'
     ].join('\n')
@@ -633,7 +639,7 @@ var PB_BLOCK_DEFS = [
     label: 'Button',
     category: 'Basic',
     media: '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="8" width="18" height="8" rx="4"/></svg>',
-    content: '<a class="pb-btn" style="display:inline-block;margin:16px auto;text-align:center;">Click Here</a>'
+    content: '<a href="#" class="pb-btn" style="display:inline-block;margin:16px auto;text-align:center;">Click Here</a>'
   },
 
   {
