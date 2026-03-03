@@ -5641,50 +5641,50 @@ body.ait-immersive-active .page{padding-top:0 !important}
 /* Error */
 .ait-iq-error{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);color:#f87171;padding:14px 20px;border-radius:10px;font-size:14px;margin-top:16px;line-height:1.5}
 
-/* ── ICP PDF STYLES ─────────────────────────────────────── */
+/* ── ICP PDF STYLES (clean black-on-white) ─────────────── */
 
-.icp-pdf-doc{width:816px;margin:0;padding:0;display:inline-block;font-family:'Inter','DM Sans',system-ui,sans-serif;line-height:1.6;color:#1a1a2e}
+.icp-pdf-doc{width:816px;margin:0;padding:0;display:inline-block;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.6;color:#111;background:#fff}
 
 /* Cover */
-.icp-pdf-cover{width:100%;height:1056px;background:#0d1f3c;display:flex;align-items:center;justify-content:center;padding:0;margin:0}
-.icp-pdf-cover-inner{text-align:center;padding:60px 80px;max-width:680px}
-.icpd-eyebrow{font-size:12px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#4BA3FF;margin-bottom:24px}
-.icpd-cover-title{font-family:'DM Serif Display',Georgia,serif;font-size:42px;color:#fff;line-height:1.2;margin:0 0 16px}
-.icpd-cover-tagline{font-size:16px;color:rgba(255,255,255,0.6);margin:0 0 48px;line-height:1.5}
+.icp-pdf-cover{width:100%;min-height:1056px;background:#fff;display:flex;align-items:center;justify-content:center;padding:0;margin:0;box-sizing:border-box}
+.icp-pdf-cover-inner{text-align:center;padding:80px 60px;max-width:680px}
+.icpd-eyebrow{font-size:12px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#555;margin-bottom:24px}
+.icpd-cover-title{font-size:38px;font-weight:700;color:#111;line-height:1.2;margin:0 0 16px}
+.icpd-cover-tagline{font-size:16px;color:#555;margin:0 0 48px;line-height:1.5}
 .icpd-cover-meta{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:440px;margin:0 auto 48px}
-.icpd-meta-box{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:16px 20px;text-align:center}
-.icpd-meta-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px}
-.icpd-meta-val{font-size:16px;font-weight:700;color:#fff}
-.icpd-cover-footer{font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:0.08em}
+.icpd-meta-box{border:1px solid #ddd;padding:16px 20px;text-align:center}
+.icpd-meta-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#777;margin-bottom:6px}
+.icpd-meta-val{font-size:16px;font-weight:700;color:#111}
+.icpd-cover-footer{font-size:11px;color:#999;letter-spacing:0.08em}
 
 /* Body Pages */
-.icpd-page{padding:56px 48px 28px;box-sizing:border-box;width:100%;background:#fff;color:#1a1a2e;page-break-before:always}
+.icpd-page{padding:56px 48px 28px;box-sizing:border-box;width:100%;background:#fff;color:#111;page-break-before:always}
 .icpd-first{page-break-before:auto}
-.icpd-section-title{font-family:'DM Serif Display',Georgia,serif;font-size:22px;color:#0d1f3c;margin:0 0 20px;page-break-after:avoid}
-.icpd-section-body{font-size:14px;line-height:1.7;color:#3a3a4a}
-.icpd-section-body b{color:#0d1f3c;font-weight:600}
+.icpd-section-title{font-size:20px;font-weight:700;color:#111;margin:0 0 16px;page-break-after:avoid}
+.icpd-section-body{font-size:14px;line-height:1.7;color:#333}
+.icpd-section-body b{color:#111;font-weight:600}
 .icpd-block{margin-bottom:14px;page-break-inside:avoid}
-.icpd-divider{border:none;border-top:1px solid #e8e8ee;margin:28px 0}
-.icpd-disqualifiers b{color:#9f1239}
-.icpd-item{display:flex;gap:12px;padding:12px 14px;margin-bottom:10px;border-radius:8px;background:#f8f9fb;border:1px solid #e8e8ee;page-break-inside:avoid}
-.icpd-item-num{width:24px;height:24px;border-radius:6px;background:#e8f0fe;color:#2563eb;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
-.icpd-item-body{flex:1;font-size:13px;line-height:1.6;color:#3a3a4a}
-.icpd-item-body b{color:#0d1f3c;font-weight:600}
-.icpd-item-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b7280;margin-bottom:4px}
+.icpd-divider{border:none;border-top:1px solid #ddd;margin:28px 0}
+.icpd-disqualifiers b{color:#111}
+.icpd-item{display:flex;gap:12px;padding:10px 0;margin-bottom:4px;border-bottom:1px solid #eee;page-break-inside:avoid}
+.icpd-item-num{width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#111;flex-shrink:0;margin-top:2px}
+.icpd-item-body{flex:1;font-size:13px;line-height:1.6;color:#333}
+.icpd-item-body b{color:#111;font-weight:600}
+.icpd-item-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#777;margin-bottom:4px}
 
 /* Closing Box */
 .icpd-closing{margin-top:32px;page-break-inside:avoid}
-.icpd-closing-inner{background:#f0f7ff;border:1px solid #d0e3ff;border-radius:10px;padding:24px 28px;font-size:14px;color:#0d1f3c;line-height:1.7;text-align:center}
+.icpd-closing-inner{border-top:2px solid #111;padding:24px 0;font-size:14px;color:#111;line-height:1.7;text-align:center}
 
 /* Headings for PDF */
 .icp-pdf-doc h1,.icp-pdf-doc h2{page-break-after:avoid}
-.icpd-continued{font-family:'DM Sans',system-ui,sans-serif;font-size:12px;font-weight:400;color:#6b7280;font-style:italic;letter-spacing:0}
+.icpd-continued{font-size:12px;font-weight:400;color:#777;font-style:italic;letter-spacing:0}
 
 /* PDF Footer */
-.icpd-footer{margin-top:48px;padding-top:24px;border-top:1px solid #e2e8f0;text-align:center;page-break-inside:avoid}
-.icpd-footer-brand{font-family:'DM Sans',system-ui,sans-serif;font-size:14px;font-weight:700;color:#0d1f3c;letter-spacing:0.03em}
-.icpd-footer-powered{font-family:'DM Sans',system-ui,sans-serif;font-size:12px;color:#6b7280;margin-top:4px}
-.icpd-footer-copy{font-family:'DM Sans',system-ui,sans-serif;font-size:11px;color:#9ca3af;margin-top:8px}
+.icpd-footer{margin-top:48px;padding-top:24px;border-top:1px solid #ddd;text-align:center;page-break-inside:avoid}
+.icpd-footer-brand{font-size:14px;font-weight:700;color:#111;letter-spacing:0.03em}
+.icpd-footer-powered{font-size:12px;color:#777;margin-top:4px}
+.icpd-footer-copy{font-size:11px;color:#999;margin-top:8px}
 
 /* ── ICP BUILDER MOBILE ─────────────────────────────────── */
 

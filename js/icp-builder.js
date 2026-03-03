@@ -42,14 +42,18 @@
     + '<b>Warning:</b> Client has no income and no assets (truly judgment-proof) -- while they may technically qualify, they\'re unlikely to pay the investigation fee or follow through. Focus on clients who have the means to engage.\n\n'
     + '<b>Warning:</b> Client is already working with another tax resolution firm -- double representation creates conflicts and delays. If they\'re unhappy with their current firm, they need to formally disengage first.'
     + '\n---SECTION---\n'
-    + '<b>Day 1-3:</b> Pull a list of all active clients who had balances due on their last return, unfiled years, or mentioned IRS issues in the past 12 months. Flag the top 10 most likely referral candidates.\n\n'
-    + '<b>Day 4-7:</b> Review the top 10 client files in detail. Note specific situations, debt amounts if known, and the best conversation entry point for each. Prioritize clients with upcoming meetings.\n\n'
-    + '<b>Day 8-10:</b> Have your first two referral conversations using the scripts above. Start with clients you have the strongest relationship with -- they\'ll be most receptive and give you practice.\n\n'
-    + '<b>Day 11-14:</b> Follow up with any clients who expressed interest but didn\'t commit. A simple "I wanted to check in on that IRS situation we discussed" is enough. Warm follow-ups convert at 2x the rate of first mentions.\n\n'
-    + '<b>Day 15-18:</b> Expand beyond your flagged list. During every routine meeting this week, listen for the red flag signals listed above. Even a brief mention of "IRS" or "back taxes" is an opening.\n\n'
-    + '<b>Day 19-21:</b> Set up a simple tracking system -- a spreadsheet or CRM tag for "IRS referral candidate." Track who you\'ve talked to, their response, and next steps. This prevents leads from falling through the cracks.\n\n'
-    + '<b>Day 22-25:</b> Send a targeted email to clients who haven\'t been in recently. Something like: "As we approach [quarter/year-end], I wanted to check in. If you have any outstanding IRS matters, I now work with a resolution specialist who can help." Keep it brief and non-alarming.\n\n'
-    + '<b>Day 26-30:</b> Review your results. Count conversations had, referrals made, and clients who engaged with Community Tax. Set your monthly referral target based on what you learned. Aim for 3-5 per month within 60 days.';
+    + '<b>Week 1:</b> Audit your existing client base. Pull a list of all active clients who had balances due on their last return, unfiled years, or mentioned IRS issues in the past 12 months. Flag the top 15-20 most likely referral candidates and organize them by urgency level.\n\n'
+    + '<b>Week 2:</b> Deep-dive into your top 10 flagged client files. Note specific situations, estimated debt amounts, and the best conversation entry point for each. Create a one-page cheat sheet for each client with their trigger points and the most relevant script from the Conversation Starters section.\n\n'
+    + '<b>Week 3:</b> Set up your referral tracking system. Create a spreadsheet or CRM tag for "IRS referral candidate" with columns for: client name, trigger observed, conversation date, response, follow-up date, referral status. This becomes your operating dashboard for the rest of the program.\n\n'
+    + '<b>Week 4:</b> Have your first 3-4 referral conversations. Start with clients you have the strongest relationships with -- they\'ll be most receptive and give you confidence. Use the scripts from the Conversation Starters section. Log every interaction in your tracker.\n\n'
+    + '<b>Week 5:</b> Follow up with any clients from Week 4 who expressed interest but didn\'t commit. A simple "I wanted to check in on that IRS situation we discussed" converts at 2x the rate of first mentions. Also have 2-3 new conversations with your next batch of flagged clients.\n\n'
+    + '<b>Week 6:</b> Expand your awareness beyond the flagged list. During every routine meeting this week, actively listen for the red flag signals from your profile. Even a brief mention of "IRS" or "back taxes" is an opening. Track how many signals you catch -- aim for at least 5.\n\n'
+    + '<b>Week 7:</b> Launch your first outbound email campaign. Send a targeted email to 20-30 clients who haven\'t been in recently: "As we approach [quarter/year-end], I wanted to check in. If you have any outstanding IRS matters, I now work with a resolution specialist who can help." Track open rates and responses.\n\n'
+    + '<b>Week 8:</b> Review your first month of data. Count conversations had, referrals submitted, and clients who engaged with Community Tax. Calculate your conversion rate at each stage. Identify which scripts and triggers work best for your specific practice and client base.\n\n'
+    + '<b>Week 9:</b> Double down on what\'s working. If email outreach is driving responses, send a second wave. If in-person conversations convert better, prioritize those. Refine your scripts based on real feedback. Have at least 4-5 new referral conversations this week.\n\n'
+    + '<b>Week 10:</b> Build your repeatable monthly system. Based on 9 weeks of data, define your standard monthly rhythm: how many clients to contact, which channels to use, when to follow up. Document this as a simple checklist you can repeat every month without thinking.\n\n'
+    + '<b>Week 11:</b> Set your quarterly goals. Based on your conversion rates, calculate how many conversations per month yield your target number of referrals. Set realistic but ambitious targets for the next 3 months. Share your goals with your team if applicable.\n\n'
+    + '<b>Week 12:</b> Final review and optimization. Compile your full 12-week results: total conversations, referrals submitted, cases closed, commission earned. Identify your top 3 lessons learned and 3 areas to improve. You should now be on track for 3-5 referrals per month consistently.';
 
   var LOADING_MSGS = [
     'Analyzing your practice profile...',
@@ -57,7 +61,7 @@
     'Building red flag indicators...',
     'Crafting conversation starters...',
     'Mapping conversion patterns...',
-    'Generating your 30-day action plan...'
+    'Building your 12-week strategy...'
   ];
 
   var TAB_IDS = ['who', 'flags', 'convo', 'convert', 'disqualify'];
@@ -230,7 +234,8 @@
         scale: 2,
         useCORS: true,
         letterRendering: true,
-        scrollY: -window.scrollY
+        scrollY: -window.scrollY,
+        backgroundColor: '#ffffff'
       },
       jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' },
       pagebreak: { mode: ['css'] }
@@ -534,8 +539,13 @@
       + 'Explain why this specific client type tends to move forward with resolution. Connect their pain points to Community Tax\'s services. Address the partner\'s motivation.\n\n'
       + 'SECTION 6 -- DISQUALIFIERS (4-6 items, each as: <b>Warning:</b> description):\n'
       + 'Clients who look like good referrals but are NOT. Save the partner time by flagging situations that won\'t convert or aren\'t a good fit. Be specific.\n\n'
-      + 'SECTION 7 -- 30-DAY ACTION PLAN (8-10 numbered tasks, each as: <b>Day X-Y:</b> specific action):\n'
-      + 'A concrete, day-by-day plan for the partner to start identifying and referring ideal clients. Include reviewing current client list, setting up tracking, having first conversations, and following up. Match their practice type.';
+      + 'SECTION 7 -- 12-WEEK STRATEGY (12 numbered items, each as: <b>Week X:</b> specific action with 2-3 detail sentences):\n'
+      + 'A comprehensive 12-week strategic plan organized into 4 phases:\n'
+      + '- Weeks 1-3 (Foundation): Audit existing client base, identify referral candidates, set up tracking systems, build internal knowledge\n'
+      + '- Weeks 4-6 (First Conversations): Start having referral conversations, practice scripts, track responses, refine approach\n'
+      + '- Weeks 7-9 (Scale Up): Expand outreach, email campaigns, establish monthly referral rhythm, optimize what is working\n'
+      + '- Weeks 10-12 (Optimize & Systematize): Review results, build repeatable system, set quarterly goals, plan next quarter\n'
+      + 'Each week should have a specific, actionable focus with clear deliverables. Make this feel like a standalone strategic playbook the partner can follow. Be detailed and practical -- this should be genuinely valuable as a standalone product.';
   }
 
   async function callApi() {
@@ -561,18 +571,16 @@
     }, 2800);
 
     try {
-      console.log('[ICP] Calling API at:', CTAX_API_URL);
       var resp = await fetch(CTAX_API_URL, {
         method: 'POST',
         headers: getApiHeaders(),
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
-          max_tokens: 4000,
+          max_tokens: 8000,
           messages: [{ role: 'user', content: buildPrompt() }]
         })
       });
 
-      console.log('[ICP] Response status:', resp.status);
       if (!resp.ok) {
         var errBody = '';
         try { errBody = await resp.text(); } catch(e) {}
@@ -581,13 +589,11 @@
       }
 
       var data = await resp.json();
-      console.log('[ICP] Response data:', data);
       if (data.error) throw new Error(data.error.message || 'API error');
 
       var text = data.content && data.content[0] ? data.content[0].text : '';
       if (!text) throw new Error('Empty response');
 
-      console.log('[ICP] Got text, length:', text.length);
       clearInterval(msgInterval);
       parseAndRender(text);
 
@@ -681,7 +687,7 @@
     if (apEl) apEl.innerHTML =
       '<div class="ait-iq-ap-head">' +
         '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' +
-        '<span>30-Day Action Plan</span>' +
+        '<span>12-Week Strategy</span>' +
       '</div>' +
       '<div class="ait-iq-ap-body">' + formatSection(_sections.actionPlan) + '</div>';
 
@@ -708,7 +714,7 @@
     blocks.forEach(function(b) {
       var t = b.trim();
       if (!t) return;
-      if (/<b>\s*Signal/i.test(t) || /<b>\s*Trigger/i.test(t) || /<b>\s*Warning/i.test(t) || /<b>\s*Day\s+\d/i.test(t)) {
+      if (/<b>\s*Signal/i.test(t) || /<b>\s*Trigger/i.test(t) || /<b>\s*Warning/i.test(t) || /<b>\s*(?:Day|Week)\s+\d/i.test(t)) {
         hasCards = true;
       }
     });
@@ -727,7 +733,7 @@
         if (/<b>\s*Signal/i.test(t)) type = 'signal';
         else if (/<b>\s*Trigger/i.test(t)) type = 'trigger';
         else if (/<b>\s*Warning/i.test(t)) type = 'warning';
-        else if (/<b>\s*Day\s+\d/i.test(t)) type = 'day';
+        else if (/<b>\s*(?:Day|Week)\s+\d/i.test(t)) type = 'day';
 
         if (type !== 'default') {
           // Split label from body at first </b> or first newline
@@ -811,12 +817,12 @@
     var today = new Date();
     var dateStr = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
-    // Page 1: Cover
+    // Page 1: Cover (clean black on white)
     var cover = document.createElement('div');
     cover.className = 'icp-pdf-cover';
     cover.innerHTML =
       '<div class="icp-pdf-cover-inner">' +
-        '<div class="icpd-eyebrow">Ideal Client Profile</div>' +
+        '<div class="icpd-eyebrow">IDEAL CLIENT PROFILE</div>' +
         '<h1 class="icpd-cover-title">' + esc(_icpData.icp_title) + '</h1>' +
         '<p class="icpd-cover-tagline">' + esc(_icpData.icp_tagline) + '</p>' +
         '<div class="icpd-cover-meta">' +
@@ -859,16 +865,16 @@
       '<div class="icpd-section-body">' + formatPdfSection(_sections.convo) + '</div>';
     doc.appendChild(page4);
 
-    // Page 5: 30-Day Action Plan
+    // Page 5: 12-Week Strategy
     var page5 = document.createElement('div');
     page5.className = 'icpd-page';
     page5.innerHTML =
-      '<h2 class="icpd-section-title">Your 30-Day Action Plan</h2>' +
+      '<h2 class="icpd-section-title">Your 12-Week Strategy</h2>' +
       '<div class="icpd-section-body">' + formatPdfSection(_sections.actionPlan) + '</div>' +
       '<div class="icpd-closing">' +
         '<div class="icpd-closing-inner">' +
-          '<strong>You now have a clear picture of your ideal referral client.</strong><br>' +
-          'Start with Week 1 of the action plan. Every conversation is an opportunity. Your clients already have these problems -- now you know how to spot them and what to say.' +
+          '<strong>You now have a clear picture of your ideal referral client and a 12-week roadmap to put it into action.</strong><br>' +
+          'Start with Week 1. Every conversation is an opportunity. Your clients already have these problems -- now you know how to spot them and what to say.' +
         '</div>' +
       '</div>';
     doc.appendChild(page5);
@@ -889,7 +895,7 @@
     var blocks = cleaned.split(/\n\n+/);
     var hasCards = false;
     blocks.forEach(function(b) {
-      if (/<b>\s*(?:Signal|Trigger|Warning|Day\s+\d)/i.test(b.trim())) hasCards = true;
+      if (/<b>\s*(?:Signal|Trigger|Warning|(?:Day|Week)\s+\d)/i.test(b.trim())) hasCards = true;
     });
 
     if (hasCards) {
@@ -904,15 +910,15 @@
           var parts = t.split(/<b>Script:<\/b>/i);
           var trigger = parts[0].replace(/<b>Trigger:<\/b>/i, '').trim();
           var script = (parts[1] || '').trim();
-          out += '<div class="icpd-item"><div class="icpd-item-num">' + idx + '</div>'
+          out += '<div class="icpd-item"><div class="icpd-item-num">' + idx + '.</div>'
             + '<div class="icpd-item-body">'
             + '<div class="icpd-item-label">Situation</div>'
             + '<p style="margin:0 0 8px">' + trigger.replace(/\n/g, ' ') + '</p>'
             + '<div class="icpd-item-label">What to Say</div>'
-            + '<p style="margin:0;font-style:italic;color:#4a5568">' + script.replace(/\n/g, '<br>') + '</p>'
+            + '<p style="margin:0;font-style:italic">' + script.replace(/\n/g, '<br>') + '</p>'
             + '</div></div>';
         } else {
-          out += '<div class="icpd-item"><div class="icpd-item-num">' + idx + '</div>'
+          out += '<div class="icpd-item"><div class="icpd-item-num">' + idx + '.</div>'
             + '<div class="icpd-item-body">' + t.replace(/\n/g, '<br>') + '</div></div>';
         }
       });
