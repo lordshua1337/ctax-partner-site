@@ -263,7 +263,12 @@ async function generateScript() {
     msgEl.textContent = loadingMsgs[msgIdx];
   }, 2800);
 
-  var prompt = 'You are an expert sales coach for Community Tax, a national IRS tax resolution firm. A partner professional needs referral scripts to introduce their client to Community Tax.\n\n' +
+  var icpBlock = '';
+  if (typeof ICPContext !== 'undefined' && ICPContext.hasProfile()) {
+    icpBlock = ICPContext.getPromptContext() + '\n\nUse the ICP profile above to tailor scripts to this partner\'s specific client persona, red flags, and conversation style. Reference their ICP insights when relevant.\n\n';
+  }
+
+  var prompt = icpBlock + 'You are an expert sales coach for Community Tax, a national IRS tax resolution firm. A partner professional needs referral scripts to introduce their client to Community Tax.\n\n' +
     'PARTNER PROFILE:\n- Professional type: ' + type + '\n- Communication style: ' + style + '\n- Preferred channel: ' + channel + '\n- Client relationship: ' + relationship + '\n\n' +
     'CLIENT SITUATION:\n' + situation + '\n\n' +
     'EXPECTED OBJECTION: ' + objection + '\n\n' +

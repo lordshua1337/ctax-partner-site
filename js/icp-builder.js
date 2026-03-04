@@ -691,6 +691,51 @@
       '</div>' +
       '<div class="ait-iq-ap-body">' + formatSection(_sections.actionPlan) + '</div>';
 
+    // Save to Portal button
+    var saveBtn = document.getElementById('ait-iq-save-portal');
+    if (saveBtn) {
+      saveBtn.style.display = 'block';
+      saveBtn.onclick = function() {
+        if (typeof ICPContext !== 'undefined') {
+          var saved = ICPContext.save({
+            icp_title: _icpData.icp_title,
+            icp_tagline: _icpData.icp_tagline,
+            fit_score: _icpData.fit_score,
+            commission_range: _icpData.commission_range,
+            referral_frequency: _icpData.referral_frequency,
+            profession_type: _answers.practice || '',
+            answers: {
+              q1: _answers.practice || '',
+              q2: _answers.clients || '',
+              q3: _answers.pain_points || '',
+              q4: _answers.scale || '',
+              q5: _answers.geography || '',
+              q6: _answers.motivation || ''
+            },
+            sections: {
+              who_they_are: _sections.who,
+              red_flags: _sections.flags,
+              how_to_bring_it_up: _sections.convo,
+              why_they_convert: _sections.convert,
+              disqualifiers: _sections.disqualify,
+              twelve_week_playbook: _sections.actionPlan
+            }
+          });
+
+          if (saved) {
+            saveBtn.textContent = 'Saved to Portal';
+            saveBtn.style.background = '#166534';
+            saveBtn.style.borderColor = '#166534';
+            setTimeout(function() {
+              saveBtn.textContent = 'Save to Portal';
+              saveBtn.style.background = '';
+              saveBtn.style.borderColor = '';
+            }, 2000);
+          }
+        }
+      };
+    }
+
     // Reset tabs to first
     icpSwitchTab('who');
   }

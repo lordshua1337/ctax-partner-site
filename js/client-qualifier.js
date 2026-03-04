@@ -40,7 +40,12 @@ async function qualifyClient() {
   var mi = 0, mel = document.getElementById('cq-loading-msg');
   var mint = setInterval(function(){ mi=(mi+1)%msgs.length; mel.textContent=msgs[mi]; }, 2500);
 
-  var prompt = 'You are a senior intake analyst at Community Tax, a national IRS tax resolution firm (15 years, $2.3B resolved, 120K+ clients). A referral partner is asking whether a potential client is a good referral candidate.\n\n'
+  var icpBlock = '';
+  if (typeof ICPContext !== 'undefined' && ICPContext.hasProfile()) {
+    icpBlock = ICPContext.getPromptContext() + '\n\nUse the ICP profile above to cross-reference this client against the partner\'s ideal client persona. Check alignment with their ICP red flags, disqualifiers, and conversion drivers. Factor ICP insights into your qualification reasoning.\n\n';
+  }
+
+  var prompt = icpBlock + 'You are a senior intake analyst at Community Tax, a national IRS tax resolution firm (15 years, $2.3B resolved, 120K+ clients). A referral partner is asking whether a potential client is a good referral candidate.\n\n'
     + 'Program facts:\n'
     + '- Minimum qualifying tax debt: $7,000+\n'
     + '- Investigation fee: $295 ($500 for businesses)\n'

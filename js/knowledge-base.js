@@ -110,7 +110,7 @@ async function askKnowledgeBase() {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 800,
-        system: KB_SYSTEM,
+        system: KB_SYSTEM + (typeof ICPContext !== 'undefined' && ICPContext.hasProfile() ? '\n\n' + ICPContext.getPromptContext() + '\n\nContextualize your answers to this partner\'s profession type and client persona when relevant.' : ''),
         messages: [{role: 'user', content: question}]
       })
     });
