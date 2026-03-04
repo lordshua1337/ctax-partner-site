@@ -493,6 +493,7 @@ function bpRenderRoadmap(roadmap) {
   html += '<div class="bp-action-btns">';
   html += '<button class="bp-action-btn bp-btn-pdf" onclick="bpPrintRoadmap()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Save as PDF</button>';
   html += '<button class="bp-action-btn bp-btn-ai" id="bp-ai-btn" onclick="bpGenerateAIRoadmap()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Enhance with AI</button>';
+  html += '<button class="bp-action-btn bp-btn-slides" onclick="bpExportSlides()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Export Slides</button>';
   html += '<button class="bp-action-btn bp-btn-reset" onclick="bpResetPlanner()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 105.64-11.36L1 10"/></svg> Start Over</button>';
   html += '</div></div>';
 
@@ -539,6 +540,12 @@ function bpRenderRoadmap(roadmap) {
     html += '</div>';
   });
   html += '</div>';
+
+  // ROI Tracker (M5P3)
+  html += '<div id="bp-roi-tracker" class="bp-roi-tracker" style="display:none"></div>';
+
+  // Drip schedule (M5P3)
+  html += '<div id="bp-drip-schedule" class="bp-drip-schedule" style="display:none"></div>';
 
   // "What if?" comparison cards
   var currentRev = roadmap.inputs.refGoal * 420;
@@ -619,6 +626,14 @@ function bpRenderRoadmap(roadmap) {
       html += '<span class="bp-prio ' + prioClass + '">' + task.priority + '</span>';
       html += '</div>';
       html += '<div class="bp-task-desc">' + task.desc + '</div>';
+      // Execute button (M5P3)
+      var _execMap = (typeof BP_TASK_TOOLS !== 'undefined') ? BP_TASK_TOOLS[task.title] : null;
+      if (_execMap && !isDone) {
+        html += '<button class="bp-exec-btn" onclick="bpExecuteTask(\'' + task.title.replace(/'/g, "\\'") + '\')">';
+        html += '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> ';
+        html += _execMap.label;
+        html += '</button>';
+      }
       html += '</div>';
       html += '</div>';
       taskIndex++;
@@ -654,6 +669,10 @@ function bpRenderRoadmap(roadmap) {
   setTimeout(function() { bpRenderActuals(roadmap.inputs); }, 180);
   setTimeout(function() { bpCheckWeeklyCheckin(); }, 200);
   setTimeout(function() { bpSyncWithChallenge(); }, 250);
+
+  // Render actionable output components (M5P3)
+  setTimeout(function() { bpRenderROITracker(roadmap.inputs); }, 280);
+  setTimeout(function() { bpRenderDripSchedule(); }, 300);
 
   // Restore AI insights if available
   bpTryRestoreAI();
@@ -1486,6 +1505,301 @@ function bpSaveStartDate() {
     inputs._startDate = new Date().toISOString().slice(0, 10);
     try { localStorage.setItem('bp_saved_inputs', JSON.stringify(inputs)); } catch (e) {}
   }
+}
+
+// ═══ M5P3C1: ACTIONABLE OUTPUT -- EXECUTE TASKS + ROI TRACKER ═══
+
+// Task-to-tool mapping for "Execute This Task" buttons
+var BP_TASK_TOOLS = {
+  'Complete Your Partner Onboarding': { section: 'portal-sec-training', label: 'Open Training' },
+  'Build Your Referral Landing Page': { section: 'portal-sec-page-builder', label: 'Open Page Builder' },
+  'Start the 30-Day Momentum Challenge': { section: 'portal-sec-challenge', label: 'Open Challenge' },
+  'Launch Your First Tax Debt Awareness Email': { section: 'portal-sec-marketing', label: 'Open Marketing Kit' },
+  'Create Your First Social Ad Campaign': { section: 'portal-sec-ai-admaker', label: 'Open Ad Maker' },
+  'Generate Custom Scripts with AI Script Builder': { section: 'portal-sec-ai-scripts', label: 'Open Script Builder' },
+  'Create Co-Branded Ads with Ad Maker': { section: 'portal-sec-ai-admaker', label: 'Open Ad Maker' },
+  'Use the Client Qualifier AI Tool': { section: 'portal-sec-ai-qualifier', label: 'Open Qualifier' },
+  'Complete 2+ CE Webinars for Deeper Expertise': { section: 'portal-sec-ce', label: 'Open Webinars' },
+  'Share Your Landing Page with Referral Network': { section: 'portal-sec-page-builder', label: 'Open Pages' },
+  'Review and Plan Your Next Quarter': { section: 'portal-sec-calculator', label: 'Open Calculator' },
+  'Start a Weekly Social Post Schedule': { section: 'portal-sec-marketing', label: 'Open Marketing Kit' },
+  'Send a Case Study Email': { section: 'portal-sec-marketing', label: 'Open Marketing Kit' },
+  'Optimize Based on Month 1 Results': { section: 'portal-sec-referrals', label: 'Open Referrals' }
+};
+
+function bpExecuteTask(taskTitle) {
+  var mapping = BP_TASK_TOOLS[taskTitle];
+  if (!mapping) {
+    if (typeof showToast === 'function') showToast('This task is best completed offline.', 'info');
+    return;
+  }
+  bpGoToSection(mapping.section);
+}
+
+// ROI Tracker: Investment vs Revenue Generated
+function bpRenderROITracker(inputs) {
+  var container = document.getElementById('bp-roi-tracker');
+  if (!container) return;
+
+  var timeline = inputs.timeline || 90;
+  var budget = inputs.budget || 0;
+  var totalInvestment = budget * Math.ceil(timeline / 30);
+
+  // Get actual referral data
+  var actualRefs = 0;
+  try {
+    var raw = localStorage.getItem('bp_checkin_history');
+    if (raw) {
+      JSON.parse(raw).forEach(function(h) { actualRefs += (h.refs || 0); });
+    }
+  } catch (e) {}
+
+  var actualRevenue = actualRefs * 420;
+  var projectedRevenue = inputs.refGoal * 420;
+  var roi = totalInvestment > 0 ? Math.round(((actualRevenue - totalInvestment) / totalInvestment) * 100) : (actualRevenue > 0 ? Infinity : 0);
+
+  var html = '<div class="bp-roi-header">';
+  html += '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>';
+  html += '<span>ROI Tracker</span>';
+  html += '</div>';
+
+  html += '<div class="bp-roi-grid">';
+
+  // Investment card
+  html += '<div class="bp-roi-card bp-roi-invest">';
+  html += '<div class="bp-roi-card-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></div>';
+  html += '<div class="bp-roi-card-val">$' + totalInvestment.toLocaleString() + '</div>';
+  html += '<div class="bp-roi-card-label">Total Investment</div>';
+  html += '<div class="bp-roi-card-note">$' + budget.toLocaleString() + '/mo x ' + Math.ceil(timeline / 30) + ' months (marketing budget)</div>';
+  html += '</div>';
+
+  // Revenue card
+  html += '<div class="bp-roi-card bp-roi-revenue">';
+  html += '<div class="bp-roi-card-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>';
+  html += '<div class="bp-roi-card-val">$' + actualRevenue.toLocaleString() + '</div>';
+  html += '<div class="bp-roi-card-label">Actual Revenue Earned</div>';
+  html += '<div class="bp-roi-card-note">' + actualRefs + ' referrals x $420 avg commission</div>';
+  html += '</div>';
+
+  // ROI card
+  html += '<div class="bp-roi-card bp-roi-return">';
+  html += '<div class="bp-roi-card-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>';
+  if (totalInvestment === 0 && actualRevenue > 0) {
+    html += '<div class="bp-roi-card-val bp-roi-positive">Infinite</div>';
+  } else if (roi >= 0) {
+    html += '<div class="bp-roi-card-val bp-roi-positive">' + roi + '%</div>';
+  } else {
+    html += '<div class="bp-roi-card-val bp-roi-negative">' + roi + '%</div>';
+  }
+  html += '<div class="bp-roi-card-label">Return on Investment</div>';
+  html += '<div class="bp-roi-card-note">' + (roi >= 0 ? 'Net profit: $' + (actualRevenue - totalInvestment).toLocaleString() : 'Net loss: -$' + (totalInvestment - actualRevenue).toLocaleString() + ' (keep going!)') + '</div>';
+  html += '</div>';
+
+  // Projected card
+  html += '<div class="bp-roi-card bp-roi-projected">';
+  html += '<div class="bp-roi-card-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>';
+  html += '<div class="bp-roi-card-val">$' + projectedRevenue.toLocaleString() + '</div>';
+  html += '<div class="bp-roi-card-label">Projected ' + timeline + '-Day Revenue</div>';
+  var pctToGoal = actualRevenue > 0 ? Math.round((actualRevenue / projectedRevenue) * 100) : 0;
+  html += '<div class="bp-roi-card-note">' + pctToGoal + '% of goal reached</div>';
+  html += '</div>';
+
+  html += '</div>';
+
+  // Visual progress toward projected revenue
+  html += '<div class="bp-roi-progress">';
+  html += '<div class="bp-roi-progress-label">Revenue Progress: $' + actualRevenue.toLocaleString() + ' of $' + projectedRevenue.toLocaleString() + ' goal</div>';
+  html += '<div class="bp-roi-progress-bar"><div class="bp-roi-progress-fill" style="width:' + Math.min(100, pctToGoal) + '%"></div></div>';
+  html += '</div>';
+
+  container.innerHTML = html;
+  container.style.display = 'block';
+}
+
+// Enhanced email drip: show upcoming scheduled tasks
+function bpRenderDripSchedule() {
+  var container = document.getElementById('bp-drip-schedule');
+  if (!container) return;
+
+  var dripEnabled = false;
+  try { dripEnabled = localStorage.getItem('bp_email_drip') === 'true'; } catch (e) {}
+  if (!dripEnabled) {
+    container.style.display = 'none';
+    return;
+  }
+
+  var inputs = bpLoadInputs();
+  if (!inputs) return;
+  var roadmap = bpBuildRoadmap(inputs);
+  var saved = bpLoadProgress();
+
+  // Find upcoming incomplete tasks
+  var taskIdx = 0;
+  var upcoming = [];
+  roadmap.months.forEach(function(month, mi) {
+    month.tasks.forEach(function(task) {
+      var tid = 'bp-t-' + taskIdx;
+      if (!saved[tid]) {
+        upcoming.push({ title: task.title, month: month.label, type: task.type, priority: task.priority });
+      }
+      taskIdx++;
+      if (upcoming.length >= 5) return;
+    });
+  });
+
+  if (upcoming.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  var html = '<div class="bp-drip-schedule-header">';
+  html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+  html += '<span>Upcoming Task Reminders</span>';
+  html += '<span class="bp-drip-active-badge">Active</span>';
+  html += '</div>';
+
+  html += '<div class="bp-drip-list">';
+  upcoming.forEach(function(task, i) {
+    var dayOffset = (i + 1) * 7;
+    var sendDate = new Date();
+    sendDate.setDate(sendDate.getDate() + dayOffset - sendDate.getDay() + 1); // Next Monday + offset
+    var dateStr = sendDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    html += '<div class="bp-drip-item">';
+    html += '<div class="bp-drip-date">' + dateStr + '</div>';
+    html += '<div class="bp-drip-task-info">';
+    html += '<div class="bp-drip-task-title">' + task.title + '</div>';
+    html += '<div class="bp-drip-task-meta">' + task.month + ' -- ' + task.priority + ' priority</div>';
+    html += '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  container.innerHTML = html;
+  container.style.display = 'block';
+}
+
+// Export roadmap as presentation-style PDF
+function bpExportSlides() {
+  var inputs = bpLoadInputs();
+  if (!inputs || !inputs.practiceType) {
+    if (typeof showToast === 'function') showToast('Generate a roadmap first!', 'warning');
+    return;
+  }
+
+  var roadmap = bpBuildRoadmap(inputs);
+  var practiceLabel = roadmap.practiceLabel;
+  var timeline = inputs.timeline || 90;
+  var today = new Date();
+  var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var dateStr = monthNames[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
+
+  var doc = document.createElement('div');
+  doc.className = 'bp-slides-doc';
+  doc.style.cssText = 'position:fixed;left:-9999px;top:0;width:1024px;font-family:"DM Sans",system-ui,sans-serif';
+
+  // Slide 1: Title
+  var html = '<div class="bp-slide" style="width:1024px;height:576px;background:linear-gradient(135deg,#0b1e3d,#162d5a);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#fff;page-break-after:always">';
+  html += '<div style="font-size:14px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:16px">Community Tax Enterprise Partner Program</div>';
+  html += '<div style="font-family:\'DM Serif Display\',serif;font-size:44px;margin-bottom:12px">Your ' + timeline + '-Day<br>Growth Roadmap</div>';
+  html += '<div style="font-size:16px;color:rgba(255,255,255,0.7);margin-bottom:32px">' + practiceLabel + '</div>';
+  html += '<div style="width:60px;height:2px;background:linear-gradient(90deg,#0B5FD8,#00C8E0);margin-bottom:32px"></div>';
+  html += '<div style="font-size:13px;color:rgba(255,255,255,0.5)">' + dateStr + '</div>';
+  html += '</div>';
+
+  // Slide 2: Executive Summary
+  html += '<div class="bp-slide" style="width:1024px;height:576px;background:#fff;padding:48px 64px;page-break-after:always">';
+  html += '<div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#0B5FD8;margin-bottom:8px">Executive Summary</div>';
+  html += '<div style="font-family:\'DM Serif Display\',serif;font-size:32px;color:#0b1e3d;margin-bottom:24px">Key Metrics at a Glance</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-bottom:32px">';
+
+  var metrics = [
+    { val: '$' + (inputs.refGoal * 420).toLocaleString(), label: 'Projected Revenue', note: inputs.refGoal + ' referrals x $420' },
+    { val: Math.round(inputs.clientCount * 0.08) + '', label: 'Potential Leads', note: '8% of ' + inputs.clientCount + ' clients' },
+    { val: bpBestChannel(inputs), label: 'Top Channel', note: 'Based on your profile' }
+  ];
+  metrics.forEach(function(m) {
+    html += '<div style="text-align:center;padding:24px;background:#f8f9fa;border-radius:12px">';
+    html += '<div style="font-family:\'DM Serif Display\',serif;font-size:28px;color:#0B5FD8;margin-bottom:4px">' + m.val + '</div>';
+    html += '<div style="font-size:13px;font-weight:700;color:#0b1e3d;margin-bottom:4px">' + m.label + '</div>';
+    html += '<div style="font-size:11px;color:#666">' + m.note + '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">';
+  html += '<div style="padding:16px 20px;background:rgba(11,95,216,0.04);border:1px solid rgba(11,95,216,0.1);border-radius:10px">';
+  html += '<div style="font-size:12px;font-weight:700;color:#0b1e3d;margin-bottom:4px">Timeline</div>';
+  html += '<div style="font-size:13px;color:#555">' + timeline + ' days starting ' + dateStr + '</div>';
+  html += '</div>';
+  html += '<div style="padding:16px 20px;background:rgba(11,95,216,0.04);border:1px solid rgba(11,95,216,0.1);border-radius:10px">';
+  html += '<div style="font-size:12px;font-weight:700;color:#0b1e3d;margin-bottom:4px">Monthly Budget</div>';
+  html += '<div style="font-size:13px;color:#555">$' + (inputs.budget || 0).toLocaleString() + '/month</div>';
+  html += '</div>';
+  html += '</div>';
+  html += '</div>';
+
+  // Slide 3+: One slide per month
+  roadmap.months.forEach(function(month, mi) {
+    html += '<div class="bp-slide" style="width:1024px;height:576px;background:#fff;padding:48px 64px;page-break-after:always">';
+    html += '<div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#0B5FD8;margin-bottom:8px">' + month.label + '</div>';
+    html += '<div style="font-family:\'DM Serif Display\',serif;font-size:28px;color:#0b1e3d;margin-bottom:20px">' + month.subtitle + ' Action Plan</div>';
+    html += '<div style="display:flex;flex-direction:column;gap:10px">';
+    month.tasks.forEach(function(task) {
+      var prioColor = task.priority === 'high' ? '#ef4444' : '#f59e0b';
+      html += '<div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:#f8f9fa;border-radius:8px;border-left:3px solid ' + prioColor + '">';
+      html += '<div style="flex:1">';
+      html += '<div style="font-size:13px;font-weight:700;color:#0b1e3d">' + task.title + '</div>';
+      html += '<div style="font-size:11px;color:#666;line-height:1.4;margin-top:2px">' + task.desc.substring(0, 120) + (task.desc.length > 120 ? '...' : '') + '</div>';
+      html += '</div>';
+      html += '<span style="font-size:9px;font-weight:700;text-transform:uppercase;color:' + prioColor + ';flex-shrink:0">' + task.priority + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '</div>';
+  });
+
+  // Final slide: Next Steps
+  html += '<div class="bp-slide" style="width:1024px;height:576px;background:linear-gradient(135deg,#0b1e3d,#162d5a);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#fff">';
+  html += '<div style="font-family:\'DM Serif Display\',serif;font-size:36px;margin-bottom:16px">Ready to Get Started?</div>';
+  html += '<div style="font-size:15px;color:rgba(255,255,255,0.7);max-width:480px;line-height:1.7;margin-bottom:32px">Log in to your partner portal to access all the tools mentioned in this roadmap. Your first task: complete your onboarding and start the 30-Day Momentum Challenge.</div>';
+  html += '<div style="display:flex;gap:16px">';
+  html += '<div style="padding:12px 24px;background:#0B5FD8;border-radius:8px;font-size:13px;font-weight:700">Open Partner Portal</div>';
+  html += '<div style="padding:12px 24px;border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-size:13px;font-weight:600">Contact Your Rep</div>';
+  html += '</div>';
+  html += '<div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:32px">Generated by Community Tax Business Planner -- ' + dateStr + '</div>';
+  html += '</div>';
+
+  doc.innerHTML = html;
+  document.body.appendChild(doc);
+
+  // Export with html2pdf
+  if (typeof html2pdf === 'undefined') {
+    // Load html2pdf if not already loaded
+    var script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+    script.onload = function() { _bpDoSlideExport(doc); };
+    document.head.appendChild(script);
+  } else {
+    _bpDoSlideExport(doc);
+  }
+}
+
+function _bpDoSlideExport(doc) {
+  var opt = {
+    margin: 0,
+    filename: 'Growth-Roadmap-Presentation.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, width: 1024 },
+    jsPDF: { unit: 'px', format: [1024, 576], orientation: 'landscape', hotfixes: ['px_scaling'] },
+    pagebreak: { mode: 'css' }
+  };
+  html2pdf().set(opt).from(doc).save().then(function() {
+    document.body.removeChild(doc);
+    if (typeof showToast === 'function') showToast('Presentation PDF saved!', 'success');
+  }).catch(function() {
+    document.body.removeChild(doc);
+    if (typeof showToast === 'function') showToast('PDF export failed. Try again.', 'error');
+  });
 }
 
 // ═══ M5P1C1: REAL INTELLIGENCE -- AI-POWERED ROADMAP ═══
