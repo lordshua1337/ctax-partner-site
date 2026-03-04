@@ -353,6 +353,17 @@
               </button>
               <button class="ait-iq-btn-secondary" onclick="icpReset()">Start Over</button>
             </div>
+            <!-- M3P1C2: ICP History + Export -->
+            <div style="display:flex;justify-content:center;gap:10px;margin-top:16px;flex-wrap:wrap">
+              <button class="ait-iq-btn-secondary" onclick="icpShowHistory()" style="font-size:13px;padding:8px 16px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Profile History
+              </button>
+              <button class="ait-iq-btn-secondary" onclick="icpShowExportMenu()" style="font-size:13px;padding:8px 16px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                Export Profile
+              </button>
+            </div>
             <div style="text-align:center;margin-top:40px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08)">
               <p style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:16px">Ready to start making referrals?</p>
               <button class="ait-iq-btn-primary" onclick="aitExitImmersive();setTimeout(function(){showPage('apply')},300)" style="background:linear-gradient(135deg,var(--sky),var(--cyan))">Apply to Become a Partner</button>

@@ -1008,6 +1008,58 @@
   .aid-cal-cell{min-height:52px;padding:4px}
 }
 
+/* ══════════════════════════════════════════
+   M3P1C2: ICP HISTORY + COMPARISON + EXPORT
+   ══════════════════════════════════════════ */
+.icp-hist-item{background:var(--white);border:1px solid var(--off2);border-radius:10px;padding:16px 20px;margin-bottom:10px;transition:all 0.15s}
+.icp-hist-item:hover{border-color:rgba(11,95,216,0.3)}
+.icp-hist-active{border-color:var(--blue);background:rgba(11,95,216,0.02)}
+.icp-hist-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.icp-hist-title{font-size:15px;font-weight:600;color:var(--navy)}
+.icp-hist-meta{font-size:12px;color:var(--slate);margin-top:2px}
+.icp-hist-fit{font-size:12px;font-weight:700;letter-spacing:0.05em}
+.icp-hist-badge{font-size:11px;font-weight:600;background:rgba(11,95,216,0.1);color:var(--blue);padding:2px 8px;border-radius:10px}
+.icp-hist-tagline{font-size:13px;color:var(--body);margin-bottom:10px;line-height:1.5}
+.icp-hist-actions{display:flex;gap:8px;align-items:center}
+
+/* Comparison Table */
+.icp-cmp-table{width:100%;border-collapse:collapse;margin-bottom:24px}
+.icp-cmp-th{font-size:14px;font-weight:600;color:var(--navy);text-align:left;padding:10px 14px;border-bottom:2px solid var(--off2)}
+.icp-cmp-row td{padding:10px 14px;border-bottom:1px solid var(--off2);font-size:14px}
+.icp-cmp-label{font-weight:500;color:var(--slate);width:140px}
+.icp-cmp-val{color:var(--navy)}
+.icp-cmp-diff{background:rgba(234,179,8,0.06)}
+.icp-cmp-sec{margin-bottom:20px}
+.icp-cmp-sec-label{font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--slate);margin-bottom:8px}
+.icp-cmp-sec-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.icp-cmp-sec-col{font-size:13px;color:var(--body);line-height:1.6;background:var(--off);padding:12px 16px;border-radius:8px}
+
+/* Export Options */
+.icp-export-options{display:flex;flex-direction:column;gap:10px}
+.icp-export-btn{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--white);border:1.5px solid var(--off2);border-radius:10px;cursor:pointer;text-align:left;transition:all 0.15s;font-family:'DM Sans',sans-serif;width:100%}
+.icp-export-btn:hover{border-color:var(--blue);background:rgba(11,95,216,0.02)}
+.icp-export-btn svg{flex-shrink:0;color:var(--blue)}
+.icp-export-btn-title{font-size:15px;font-weight:600;color:var(--navy)}
+.icp-export-btn-desc{font-size:13px;color:var(--slate);margin-top:2px}
+
+/* DARK MODE: ICP History + Comparison + Export */
+[data-theme="dark"] .icp-hist-item{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .icp-hist-item:hover{border-color:rgba(11,95,216,0.4)}
+[data-theme="dark"] .icp-hist-active{background:rgba(11,95,216,0.08);border-color:rgba(11,95,216,0.4)}
+[data-theme="dark"] .icp-hist-title{color:#f3f4f6}
+[data-theme="dark"] .icp-hist-meta{color:#9ca3af}
+[data-theme="dark"] .icp-hist-tagline{color:#d1d5db}
+[data-theme="dark"] .icp-cmp-th{color:#f3f4f6;border-color:rgba(255,255,255,0.1)}
+[data-theme="dark"] .icp-cmp-row td{border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .icp-cmp-label{color:#9ca3af}
+[data-theme="dark"] .icp-cmp-val{color:#f3f4f6}
+[data-theme="dark"] .icp-cmp-diff{background:rgba(234,179,8,0.08)}
+[data-theme="dark"] .icp-cmp-sec-col{background:rgba(255,255,255,0.04);color:#d1d5db}
+[data-theme="dark"] .icp-export-btn{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .icp-export-btn:hover{border-color:rgba(11,95,216,0.4)}
+[data-theme="dark"] .icp-export-btn-title{color:#f3f4f6}
+[data-theme="dark"] .icp-export-btn-desc{color:#9ca3af}
+
 /* ── Knowledge Base Related Questions ────────────────── */
 .kb-related-btn{display:block;width:100%;text-align:left;background:var(--white);border:1.5px solid var(--off2);border-radius:8px;padding:10px 16px;font-size:14px;color:var(--navy);cursor:pointer;transition:all 0.13s;font-family:'DM Sans',sans-serif;margin-bottom:6px}
 .kb-related-btn:last-child{margin-bottom:0}
