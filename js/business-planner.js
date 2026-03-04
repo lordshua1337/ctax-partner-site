@@ -114,7 +114,8 @@ function bpGenerateRoadmap() {
     geo: geo,
     years: years,
     currentRefs: currentRefs,
-    season: season
+    season: season,
+    timeline: parseInt(document.getElementById('bp-timeline') ? document.getElementById('bp-timeline').value : '90') || 90
   };
 
   var roadmap = bpBuildRoadmap(inputs);
@@ -423,7 +424,7 @@ function bpBuildRoadmap(inputs) {
   // Build the insight cards
   var insights = [];
   insights.push({
-    title: 'Your Estimated 90-Day Revenue',
+    title: 'Your Estimated ' + (inputs.timeline || 90) + '-Day Revenue',
     value: '$' + (inputs.refGoal * 420).toLocaleString(),
     desc: 'Based on ' + inputs.refGoal + ' referrals at $420 avg commission (Premium tier). Pro tier would yield $' + (inputs.refGoal * 525).toLocaleString() + '.'
   });
@@ -486,11 +487,17 @@ function bpRenderRoadmap(roadmap) {
 
   // Action bar
   html += '<div class="bp-action-bar">';
-  html += '<div class="bp-action-title">Your 90-Day Growth Roadmap</div>';
+  var _tlDays = roadmap.inputs.timeline || 90;
+  var _tlSuffix = (typeof BP_TIMELINES !== 'undefined' && BP_TIMELINES[_tlDays]) ? BP_TIMELINES[_tlDays].suffix : 'Growth Roadmap';
+  html += '<div class="bp-action-title">Your ' + _tlDays + '-Day ' + _tlSuffix + '</div>';
   html += '<div class="bp-action-btns">';
   html += '<button class="bp-action-btn bp-btn-pdf" onclick="bpPrintRoadmap()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Save as PDF</button>';
+  html += '<button class="bp-action-btn bp-btn-ai" id="bp-ai-btn" onclick="bpGenerateAIRoadmap()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Enhance with AI</button>';
   html += '<button class="bp-action-btn bp-btn-reset" onclick="bpResetPlanner()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 105.64-11.36L1 10"/></svg> Start Over</button>';
   html += '</div></div>';
+
+  // Industry benchmarks panel
+  html += '<div id="bp-benchmarks" class="bp-benchmarks" style="display:none"></div>';
 
   // Email drip toggle
   var dripEnabled = false;
@@ -628,6 +635,12 @@ function bpRenderRoadmap(roadmap) {
   if (result) {
     setTimeout(function() { result.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
   }
+
+  // Render benchmarks
+  setTimeout(function() { bpRenderBenchmarks(roadmap.inputs); }, 100);
+
+  // Restore AI insights if available
+  bpTryRestoreAI();
 }
 
 // Save/load task progress from localStorage
@@ -1061,5 +1074,218 @@ function bpResetPlanner() {
   try {
     localStorage.removeItem('bp_task_progress');
     localStorage.removeItem('bp_saved_inputs');
+    localStorage.removeItem('bp_ai_roadmap');
   } catch (e) { /* ignore */ }
+}
+
+// ═══ M5P1C1: REAL INTELLIGENCE -- AI-POWERED ROADMAP ═══
+
+// Industry benchmark data (per practice type, per geography)
+var BP_BENCHMARKS = {
+  'tax-prep': { avgRefs: 8, topRefs: 22, convRate: 0.68, avgDeal: 11200, seasonMult: { 'tax-season': 1.8, 'post-season': 0.7, 'fall': 0.85, 'year-end': 1.1 } },
+  'accounting': { avgRefs: 6, topRefs: 18, convRate: 0.62, avgDeal: 9800, seasonMult: { 'tax-season': 1.5, 'post-season': 0.8, 'fall': 0.9, 'year-end': 1.2 } },
+  'financial-advisory': { avgRefs: 5, topRefs: 15, convRate: 0.55, avgDeal: 14500, seasonMult: { 'tax-season': 1.3, 'post-season': 0.9, 'fall': 1.0, 'year-end': 1.1 } },
+  'legal': { avgRefs: 4, topRefs: 12, convRate: 0.72, avgDeal: 16200, seasonMult: { 'tax-season': 1.2, 'post-season': 1.0, 'fall': 1.0, 'year-end': 1.0 } },
+  'insurance': { avgRefs: 3, topRefs: 10, convRate: 0.48, avgDeal: 8900, seasonMult: { 'tax-season': 1.4, 'post-season': 0.8, 'fall': 0.9, 'year-end': 1.1 } },
+  'mortgage': { avgRefs: 4, topRefs: 14, convRate: 0.51, avgDeal: 10500, seasonMult: { 'tax-season': 1.3, 'post-season': 0.85, 'fall': 1.1, 'year-end': 0.9 } },
+  'other': { avgRefs: 3, topRefs: 8, convRate: 0.45, avgDeal: 9000, seasonMult: { 'tax-season': 1.3, 'post-season': 0.85, 'fall': 0.95, 'year-end': 1.0 } }
+};
+
+var BP_GEO_MULTIPLIERS = {
+  'urban': { refs: 1.25, competition: 'high', avgDebt: 18500 },
+  'suburban': { refs: 1.0, competition: 'medium', avgDebt: 14200 },
+  'rural': { refs: 0.75, competition: 'low', avgDebt: 11800 },
+  '': { refs: 1.0, competition: 'medium', avgDebt: 14200 }
+};
+
+// Timeline duration options
+var BP_TIMELINES = {
+  30: { label: '30 Days', months: 1, suffix: 'Sprint' },
+  60: { label: '60 Days', months: 2, suffix: 'Launch' },
+  90: { label: '90 Days', months: 3, suffix: 'Growth Roadmap' },
+  180: { label: '180 Days', months: 6, suffix: 'Strategic Plan' }
+};
+
+function bpRenderBenchmarks(inputs) {
+  var el = document.getElementById('bp-benchmarks');
+  if (!el) return;
+
+  var bench = BP_BENCHMARKS[inputs.practiceType] || BP_BENCHMARKS['other'];
+  var geoMult = BP_GEO_MULTIPLIERS[inputs.geo] || BP_GEO_MULTIPLIERS[''];
+  var season = inputs.season || bpGetSeason();
+  var sMult = bench.seasonMult[season] || 1.0;
+
+  var adjustedAvg = Math.round(bench.avgRefs * geoMult.refs * sMult);
+  var adjustedTop = Math.round(bench.topRefs * geoMult.refs * sMult);
+  var practiceLabel = BP_PRACTICE_TYPES[inputs.practiceType] || 'Your Practice Type';
+
+  var seasonLabels = {
+    'tax-season': 'Tax Season (Jan-Apr)',
+    'post-season': 'Post-Season (May-Jul)',
+    'fall': 'Fall (Aug-Oct)',
+    'year-end': 'Year-End (Nov-Dec)'
+  };
+
+  el.style.display = 'block';
+  el.innerHTML = '<div class="bp-bench-header">'
+    + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>'
+    + '<span>Industry Benchmarks: ' + practiceLabel + '</span>'
+    + '</div>'
+    + '<div class="bp-bench-grid">'
+    + '<div class="bp-bench-card">'
+    + '<div class="bp-bench-val">' + adjustedAvg + '</div>'
+    + '<div class="bp-bench-label">Avg Referrals/Month</div>'
+    + '<div class="bp-bench-note">Adjusted for ' + (seasonLabels[season] || season) + ' + ' + (inputs.geo || 'your') + ' market</div>'
+    + '</div>'
+    + '<div class="bp-bench-card">'
+    + '<div class="bp-bench-val">' + adjustedTop + '</div>'
+    + '<div class="bp-bench-label">Top 10% Partners</div>'
+    + '<div class="bp-bench-note">Best performers in your practice category</div>'
+    + '</div>'
+    + '<div class="bp-bench-card">'
+    + '<div class="bp-bench-val">' + Math.round(bench.convRate * 100) + '%</div>'
+    + '<div class="bp-bench-label">Referral Close Rate</div>'
+    + '<div class="bp-bench-note">% of submitted referrals that result in signed cases</div>'
+    + '</div>'
+    + '<div class="bp-bench-card">'
+    + '<div class="bp-bench-val">$' + geoMult.avgDebt.toLocaleString() + '</div>'
+    + '<div class="bp-bench-label">Avg Tax Debt in Market</div>'
+    + '<div class="bp-bench-note">Typical client debt size in ' + (inputs.geo || 'your') + ' areas</div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="bp-bench-comparison">'
+    + '<div class="bp-bench-comp-title">Your Goal vs Market</div>'
+    + '<div class="bp-bench-comp-bar">'
+    + '<div class="bp-bench-bar-track">'
+    + '<div class="bp-bench-bar-avg" style="left:' + Math.min(95, (adjustedAvg / adjustedTop) * 100) + '%"><div class="bp-bench-bar-dot"></div><div class="bp-bench-bar-label">Avg (' + adjustedAvg + ')</div></div>'
+    + '<div class="bp-bench-bar-you" style="left:' + Math.min(95, (inputs.refGoal / adjustedTop) * 100) + '%"><div class="bp-bench-bar-dot bp-bench-bar-dot-you"></div><div class="bp-bench-bar-label">You (' + inputs.refGoal + ')</div></div>'
+    + '<div class="bp-bench-bar-top" style="left:95%"><div class="bp-bench-bar-dot bp-bench-bar-dot-top"></div><div class="bp-bench-bar-label">Top (' + adjustedTop + ')</div></div>'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+}
+
+// AI-Powered Roadmap Generation
+async function bpGenerateAIRoadmap() {
+  var inputs = bpLoadInputs();
+  if (!inputs || !inputs.practiceType) {
+    if (typeof showToast === 'function') showToast('Generate a standard roadmap first, then enhance with AI.', 'warning');
+    return;
+  }
+
+  var btn = document.getElementById('bp-ai-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="bp-ai-spinner"></span> Generating personalized roadmap...';
+  }
+
+  var bench = BP_BENCHMARKS[inputs.practiceType] || BP_BENCHMARKS['other'];
+  var geoMult = BP_GEO_MULTIPLIERS[inputs.geo] || BP_GEO_MULTIPLIERS[''];
+  var practiceLabel = BP_PRACTICE_TYPES[inputs.practiceType] || 'professional practice';
+  var timeline = inputs.timeline || 90;
+
+  var prompt = 'You are a business growth strategist for a tax resolution referral partner program. '
+    + 'Generate a personalized ' + timeline + '-day growth roadmap for a ' + practiceLabel.toLowerCase() + ' partner.\n\n'
+    + 'Partner profile:\n'
+    + '- Practice type: ' + practiceLabel + '\n'
+    + '- Client base: ' + (inputs.clientCount || 'unknown') + ' active clients\n'
+    + '- Target audience: ' + (BP_AUDIENCES[inputs.audience] || 'mixed') + '\n'
+    + '- Monthly marketing budget: $' + (inputs.budget || 0) + '\n'
+    + '- Referral goal: ' + inputs.refGoal + ' per quarter\n'
+    + '- Has website: ' + (inputs.hasWebsite ? 'Yes' : 'No') + '\n'
+    + '- Has social media: ' + (inputs.hasSocial ? 'Yes' : 'No') + '\n'
+    + '- Has email list: ' + (inputs.hasEmail ? 'Yes' : 'No') + '\n'
+    + '- Geography: ' + (inputs.geo || 'not specified') + '\n'
+    + '- Years in business: ' + (inputs.years || 'not specified') + '\n'
+    + '- Current referrals/month: ' + (inputs.currentRefs || 'not specified') + '\n'
+    + '- Season: ' + (inputs.season || bpGetSeason()) + '\n'
+    + '- Industry avg referrals/month: ' + bench.avgRefs + '\n'
+    + '- Top 10% referrals/month: ' + bench.topRefs + '\n\n'
+    + 'Generate exactly 3 personalized strategic insights as JSON. Each insight should be specific to this partner\'s situation, not generic advice.\n\n'
+    + 'Format: {"insights":[{"title":"string","value":"string","detail":"2-3 sentence explanation"}]}\n\n'
+    + 'Focus on: (1) their biggest untapped opportunity, (2) their recommended first action based on current assets, (3) a specific revenue projection with reasoning.\n\n'
+    + 'Be extremely specific -- reference their client count, practice type, geography, and season. No generic advice.';
+
+  try {
+    if (typeof CTAX_API_KEY === 'undefined' || !CTAX_API_KEY) {
+      throw new Error('No API key');
+    }
+
+    var resp = await fetch(CTAX_API_URL, {
+      method: 'POST',
+      headers: getApiHeaders(),
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!resp.ok) throw new Error('API ' + resp.status);
+    var data = await resp.json();
+    var text = data.content && data.content[0] ? data.content[0].text : '';
+
+    // Extract JSON from response
+    var jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      var parsed = JSON.parse(jsonMatch[0]);
+      if (parsed.insights && parsed.insights.length) {
+        bpRenderAIInsights(parsed.insights);
+        try { localStorage.setItem('bp_ai_roadmap', JSON.stringify(parsed)); } catch (e) {}
+      }
+    }
+
+  } catch (err) {
+    if (typeof showToast === 'function') {
+      showToast('AI enhancement unavailable right now. Your standard roadmap is still excellent.', 'info');
+    }
+  }
+
+  if (btn) {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Enhance with AI';
+  }
+}
+
+function bpRenderAIInsights(insights) {
+  var container = document.getElementById('bp-ai-insights');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'bp-ai-insights';
+    container.className = 'bp-ai-insights';
+    var insRow = document.querySelector('.bp-insights-row');
+    if (insRow) insRow.parentNode.insertBefore(container, insRow.nextSibling);
+  }
+
+  var html = '<div class="bp-ai-header">'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>'
+    + '<span>AI-Powered Insights</span>'
+    + '<span class="bp-ai-badge">Personalized</span>'
+    + '</div>'
+    + '<div class="bp-ai-grid">';
+
+  insights.forEach(function(ins) {
+    html += '<div class="bp-ai-card">'
+      + '<div class="bp-ai-card-val">' + (ins.value || '') + '</div>'
+      + '<div class="bp-ai-card-title">' + (ins.title || '') + '</div>'
+      + '<div class="bp-ai-card-detail">' + (ins.detail || '') + '</div>'
+      + '</div>';
+  });
+
+  html += '</div>';
+  container.innerHTML = html;
+  container.style.display = 'block';
+}
+
+// Restore AI insights on page load
+function bpTryRestoreAI() {
+  try {
+    var saved = localStorage.getItem('bp_ai_roadmap');
+    if (saved) {
+      var parsed = JSON.parse(saved);
+      if (parsed.insights) {
+        setTimeout(function() { bpRenderAIInsights(parsed.insights); }, 200);
+      }
+    }
+  } catch (e) {}
 }

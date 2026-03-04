@@ -3959,6 +3959,59 @@ select.set-input{padding-right:36px;background-image:url("data:image/svg+xml,%3C
 .bp-btn-pdf{border-color:rgba(11,95,216,0.2);color:var(--blue);background:rgba(11,95,216,0.04)}
 .bp-btn-pdf:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
 .bp-btn-reset:hover{background:var(--off);color:var(--navy)}
+.bp-btn-ai{border-color:rgba(139,92,246,0.2);color:#7c3aed;background:rgba(139,92,246,0.04)}
+.bp-btn-ai:hover{background:#7c3aed;color:#fff;border-color:#7c3aed}
+.bp-btn-ai:disabled{opacity:0.6;cursor:not-allowed;pointer-events:none}
+.bp-ai-spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(124,58,237,0.2);border-top-color:#7c3aed;border-radius:50%;animation:bpSpin .6s linear infinite}
+@keyframes bpSpin{to{transform:rotate(360deg)}}
+
+/* Industry Benchmarks Panel */
+.bp-benchmarks{margin-bottom:32px;background:linear-gradient(135deg,rgba(11,95,216,0.03) 0%,rgba(0,200,224,0.02) 100%);border:1px solid rgba(11,95,216,0.1);border-radius:16px;padding:24px 28px;overflow:hidden}
+.bp-bench-header{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:20px;letter-spacing:-0.01em}
+.bp-bench-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.bp-bench-card{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:20px;text-align:center;transition:border-color .2s}
+.bp-bench-card:hover{border-color:rgba(11,95,216,0.2)}
+.bp-bench-val{font-family:'DM Serif Display',serif;font-size:28px;font-weight:400;color:var(--navy);margin-bottom:4px}
+.bp-bench-label{font-size:12px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
+.bp-bench-note{font-size:11px;color:var(--slate);line-height:1.4}
+.bp-bench-comparison{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:20px 24px}
+.bp-bench-comp-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px}
+.bp-bench-comp-bar{position:relative;height:48px}
+.bp-bench-bar-track{position:relative;height:6px;background:linear-gradient(90deg,rgba(11,95,216,0.08),rgba(0,200,224,0.15));border-radius:6px;top:16px}
+.bp-bench-bar-avg,.bp-bench-bar-you,.bp-bench-bar-top{position:absolute;top:0;transform:translateX(-50%)}
+.bp-bench-bar-dot{width:14px;height:14px;border-radius:50%;background:var(--slate);border:3px solid var(--white);box-shadow:0 2px 6px rgba(0,0,0,0.12);margin:0 auto}
+.bp-bench-bar-dot-you{background:var(--blue)}
+.bp-bench-bar-dot-top{background:#00C8E0}
+.bp-bench-bar-label{font-size:10px;font-weight:600;color:var(--slate);text-align:center;margin-top:4px;white-space:nowrap}
+
+/* AI-Powered Insights Panel */
+.bp-ai-insights{margin-bottom:32px;display:none}
+.bp-ai-header{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;color:#7c3aed;margin-bottom:16px}
+.bp-ai-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;padding:3px 10px;border-radius:20px}
+.bp-ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.bp-ai-card{background:linear-gradient(135deg,rgba(139,92,246,0.03) 0%,rgba(168,85,247,0.02) 100%);border:1px solid rgba(139,92,246,0.12);border-radius:14px;padding:22px;transition:border-color .2s,box-shadow .2s}
+.bp-ai-card:hover{border-color:rgba(139,92,246,0.25);box-shadow:0 4px 16px rgba(139,92,246,0.08)}
+.bp-ai-card-val{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;color:#7c3aed;margin-bottom:6px}
+.bp-ai-card-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.bp-ai-card-detail{font-size:12px;color:var(--body);line-height:1.6}
+
+/* Dark mode: Benchmarks + AI Insights */
+[data-theme="dark"] .bp-benchmarks{background:rgba(11,95,216,0.04);border-color:rgba(11,95,216,0.12)}
+[data-theme="dark"] .bp-bench-card{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .bp-bench-card:hover{border-color:rgba(11,95,216,0.25)}
+[data-theme="dark"] .bp-bench-comparison{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .bp-bench-bar-dot{border-color:var(--navy)}
+[data-theme="dark"] .bp-ai-card{background:rgba(139,92,246,0.06);border-color:rgba(139,92,246,0.15)}
+[data-theme="dark"] .bp-ai-card:hover{border-color:rgba(139,92,246,0.3);box-shadow:0 4px 16px rgba(139,92,246,0.12)}
+[data-theme="dark"] .bp-btn-ai{background:rgba(139,92,246,0.08);border-color:rgba(139,92,246,0.2);color:#a78bfa}
+[data-theme="dark"] .bp-btn-ai:hover{background:#7c3aed;color:#fff}
+
+@media(max-width:700px){
+  .bp-bench-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .bp-bench-val{font-size:22px}
+  .bp-ai-grid{grid-template-columns:1fr}
+  .bp-bench-comparison{padding:16px}
+}
 
 /* What If Comparison */
 .bp-whatif{margin-bottom:40px}
