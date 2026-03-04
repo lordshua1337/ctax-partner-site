@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260" viewBox="0 0 400 260" fill="none">
+  <rect width="400" height="260" rx="12" fill="#f0f4f8"/>
+  <rect x="30" y="30" width="100" height="60" rx="8" fill="#e2e8f0"/>
+  <rect x="150" y="30" width="100" height="60" rx="8" fill="#e2e8f0"/>
+  <rect x="270" y="30" width="100" height="60" rx="8" fill="#e2e8f0"/>
+  <rect x="30" y="110" width="340" height="120" rx="8" fill="#e2e8f0"/>
+  <polyline points="50,200 100,170 150,180 200,150 250,160 300,130 350,140" stroke="#0B5FD8" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="50" cy="200" r="3" fill="#0B5FD8"/>
+  <circle cx="100" cy="170" r="3" fill="#0B5FD8"/>
+  <circle cx="150" cy="180" r="3" fill="#0B5FD8"/>
+  <circle cx="200" cy="150" r="3" fill="#0B5FD8"/>
+  <circle cx="250" cy="160" r="3" fill="#0B5FD8"/>
+  <circle cx="300" cy="130" r="3" fill="#0B5FD8"/>
+  <circle cx="350" cy="140" r="3" fill="#0B5FD8"/>
+  <rect x="40" y="42" width="30" height="6" rx="3" fill="#cbd5e1"/>
+  <rect x="40" y="54" width="50" height="10" rx="3" fill="#94a3b8"/>
+  <rect x="160" y="42" width="30" height="6" rx="3" fill="#cbd5e1"/>
+  <rect x="160" y="54" width="50" height="10" rx="3" fill="#94a3b8"/>
+  <rect x="280" y="42" width="30" height="6" rx="3" fill="#cbd5e1"/>
+  <rect x="280" y="54" width="50" height="10" rx="3" fill="#94a3b8"/>
+</svg>
