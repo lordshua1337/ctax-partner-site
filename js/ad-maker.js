@@ -85,6 +85,62 @@ function resizeAd(ratio, realW, realH){
 }
 
 
+// ── LIVE PREVIEW ──────────────────────────────────────────
+function amUpdatePreview() {
+  var previewEl = document.getElementById('am-live-preview');
+  if (!previewEl) return;
+  var firm = (document.getElementById('am-firm') || {value:''}).value.trim();
+  if (!firm) {
+    previewEl.style.display = 'none';
+    return;
+  }
+  previewEl.style.display = 'block';
+  var color = (document.getElementById('am-color') || {value:'#0B5FD8'}).value;
+  var tagline = (document.getElementById('am-tagline') || {value:''}).value.trim();
+  var canvas = document.getElementById('am-preview-canvas');
+  if (!canvas) return;
+  canvas.innerHTML = buildStaticCard(firm, 'Facebook', color, tagline, amLogoDataUrl, amCurrentTemplate, {w: 600, h: 314});
+}
+
+// Debounced preview updater
+var _amPreviewTimer = null;
+function amDebouncedPreview() {
+  clearTimeout(_amPreviewTimer);
+  _amPreviewTimer = setTimeout(amUpdatePreview, 150);
+}
+
+// Wire live preview inputs
+(function() {
+  function wirePreview() {
+    ['am-firm', 'am-tagline', 'am-color', 'am-color-hex'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && !el._previewWired) {
+        el._previewWired = true;
+        el.addEventListener('input', amDebouncedPreview);
+      }
+    });
+    var platform = document.getElementById('am-platform');
+    if (platform && !platform._previewWired) {
+      platform._previewWired = true;
+      platform.addEventListener('change', amDebouncedPreview);
+    }
+  }
+  // Wire on page show
+  var origShow2 = window.showPage;
+  window.showPage = function(id) {
+    if (origShow2) origShow2(id);
+    if (id === 'admaker') setTimeout(wirePreview, 150);
+  };
+  setTimeout(wirePreview, 700);
+})();
+
+// Override selectTemplate to also update preview
+var _origSelectTemplate = selectTemplate;
+selectTemplate = function(n) {
+  _origSelectTemplate(n);
+  amDebouncedPreview();
+};
+
 function generateStaticAd(){
   var firm     = (document.getElementById('am-firm')    || {value:''}).value.trim();
   var platform = (document.getElementById('am-platform')|| {value:'Facebook'}).value;
@@ -103,6 +159,13 @@ function generateStaticAd(){
   window._amRealW = 1200;
   window._amRealH = 628;
 
+  // Save to recent results
+  if (typeof saveToolResult === 'function') {
+    saveToolResult('ad-maker', firm + ' · Template ' + amCurrentTemplate, {
+      firm: firm, platform: platform, color: color, tagline: tagline, template: amCurrentTemplate
+    });
+  }
+
   var resultsEl = document.getElementById('am-results');
   var formEl    = document.getElementById('am-form-wrap');
   if(formEl)    formEl.style.display = 'none';
@@ -113,6 +176,69 @@ function generateStaticAd(){
     resizeAd('16:9', 1200, 628);
     if(resultsEl) resultsEl.style.visibility = '';
   }, 30);
+}
+
+// ── BATCH DOWNLOAD ALL SIZES ──────────────────────────────
+function downloadAllSizes() {
+  var sizes = [
+    { ratio: '16:9', w: 1200, h: 628 },
+    { ratio: '1:1', w: 1080, h: 1080 },
+    { ratio: '4:5', w: 1080, h: 1350 },
+    { ratio: '9:16', w: 1080, h: 1920 },
+    { ratio: '5:4', w: 1350, h: 1080 }
+  ];
+  var firm = (document.getElementById('am-firm') || {value:'partner'}).value.trim() || 'partner';
+  var firmSlug = firm.replace(/\s+/g, '-').toLowerCase();
+  var inputs = window._amInputs || {};
+
+  var btn = document.getElementById('am-batch-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Downloading...'; }
+
+  // Create a temp container for rendering each size
+  var temp = document.createElement('div');
+  temp.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1';
+  document.body.appendChild(temp);
+
+  var idx = 0;
+  function downloadNext() {
+    if (idx >= sizes.length) {
+      document.body.removeChild(temp);
+      if (btn) { btn.disabled = false; btn.innerHTML = '<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download All Sizes'; }
+      if (typeof showToast === 'function') showToast('All 5 ad sizes downloaded', 'copied');
+      return;
+    }
+    var s = sizes[idx];
+    var dispW = Math.round(s.w * 0.5);
+    var dispH = Math.round(s.h * 0.5);
+    temp.style.width = dispW + 'px';
+    temp.style.height = dispH + 'px';
+    temp.innerHTML = buildStaticCard(
+      inputs.firm || firm, inputs.platform || 'Facebook',
+      inputs.color || '#0B5FD8', inputs.tagline || '',
+      amLogoDataUrl, amCurrentTemplate, { w: s.w, h: s.h }
+    );
+
+    (window.loadHtml2Canvas ? window.loadHtml2Canvas() : Promise.resolve()).then(function() {
+      html2canvas(temp, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: null }).then(function(cv) {
+        var a = document.createElement('a');
+        a.href = cv.toDataURL('image/png');
+        a.download = firmSlug + '-ctax-' + s.w + 'x' + s.h + '.png';
+        a.click();
+        idx++;
+        setTimeout(downloadNext, 400);
+      });
+    });
+  }
+
+  // Ensure html2canvas is loaded
+  if (typeof html2canvas === 'undefined') {
+    var sc = document.createElement('script');
+    sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    sc.onload = downloadNext;
+    document.head.appendChild(sc);
+  } else {
+    downloadNext();
+  }
 }
 
 function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims){

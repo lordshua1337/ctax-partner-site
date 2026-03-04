@@ -4,6 +4,135 @@ var _sbCurrentTab = -1;
 var _sbAnimating = false;
 var _sbTabNames = ['conversation','email','objections','followup'];
 
+// ── TEMPLATE LIBRARY ──────────────────────────────────────
+var SB_TEMPLATES = [
+  { name: 'Intro Email — CPA Client', icon: 'mail', type: 'CPA / Tax Preparer', style: 'warm and conversational', channel: 'email', relationship: 'long-term client I know well', objection: 'trust — skeptical about tax resolution firms', situation: 'Client owes approximately $25,000 in back taxes from 2020-2022. They mentioned it during our last tax prep meeting but seem overwhelmed and unsure where to start.' },
+  { name: 'Cold Call — Mortgage Lead', icon: 'phone', type: 'Mortgage Broker / Loan Officer', style: 'direct and concise', channel: 'phone call', relationship: 'newer client, still building trust', objection: 'cost — they think they can\'t afford it', situation: 'Applicant\'s mortgage was denied due to an IRS tax lien showing on their credit report. Estimated debt around $40,000 across multiple years.' },
+  { name: 'Follow-Up — Past Client', icon: 'refresh', type: 'Financial Advisor / Wealth Manager', style: 'formal and professional', channel: 'email', relationship: 'past client reconnecting', objection: 'avoidance — not ready to face the problem', situation: 'Former client reached out about retirement planning but casually mentioned owing the IRS about $18,000. They haven\'t filed in 3 years.' },
+  { name: 'Objection Handler — Skeptic', icon: 'shield', type: 'Insurance Agent / Broker', style: 'educational and detailed', channel: 'in-person conversation', relationship: 'long-term client I know well', objection: 'already tried — had a bad experience before', situation: 'Client owes $55,000 and previously hired a tax resolution company that took their money and did nothing. Very skeptical but needs help — garnishment started last month.' },
+  { name: 'Text Message — Quick Referral', icon: 'message', type: 'Bookkeeper / Accountant', style: 'warm and conversational', channel: 'text message', relationship: 'long-term client I know well', objection: 'minimizing — doesn\'t think it\'s that serious', situation: 'While doing their books I noticed $12,000 in IRS penalties accumulating. Client brushes it off saying they\'ll handle it but it\'s been 2 years.' },
+  { name: 'Debt Counselor Handoff', icon: 'handshake', type: 'Debt Settlement / Credit Counselor', style: 'direct and concise', channel: 'phone call', relationship: 'newer client, still building trust', objection: 'cost — they think they can\'t afford it', situation: 'Client came in for credit card debt settlement but also has $70,000 in IRS debt with active bank levy. They\'re panicking about frozen accounts.' },
+  { name: 'Real Estate — Lien Block', icon: 'home', type: 'Real Estate Agent / Broker', style: 'warm and conversational', channel: 'in-person conversation', relationship: 'newer client, still building trust', objection: 'avoidance — not ready to face the problem', situation: 'Seller can\'t close because of a federal tax lien on the property. Estimated IRS debt is $30,000-$45,000. Deal is at risk of falling through.' },
+  { name: 'Attorney — Divorce Case', icon: 'scale', type: 'Attorney / Law Firm', style: 'formal and professional', channel: 'email', relationship: 'newer client, still building trust', objection: 'trust — skeptical about tax resolution firms', situation: 'Divorce client discovered their spouse hid $90,000 in unpaid business taxes. Client may qualify for innocent spouse relief. IRS has sent collection notices.' },
+  { name: 'Fintech — Platform Alert', icon: 'zap', type: 'Fintech / Lending Platform', style: 'direct and concise', channel: 'email', relationship: 'referred client I haven\'t met yet', objection: 'minimizing — doesn\'t think it\'s that serious', situation: 'User flagged by our system for potential tax debt issues — estimated $15,000-$20,000 based on filed returns showing underpayment. No personal relationship.' },
+  { name: 'Warm Intro — Referral Partner', icon: 'users', type: 'Other Financial Professional', style: 'educational and detailed', channel: 'in-person conversation', relationship: 'long-term client I know well', objection: 'cost — they think they can\'t afford it', situation: 'Long-time client just disclosed they owe $35,000 to the IRS and haven\'t filed in 4 years. They\'re self-employed and worried about losing everything.' }
+];
+
+function sbShowTemplates() {
+  var wrap = document.getElementById('sb-template-library');
+  if (!wrap) return;
+  var isVisible = wrap.style.display !== 'none';
+  wrap.style.display = isVisible ? 'none' : 'block';
+  var btn = document.getElementById('sb-templates-toggle');
+  if (btn) btn.textContent = isVisible ? 'Use a Template' : 'Hide Templates';
+}
+
+function sbUseTemplate(idx) {
+  var t = SB_TEMPLATES[idx];
+  if (!t) return;
+  var fields = {
+    'sb-type': t.type,
+    'sb-style': t.style,
+    'sb-channel': t.channel,
+    'sb-situation': t.situation,
+    'sb-relationship': t.relationship,
+    'sb-objection': t.objection
+  };
+  Object.keys(fields).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = fields[id];
+  });
+  // Hide template library after selection
+  var wrap = document.getElementById('sb-template-library');
+  if (wrap) wrap.style.display = 'none';
+  var btn = document.getElementById('sb-templates-toggle');
+  if (btn) btn.textContent = 'Use a Template';
+  // Show toast
+  if (typeof showToast === 'function') showToast('Template loaded — review inputs and generate', 'copied');
+}
+
+// ── RECENT RESULTS (shared across all tools) ──────────────
+var TOOL_HISTORY_KEY = 'ctax_tool_history';
+
+function saveToolResult(toolName, label, data) {
+  try {
+    var history = JSON.parse(localStorage.getItem(TOOL_HISTORY_KEY) || '[]');
+    history.unshift({
+      tool: toolName,
+      label: label,
+      data: data,
+      timestamp: Date.now()
+    });
+    // Keep max 20 entries across all tools
+    if (history.length > 20) history = history.slice(0, 20);
+    localStorage.setItem(TOOL_HISTORY_KEY, JSON.stringify(history));
+  } catch (e) { /* storage full or unavailable */ }
+}
+
+function getToolHistory(toolName) {
+  try {
+    var history = JSON.parse(localStorage.getItem(TOOL_HISTORY_KEY) || '[]');
+    return toolName ? history.filter(function(h) { return h.tool === toolName; }).slice(0, 5) : history.slice(0, 10);
+  } catch (e) { return []; }
+}
+
+function renderRecentResults(containerId, toolName) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  var items = getToolHistory(toolName);
+  if (!items.length) {
+    el.style.display = 'none';
+    return;
+  }
+  el.style.display = 'block';
+  var html = '<div class="rr-header"><div class="rr-title">Recent Results</div></div><div class="rr-list">';
+  items.forEach(function(item, i) {
+    var ago = timeAgo(item.timestamp);
+    html += '<button class="rr-item" onclick="loadRecentResult(\'' + toolName + '\',' + i + ')">'
+      + '<div class="rr-item-label">' + esc(item.label) + '</div>'
+      + '<div class="rr-item-meta">' + ago + '</div>'
+      + '</button>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function timeAgo(ts) {
+  var diff = Date.now() - ts;
+  var mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return mins + 'm ago';
+  var hrs = Math.floor(mins / 60);
+  if (hrs < 24) return hrs + 'h ago';
+  var days = Math.floor(hrs / 24);
+  return days + 'd ago';
+}
+
+function loadRecentResult(toolName, idx) {
+  var items = getToolHistory(toolName);
+  var item = items[idx];
+  if (!item || !item.data) return;
+
+  if (toolName === 'script-builder' && item.data.results) {
+    sbResults = item.data.results;
+    document.getElementById('sb-output-meta').textContent = item.data.meta || '';
+    document.getElementById('sb-form-wrap').style.display = 'none';
+    document.getElementById('sb-loading').style.display = 'none';
+    document.getElementById('sb-output').style.display = 'block';
+    renderConversation(sbResults.conversation || '', 'out-conversation');
+    renderEmail(sbResults.email || '', 'out-email');
+    renderObjections(sbResults.objections || '', 'out-objections');
+    renderFollowup(sbResults.followup || '', 'out-followup');
+    if (sbResults.tips) renderTips(sbResults.tips);
+    switchSbTab('conversation');
+  }
+  if (toolName === 'client-qualifier' && item.data.text) {
+    cqAnalysisText = item.data.text;
+    // Re-parse and render
+    if (typeof showToast === 'function') showToast('Loaded previous result', 'copied');
+  }
+}
+
 function switchSbTab(tab) {
   var newIdx = _sbTabNames.indexOf(tab);
   if (newIdx < 0 || _sbAnimating) return;
@@ -330,6 +459,12 @@ async function generateScript() {
     renderObjections(sbResults.objections, 'out-objections');
     renderFollowup('', 'out-followup');
     renderTips(sbResults.tips);
+
+    // Save to recent results
+    saveToolResult('script-builder', type + ' · ' + channel, {
+      results: { conversation: sbResults.conversation, email: sbResults.email, objections: sbResults.objections, tips: sbResults.tips, followup: '' },
+      meta: type + ' · ' + style + ' · ' + channel
+    });
 
     switchSbTab('conversation');
 

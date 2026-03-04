@@ -58,6 +58,9 @@
     <p>Enter basic details about a client's tax situation. Get an instant assessment of referral strength, likely resolution path, estimated case value, and talking points for the conversation.</p>
   </div>
 
+  <!-- Recent Results for Qualifier -->
+  <div id="cq-recent-results" class="rr-container" style="display:none"></div>
+
   <div class="cq-wrap">
     <div id="cq-error" style="display:none;background:#fff0f0;border:1px solid #ffcccc;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:14px;color:#c0392b;font-weight:500"></div>
     <div id="cq-form-wrap">
@@ -361,3 +364,8 @@
   </div>
 
 </div></section>
+<script>
+  if (typeof renderRecentResults === 'function') {
+    renderRecentResults('cq-recent-results', 'client-qualifier');
+  }
+</script>

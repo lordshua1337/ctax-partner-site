@@ -362,6 +362,26 @@
 @keyframes sbspin{to{transform:rotate(360deg)}}
 @media(max-width:768px){.sb-grid{grid-template-columns:1fr}}
 
+/* ── Script Builder Template Library ─────────────────── */
+.sb-tpl-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.sb-tpl-card{background:var(--white);border:1.5px solid var(--off2);border-radius:10px;padding:16px 12px;text-align:center;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.sb-tpl-card:hover{border-color:var(--blue);box-shadow:0 4px 16px rgba(11,95,216,0.1);transform:translateY(-2px)}
+.sb-tpl-icon{width:36px;height:36px;border-radius:50%;background:rgba(11,95,216,0.06);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;color:var(--blue)}
+.sb-tpl-name{font-size:12px;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:4px}
+.sb-tpl-desc{font-size:11px;color:var(--slate);line-height:1.3}
+@media(max-width:960px){.sb-tpl-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.sb-tpl-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ── Recent Results Panel (shared) ───────────────────── */
+.rr-container{margin-bottom:28px}
+.rr-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.rr-title{font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate)}
+.rr-list{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.rr-item{flex:0 0 auto;background:var(--white);border:1.5px solid var(--off2);border-radius:8px;padding:10px 16px;cursor:pointer;transition:all 0.13s;text-align:left;font-family:'DM Sans',sans-serif;min-width:160px;max-width:220px}
+.rr-item:hover{border-color:var(--blue);box-shadow:0 2px 8px rgba(11,95,216,0.08)}
+.rr-item-label{font-size:13px;font-weight:600;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rr-item-meta{font-size:11px;color:var(--slate);margin-top:2px}
+
 .price-ph{background:linear-gradient(155deg,var(--navy) 0%,var(--navy2) 60%,var(--navy3) 100%);padding:72px 0 0;position:relative;overflow:hidden;text-align:center}
 .price-ph::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 100%,rgba(11,95,216,0.1) 0%,transparent 60%);pointer-events:none}
 .price-ph-inner{position:relative;z-index:1;padding-bottom:60px}

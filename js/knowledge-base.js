@@ -128,13 +128,30 @@ async function askKnowledgeBase() {
     input.focus();
     if (kbSection) kbSection.scrollIntoView({behavior:'smooth',block:'start'});
 
+    // Save to recent results
+    if (typeof saveToolResult === 'function') {
+      saveToolResult('knowledge-base', question.length > 50 ? question.substring(0, 50) + '...' : question, {
+        question: question,
+        answer: text
+      });
+    }
+
   } catch(err) {
     document.getElementById('kb-loading').style.display = 'none';
     var isAuth = err.message && err.message.indexOf('401') !== -1;
     var msg = isAuth
       ? 'Invalid API key. Please check your key and try again.'
       : 'Unable to search right now. Please try again in a moment.';
-    alert(msg);
+    if (typeof showToast === 'function') {
+      showToast(msg, 'error');
+    } else {
+      // Fallback: show in the answer area
+      var ansEl = document.getElementById('kb-answer');
+      if (ansEl) {
+        document.getElementById('kb-answer-text').innerHTML = '<div style="color:#c0392b;font-weight:500">' + msg + '</div>';
+        ansEl.style.display = 'block';
+      }
+    }
   }
 }
 

@@ -27,7 +27,11 @@ async function qualifyClient() {
   var notes = document.getElementById('cq-notes').value.trim();
 
   if (!debt || !issue || !years) {
-    alert('Please fill in at least the tax debt, issue type, and years affected.');
+    var cqErr = document.getElementById('cq-error');
+    if (cqErr) {
+      cqErr.textContent = 'Please fill in at least the tax debt, issue type, and years affected.';
+      cqErr.style.display = 'block';
+    }
     return;
   }
 
@@ -124,6 +128,16 @@ async function qualifyClient() {
 
     document.getElementById('cq-loading').style.display = 'none';
     document.getElementById('cq-output').style.display = 'block';
+
+    // Save to recent results
+    if (typeof saveToolResult === 'function') {
+      saveToolResult('client-qualifier', (result.verdict_title || result.verdict) + ' · ' + debt, {
+        text: cqAnalysisText,
+        verdict: result.verdict,
+        debt: debt,
+        issue: issue
+      });
+    }
 
   } catch(err) {
     clearInterval(mint);
