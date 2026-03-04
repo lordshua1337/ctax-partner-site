@@ -233,6 +233,115 @@ var PB_THEMES = [
     desc: 'Organic mountains, warm earth tones',
     preview: { bg: '#faf6f1', hero: '#3d2e22', accent: '#946640' },
     tokens: PB_BOHO_PALETTES[0].tokens
+  },
+  {
+    id: 'corporate',
+    label: 'Corporate Blue',
+    desc: 'Professional blue, high trust, clean',
+    preview: { bg: '#f8fafc', hero: '#1e3a5f', accent: '#2563eb' },
+    tokens: {
+      '--pb-bg-0': '#ffffff',
+      '--pb-bg-1': '#f8fafc',
+      '--pb-bg-2': '#f1f5f9',
+      '--pb-bg-3': '#e2e8f0',
+      '--pb-text-0': '#0f172a',
+      '--pb-text-1': '#475569',
+      '--pb-text-2': '#94a3b8',
+      '--pb-border': '#e2e8f0',
+      '--pb-border-subtle': '#f1f5f9',
+      '--pb-accent': '#2563eb',
+      '--pb-accent-hover': '#3b82f6',
+      '--pb-accent-soft': 'rgba(37, 99, 235, 0.08)',
+      '--pb-accent-glow': 'rgba(37, 99, 235, 0.20)',
+      '--pb-shadow-sm': '0 1px 2px rgba(15, 23, 42, 0.05)',
+      '--pb-shadow-md': '0 4px 12px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04)',
+      '--pb-shadow-lg': '0 12px 40px rgba(15, 23, 42, 0.10), 0 4px 12px rgba(15, 23, 42, 0.05)',
+      '--pb-shadow-xl': '0 24px 80px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.05)',
+      '--pb-glass-bg': 'rgba(255, 255, 255, 0.85)',
+      '--pb-glass-border': 'rgba(37, 99, 235, 0.08)'
+    }
+  },
+  {
+    id: 'luxury',
+    label: 'Luxury Dark',
+    desc: 'Black + gold -- premium feel',
+    preview: { bg: '#0c0c0c', hero: '#1a1a1a', accent: '#d4a843' },
+    tokens: {
+      '--pb-bg-0': '#0c0c0c',
+      '--pb-bg-1': '#161616',
+      '--pb-bg-2': '#1f1f1f',
+      '--pb-bg-3': '#2a2a2a',
+      '--pb-text-0': '#f5f0e8',
+      '--pb-text-1': '#b8a88a',
+      '--pb-text-2': '#7a6e5c',
+      '--pb-border': 'rgba(212, 168, 67, 0.15)',
+      '--pb-border-subtle': 'rgba(212, 168, 67, 0.06)',
+      '--pb-accent': '#d4a843',
+      '--pb-accent-hover': '#e2bc5e',
+      '--pb-accent-soft': 'rgba(212, 168, 67, 0.10)',
+      '--pb-accent-glow': 'rgba(212, 168, 67, 0.25)',
+      '--pb-btn-text': '#0c0c0c',
+      '--pb-shadow-sm': '0 1px 2px rgba(0,0,0,0.5)',
+      '--pb-shadow-md': '0 4px 12px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.4)',
+      '--pb-shadow-lg': '0 12px 40px rgba(0,0,0,0.7), 0 4px 12px rgba(0,0,0,0.4)',
+      '--pb-shadow-xl': '0 24px 80px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.4)',
+      '--pb-glass-bg': 'rgba(22, 22, 22, 0.85)',
+      '--pb-glass-border': 'rgba(212, 168, 67, 0.12)'
+    }
+  },
+  {
+    id: 'fresh',
+    label: 'Fresh Green',
+    desc: 'Clean, natural, trustworthy',
+    preview: { bg: '#fafdf7', hero: '#f0fdf4', accent: '#16a34a' },
+    tokens: {
+      '--pb-bg-0': '#fafdf7',
+      '--pb-bg-1': '#f0fdf4',
+      '--pb-bg-2': '#dcfce7',
+      '--pb-bg-3': '#bbf7d0',
+      '--pb-text-0': '#14532d',
+      '--pb-text-1': '#3f6212',
+      '--pb-text-2': '#65a30d',
+      '--pb-border': '#bbf7d0',
+      '--pb-border-subtle': '#dcfce7',
+      '--pb-accent': '#16a34a',
+      '--pb-accent-hover': '#22c55e',
+      '--pb-accent-soft': 'rgba(22, 163, 74, 0.08)',
+      '--pb-accent-glow': 'rgba(22, 163, 74, 0.20)',
+      '--pb-shadow-sm': '0 1px 2px rgba(20, 83, 45, 0.05)',
+      '--pb-shadow-md': '0 4px 12px rgba(20, 83, 45, 0.07), 0 1px 3px rgba(20, 83, 45, 0.04)',
+      '--pb-shadow-lg': '0 12px 40px rgba(20, 83, 45, 0.09), 0 4px 12px rgba(20, 83, 45, 0.05)',
+      '--pb-shadow-xl': '0 24px 80px rgba(20, 83, 45, 0.12), 0 4px 12px rgba(20, 83, 45, 0.05)',
+      '--pb-glass-bg': 'rgba(250, 253, 247, 0.85)',
+      '--pb-glass-border': 'rgba(22, 163, 74, 0.08)'
+    }
+  },
+  {
+    id: 'sunset',
+    label: 'Warm Sunset',
+    desc: 'Orange + coral -- energetic, warm',
+    preview: { bg: '#fffbeb', hero: '#fff7ed', accent: '#ea580c' },
+    tokens: {
+      '--pb-bg-0': '#fffbeb',
+      '--pb-bg-1': '#fff7ed',
+      '--pb-bg-2': '#ffedd5',
+      '--pb-bg-3': '#fed7aa',
+      '--pb-text-0': '#431407',
+      '--pb-text-1': '#7c2d12',
+      '--pb-text-2': '#c2410c',
+      '--pb-border': '#fed7aa',
+      '--pb-border-subtle': '#ffedd5',
+      '--pb-accent': '#ea580c',
+      '--pb-accent-hover': '#f97316',
+      '--pb-accent-soft': 'rgba(234, 88, 12, 0.08)',
+      '--pb-accent-glow': 'rgba(234, 88, 12, 0.20)',
+      '--pb-shadow-sm': '0 1px 2px rgba(67, 20, 7, 0.05)',
+      '--pb-shadow-md': '0 4px 12px rgba(67, 20, 7, 0.07), 0 1px 3px rgba(67, 20, 7, 0.04)',
+      '--pb-shadow-lg': '0 12px 40px rgba(67, 20, 7, 0.09), 0 4px 12px rgba(67, 20, 7, 0.05)',
+      '--pb-shadow-xl': '0 24px 80px rgba(67, 20, 7, 0.12), 0 4px 12px rgba(67, 20, 7, 0.05)',
+      '--pb-glass-bg': 'rgba(255, 251, 235, 0.85)',
+      '--pb-glass-border': 'rgba(234, 88, 12, 0.08)'
+    }
   }
 ];
 
@@ -250,6 +359,23 @@ var PB_ACCENT_COLORS = [
   { id: 'slate',   color: '#475569', hover: '#64748b', label: 'Slate' }
 ];
 
+
+// ================================================================
+//  Font Pairings (10 curated Google Fonts combos)
+// ================================================================
+
+var PB_FONT_PAIRINGS = [
+  { id: 'classic', label: 'Classic', heading: 'DM Serif Display', body: 'DM Sans', desc: 'Default -- elegant serif + clean sans', googleUrl: '' },
+  { id: 'modern', label: 'Modern', heading: 'Inter', body: 'Inter', desc: 'Clean and geometric', googleUrl: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap' },
+  { id: 'editorial', label: 'Editorial', heading: 'Playfair Display', body: 'Source Sans 3', desc: 'Magazine-style contrast', googleUrl: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap' },
+  { id: 'geometric', label: 'Geometric', heading: 'Space Grotesk', body: 'DM Sans', desc: 'Tech-forward precision', googleUrl: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap' },
+  { id: 'humanist', label: 'Humanist', heading: 'Libre Baskerville', body: 'Nunito Sans', desc: 'Warm and readable', googleUrl: 'https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Nunito+Sans:wght@300;400;600&display=swap' },
+  { id: 'bold', label: 'Bold', heading: 'Oswald', body: 'Lato', desc: 'High impact headlines', googleUrl: 'https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Lato:wght@300;400;700&display=swap' },
+  { id: 'elegant', label: 'Elegant', heading: 'Cormorant Garamond', body: 'Montserrat', desc: 'Luxury and refinement', googleUrl: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap' },
+  { id: 'techy', label: 'Techy', heading: 'JetBrains Mono', body: 'Inter', desc: 'Developer aesthetic', googleUrl: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;600&display=swap' },
+  { id: 'warm', label: 'Warm', heading: 'Merriweather', body: 'Open Sans', desc: 'Friendly and approachable', googleUrl: 'https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap' },
+  { id: 'clean', label: 'Clean', heading: 'Poppins', body: 'Poppins', desc: 'Round and modern', googleUrl: 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap' }
+];
 
 // ================================================================
 //  Boho palette helpers
@@ -443,6 +569,44 @@ function pbBuildThemePanel() {
     h += '</div>';
   }
 
+  // Font picker
+  var savedFont = localStorage.getItem('ctax_pb_font') || 'classic';
+  h += '<div class="pb-tp-section-label">Font Pairing</div>';
+  h += '<div class="pb-tp-fonts">';
+  PB_FONT_PAIRINGS.forEach(function(fp) {
+    var active = fp.id === savedFont ? ' pb-tp-font-active' : '';
+    h += '<button class="pb-tp-font' + active + '" onclick="pbSelectFont(\'' + fp.id + '\')">';
+    h += '<span class="pb-tp-font-sample" style="font-family:\'' + fp.heading + '\', serif">Aa</span>';
+    h += '<span class="pb-tp-font-info">';
+    h += '<span class="pb-tp-font-name">' + fp.label + '</span>';
+    h += '<span class="pb-tp-font-desc">' + fp.desc + '</span>';
+    h += '</span>';
+    h += '</button>';
+  });
+  h += '</div>';
+
+  // Section background picker
+  h += '<div class="pb-tp-section-label">Section Backgrounds</div>';
+  h += '<div class="pb-tp-bg-options">';
+  var bgOptions = [
+    { cls: '', label: 'Default' },
+    { cls: 'pb-bg-gradient-warm', label: 'Warm' },
+    { cls: 'pb-bg-gradient-cool', label: 'Cool' },
+    { cls: 'pb-bg-gradient-sunset', label: 'Sunset' },
+    { cls: 'pb-bg-gradient-forest', label: 'Forest' },
+    { cls: 'pb-bg-pattern-dots', label: 'Dots' },
+    { cls: 'pb-bg-pattern-grid', label: 'Grid' },
+    { cls: 'pb-bg-pattern-diagonal', label: 'Diagonal' }
+  ];
+  bgOptions.forEach(function(opt) {
+    h += '<button class="pb-tp-bg-btn" onclick="pbApplySectionBg(\'' + opt.cls + '\')" title="' + opt.label + '">';
+    h += '<span class="pb-tp-bg-preview ' + opt.cls + '"></span>';
+    h += '<span>' + opt.label + '</span>';
+    h += '</button>';
+  });
+  h += '</div>';
+  h += '<p class="pb-tp-bg-hint">Select a section in the editor, then click a background to apply it.</p>';
+
   panel.innerHTML = h;
 }
 
@@ -484,6 +648,71 @@ function pbResetAccent() {
   localStorage.removeItem('ctax_pb_accent');
   pbApplyThemeToCanvas();
   pbBuildThemePanel();
+}
+
+function pbSelectFont(fontId) {
+  localStorage.setItem('ctax_pb_font', fontId);
+  pbApplyFontToCanvas();
+  pbBuildThemePanel();
+}
+
+function pbApplyFontToCanvas() {
+  if (!pbEditor) return;
+  var fontId = localStorage.getItem('ctax_pb_font') || 'classic';
+  var pairing = null;
+  for (var i = 0; i < PB_FONT_PAIRINGS.length; i++) {
+    if (PB_FONT_PAIRINGS[i].id === fontId) { pairing = PB_FONT_PAIRINGS[i]; break; }
+  }
+  if (!pairing) return;
+
+  // Inject Google Font link into canvas iframe
+  var frame = pbEditor.Canvas.getFrameEl();
+  if (frame && frame.contentDocument && pairing.googleUrl) {
+    var doc = frame.contentDocument;
+    var existingLink = doc.getElementById('pb-google-font');
+    if (existingLink) existingLink.remove();
+    var link = doc.createElement('link');
+    link.id = 'pb-google-font';
+    link.rel = 'stylesheet';
+    link.href = pairing.googleUrl;
+    doc.head.appendChild(link);
+  }
+
+  // Apply font CSS variables via inline style injection
+  if (frame && frame.contentDocument) {
+    var doc = frame.contentDocument;
+    var existingStyle = doc.getElementById('pb-font-override');
+    if (existingStyle) existingStyle.remove();
+    var style = doc.createElement('style');
+    style.id = 'pb-font-override';
+    style.textContent = ':root { --pb-font-heading: "' + pairing.heading + '", serif; --pb-font-body: "' + pairing.body + '", sans-serif; }';
+    doc.head.appendChild(style);
+  }
+}
+
+function pbApplySectionBg(className) {
+  if (!pbEditor) return;
+  var selected = pbEditor.getSelected();
+  if (!selected) {
+    if (typeof showToast === 'function') showToast('Select a section first, then choose a background', 'info');
+    return;
+  }
+
+  // Remove existing background classes
+  var bgClasses = ['pb-bg-gradient-warm', 'pb-bg-gradient-cool', 'pb-bg-gradient-sunset', 'pb-bg-gradient-forest', 'pb-bg-pattern-dots', 'pb-bg-pattern-grid', 'pb-bg-pattern-diagonal'];
+  var currentClasses = selected.getClasses ? selected.getClasses() : [];
+  bgClasses.forEach(function(cls) {
+    if (currentClasses.indexOf(cls) !== -1) {
+      selected.removeClass(cls);
+    }
+  });
+
+  // Add new class if not "Default"
+  if (className) {
+    selected.addClass(className);
+  }
+  if (typeof pbSave === 'function') pbSave();
+  if (typeof showToast === 'function') showToast('Background applied', 'success');
 }
 
 function pbGetAccentOverride() {
@@ -911,6 +1140,11 @@ function pbApplyThemeToCanvas() {
   // Update body bg
   doc.body.style.background = tokens['--pb-bg-0'];
   doc.body.style.color = tokens['--pb-text-0'];
+
+  // Apply selected font pairing
+  if (typeof pbApplyFontToCanvas === 'function') {
+    pbApplyFontToCanvas();
+  }
 
   pbUpdateThemeIndicator(theme, accent, bohoPal);
 }

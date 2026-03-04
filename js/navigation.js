@@ -291,12 +291,41 @@ function renderLandingPage(slug) {
   var canvasCss = (typeof PB_CANVAS_CSS !== 'undefined') ? PB_CANVAS_CSS : '';
   var presetCSS = (typeof pbGetPresetInlineCSS === 'function') ? pbGetPresetInlineCSS() : '';
   var fontLinks = (typeof PB_FONT_LINKS !== 'undefined') ? PB_FONT_LINKS : '';
+  // Countdown timer script for published pages
+  var countdownScript = '<script>' +
+    '(function(){' +
+    'var els=document.querySelectorAll(".pb-countdown");' +
+    'els.forEach(function(el){' +
+    'var hours=parseInt(el.getAttribute("data-pb-hours"))||48;' +
+    'var key="pb_cd_"+hours;' +
+    'var stored=localStorage.getItem(key);' +
+    'var end;' +
+    'if(stored){end=parseInt(stored)}' +
+    'else{end=Date.now()+hours*3600000;localStorage.setItem(key,end)}' +
+    'function tick(){' +
+    'var left=Math.max(0,end-Date.now());' +
+    'var d=Math.floor(left/86400000);' +
+    'var h=Math.floor((left%86400000)/3600000);' +
+    'var m=Math.floor((left%3600000)/60000);' +
+    'var s=Math.floor((left%60000)/1000);' +
+    'var dn=el.querySelector("[data-pb-unit=days]");' +
+    'var hn=el.querySelector("[data-pb-unit=hours]");' +
+    'var mn=el.querySelector("[data-pb-unit=minutes]");' +
+    'var sn=el.querySelector("[data-pb-unit=seconds]");' +
+    'if(dn)dn.textContent=String(d).padStart(2,"0");' +
+    'if(hn)hn.textContent=String(h).padStart(2,"0");' +
+    'if(mn)mn.textContent=String(m).padStart(2,"0");' +
+    'if(sn)sn.textContent=String(s).padStart(2,"0");' +
+    'if(left>0)requestAnimationFrame(tick)}' +
+    'tick()})})()' +
+    '<\/script>';
+
   var fullHtml = '<!DOCTYPE html><html lang="en"><head>' +
     '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">' +
     '<title>' + page.title + '</title>' +
     fontLinks +
     '<style>' + presetCSS + '\n' + canvasCss + '\n' + (page.css || '') + '</style>' +
-    '</head><body>' + (page.html || '') + '</body></html>';
+    '</head><body>' + (page.html || '') + countdownScript + '</body></html>';
 
   lpEl.innerHTML = '<div class="lp-back-bar">' +
     '<button class="lp-back-btn" onclick="exitLandingPage();showPage(\'portal\')">' +

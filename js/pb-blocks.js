@@ -107,6 +107,88 @@ var PB_BLOCK_DEFS = [
     ].join('\n')
   },
 
+  {
+    id: 'hero-video',
+    label: 'Hero: Video Embed',
+    category: 'Heroes',
+    media: '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><polygon points="10 8 16 12 10 16" fill="currentColor" opacity="0.3"/></svg>',
+    content: [
+      '<section class="pb-hero-video">',
+      '  <div class="pb-hero-video-text">',
+      '    <div class="pb-badge">See How It Works</div>',
+      '    <h1>Watch How We Resolve IRS Debt</h1>',
+      '    <p>In under 2 minutes, see how our licensed team has helped over 50,000 people settle tax debt, stop collections, and move forward.</p>',
+      '    <a href="#" class="pb-btn pb-btn-glow">Get a Free Consultation</a>',
+      '  </div>',
+      '  <div class="pb-hero-video-embed">',
+      '    <div class="pb-video-wrapper">',
+      '      <div class="pb-video-placeholder" onclick="this.innerHTML=\'<iframe src=&quot;https://www.youtube.com/embed/dQw4w9WgXcQ&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen style=&quot;width:100%;height:100%;position:absolute;inset:0&quot;></iframe>\';this.style.cursor=\'default\'">',
+      '        <svg width="64" height="64" viewBox="0 0 24 24" fill="var(--pb-accent)" stroke="none"><polygon points="5 3 19 12 5 21"/></svg>',
+      '        <span>Click to play video</span>',
+      '      </div>',
+      '    </div>',
+      '  </div>',
+      '</section>'
+    ].join('\n')
+  },
+
+  {
+    id: 'hero-countdown',
+    label: 'Hero: Countdown Timer',
+    category: 'Heroes',
+    media: '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    content: [
+      '<section class="pb-hero-countdown">',
+      '  <div class="pb-badge">Limited Time Offer</div>',
+      '  <h1>Free Tax Debt Analysis -- Offer Ends Soon</h1>',
+      '  <p class="pb-hero-sub">For a limited time, get a complete IRS account review at no cost. Find out exactly what you owe and what options are available.</p>',
+      '  <div class="pb-countdown" data-pb-hours="48">',
+      '    <div class="pb-countdown-block"><span class="pb-cd-num" data-pb-unit="days">02</span><span class="pb-cd-label">Days</span></div>',
+      '    <div class="pb-countdown-sep">:</div>',
+      '    <div class="pb-countdown-block"><span class="pb-cd-num" data-pb-unit="hours">00</span><span class="pb-cd-label">Hours</span></div>',
+      '    <div class="pb-countdown-sep">:</div>',
+      '    <div class="pb-countdown-block"><span class="pb-cd-num" data-pb-unit="minutes">00</span><span class="pb-cd-label">Minutes</span></div>',
+      '    <div class="pb-countdown-sep">:</div>',
+      '    <div class="pb-countdown-block"><span class="pb-cd-num" data-pb-unit="seconds">00</span><span class="pb-cd-label">Seconds</span></div>',
+      '  </div>',
+      '  <a href="#" class="pb-btn pb-btn-glow">Claim Your Free Analysis</a>',
+      '  <p class="pb-cta-trust">No cost. No obligation. Available for a limited time.</p>',
+      '</section>'
+    ].join('\n')
+  },
+
+  {
+    id: 'hero-split-form',
+    label: 'Hero: Split + Form',
+    category: 'Heroes',
+    media: '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="13" y1="3" x2="13" y2="21"/><line x1="15" y1="8" x2="20" y2="8"/><line x1="15" y1="11" x2="20" y2="11"/><line x1="15" y1="14" x2="20" y2="14"/></svg>',
+    content: [
+      '<section class="pb-hero-split-form">',
+      '  <div class="pb-hero-split-text">',
+      '    <div class="pb-badge">Referred by Your Tax Professional</div>',
+      '    <h1>Resolve Your IRS Debt. Start With a Free Review.</h1>',
+      '    <p>Over 50,000 people have used this team to settle tax debt, stop penalties, and get a fresh start. Your tax professional sent you here because it works.</p>',
+      '    <div class="pb-trust-row pb-trust-row-compact">',
+      '      <div class="pb-trust-item"><span class="pb-trust-val">$2.3B+</span><span class="pb-trust-label">Resolved</span></div>',
+      '      <div class="pb-trust-item"><span class="pb-trust-val">A+</span><span class="pb-trust-label">BBB Rating</span></div>',
+      '      <div class="pb-trust-item"><span class="pb-trust-val">14 Yrs</span><span class="pb-trust-label">Experience</span></div>',
+      '    </div>',
+      '  </div>',
+      '  <div class="pb-hero-form-card">',
+      '    <h3>Get Your Free Consultation</h3>',
+      '    <p>Fill this out and a tax expert will call you within 24 hours.</p>',
+      '    <form class="pb-form">',
+      '      <input type="text" placeholder="Full Name"/>',
+      '      <input type="email" placeholder="Email Address"/>',
+      '      <input type="tel" placeholder="Phone Number"/>',
+      '      <button type="button" class="pb-btn">Get My Free Review</button>',
+      '      <p class="pb-form-security">&#128274; 100% confidential. No spam.</p>',
+      '    </form>',
+      '  </div>',
+      '</section>'
+    ].join('\n')
+  },
+
   // ================================================================
   //  SOCIAL PROOF (3 variants)
   // ================================================================

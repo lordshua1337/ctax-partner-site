@@ -84,6 +84,8 @@ function pbInit() {
   // Ensure canvas styles are loaded (fallback: inject inline)
   pbEditor.on('canvas:frame:load', function() {
     pbInjectCanvasStyles();
+    // Start countdown timers in the canvas
+    pbStartCanvasCountdowns();
   });
 
   // Add custom blocks
@@ -92,8 +94,8 @@ function pbInit() {
   // Auto-save on change
   pbEditor.on('change:changesCount', function() { pbSave(); });
 
-  // Update block count
-  pbEditor.on('component:add', pbUpdateCount);
+  // Update block count + start countdowns on new blocks
+  pbEditor.on('component:add', function() { pbUpdateCount(); setTimeout(pbStartCanvasCountdowns, 300); });
   pbEditor.on('component:remove', pbUpdateCount);
   pbUpdateCount();
 
@@ -225,6 +227,12 @@ function pbSetDevice(device) {
   document.querySelectorAll('.pb-device-btn').forEach(function(btn) {
     btn.classList.toggle('pb-device-active', btn.getAttribute('data-device') === device);
   });
+  // Phone frame for mobile preview
+  var canvasArea = document.querySelector('.pb-canvas-area');
+  if (canvasArea) {
+    canvasArea.classList.toggle('pb-phone-frame', device === 'Mobile');
+    canvasArea.classList.toggle('pb-tablet-frame', device === 'Tablet');
+  }
 }
 
 function pbShowPanel(panel) {
@@ -1415,6 +1423,38 @@ function pbNormalizeColor(color) {
     return '#' + r + g + b;
   }
   return color;
+}
+
+// ══════════════════════════════════════════
+//  Countdown timer for canvas preview
+// ══════════════════════════════════════════
+function pbStartCanvasCountdowns() {
+  if (!pbEditor) return;
+  var frame = pbEditor.Canvas.getFrameEl();
+  if (!frame || !frame.contentDocument) return;
+  var doc = frame.contentDocument;
+  var els = doc.querySelectorAll('.pb-countdown');
+  els.forEach(function(el) {
+    var hours = parseInt(el.getAttribute('data-pb-hours')) || 48;
+    var end = Date.now() + hours * 3600000;
+    function tick() {
+      var left = Math.max(0, end - Date.now());
+      var d = Math.floor(left / 86400000);
+      var h = Math.floor((left % 86400000) / 3600000);
+      var m = Math.floor((left % 3600000) / 60000);
+      var s = Math.floor((left % 60000) / 1000);
+      var dn = el.querySelector('[data-pb-unit="days"]');
+      var hn = el.querySelector('[data-pb-unit="hours"]');
+      var mn = el.querySelector('[data-pb-unit="minutes"]');
+      var sn = el.querySelector('[data-pb-unit="seconds"]');
+      if (dn) dn.textContent = String(d).padStart(2, '0');
+      if (hn) hn.textContent = String(h).padStart(2, '0');
+      if (mn) mn.textContent = String(m).padStart(2, '0');
+      if (sn) sn.textContent = String(s).padStart(2, '0');
+      if (left > 0) requestAnimationFrame(tick);
+    }
+    tick();
+  });
 }
 
 // ══════════════════════════════════════════
