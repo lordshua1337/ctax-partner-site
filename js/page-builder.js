@@ -1135,6 +1135,15 @@ function pbRenderMyPages() {
     html += '<button class="pb-mp-btn" onclick="pbShowVersionHistory(\'' + pbEscapeAttr(page.slug) + '\')" title="Version history">';
     html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> History';
     html += '</button>';
+    html += '<button class="pb-mp-btn" onclick="pbShowFormSubmissions(\'' + pbEscapeAttr(page.slug) + '\')" title="View form submissions">';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Leads';
+    html += '</button>';
+    html += '<button class="pb-mp-btn" onclick="pbCreateABTest(\'' + pbEscapeAttr(page.slug) + '\')" title="Create A/B test">';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22V8"/><path d="M21 3l-9 9"/><path d="M3 3l9 9"/></svg> A/B Test';
+    html += '</button>';
+    html += '<button class="pb-mp-btn" onclick="pbExportTemplate(\'' + pbEscapeAttr(page.slug) + '\')" title="Export as template">';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Export';
+    html += '</button>';
     html += '<button class="pb-mp-btn pb-mp-btn-danger" onclick="pbConfirmUnpublish(\'' + pbEscapeAttr(page.slug) + '\')" title="Unpublish">';
     html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Unpublish';
     html += '</button>';
@@ -2148,6 +2157,346 @@ function pbRenderAnalytics(slug) {
 function pbCloseAnalytics() {
   var overlay = document.getElementById('pb-an-overlay');
   if (overlay) overlay.remove();
+}
+
+// ══════════════════════════════════════════
+//  M1P2C2: A/B Testing System
+// ══════════════════════════════════════════
+
+var PB_AB_TESTS_KEY = 'ctax_pb_ab_tests';
+
+function pbGetABTests() {
+  try {
+    var raw = localStorage.getItem(PB_AB_TESTS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+}
+
+function pbSetABTests(tests) {
+  try { localStorage.setItem(PB_AB_TESTS_KEY, JSON.stringify(tests)); } catch (e) {}
+}
+
+function pbCreateABTest(slugA) {
+  var pageA = pbFindPage(slugA);
+  if (!pageA) {
+    if (typeof showToast === 'function') showToast('Page not found.', 'warning');
+    return;
+  }
+
+  var name = prompt('Name this A/B test (e.g. "Hero headline test"):');
+  if (!name || !name.trim()) return;
+
+  // Create variant B as a copy
+  var pages = pbGetPages();
+  var slugB = slugA + '-variant-b';
+  var counter = 1;
+  while (pages.some(function(p) { return p.slug === slugB; })) {
+    counter++;
+    slugB = slugA + '-variant-b-' + counter;
+  }
+
+  var now = new Date().toISOString();
+  var pageB = Object.assign({}, pageA, {
+    slug: slugB,
+    title: pageA.title + ' (Variant B)',
+    publishedAt: now,
+    updatedAt: now
+  });
+  pbSetPages(pages.concat([pageB]));
+
+  // Create test record
+  var tests = pbGetABTests();
+  tests.push({
+    id: 'ab-' + Date.now(),
+    name: name.trim(),
+    slugA: slugA,
+    slugB: slugB,
+    createdAt: now,
+    status: 'running',
+    trafficSplit: 50 // 50/50 split
+  });
+  pbSetABTests(tests);
+
+  pbRenderMyPages();
+  if (typeof showToast === 'function') {
+    showToast('A/B test created! Edit Variant B to make changes, then compare analytics.', 'success');
+  }
+}
+
+function pbShowABTestResults() {
+  var tests = pbGetABTests();
+  if (tests.length === 0) {
+    if (typeof showToast === 'function') showToast('No A/B tests running. Create one from My Pages.', 'info');
+    return;
+  }
+
+  var overlay = document.createElement('div');
+  overlay.className = 'pb-ab-overlay';
+  overlay.id = 'pb-ab-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) pbCloseABResults(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'pb-ab-modal';
+
+  var html = '<div class="pb-ab-header">';
+  html += '<div class="pb-ab-title">A/B Test Results</div>';
+  html += '<button class="pb-ab-close" onclick="pbCloseABResults()">&times;</button>';
+  html += '</div>';
+  html += '<div class="pb-ab-body">';
+
+  var analytics = pbGetAnalytics();
+
+  tests.forEach(function(test) {
+    var dataA = analytics[test.slugA] || { views: 0, formSubmissions: 0, ctaClicks: 0 };
+    var dataB = analytics[test.slugB] || { views: 0, formSubmissions: 0, ctaClicks: 0 };
+    var convA = dataA.views > 0 ? Math.round((dataA.formSubmissions / dataA.views) * 100) : 0;
+    var convB = dataB.views > 0 ? Math.round((dataB.formSubmissions / dataB.views) * 100) : 0;
+
+    var winner = '';
+    if (dataA.views >= 10 && dataB.views >= 10) {
+      winner = convA > convB ? 'A' : convB > convA ? 'B' : 'Tie';
+    }
+
+    html += '<div class="pb-ab-test">';
+    html += '<div class="pb-ab-test-name">' + pbEscapeHtml(test.name) + '</div>';
+    html += '<div class="pb-ab-test-date">Started ' + new Date(test.createdAt).toLocaleDateString() + '</div>';
+
+    html += '<div class="pb-ab-comparison">';
+
+    // Variant A
+    html += '<div class="pb-ab-variant' + (winner === 'A' ? ' pb-ab-winner' : '') + '">';
+    html += '<div class="pb-ab-variant-label">Variant A' + (winner === 'A' ? ' -- WINNER' : '') + '</div>';
+    html += '<div class="pb-ab-variant-slug">' + test.slugA + '</div>';
+    html += '<div class="pb-ab-metrics">';
+    html += '<div class="pb-ab-metric"><span class="pb-ab-metric-val">' + dataA.views + '</span><span class="pb-ab-metric-label">Views</span></div>';
+    html += '<div class="pb-ab-metric"><span class="pb-ab-metric-val">' + dataA.formSubmissions + '</span><span class="pb-ab-metric-label">Conversions</span></div>';
+    html += '<div class="pb-ab-metric"><span class="pb-ab-metric-val">' + convA + '%</span><span class="pb-ab-metric-label">Conv. Rate</span></div>';
+    html += '</div></div>';
+
+    // VS divider
+    html += '<div class="pb-ab-vs">VS</div>';
+
+    // Variant B
+    html += '<div class="pb-ab-variant' + (winner === 'B' ? ' pb-ab-winner' : '') + '">';
+    html += '<div class="pb-ab-variant-label">Variant B' + (winner === 'B' ? ' -- WINNER' : '') + '</div>';
+    html += '<div class="pb-ab-variant-slug">' + test.slugB + '</div>';
+    html += '<div class="pb-ab-metrics">';
+    html += '<div class="pb-ab-metric"><span class="pb-ab-metric-val">' + dataB.views + '</span><span class="pb-ab-metric-label">Views</span></div>';
+    html += '<div class="pb-ab-metric"><span class="pb-ab-metric-val">' + dataB.formSubmissions + '</span><span class="pb-ab-metric-label">Conversions</span></div>';
+    html += '<div class="pb-ab-metric"><span class="pb-ab-metric-val">' + convB + '%</span><span class="pb-ab-metric-label">Conv. Rate</span></div>';
+    html += '</div></div>';
+
+    html += '</div>'; // comparison
+
+    if (!winner && (dataA.views < 10 || dataB.views < 10)) {
+      html += '<div class="pb-ab-note">Need at least 10 views per variant to determine a winner.</div>';
+    }
+
+    html += '<div class="pb-ab-actions">';
+    html += '<button class="pb-ab-action-btn" onclick="pbEndABTest(\'' + test.id + '\')">End Test</button>';
+    html += '</div>';
+    html += '</div>';
+  });
+
+  html += '</div>';
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function pbCloseABResults() {
+  var el = document.getElementById('pb-ab-overlay');
+  if (el) el.remove();
+}
+
+function pbEndABTest(testId) {
+  if (!confirm('End this A/B test? The variant pages will remain published.')) return;
+  var tests = pbGetABTests().map(function(t) {
+    if (t.id === testId) return Object.assign({}, t, { status: 'ended', endedAt: new Date().toISOString() });
+    return t;
+  });
+  pbSetABTests(tests);
+  pbCloseABResults();
+  if (typeof showToast === 'function') showToast('A/B test ended. Review results anytime.', 'info');
+}
+
+// ══════════════════════════════════════════
+//  M1P2C2: Form Submission Handler
+// ══════════════════════════════════════════
+
+var PB_FORM_SUBS_KEY = 'ctax_pb_form_submissions';
+
+function pbGetFormSubmissions() {
+  try {
+    var raw = localStorage.getItem(PB_FORM_SUBS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+
+function pbHandleFormSubmit(slug, formData) {
+  var subs = pbGetFormSubmissions();
+  if (!subs[slug]) subs[slug] = [];
+
+  var entry = {
+    submittedAt: new Date().toISOString(),
+    data: formData
+  };
+  subs[slug].push(entry);
+
+  try { localStorage.setItem(PB_FORM_SUBS_KEY, JSON.stringify(subs)); } catch (e) {}
+
+  // Track in analytics
+  pbTrackFormSubmit(slug);
+
+  return entry;
+}
+
+function pbShowFormSubmissions(slug) {
+  var subs = pbGetFormSubmissions();
+  var entries = subs[slug] || [];
+
+  var overlay = document.createElement('div');
+  overlay.className = 'pb-fs-overlay';
+  overlay.id = 'pb-fs-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) pbCloseFormSubs(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'pb-fs-modal';
+
+  var html = '<div class="pb-fs-header">';
+  html += '<div class="pb-fs-title">Form Submissions: ' + pbEscapeHtml(slug) + ' (' + entries.length + ')</div>';
+  html += '<div style="display:flex;gap:8px">';
+  if (entries.length > 0) {
+    html += '<button class="pb-fs-export" onclick="pbExportFormSubs(\'' + pbEscapeAttr(slug) + '\')">Export CSV</button>';
+  }
+  html += '<button class="pb-fs-close" onclick="pbCloseFormSubs()">&times;</button>';
+  html += '</div></div>';
+
+  html += '<div class="pb-fs-body">';
+  if (entries.length === 0) {
+    html += '<div class="pb-fs-empty">No form submissions yet. Visitors who fill out forms on your landing page will appear here.</div>';
+  } else {
+    entries.slice().reverse().forEach(function(entry, i) {
+      html += '<div class="pb-fs-entry">';
+      html += '<div class="pb-fs-entry-date">' + new Date(entry.submittedAt).toLocaleString() + '</div>';
+      html += '<div class="pb-fs-entry-fields">';
+      for (var key in entry.data) {
+        if (entry.data.hasOwnProperty(key)) {
+          html += '<div class="pb-fs-field">';
+          html += '<span class="pb-fs-field-label">' + pbEscapeHtml(key) + '</span>';
+          html += '<span class="pb-fs-field-val">' + pbEscapeHtml(entry.data[key]) + '</span>';
+          html += '</div>';
+        }
+      }
+      html += '</div></div>';
+    });
+  }
+  html += '</div>';
+
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function pbCloseFormSubs() {
+  var el = document.getElementById('pb-fs-overlay');
+  if (el) el.remove();
+}
+
+function pbExportFormSubs(slug) {
+  var subs = pbGetFormSubmissions();
+  var entries = subs[slug] || [];
+  if (entries.length === 0) return;
+
+  // Collect all unique field keys
+  var keys = ['submittedAt'];
+  entries.forEach(function(e) {
+    for (var k in e.data) {
+      if (keys.indexOf(k) === -1) keys.push(k);
+    }
+  });
+
+  // Build CSV
+  var csv = keys.join(',') + '\n';
+  entries.forEach(function(e) {
+    var row = keys.map(function(k) {
+      var val = k === 'submittedAt' ? e.submittedAt : (e.data[k] || '');
+      return '"' + String(val).replace(/"/g, '""') + '"';
+    });
+    csv += row.join(',') + '\n';
+  });
+
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = slug + '-submissions.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  if (typeof showToast === 'function') showToast('CSV exported!', 'success');
+}
+
+// ══════════════════════════════════════════
+//  M1P2C2: Template Import/Export
+// ══════════════════════════════════════════
+
+function pbExportTemplate(slug) {
+  var page = pbFindPage(slug);
+  if (!page) return;
+
+  var template = {
+    type: 'ctax-pb-template',
+    version: 1,
+    name: page.title,
+    html: page.html,
+    css: page.css,
+    exportedAt: new Date().toISOString()
+  };
+
+  var json = JSON.stringify(template, null, 2);
+  var blob = new Blob([json], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = (page.slug || 'template') + '.ctax-template.json';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  if (typeof showToast === 'function') showToast('Template exported!', 'success');
+}
+
+function pbImportTemplate() {
+  var input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        var template = JSON.parse(ev.target.result);
+        if (template.type !== 'ctax-pb-template') {
+          if (typeof showToast === 'function') showToast('Not a valid CTAX template file.', 'error');
+          return;
+        }
+        if (!pbEditor) {
+          if (typeof showToast === 'function') showToast('Open the Page Builder first.', 'warning');
+          return;
+        }
+        pbEditor.setComponents(template.html || '');
+        pbEditor.setStyle(template.css || '');
+        pbInjectCanvasStyles();
+        pbSave();
+        if (typeof showToast === 'function') showToast('Template "' + template.name + '" imported!', 'success');
+      } catch (err) {
+        if (typeof showToast === 'function') showToast('Failed to import template: invalid file.', 'error');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 
 // ══════════════════════════════════════════
