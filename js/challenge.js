@@ -197,6 +197,9 @@ function chInit() {
   chRenderLeaderboard(state);
   chRenderCatchUp(state);
   chRenderStreakFreeze(state);
+  chRenderPostChallenge(state);
+  chRenderWhatsNext(state);
+  chRenderDigestToggle();
   chStartAutoDetect();
 }
 
@@ -221,6 +224,11 @@ function chRenderGrid(state) {
     html += '<div class="' + cls + '" title="Day ' + i + ': ' + dayData.title + '">' + inner + '</div>';
   }
   grid.innerHTML = html;
+}
+
+// Helper: get correct day list based on track
+function chGetDays(state) {
+  return (state && state.advancedTrack && typeof CH_ADVANCED_DAYS !== 'undefined') ? CH_ADVANCED_DAYS : CH_DAYS;
 }
 
 // ═══ M4P2C1: TOOL CONTEXT PRE-FILL MAP ═══
@@ -992,6 +1000,351 @@ function chStartAutoDetect() {
       chAutoDetect();
     }
   }, 30000);
+}
+
+// ═══ M4P3C1: COMPLETION EXPERIENCE ═══
+
+// Rainmaker Certificate (Day 30 completion)
+function chGenerateCertificate() {
+  var state = chGetState();
+  var doneDays = chCountDone(state);
+  if (doneDays < 30) {
+    if (typeof showToast === 'function') showToast('Complete all 30 days to earn your certificate!', 'warning');
+    return;
+  }
+
+  var canvas = document.createElement('canvas');
+  canvas.width = 1056;
+  canvas.height = 816;
+  var ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, 1056, 816);
+
+  // Border
+  ctx.strokeStyle = '#0B5FD8';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(32, 32, 992, 752);
+  ctx.strokeStyle = 'rgba(11,95,216,0.15)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(44, 44, 968, 728);
+
+  // Corner accents
+  var corners = [[52, 52], [996, 52], [52, 764], [996, 764]];
+  corners.forEach(function(c) {
+    ctx.fillStyle = '#00C8E0';
+    ctx.beginPath();
+    ctx.arc(c[0], c[1], 6, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // Top accent line
+  var topGrad = ctx.createLinearGradient(328, 0, 728, 0);
+  topGrad.addColorStop(0, '#0B5FD8');
+  topGrad.addColorStop(1, '#00C8E0');
+  ctx.fillStyle = topGrad;
+  ctx.fillRect(428, 80, 200, 3);
+
+  // Certificate title
+  ctx.fillStyle = '#0a1628';
+  ctx.font = '16px DM Sans, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('COMMUNITY TAX ENTERPRISE PARTNER PROGRAM', 528, 130);
+
+  ctx.font = 'bold 42px DM Serif Display, serif';
+  ctx.fillStyle = '#0B5FD8';
+  ctx.fillText('Certificate of Achievement', 528, 190);
+
+  // Divider
+  ctx.fillStyle = '#0B5FD8';
+  ctx.fillRect(378, 210, 300, 2);
+
+  // Body
+  ctx.fillStyle = '#555';
+  ctx.font = '16px DM Sans, sans-serif';
+  ctx.fillText('This certifies that', 528, 270);
+
+  ctx.fillStyle = '#0a1628';
+  ctx.font = 'bold 36px DM Serif Display, serif';
+  ctx.fillText('Partner', 528, 320);
+
+  ctx.fillStyle = '#555';
+  ctx.font = '16px DM Sans, sans-serif';
+  ctx.fillText('has successfully completed the', 528, 370);
+
+  ctx.fillStyle = '#0a1628';
+  ctx.font = 'bold 28px DM Serif Display, serif';
+  ctx.fillText('30-Day Momentum Challenge', 528, 410);
+
+  // Stats
+  ctx.fillStyle = '#888';
+  ctx.font = '14px DM Sans, sans-serif';
+  ctx.fillText('Achieving the rank of RAINMAKER', 528, 460);
+
+  ctx.fillStyle = '#0a1628';
+  ctx.font = 'bold 20px DM Sans, sans-serif';
+  ctx.fillText(state.points.toLocaleString() + ' Points', 370, 510);
+  ctx.fillText(state.bestStreak + '-Day Best Streak', 528, 510);
+  var badgeCount = 0;
+  if (state.badges) { for (var b in state.badges) { if (state.badges[b]) badgeCount++; } }
+  ctx.fillText(badgeCount + '/7 Badges', 686, 510);
+
+  ctx.fillStyle = '#aaa';
+  ctx.font = '13px DM Sans, sans-serif';
+  ctx.fillText('Total Points', 370, 530);
+  ctx.fillText('Consistency', 528, 530);
+  ctx.fillText('Achievements', 686, 530);
+
+  // Date
+  var today = new Date();
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var dateStr = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
+  ctx.fillStyle = '#888';
+  ctx.font = '14px DM Sans, sans-serif';
+  ctx.fillText('Completed on ' + dateStr, 528, 600);
+
+  // Signature line
+  ctx.strokeStyle = '#ccc';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(378, 680);
+  ctx.lineTo(678, 680);
+  ctx.stroke();
+  ctx.fillStyle = '#888';
+  ctx.font = '12px DM Sans, sans-serif';
+  ctx.fillText('Community Tax Partner Success Team', 528, 700);
+
+  // Bottom accent
+  var botGrad = ctx.createLinearGradient(328, 0, 728, 0);
+  botGrad.addColorStop(0, '#0B5FD8');
+  botGrad.addColorStop(1, '#00C8E0');
+  ctx.fillStyle = botGrad;
+  ctx.fillRect(428, 740, 200, 3);
+
+  // Download
+  try {
+    var link = document.createElement('a');
+    link.download = 'Rainmaker-Certificate.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    if (typeof showToast === 'function') showToast('Rainmaker Certificate downloaded!', 'success');
+  } catch (e) {
+    if (typeof showToast === 'function') showToast('Could not generate certificate.', 'error');
+  }
+}
+
+// Post-Challenge Dashboard
+function chRenderPostChallenge(state) {
+  var el = document.getElementById('ch-post-challenge');
+  if (!el) return;
+
+  var doneDays = chCountDone(state);
+  if (doneDays < 30) {
+    el.style.display = 'none';
+    return;
+  }
+
+  el.style.display = 'block';
+
+  // Calculate stats
+  var skipped = 0;
+  for (var k in state.skippedDays) { if (state.skippedDays[k]) skipped++; }
+  var badgeCount = 0;
+  if (state.badges) { for (var b in state.badges) { if (state.badges[b]) badgeCount++; } }
+
+  // Tool usage from history
+  var toolUse = { scripts: 0, ads: 0, quals: 0, pages: 0 };
+  if (typeof getToolHistory === 'function') {
+    var hist = getToolHistory();
+    hist.forEach(function(h) {
+      if (h.tool === 'script-builder') toolUse.scripts++;
+      else if (h.tool === 'ad-maker') toolUse.ads++;
+      else if (h.tool === 'client-qualifier') toolUse.quals++;
+    });
+  }
+  try {
+    var pages = JSON.parse(localStorage.getItem('ctax_pb_pages') || '[]');
+    toolUse.pages = pages.length;
+  } catch (e) {}
+
+  var html = '<div class="ch-pc-header">'
+    + '<div class="ch-pc-crown"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>'
+    + '<div class="ch-pc-title">Challenge Complete: The Rainmaker</div>'
+    + '<div class="ch-pc-sub">30 days of building, learning, and earning. Here is your journey in numbers.</div>'
+    + '</div>';
+
+  // Stats grid
+  html += '<div class="ch-pc-stats">'
+    + '<div class="ch-pc-stat"><div class="ch-pc-stat-val">' + state.points.toLocaleString() + '</div><div class="ch-pc-stat-label">Total Points</div></div>'
+    + '<div class="ch-pc-stat"><div class="ch-pc-stat-val">' + state.bestStreak + '</div><div class="ch-pc-stat-label">Best Streak</div></div>'
+    + '<div class="ch-pc-stat"><div class="ch-pc-stat-val">' + badgeCount + '/7</div><div class="ch-pc-stat-label">Badges Earned</div></div>'
+    + '<div class="ch-pc-stat"><div class="ch-pc-stat-val">' + skipped + '</div><div class="ch-pc-stat-label">Days Skipped</div></div>'
+    + '</div>';
+
+  // Tools mastered
+  html += '<div class="ch-pc-tools-header">Tools You Used</div>'
+    + '<div class="ch-pc-tools">'
+    + '<div class="ch-pc-tool"><span class="ch-pc-tool-val">' + toolUse.scripts + '</span> Scripts Created</div>'
+    + '<div class="ch-pc-tool"><span class="ch-pc-tool-val">' + toolUse.ads + '</span> Ads Made</div>'
+    + '<div class="ch-pc-tool"><span class="ch-pc-tool-val">' + toolUse.quals + '</span> Clients Qualified</div>'
+    + '<div class="ch-pc-tool"><span class="ch-pc-tool-val">' + toolUse.pages + '</span> Pages Built</div>'
+    + '</div>';
+
+  // Certificate button
+  html += '<div class="ch-pc-actions">'
+    + '<button class="ch-pc-cert-btn" onclick="chGenerateCertificate()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg> Download Rainmaker Certificate</button>'
+    + '</div>';
+
+  el.innerHTML = html;
+}
+
+// "What's Next" Recommendations
+function chRenderWhatsNext(state) {
+  var el = document.getElementById('ch-whats-next');
+  if (!el) return;
+
+  var doneDays = chCountDone(state);
+
+  // Build recommendations based on what was skipped/completed
+  var recs = [];
+
+  // Check for skipped tool-linked tasks
+  var skippedTools = {};
+  for (var k in state.skippedDays) {
+    if (state.skippedDays[k]) {
+      var d = parseInt(k, 10);
+      var task = CH_DAYS[d - 1];
+      if (task && task.tool) {
+        skippedTools[task.tool] = (skippedTools[task.tool] || 0) + 1;
+      }
+    }
+  }
+
+  if (skippedTools['portal-sec-ai-scripts']) {
+    recs.push({ icon: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>', title: 'Master the Script Builder', desc: 'You skipped some scripting tasks. Generate 3 scripts this week to build your library.', action: 'portal-sec-ai-scripts' });
+  }
+  if (skippedTools['portal-sec-ai-admaker']) {
+    recs.push({ icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>', title: 'Create Ad Campaigns', desc: 'Try the Ad Maker with different templates to find what resonates.', action: 'portal-sec-ai-admaker' });
+  }
+  if (skippedTools['portal-sec-submit']) {
+    recs.push({ icon: '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>', title: 'Submit More Referrals', desc: 'The more referrals you submit, the faster your commissions grow.', action: 'portal-sec-submit' });
+  }
+
+  // Always recommend these
+  recs.push({ icon: '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>', title: 'Generate Your 90-Day Roadmap', desc: 'Use the Business Planner to build a strategic growth plan for the next quarter.', action: 'portal-sec-planner' });
+
+  if (doneDays >= 30) {
+    recs.push({ icon: '<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 105.64-8.36"/>', title: 'Take the Advanced Challenge', desc: '30 more days of harder tasks. Restart with the Advanced Track.', action: 'restart-advanced' });
+  }
+
+  if (!recs.length) {
+    el.style.display = 'none';
+    return;
+  }
+
+  el.style.display = 'block';
+  var html = '<div class="ch-wn-header">'
+    + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+    + '<span>What\'s Next</span>'
+    + '</div>'
+    + '<div class="ch-wn-list">';
+
+  recs.forEach(function(rec) {
+    var onclick = rec.action === 'restart-advanced'
+      ? 'chRestartAdvanced()'
+      : 'portalNav(document.querySelector(\'[onclick*=\"' + rec.action + '\"]\'),\'' + rec.action + '\')';
+    html += '<div class="ch-wn-card" onclick="' + onclick + '">'
+      + '<div class="ch-wn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + rec.icon + '</svg></div>'
+      + '<div class="ch-wn-info">'
+      + '<div class="ch-wn-title">' + rec.title + '</div>'
+      + '<div class="ch-wn-desc">' + rec.desc + '</div>'
+      + '</div>'
+      + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--mist)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
+      + '</div>';
+  });
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// Challenge Restart with Advanced Track
+var CH_ADVANCED_DAYS = [
+  { day: 1, title: 'Audit your referral pipeline', desc: 'Review all submitted referrals. Categorize by status and follow up on any stalled cases.', pts: 200, tool: 'portal-sec-referrals' },
+  { day: 2, title: 'Create 3 niche-specific scripts', desc: 'Generate scripts for 3 different client archetypes using the Script Builder.', pts: 250, tool: 'portal-sec-ai-scripts' },
+  { day: 3, title: 'Build a landing page for referrals', desc: 'Use the Page Builder to create a dedicated referral capture page.', pts: 300, tool: 'portal-sec-page-builder' },
+  { day: 4, title: 'Run an A/B ad test', desc: 'Create 2 ad variants in Ad Maker and prepare to test them.', pts: 250, tool: 'portal-sec-ai-admaker' },
+  { day: 5, title: 'Qualify 5 potential clients', desc: 'Use the Client Qualifier on 5 different client scenarios.', pts: 300, tool: 'portal-sec-ai-qualifier' },
+  { day: 6, title: 'Design a drip email sequence', desc: 'Create a 5-email follow-up series for cold prospects.', pts: 350, tool: 'portal-sec-ai-scripts' },
+  { day: 7, title: 'Analyze your first month metrics', desc: 'Review dashboard analytics and document your biggest wins and lessons.', pts: 200, tool: 'portal-sec-dashboard' },
+  { day: 8, title: 'Build a competitor comparison sheet', desc: 'Use AI tools to create a comparison of your services vs doing nothing.', pts: 300, tool: 'portal-sec-ai-scripts' },
+  { day: 9, title: 'Submit 2 referrals today', desc: 'Double your daily output. Submit 2 qualified referrals.', pts: 400, tool: 'portal-sec-submit' },
+  { day: 10, title: 'Create your personal partner brand guide', desc: 'Document your brand colors, messaging, and value proposition.', pts: 250, tool: 'portal-sec-settings' },
+  { day: 11, title: 'Master objection handling', desc: 'Practice all 5 objection scenarios from the Playbook.', pts: 200, tool: 'portal-sec-playbook' },
+  { day: 12, title: 'Build a social proof portfolio', desc: 'Create 3 social media posts showcasing partner program benefits.', pts: 300, tool: 'portal-sec-ai-admaker' },
+  { day: 13, title: 'Revenue optimization review', desc: 'Revisit your projections and adjust based on actual data.', pts: 200, tool: 'portal-sec-calculator' },
+  { day: 14, title: 'Teach someone about the program', desc: 'Explain the partner referral process to a colleague.', pts: 250, tool: null },
+  { day: 15, title: 'Advanced client qualification', desc: 'Qualify a complex multi-year tax situation using the AI tool.', pts: 350, tool: 'portal-sec-ai-qualifier' },
+  { day: 16, title: 'Create a video script', desc: 'Generate a 60-second video script explaining IRS resolution.', pts: 300, tool: 'portal-sec-ai-scripts' },
+  { day: 17, title: 'Pipeline velocity check', desc: 'Follow up on ALL pending referrals. Document status of each.', pts: 250, tool: 'portal-sec-referrals' },
+  { day: 18, title: 'Build a workshop presentation', desc: 'Create a 10-slide presentation for a client workshop on tax debt.', pts: 400, tool: 'portal-sec-ai-scripts' },
+  { day: 19, title: 'Expand your referral network', desc: 'Identify 5 new professionals who could become referral partners.', pts: 300, tool: null },
+  { day: 20, title: 'Submit 3 referrals today', desc: 'Triple your output. This is where volume meets quality.', pts: 500, tool: 'portal-sec-submit' },
+  { day: 21, title: 'Create a case study template', desc: 'Build a success story template for future client results.', pts: 300, tool: 'portal-sec-ai-scripts' },
+  { day: 22, title: 'Optimize your landing page', desc: 'Improve your published page with better copy and CTAs.', pts: 350, tool: 'portal-sec-page-builder' },
+  { day: 23, title: 'Design a seasonal campaign', desc: 'Create time-sensitive marketing for tax season.', pts: 350, tool: 'portal-sec-ai-admaker' },
+  { day: 24, title: 'Advanced revenue planning', desc: 'Model 3 growth scenarios in the Business Planner.', pts: 300, tool: 'portal-sec-planner' },
+  { day: 25, title: 'Create a referral partner one-pager', desc: 'Build a PDF one-pager explaining the program to potential partners.', pts: 400, tool: 'portal-sec-ai-scripts' },
+  { day: 26, title: 'Master batch workflows', desc: 'Generate 5 scripts, 3 ads, and 2 qualification reports in one session.', pts: 500, tool: null },
+  { day: 27, title: 'Review and update your growth roadmap', desc: 'Revise your 90-Day plan based on 60 days of data.', pts: 250, tool: 'portal-sec-planner' },
+  { day: 28, title: 'Mentor a newer partner', desc: 'Share your best practices with someone who is just starting.', pts: 300, tool: null },
+  { day: 29, title: 'Set quarterly revenue targets', desc: 'Based on your actual run rate, set specific Q2 targets.', pts: 250, tool: 'portal-sec-calculator' },
+  { day: 30, title: 'Celebrate and plan your next quarter', desc: 'You completed the Advanced Track. Document your system and prepare to scale.', pts: 600, tool: null }
+];
+
+function chRestartAdvanced() {
+  var state = chGetState();
+  state.advancedTrack = true;
+  state.currentDay = 1;
+  state.completedDays = {};
+  state.skippedDays = {};
+  state.streak = 0;
+  // Keep points, badges, and bestStreak from original challenge
+  state.advancedStartDate = new Date().toISOString().slice(0, 10);
+  chSaveState(state);
+
+  if (typeof showToast === 'function') {
+    showToast('Advanced Track started! 30 harder tasks await. Good luck, Rainmaker.', 'success');
+  }
+
+  chInit();
+}
+
+// Weekly Digest Flag
+function chToggleWeeklyDigest() {
+  try {
+    var flag = localStorage.getItem('ctax_ch_weekly_digest') === 'true';
+    localStorage.setItem('ctax_ch_weekly_digest', flag ? 'false' : 'true');
+    chRenderDigestToggle();
+    if (typeof showToast === 'function') {
+      showToast(flag ? 'Weekly digest disabled.' : 'Weekly digest enabled. You\'ll receive weekly progress summaries.', 'info');
+    }
+  } catch (e) {}
+}
+
+function chRenderDigestToggle() {
+  var el = document.getElementById('ch-digest-toggle');
+  if (!el) return;
+  var enabled = localStorage.getItem('ctax_ch_weekly_digest') === 'true';
+  el.innerHTML = '<div class="ch-digest-inner">'
+    + '<div class="ch-digest-info">'
+    + '<div class="ch-digest-label">Weekly Progress Digest</div>'
+    + '<div class="ch-digest-desc">Receive a weekly summary of your challenge progress and upcoming tasks.</div>'
+    + '</div>'
+    + '<button class="ch-digest-btn' + (enabled ? ' ch-digest-on' : '') + '" onclick="chToggleWeeklyDigest()">'
+    + (enabled ? 'On' : 'Off')
+    + '</button>'
+    + '</div>';
 }
 
 // ── PDF EXPORT: 30-Day Momentum Challenge Progress Report ──

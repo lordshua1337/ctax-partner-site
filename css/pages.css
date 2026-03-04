@@ -4933,6 +4933,66 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 [data-theme="dark"] .ch-freeze-label{color:#e0e4ec}
 [data-theme="dark"] .ch-freeze-desc{color:rgba(255,255,255,0.5)}
 
+/* M4P3: Post-Challenge Dashboard */
+.ch-post-challenge{background:linear-gradient(135deg,rgba(255,215,0,0.04),rgba(11,95,216,0.04));border:1px solid rgba(255,215,0,0.15);border-radius:16px;padding:28px 32px;margin-bottom:24px}
+.ch-pc-header{text-align:center;margin-bottom:24px}
+.ch-pc-crown{margin-bottom:12px}
+.ch-pc-title{font-family:'DM Serif Display',serif;font-size:24px;color:var(--navy)}
+.ch-pc-sub{font-size:14px;color:var(--body);margin-top:6px}
+.ch-pc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.ch-pc-stat{text-align:center;padding:16px 10px;background:var(--white);border-radius:12px;border:1px solid var(--off2)}
+.ch-pc-stat-val{font-family:'DM Serif Display',serif;font-size:24px;color:var(--navy)}
+.ch-pc-stat-label{font-size:11px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:0.05em;margin-top:4px}
+.ch-pc-tools-header{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:10px}
+.ch-pc-tools{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.ch-pc-tool{font-size:13px;color:var(--body);padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid var(--off2)}
+.ch-pc-tool-val{font-weight:700;color:var(--blue);margin-right:4px}
+.ch-pc-actions{text-align:center}
+.ch-pc-cert-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#FFD700,#FFA500);color:#0a1628;border:none;border-radius:10px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;box-shadow:0 4px 16px rgba(255,215,0,0.3)}
+.ch-pc-cert-btn:hover{box-shadow:0 6px 24px rgba(255,215,0,0.45);transform:translateY(-1px)}
+
+/* M4P3: What's Next Recommendations */
+.ch-whats-next{background:var(--white);border:1px solid var(--off2);border-radius:14px;padding:20px 24px;margin-bottom:24px}
+.ch-wn-header{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--navy);margin-bottom:16px}
+.ch-wn-list{display:flex;flex-direction:column;gap:8px}
+.ch-wn-card{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--off);border-radius:10px;border:1px solid var(--off2);cursor:pointer;transition:all 0.15s}
+.ch-wn-card:hover{border-color:var(--blue);box-shadow:0 2px 8px rgba(11,95,216,0.08);transform:translateX(4px)}
+.ch-wn-icon{width:40px;height:40px;border-radius:10px;background:rgba(11,95,216,0.06);display:flex;align-items:center;justify-content:center;color:var(--blue);flex-shrink:0}
+.ch-wn-info{flex:1;min-width:0}
+.ch-wn-title{font-size:14px;font-weight:600;color:var(--navy)}
+.ch-wn-desc{font-size:12px;color:var(--slate);margin-top:2px}
+
+/* M4P3: Weekly Digest Toggle */
+.ch-digest-toggle{margin-bottom:24px}
+.ch-digest-inner{display:flex;align-items:center;gap:16px;padding:14px 20px;background:var(--white);border:1px solid var(--off2);border-radius:12px}
+.ch-digest-info{flex:1;min-width:0}
+.ch-digest-label{font-size:14px;font-weight:700;color:var(--navy)}
+.ch-digest-desc{font-size:12px;color:var(--slate);margin-top:2px}
+.ch-digest-btn{padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif;border:1.5px solid var(--off2);background:var(--off);color:var(--slate)}
+.ch-digest-btn:hover{border-color:var(--blue)}
+.ch-digest-on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.ch-digest-on:hover{background:#0a4fb5}
+
+/* M4P3 Dark Mode */
+[data-theme="dark"] .ch-post-challenge{background:linear-gradient(135deg,rgba(255,215,0,0.03),rgba(75,163,255,0.03));border-color:rgba(255,215,0,0.1)}
+[data-theme="dark"] .ch-pc-title{color:#e0e4ec}
+[data-theme="dark"] .ch-pc-sub{color:rgba(255,255,255,0.6)}
+[data-theme="dark"] .ch-pc-stat{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ch-pc-stat-val{color:#e0e4ec}
+[data-theme="dark"] .ch-pc-tools-header{color:#e0e4ec}
+[data-theme="dark"] .ch-pc-tool{background:#141e30;border-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7)}
+[data-theme="dark"] .ch-whats-next{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ch-wn-header{color:#e0e4ec}
+[data-theme="dark"] .ch-wn-card{background:#0e1726;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ch-wn-card:hover{border-color:#4BA3FF}
+[data-theme="dark"] .ch-wn-icon{background:rgba(75,163,255,0.08)}
+[data-theme="dark"] .ch-wn-title{color:#e0e4ec}
+[data-theme="dark"] .ch-wn-desc{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .ch-digest-inner{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ch-digest-label{color:#e0e4ec}
+[data-theme="dark"] .ch-digest-desc{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .ch-digest-btn{background:#0e1726;border-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5)}
+
 /* Weekly Progress Grid */
 .ch-weeks{background:var(--white);border:1px solid var(--off2);border-radius:14px;padding:24px;margin-bottom:24px}
 .ch-weeks-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
