@@ -22,9 +22,12 @@
   <!-- Step 1: Inputs -->
   <div id="sb-form-wrap">
 
-    <!-- Template Library -->
-    <div style="text-align:center;margin-bottom:24px">
+    <!-- Template Library + Batch/Favorites -->
+    <div style="display:flex;justify-content:center;gap:8px;margin-bottom:24px;flex-wrap:wrap">
       <button class="btn btn-g" id="sb-templates-toggle" onclick="sbShowTemplates()">Use a Template</button>
+      <button class="btn btn-g" onclick="sbShowBatchModal()">Batch Generate</button>
+      <button class="btn btn-g" onclick="showFavoritesPanel()">Favorites</button>
+      <button class="btn btn-g" onclick="exportMarketingKit()">Export Kit</button>
     </div>
     <div id="sb-template-library" style="display:none;margin-bottom:32px">
       <div class="sb-tpl-grid"></div>

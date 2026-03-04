@@ -481,4 +481,117 @@ function resetAdMaker(){
     }
   }, 100);
 }
+// ══════════════════════════════════════════
+//  M2P1C2: Batch Ad Export (all sizes)
+// ══════════════════════════════════════════
+
+var AM_SIZES = [
+  { label: 'Facebook / LinkedIn (16:9)', ratio: '16:9', w: 1200, h: 628 },
+  { label: 'Instagram Square (1:1)', ratio: '1:1', w: 1080, h: 1080 },
+  { label: 'Instagram Story (9:16)', ratio: '9:16', w: 1080, h: 1920 },
+  { label: 'Pinterest (4:5)', ratio: '4:5', w: 1080, h: 1350 }
+];
+
+function amShowBatchExport() {
+  var inputs = window._amInputs;
+  if (!inputs || !inputs.firm) {
+    if (typeof showToast === 'function') showToast('Generate an ad first to export all sizes.', 'warning');
+    return;
+  }
+
+  var overlay = document.createElement('div');
+  overlay.className = 'am-batch-overlay';
+  overlay.id = 'am-batch-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) amCloseBatchExport(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'am-batch-modal';
+
+  var html = '<div class="am-batch-header">';
+  html += '<h3>Export All Ad Sizes</h3>';
+  html += '<button class="am-batch-close" onclick="amCloseBatchExport()">&times;</button>';
+  html += '</div>';
+  html += '<div class="am-batch-body">';
+  html += '<p class="am-batch-desc">Download your ad in every standard size. Each file is named with its dimensions.</p>';
+
+  html += '<div class="am-batch-sizes">';
+  AM_SIZES.forEach(function(s, i) {
+    html += '<div class="am-batch-size-item">';
+    html += '<div class="am-batch-size-label">' + s.label + '</div>';
+    html += '<div class="am-batch-size-dim">' + s.w + 'x' + s.h + '</div>';
+    html += '<div class="am-batch-size-status" id="am-batch-status-' + i + '">Ready</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  html += '<div id="am-batch-progress" class="am-batch-progress" style="display:none">';
+  html += '<div class="am-batch-progress-bar"><div class="am-batch-progress-fill" id="am-batch-fill"></div></div>';
+  html += '</div>';
+
+  html += '<div class="am-batch-actions">';
+  html += '<button class="am-batch-btn-all" id="am-batch-run" onclick="amRunBatchExport()">Download All Sizes</button>';
+  html += '</div>';
+  html += '</div>';
+
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function amCloseBatchExport() {
+  var el = document.getElementById('am-batch-overlay');
+  if (el) el.remove();
+}
+
+async function amRunBatchExport() {
+  var inputs = window._amInputs;
+  if (!inputs) return;
+
+  var runBtn = document.getElementById('am-batch-run');
+  if (runBtn) runBtn.disabled = true;
+  var progressEl = document.getElementById('am-batch-progress');
+  var fillEl = document.getElementById('am-batch-fill');
+  if (progressEl) progressEl.style.display = 'block';
+
+  // Create a temp container offscreen
+  var temp = document.createElement('div');
+  temp.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1';
+  document.body.appendChild(temp);
+
+  for (var i = 0; i < AM_SIZES.length; i++) {
+    var s = AM_SIZES[i];
+    var statusEl = document.getElementById('am-batch-status-' + i);
+    if (statusEl) { statusEl.textContent = 'Generating...'; statusEl.style.color = '#0b5fd8'; }
+
+    // Build the ad at this size
+    var fmtMap = { '16:9': '16x9', '1:1': '1x1', '4:5': '4x5', '9:16': '9x16' };
+    var fmt = fmtMap[s.ratio] || '16x9';
+    var cardHtml = buildStaticCard(inputs.firm, inputs.platform || 'Facebook', inputs.color, inputs.tagline, amLogoDataUrl, amCurrentTemplate, { w: s.w, h: s.h });
+
+    temp.innerHTML = '<div style="width:' + (s.w / 2) + 'px;height:' + (s.h / 2) + 'px;overflow:hidden">' + cardHtml + '</div>';
+
+    try {
+      if (typeof html2canvas !== 'undefined') {
+        var canvas = await html2canvas(temp.firstChild, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: null });
+        var link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = inputs.firm.replace(/\s+/g, '-').toLowerCase() + '-ctax-' + s.w + 'x' + s.h + '.png';
+        link.click();
+        if (statusEl) { statusEl.textContent = 'Downloaded'; statusEl.style.color = '#059669'; }
+      }
+    } catch (err) {
+      if (statusEl) { statusEl.textContent = 'Error'; statusEl.style.color = '#dc2626'; }
+    }
+
+    if (fillEl) fillEl.style.width = Math.round(((i + 1) / AM_SIZES.length) * 100) + '%';
+
+    // Small delay between downloads
+    await new Promise(function(resolve) { setTimeout(resolve, 500); });
+  }
+
+  temp.remove();
+  if (runBtn) { runBtn.disabled = false; runBtn.textContent = 'Done!'; }
+  if (typeof showToast === 'function') showToast('All ad sizes exported!', 'success');
+}
+
 // ── END AD MAKER ─────────────────────────────────────────────

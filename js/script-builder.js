@@ -641,4 +641,462 @@ function switchVariant(key) {
   renderVariantButtons();
 }
 
+
+// ══════════════════════════════════════════
+//  M2P1C2: Favorites System (cross-tool)
+// ══════════════════════════════════════════
+
+var TOOL_FAVORITES_KEY = 'ctax_tool_favorites';
+
+function getToolFavorites() {
+  try { return JSON.parse(localStorage.getItem(TOOL_FAVORITES_KEY) || '[]'); } catch (e) { return []; }
+}
+
+function setToolFavorites(favs) {
+  try { localStorage.setItem(TOOL_FAVORITES_KEY, JSON.stringify(favs)); } catch (e) {}
+}
+
+function toggleFavorite(toolName, label, data) {
+  var favs = getToolFavorites();
+  var existIdx = favs.findIndex(function(f) { return f.tool === toolName && f.label === label; });
+  if (existIdx >= 0) {
+    favs.splice(existIdx, 1);
+    setToolFavorites(favs);
+    if (typeof showToast === 'function') showToast('Removed from favorites', 'info');
+    return false;
+  }
+  favs.unshift({
+    tool: toolName,
+    label: label,
+    data: data,
+    favoritedAt: new Date().toISOString()
+  });
+  if (favs.length > 50) favs = favs.slice(0, 50);
+  setToolFavorites(favs);
+  if (typeof showToast === 'function') showToast('Added to favorites!', 'success');
+  return true;
+}
+
+function isFavorited(toolName, label) {
+  var favs = getToolFavorites();
+  return favs.some(function(f) { return f.tool === toolName && f.label === label; });
+}
+
+function showFavoritesPanel() {
+  var favs = getToolFavorites();
+
+  var overlay = document.createElement('div');
+  overlay.className = 'tf-overlay';
+  overlay.id = 'tf-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) closeFavoritesPanel(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'tf-modal';
+
+  var html = '<div class="tf-header">';
+  html += '<h3>Favorites</h3>';
+  html += '<div class="tf-header-actions">';
+  if (favs.length > 0) {
+    html += '<button class="tf-btn-export" onclick="exportFavoritesAsText()">Export All</button>';
+  }
+  html += '<button class="tf-close" onclick="closeFavoritesPanel()">&times;</button>';
+  html += '</div></div>';
+
+  html += '<div class="tf-body">';
+  if (favs.length === 0) {
+    html += '<div class="tf-empty">No favorites yet. Star results from any tool to save them here.</div>';
+  } else {
+    // Group by tool
+    var grouped = {};
+    favs.forEach(function(f) {
+      if (!grouped[f.tool]) grouped[f.tool] = [];
+      grouped[f.tool].push(f);
+    });
+
+    var toolLabels = {
+      'script-builder': 'Scripts',
+      'ad-maker': 'Ads',
+      'client-qualifier': 'Qualifications',
+      'knowledge-base': 'Knowledge Base'
+    };
+
+    Object.keys(grouped).forEach(function(tool) {
+      html += '<div class="tf-group">';
+      html += '<div class="tf-group-title">' + (toolLabels[tool] || tool) + ' (' + grouped[tool].length + ')</div>';
+      grouped[tool].forEach(function(fav) {
+        var date = new Date(fav.favoritedAt);
+        var dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        html += '<div class="tf-item">';
+        html += '<div class="tf-item-info">';
+        html += '<div class="tf-item-label">' + esc(fav.label) + '</div>';
+        html += '<div class="tf-item-date">' + dateStr + '</div>';
+        html += '</div>';
+        html += '<div class="tf-item-actions">';
+        html += '<button class="tf-item-load" onclick="closeFavoritesPanel();loadRecentResult(\'' + tool + '\',0)" title="Load">Load</button>';
+        html += '<button class="tf-item-remove" onclick="removeFavoriteByLabel(\'' + tool + '\',\'' + esc(fav.label).replace(/'/g, "\\'") + '\')" title="Remove">&times;</button>';
+        html += '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    });
+  }
+  html += '</div>';
+
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function closeFavoritesPanel() {
+  var el = document.getElementById('tf-overlay');
+  if (el) el.remove();
+}
+
+function removeFavoriteByLabel(tool, label) {
+  var favs = getToolFavorites().filter(function(f) { return !(f.tool === tool && f.label === label); });
+  setToolFavorites(favs);
+  closeFavoritesPanel();
+  showFavoritesPanel();
+}
+
+function exportFavoritesAsText() {
+  var favs = getToolFavorites();
+  if (!favs.length) return;
+
+  var text = '=== MY FAVORITES ===\nExported: ' + new Date().toLocaleString() + '\n\n';
+  var toolLabels = { 'script-builder': 'SCRIPTS', 'ad-maker': 'ADS', 'client-qualifier': 'QUALIFICATIONS', 'knowledge-base': 'KNOWLEDGE BASE' };
+
+  var grouped = {};
+  favs.forEach(function(f) { if (!grouped[f.tool]) grouped[f.tool] = []; grouped[f.tool].push(f); });
+
+  Object.keys(grouped).forEach(function(tool) {
+    text += '\n--- ' + (toolLabels[tool] || tool.toUpperCase()) + ' ---\n\n';
+    grouped[tool].forEach(function(fav, i) {
+      text += (i + 1) + '. ' + fav.label + '\n';
+      if (fav.data && fav.data.results) {
+        if (fav.data.results.conversation) text += '\nConversation Script:\n' + fav.data.results.conversation + '\n';
+        if (fav.data.results.email) text += '\nEmail:\n' + fav.data.results.email + '\n';
+      }
+      if (fav.data && fav.data.text) text += fav.data.text + '\n';
+      text += '\n';
+    });
+  });
+
+  var blob = new Blob([text], { type: 'text/plain' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'ctax-favorites.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+  if (typeof showToast === 'function') showToast('Favorites exported!', 'success');
+}
+
+
+// ══════════════════════════════════════════
+//  M2P1C2: Batch Script Generation
+// ══════════════════════════════════════════
+
+var _sbBatchRunning = false;
+var _sbBatchResults = [];
+
+function sbShowBatchModal() {
+  if (_sbBatchRunning) {
+    if (typeof showToast === 'function') showToast('Batch generation already in progress.', 'warning');
+    return;
+  }
+
+  var overlay = document.createElement('div');
+  overlay.className = 'sb-batch-overlay';
+  overlay.id = 'sb-batch-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay && !_sbBatchRunning) sbCloseBatch(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'sb-batch-modal';
+
+  var html = '<div class="sb-batch-header">';
+  html += '<h3>Batch Generate Scripts</h3>';
+  html += '<button class="sb-batch-close" onclick="sbCloseBatch()">&times;</button>';
+  html += '</div>';
+  html += '<div class="sb-batch-body">';
+  html += '<p class="sb-batch-desc">Select templates to generate scripts for all at once. Each uses the template\'s pre-filled context.</p>';
+
+  html += '<div class="sb-batch-select-all"><label><input type="checkbox" id="sb-batch-all" onchange="sbToggleBatchAll()"> Select All (' + SB_TEMPLATES.length + ' templates)</label></div>';
+
+  html += '<div class="sb-batch-list">';
+  SB_TEMPLATES.forEach(function(t, i) {
+    html += '<label class="sb-batch-item">';
+    html += '<input type="checkbox" value="' + i + '" class="sb-batch-cb">';
+    html += '<div class="sb-batch-item-info">';
+    html += '<div class="sb-batch-item-name">' + esc(t.name) + '</div>';
+    html += '<div class="sb-batch-item-meta">' + esc(t.type) + ' · ' + esc(t.channel) + '</div>';
+    html += '</div>';
+    html += '</label>';
+  });
+  html += '</div>';
+
+  html += '<div id="sb-batch-progress" class="sb-batch-progress" style="display:none">';
+  html += '<div class="sb-batch-progress-bar"><div class="sb-batch-progress-fill" id="sb-batch-fill"></div></div>';
+  html += '<div class="sb-batch-progress-text" id="sb-batch-text">0 / 0</div>';
+  html += '</div>';
+
+  html += '<div class="sb-batch-actions">';
+  html += '<button class="sb-batch-btn-run" id="sb-batch-run" onclick="sbRunBatch()">Generate Selected</button>';
+  html += '</div>';
+  html += '</div>';
+
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function sbCloseBatch() {
+  if (_sbBatchRunning) return;
+  var el = document.getElementById('sb-batch-overlay');
+  if (el) el.remove();
+}
+
+function sbToggleBatchAll() {
+  var allChecked = document.getElementById('sb-batch-all').checked;
+  document.querySelectorAll('.sb-batch-cb').forEach(function(cb) { cb.checked = allChecked; });
+}
+
+async function sbRunBatch() {
+  if (!CTAX_API_KEY) { if (!promptForApiKey()) { return; } }
+
+  var checkboxes = document.querySelectorAll('.sb-batch-cb:checked');
+  var indices = [];
+  checkboxes.forEach(function(cb) { indices.push(parseInt(cb.value)); });
+
+  if (indices.length === 0) {
+    if (typeof showToast === 'function') showToast('Select at least one template.', 'warning');
+    return;
+  }
+
+  _sbBatchRunning = true;
+  _sbBatchResults = [];
+  var runBtn = document.getElementById('sb-batch-run');
+  if (runBtn) runBtn.disabled = true;
+
+  var progressEl = document.getElementById('sb-batch-progress');
+  var fillEl = document.getElementById('sb-batch-fill');
+  var textEl = document.getElementById('sb-batch-text');
+  if (progressEl) progressEl.style.display = 'block';
+
+  var total = indices.length;
+  var completed = 0;
+
+  for (var i = 0; i < indices.length; i++) {
+    var idx = indices[i];
+    var t = SB_TEMPLATES[idx];
+    if (!t) continue;
+
+    if (textEl) textEl.textContent = (completed + 1) + ' / ' + total + ' — ' + t.name;
+
+    try {
+      var icpBlock = '';
+      if (typeof ICPContext !== 'undefined' && ICPContext.hasProfile()) {
+        icpBlock = ICPContext.getPromptContext() + '\n\n';
+      }
+
+      var prompt = icpBlock + 'You are an expert sales coach for Community Tax. Generate a complete referral script.\n\n' +
+        'PARTNER: ' + t.type + '\nSTYLE: ' + t.style + '\nCHANNEL: ' + t.channel + '\nRELATIONSHIP: ' + t.relationship + '\n' +
+        'SITUATION: ' + t.situation + '\nOBJECTION: ' + t.objection + '\n\n' +
+        'Generate 3 sections separated by "---SECTION---":\n' +
+        '1. Conversation script (200-300 words)\n' +
+        '2. Email template (Subject: line + body)\n' +
+        '3. 3 objection/response pairs';
+
+      var response = await fetch(CTAX_API_URL, {
+        method: 'POST',
+        headers: getApiHeaders(),
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1200,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+
+      var data = await response.json();
+      var text = data.content && data.content[0] ? data.content[0].text : '';
+      var sections = text.split('---SECTION---');
+
+      _sbBatchResults.push({
+        template: t.name,
+        type: t.type,
+        channel: t.channel,
+        conversation: (sections[0] || '').trim(),
+        email: (sections[1] || '').trim(),
+        objections: (sections[2] || '').trim()
+      });
+
+      // Save each to history
+      saveToolResult('script-builder', t.name + ' (batch)', {
+        results: { conversation: (sections[0] || '').trim(), email: (sections[1] || '').trim(), objections: (sections[2] || '').trim() },
+        meta: t.type + ' · ' + t.style + ' · ' + t.channel
+      });
+
+    } catch (err) {
+      _sbBatchResults.push({
+        template: t.name,
+        type: t.type,
+        channel: t.channel,
+        error: err.message || 'Generation failed'
+      });
+    }
+
+    completed++;
+    if (fillEl) fillEl.style.width = Math.round((completed / total) * 100) + '%';
+  }
+
+  _sbBatchRunning = false;
+  if (runBtn) runBtn.disabled = false;
+  if (textEl) textEl.textContent = 'Complete! ' + completed + ' scripts generated.';
+
+  trackToolUsage('script-builder');
+
+  // Show download button
+  var actionsEl = document.querySelector('.sb-batch-actions');
+  if (actionsEl) {
+    actionsEl.innerHTML = '<button class="sb-batch-btn-download" onclick="sbDownloadBatch()">Download All Scripts</button>' +
+      '<button class="sb-batch-btn-close" onclick="sbCloseBatch()">Close</button>';
+  }
+}
+
+function sbDownloadBatch() {
+  if (!_sbBatchResults.length) return;
+
+  var text = '=== BATCH SCRIPT GENERATION ===\n';
+  text += 'Generated: ' + new Date().toLocaleString() + '\n';
+  text += 'Total: ' + _sbBatchResults.length + ' scripts\n';
+  text += '='.repeat(50) + '\n\n';
+
+  _sbBatchResults.forEach(function(r, i) {
+    text += '\n' + '='.repeat(50) + '\n';
+    text += (i + 1) + '. ' + r.template + '\n';
+    text += 'Type: ' + r.type + ' | Channel: ' + r.channel + '\n';
+    text += '='.repeat(50) + '\n\n';
+
+    if (r.error) {
+      text += '[ERROR] ' + r.error + '\n';
+    } else {
+      text += '--- CONVERSATION SCRIPT ---\n\n' + r.conversation + '\n\n';
+      text += '--- EMAIL TEMPLATE ---\n\n' + r.email + '\n\n';
+      text += '--- OBJECTION RESPONSES ---\n\n' + r.objections + '\n\n';
+    }
+  });
+
+  var blob = new Blob([text], { type: 'text/plain' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'ctax-batch-scripts-' + new Date().toISOString().slice(0, 10) + '.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+  if (typeof showToast === 'function') showToast('All scripts downloaded!', 'success');
+}
+
+
+// ══════════════════════════════════════════
+//  M2P1C2: Marketing Kit PDF Export (all tools)
+// ══════════════════════════════════════════
+
+function exportMarketingKit() {
+  var history = getToolHistory();
+  var favs = getToolFavorites();
+
+  if (history.length === 0 && favs.length === 0) {
+    if (typeof showToast === 'function') showToast('Generate some content first to export your marketing kit.', 'warning');
+    return;
+  }
+
+  // Build HTML document for PDF
+  var doc = document.createElement('div');
+  doc.style.cssText = 'width:800px;padding:40px;font-family:system-ui,sans-serif;color:#111827;background:#fff';
+
+  // Cover
+  doc.innerHTML = '<div style="text-align:center;padding:80px 40px;margin-bottom:40px;background:linear-gradient(135deg,#0b5fd8 0%,#1e40af 100%);color:#fff;border-radius:16px">' +
+    '<h1 style="font-size:36px;font-weight:800;margin:0 0 12px">My Marketing Kit</h1>' +
+    '<p style="font-size:16px;opacity:0.85;margin:0">AI-Generated Content from CTAX Partner Portal</p>' +
+    '<p style="font-size:14px;opacity:0.6;margin:16px 0 0">Generated ' + new Date().toLocaleDateString() + '</p>' +
+    '</div>';
+
+  // Stats summary
+  var stats = getToolStats();
+  var totalGen = 0;
+  Object.keys(stats).forEach(function(k) { totalGen += stats[k].count || 0; });
+  doc.innerHTML += '<div style="display:flex;gap:16px;margin-bottom:32px">' +
+    '<div style="flex:1;padding:16px;background:#f0f9ff;border-radius:10px;text-align:center"><div style="font-size:28px;font-weight:800;color:#0b5fd8">' + totalGen + '</div><div style="font-size:12px;color:#6b7280">Total Generations</div></div>' +
+    '<div style="flex:1;padding:16px;background:#f0fdf4;border-radius:10px;text-align:center"><div style="font-size:28px;font-weight:800;color:#059669">' + favs.length + '</div><div style="font-size:12px;color:#6b7280">Favorites Saved</div></div>' +
+    '<div style="flex:1;padding:16px;background:#fef3c7;border-radius:10px;text-align:center"><div style="font-size:28px;font-weight:800;color:#d97706">' + history.length + '</div><div style="font-size:12px;color:#6b7280">Recent Results</div></div>' +
+    '</div>';
+
+  // Favorites section
+  if (favs.length > 0) {
+    doc.innerHTML += '<h2 style="font-size:22px;font-weight:700;margin:32px 0 16px;padding-bottom:8px;border-bottom:2px solid #e5e7eb">Starred Favorites</h2>';
+    favs.forEach(function(fav) {
+      doc.innerHTML += '<div style="margin-bottom:20px;padding:16px;border:1px solid #e5e7eb;border-radius:10px">' +
+        '<div style="font-size:14px;font-weight:700;color:#0b5fd8;margin-bottom:8px">' + esc(fav.label) + '</div>';
+      if (fav.data && fav.data.results) {
+        if (fav.data.results.conversation) {
+          doc.innerHTML += '<div style="font-size:12px;font-weight:600;color:#6b7280;margin:8px 0 4px">Conversation Script</div>' +
+            '<div style="font-size:13px;line-height:1.6;white-space:pre-wrap">' + esc(fav.data.results.conversation).substring(0, 500) + '...</div>';
+        }
+        if (fav.data.results.email) {
+          doc.innerHTML += '<div style="font-size:12px;font-weight:600;color:#6b7280;margin:8px 0 4px">Email Template</div>' +
+            '<div style="font-size:13px;line-height:1.6;white-space:pre-wrap">' + esc(fav.data.results.email).substring(0, 500) + '...</div>';
+        }
+      }
+      if (fav.data && fav.data.text) {
+        doc.innerHTML += '<div style="font-size:13px;line-height:1.6;white-space:pre-wrap">' + esc(fav.data.text).substring(0, 500) + '...</div>';
+      }
+      doc.innerHTML += '</div>';
+    });
+  }
+
+  // Recent history section
+  if (history.length > 0) {
+    doc.innerHTML += '<div style="page-break-before:always"></div>';
+    doc.innerHTML += '<h2 style="font-size:22px;font-weight:700;margin:32px 0 16px;padding-bottom:8px;border-bottom:2px solid #e5e7eb">Recent Activity</h2>';
+    history.slice(0, 10).forEach(function(item) {
+      var toolLabels = { 'script-builder': 'Script', 'ad-maker': 'Ad', 'client-qualifier': 'Qualification', 'knowledge-base': 'KB' };
+      doc.innerHTML += '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f3f4f6">' +
+        '<span style="font-size:11px;font-weight:600;padding:2px 8px;background:#f3f4f6;border-radius:4px">' + (toolLabels[item.tool] || item.tool) + '</span>' +
+        '<span style="font-size:13px;color:#111827">' + esc(item.label) + '</span>' +
+        '<span style="font-size:11px;color:#9ca3af;margin-left:auto">' + timeAgo(item.timestamp) + '</span>' +
+        '</div>';
+    });
+  }
+
+  // Footer
+  doc.innerHTML += '<div style="margin-top:40px;padding-top:16px;border-top:1px solid #e5e7eb;text-align:center;font-size:11px;color:#9ca3af">' +
+    'Generated by CTAX Partner Portal | ' + new Date().toLocaleDateString() + '</div>';
+
+  // Use html2pdf if available
+  if (typeof html2pdf !== 'undefined') {
+    document.body.appendChild(doc);
+    html2pdf().set({
+      margin: 0.5,
+      filename: 'CTAX-Marketing-Kit-' + new Date().toISOString().slice(0, 10) + '.pdf',
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    }).from(doc).save().then(function() {
+      doc.remove();
+      if (typeof showToast === 'function') showToast('Marketing Kit PDF exported!', 'success');
+    });
+  } else {
+    // Fallback: download as HTML
+    var htmlStr = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>CTAX Marketing Kit</title></head><body>' + doc.outerHTML + '</body></html>';
+    var blob = new Blob([htmlStr], { type: 'text/html' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'CTAX-Marketing-Kit.html';
+    a.click();
+    URL.revokeObjectURL(url);
+    if (typeof showToast === 'function') showToast('Marketing Kit exported as HTML!', 'success');
+  }
+}
+
 // ── END SCRIPT BUILDER ───────────────────────────────────────
