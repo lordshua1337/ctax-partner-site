@@ -197,6 +197,7 @@ function chInit() {
   chRenderLeaderboard(state);
   chRenderCatchUp(state);
   chRenderStreakFreeze(state);
+  chStartAutoDetect();
 }
 
 function chRenderGrid(state) {
@@ -222,6 +223,20 @@ function chRenderGrid(state) {
   grid.innerHTML = html;
 }
 
+// ═══ M4P2C1: TOOL CONTEXT PRE-FILL MAP ═══
+var CH_TOOL_PREFILL = {
+  4: { tool: 'portal-sec-ai-scripts', tpl: 0, label: 'Open Script Builder' },
+  6: { tool: 'portal-sec-marketing', label: 'Open Marketing Kit' },
+  9: { tool: 'portal-sec-ai-scripts', tpl: 1, label: 'Open Script Builder' },
+  10: { tool: 'portal-sec-submit', label: 'Submit a Referral' },
+  12: { tool: 'portal-sec-ai-admaker', label: 'Open Ad Maker' },
+  15: { tool: 'portal-sec-ai-qualifier', label: 'Open Client Qualifier' },
+  18: { tool: 'portal-sec-ai-scripts', tpl: 2, label: 'Open Script Builder' },
+  20: { tool: 'portal-sec-submit', label: 'Submit a Referral' },
+  24: { tool: 'portal-sec-ai-admaker', label: 'Open Ad Maker' },
+  30: { tool: 'portal-sec-submit', label: 'Submit a Referral' }
+};
+
 function chRenderToday(state) {
   var titleEl = document.getElementById('ch-today-title');
   var descEl = document.getElementById('ch-today-desc');
@@ -246,6 +261,28 @@ function chRenderToday(state) {
   }
   var whyText = CH_WHY[state.currentDay - 1] || '';
   whyEl.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> ' + whyText;
+
+  // M4P2: "Start Task" button that auto-navigates to linked tool
+  var startBtn = document.getElementById('ch-start-task');
+  if (!startBtn) {
+    startBtn = document.createElement('button');
+    startBtn.id = 'ch-start-task';
+    startBtn.className = 'ch-start-task-btn';
+    var actionsEl = document.querySelector('.ch-today-actions');
+    if (actionsEl) actionsEl.insertBefore(startBtn, actionsEl.firstChild);
+  }
+  var prefill = CH_TOOL_PREFILL[state.currentDay];
+  if (day.tool && !state.completedDays[state.currentDay]) {
+    startBtn.style.display = 'inline-flex';
+    startBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> '
+      + (prefill ? prefill.label : 'Start Task');
+    startBtn.onclick = function() { chStartTask(state.currentDay); };
+  } else {
+    startBtn.style.display = 'none';
+  }
+
+  // M4P2: Tool output preview for completed days
+  chRenderTaskOutput(state);
 
   if (state.completedDays[state.currentDay]) {
     if (todayWrap) todayWrap.classList.add('ch-today-completed');
@@ -683,6 +720,278 @@ function chRenderStreakFreeze(state) {
     state.streakFreezes = shouldHave;
     chSaveState(state);
   }
+}
+
+// ═══ M4P2C1: SMART TASK LINKING ═══
+
+// Navigate to linked tool and pre-fill context
+function chStartTask(dayNum) {
+  var day = CH_DAYS[dayNum - 1];
+  if (!day || !day.tool) return;
+
+  var prefill = CH_TOOL_PREFILL[dayNum];
+
+  // Navigate to the tool section
+  if (typeof portalNav === 'function') {
+    var navItem = document.querySelector('[onclick*="' + day.tool + '"]');
+    if (navItem) {
+      portalNav(navItem, day.tool);
+    }
+  }
+
+  // Pre-fill tool context where possible
+  if (prefill && prefill.tpl !== undefined) {
+    // Script Builder: select template
+    setTimeout(function() {
+      if (typeof sbUseTemplate === 'function') {
+        sbUseTemplate(prefill.tpl);
+      }
+    }, 500);
+  }
+
+  // Track that user started this task
+  try {
+    var starts = JSON.parse(localStorage.getItem('ctax_ch_task_starts') || '{}');
+    starts[dayNum] = Date.now();
+    localStorage.setItem('ctax_ch_task_starts', JSON.stringify(starts));
+  } catch (e) {}
+
+  if (typeof showToast === 'function') {
+    showToast('Day ' + dayNum + ' task opened. Complete it and come back to mark it done!', 'info');
+  }
+}
+
+// Auto-detect task completion based on tool usage
+function chAutoDetect() {
+  var state = chGetState();
+  if (state.completedDays[state.currentDay]) return;
+
+  var day = CH_DAYS[state.currentDay - 1];
+  if (!day || !day.tool) return;
+
+  var detected = false;
+  var toolKey = day.tool;
+
+  // Check tool history for recent activity matching today's task
+  if (typeof getToolHistory === 'function') {
+    var history = getToolHistory();
+    var now = Date.now();
+    var fiveMinAgo = now - (5 * 60 * 1000);
+
+    // Map challenge tool targets to tool history types
+    var toolTypeMap = {
+      'portal-sec-ai-scripts': 'script-builder',
+      'portal-sec-ai-admaker': 'ad-maker',
+      'portal-sec-ai-qualifier': 'client-qualifier'
+    };
+
+    var historyType = toolTypeMap[toolKey];
+    if (historyType) {
+      for (var i = history.length - 1; i >= 0; i--) {
+        if (history[i].tool === historyType && history[i].timestamp > fiveMinAgo) {
+          detected = true;
+          break;
+        }
+      }
+    }
+  }
+
+  // Check for referral submission (submit section usage)
+  if (toolKey === 'portal-sec-submit') {
+    try {
+      var subCount = parseInt(localStorage.getItem('ctax_referral_count') || '0', 10);
+      var lastSub = parseInt(localStorage.getItem('ctax_last_referral_ts') || '0', 10);
+      if (lastSub > Date.now() - (10 * 60 * 1000)) {
+        detected = true;
+      }
+    } catch (e) {}
+  }
+
+  if (detected) {
+    // Show auto-completion prompt
+    chShowAutoDetectPrompt(state.currentDay, day);
+  }
+}
+
+function chShowAutoDetectPrompt(dayNum, day) {
+  var el = document.getElementById('ch-auto-detect');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'ch-auto-detect';
+    el.className = 'ch-auto-detect';
+    var todayCard = document.getElementById('ch-today');
+    if (todayCard) todayCard.parentNode.insertBefore(el, todayCard.nextSibling);
+  }
+
+  el.innerHTML = '<div class="ch-ad-inner">'
+    + '<div class="ch-ad-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>'
+    + '<div class="ch-ad-content">'
+    + '<div class="ch-ad-title">Task Detected!</div>'
+    + '<div class="ch-ad-text">It looks like you just completed "' + day.title + '." Mark it done?</div>'
+    + '</div>'
+    + '<button class="ch-ad-btn" onclick="chCompleteDay();this.closest(\'.ch-auto-detect\').style.display=\'none\'">Complete +' + day.pts + ' pts</button>'
+    + '</div>';
+  el.style.display = 'block';
+}
+
+// Render tool output preview for completed tasks
+function chRenderTaskOutput(state) {
+  var el = document.getElementById('ch-task-output');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'ch-task-output';
+    el.className = 'ch-task-output';
+    var todayCard = document.getElementById('ch-today');
+    if (todayCard) todayCard.parentNode.insertBefore(el, todayCard.nextSibling);
+  }
+
+  if (!state.completedDays[state.currentDay]) {
+    el.style.display = 'none';
+    return;
+  }
+
+  // Find the most recent tool output related to today's task
+  var day = CH_DAYS[state.currentDay - 1];
+  var toolTypeMap = {
+    'portal-sec-ai-scripts': 'script-builder',
+    'portal-sec-ai-admaker': 'ad-maker',
+    'portal-sec-ai-qualifier': 'client-qualifier'
+  };
+
+  var historyType = toolTypeMap[day.tool];
+  var output = null;
+
+  if (historyType && typeof getToolHistory === 'function') {
+    var history = getToolHistory();
+    for (var i = history.length - 1; i >= 0; i--) {
+      if (history[i].tool === historyType) {
+        output = history[i];
+        break;
+      }
+    }
+  }
+
+  if (output) {
+    var preview = (output.title || output.summary || '').substring(0, 120);
+    el.style.display = 'block';
+    el.innerHTML = '<div class="ch-to-inner">'
+      + '<div class="ch-to-badge">Created Today</div>'
+      + '<div class="ch-to-preview">"' + preview + (preview.length >= 120 ? '...' : '') + '"</div>'
+      + '<div class="ch-to-tool">' + (historyType || 'Tool').replace(/-/g, ' ') + '</div>'
+      + '</div>';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+// Share progress as image card
+function chShareProgress() {
+  var state = chGetState();
+  var doneDays = chCountDone(state);
+  var pct = Math.round((doneDays / 30) * 100);
+  var identity = chGetIdentity(state.currentDay);
+
+  // Build a shareable canvas
+  var canvas = document.createElement('canvas');
+  canvas.width = 600;
+  canvas.height = 340;
+  var ctx = canvas.getContext('2d');
+
+  // Background
+  var grad = ctx.createLinearGradient(0, 0, 600, 340);
+  grad.addColorStop(0, '#0a1628');
+  grad.addColorStop(1, '#0e2040');
+  ctx.fillStyle = grad;
+  ctx.roundRect(0, 0, 600, 340, 16);
+  ctx.fill();
+
+  // Accent line
+  var accentGrad = ctx.createLinearGradient(40, 0, 300, 0);
+  accentGrad.addColorStop(0, '#0B5FD8');
+  accentGrad.addColorStop(1, '#00C8E0');
+  ctx.fillStyle = accentGrad;
+  ctx.fillRect(40, 40, 80, 3);
+
+  // Title
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 28px DM Sans, sans-serif';
+  ctx.fillText('30-Day Momentum Challenge', 40, 82);
+
+  // Identity
+  ctx.fillStyle = '#00C8E0';
+  ctx.font = 'bold 18px DM Sans, sans-serif';
+  ctx.fillText(identity.title, 40, 115);
+
+  // Stats
+  ctx.fillStyle = '#8899b0';
+  ctx.font = '14px DM Sans, sans-serif';
+  ctx.fillText('Day ' + state.currentDay + ' of 30', 40, 160);
+
+  // Big percentage
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 64px DM Serif Display, serif';
+  ctx.fillText(pct + '%', 40, 240);
+  ctx.fillStyle = '#8899b0';
+  ctx.font = '16px DM Sans, sans-serif';
+  ctx.fillText('Complete', 40, 262);
+
+  // Stats right side
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 32px DM Sans, sans-serif';
+  ctx.fillText(state.points.toLocaleString(), 300, 200);
+  ctx.fillStyle = '#8899b0';
+  ctx.font = '14px DM Sans, sans-serif';
+  ctx.fillText('Points Earned', 300, 222);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 32px DM Sans, sans-serif';
+  ctx.fillText(state.bestStreak + '', 300, 260);
+  ctx.fillStyle = '#8899b0';
+  ctx.font = '14px DM Sans, sans-serif';
+  ctx.fillText('Best Streak', 300, 282);
+
+  // Badges earned count
+  var badgeCount = 0;
+  if (state.badges) { for (var b in state.badges) { if (state.badges[b]) badgeCount++; } }
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 32px DM Sans, sans-serif';
+  ctx.fillText(badgeCount + '', 460, 200);
+  ctx.fillStyle = '#8899b0';
+  ctx.font = '14px DM Sans, sans-serif';
+  ctx.fillText('Badges Earned', 460, 222);
+
+  // Branding
+  ctx.fillStyle = '#4a5a70';
+  ctx.font = '12px DM Sans, sans-serif';
+  ctx.fillText('Community Tax Partner Program', 40, 320);
+
+  // Download
+  try {
+    var link = document.createElement('a');
+    link.download = 'challenge-progress-day-' + state.currentDay + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    if (typeof showToast === 'function') {
+      showToast('Progress card downloaded! Share it on social media.', 'success');
+    }
+  } catch (e) {
+    if (typeof showToast === 'function') {
+      showToast('Could not generate share card.', 'error');
+    }
+  }
+}
+
+// Auto-detect polling -- check every 30s when challenge section is visible
+var _chAutoDetectInterval = null;
+
+function chStartAutoDetect() {
+  if (_chAutoDetectInterval) return;
+  _chAutoDetectInterval = setInterval(function() {
+    var sec = document.getElementById('portal-sec-challenge');
+    if (sec && sec.style.display !== 'none') {
+      chAutoDetect();
+    }
+  }, 30000);
 }
 
 // ── PDF EXPORT: 30-Day Momentum Challenge Progress Report ──

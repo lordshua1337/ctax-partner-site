@@ -4996,6 +4996,42 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 .ch-lb-row-you{background:rgba(11,95,216,0.03);border:1px solid rgba(11,95,216,0.08)}
 .ch-lb-row-you:hover{background:rgba(11,95,216,0.06)}
 
+/* M4P2: Start Task Button */
+.ch-start-task-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#0B5FD8,#00C8E0);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.ch-start-task-btn:hover{box-shadow:0 4px 16px rgba(11,95,216,0.3);transform:translateY(-1px)}
+
+/* M4P2: Share Progress Button */
+.ch-share-btn{display:inline-flex;align-items:center;gap:6px;background:var(--white);color:var(--navy);border:1.5px solid var(--off2);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.ch-share-btn:hover{border-color:var(--blue);color:var(--blue);box-shadow:0 2px 8px rgba(11,95,216,0.1)}
+
+/* M4P2: Auto-Detect Prompt */
+.ch-auto-detect{margin-bottom:20px}
+.ch-ad-inner{display:flex;align-items:center;gap:14px;padding:16px 20px;background:linear-gradient(135deg,rgba(16,185,129,0.04),rgba(11,95,216,0.04));border:1px solid rgba(16,185,129,0.15);border-radius:12px;animation:chAdPulse 2s ease-in-out infinite}
+@keyframes chAdPulse{0%,100%{border-color:rgba(16,185,129,0.15)}50%{border-color:rgba(16,185,129,0.35)}}
+.ch-ad-icon{flex-shrink:0}
+.ch-ad-content{flex:1;min-width:0}
+.ch-ad-title{font-size:14px;font-weight:700;color:var(--navy)}
+.ch-ad-text{font-size:13px;color:var(--body);margin-top:2px}
+.ch-ad-btn{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.ch-ad-btn:hover{background:#0a4fb5}
+
+/* M4P2: Task Output Preview */
+.ch-task-output{margin-bottom:20px}
+.ch-to-inner{padding:16px 20px;background:var(--white);border:1px solid var(--off2);border-radius:12px;position:relative}
+.ch-to-badge{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:rgba(16,185,129,0.08);color:#10B981;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+.ch-to-preview{font-size:14px;color:var(--body);line-height:1.5;font-style:italic}
+.ch-to-tool{font-size:12px;color:var(--slate);margin-top:6px;text-transform:capitalize}
+
+/* M4P2: Dark Mode */
+[data-theme="dark"] .ch-share-btn{background:#141e30;border-color:rgba(255,255,255,0.06);color:#e0e4ec}
+[data-theme="dark"] .ch-share-btn:hover{border-color:#4BA3FF;color:#4BA3FF}
+[data-theme="dark"] .ch-ad-inner{background:linear-gradient(135deg,rgba(16,185,129,0.06),rgba(75,163,255,0.04));border-color:rgba(16,185,129,0.2)}
+[data-theme="dark"] .ch-ad-title{color:#e0e4ec}
+[data-theme="dark"] .ch-ad-text{color:rgba(255,255,255,0.6)}
+[data-theme="dark"] .ch-to-inner{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ch-to-preview{color:rgba(255,255,255,0.7)}
+[data-theme="dark"] .ch-to-tool{color:rgba(255,255,255,0.4)}
+
 /* Identity + Motivation Banner */
 .ch-identity{display:flex;align-items:center;gap:28px;background:linear-gradient(135deg,rgba(11,95,216,0.06),rgba(0,200,224,0.04));border:1px solid rgba(11,95,216,0.12);border-radius:16px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden}
 .ch-identity::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,224,0.06),transparent 70%);pointer-events:none}
