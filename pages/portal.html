@@ -125,6 +125,11 @@
           Knowledge Base
           <span class="pni-badge">Pro</span>
         </a>
+        <a class="portal-nav-item" onclick="portalNav(this,'portal-sec-ai-dashboard')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          AI Dashboard
+          <span class="pni-badge pni-badge-green">New</span>
+        </a>
       </div>
 
       <div class="portal-nav-group">
@@ -3494,6 +3499,122 @@
         </div>
         <button class="ai-embed-btn" onclick="aiDemoGenerate(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Search Knowledge Base</button>
         <div class="ai-embed-result" id="ai-kb-result"></div>
+      </div>
+    </div>
+
+    <!-- ═══ AI DASHBOARD ═══ -->
+    <div class="portal-section" id="portal-sec-ai-dashboard">
+      <div class="portal-sec-header">
+        <h2 class="portal-sec-title">AI Dashboard <span class="pni-badge pni-badge-green">New</span></h2>
+        <p class="portal-sec-desc">Unified analytics, results archive, content calendar, and saved prompts across all your AI tools.</p>
+      </div>
+
+      <!-- Dashboard Tabs -->
+      <div class="aid-tabs">
+        <button class="aid-tab aid-tab-active" onclick="aidSwitchTab(this,'aid-overview')">Overview</button>
+        <button class="aid-tab" onclick="aidSwitchTab(this,'aid-archive')">Results Archive</button>
+        <button class="aid-tab" onclick="aidSwitchTab(this,'aid-calendar')">Content Calendar</button>
+        <button class="aid-tab" onclick="aidSwitchTab(this,'aid-prompts')">Saved Prompts</button>
+      </div>
+
+      <!-- Tab: Overview -->
+      <div class="aid-panel aid-panel-active" id="aid-overview">
+        <!-- Usage Stats Row -->
+        <div class="aid-stats-row" id="aid-stats-row"></div>
+
+        <!-- Usage Over Time Chart -->
+        <div class="aid-card">
+          <div class="aid-card-header">
+            <div class="aid-card-title">Usage Over Time</div>
+            <div class="aid-card-actions">
+              <select id="aid-chart-range" onchange="aidRenderChart()" class="aid-select-sm">
+                <option value="7">Last 7 days</option>
+                <option value="30" selected>Last 30 days</option>
+                <option value="90">Last 90 days</option>
+              </select>
+            </div>
+          </div>
+          <div id="aid-chart" class="aid-chart"></div>
+        </div>
+
+        <!-- Tool Breakdown + Recent Activity -->
+        <div class="aid-two-col">
+          <div class="aid-card">
+            <div class="aid-card-header"><div class="aid-card-title">Tool Breakdown</div></div>
+            <div id="aid-breakdown"></div>
+          </div>
+          <div class="aid-card">
+            <div class="aid-card-header"><div class="aid-card-title">Recent Activity</div></div>
+            <div id="aid-recent-activity"></div>
+          </div>
+        </div>
+
+        <!-- Export -->
+        <div class="aid-export-bar">
+          <button class="btn btn-g" onclick="aidExportJSON()">Export All as JSON</button>
+          <button class="btn btn-g" onclick="aidExportCSV()">Export Usage as CSV</button>
+          <button class="btn btn-p" onclick="aidClearData()">Clear All Data</button>
+        </div>
+      </div>
+
+      <!-- Tab: Results Archive -->
+      <div class="aid-panel" id="aid-archive" style="display:none">
+        <div class="aid-archive-toolbar">
+          <div class="aid-search-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="aid-search" placeholder="Search results..." oninput="aidFilterArchive()">
+          </div>
+          <select id="aid-filter-tool" onchange="aidFilterArchive()" class="aid-select-sm">
+            <option value="">All Tools</option>
+            <option value="script-builder">Script Builder</option>
+            <option value="ad-maker">Ad Maker</option>
+            <option value="client-qualifier">Client Qualifier</option>
+            <option value="knowledge-base">Knowledge Base</option>
+          </select>
+          <select id="aid-filter-time" onchange="aidFilterArchive()" class="aid-select-sm">
+            <option value="">All Time</option>
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+          </select>
+        </div>
+        <div id="aid-archive-list" class="aid-archive-list"></div>
+        <div id="aid-archive-empty" class="aid-empty" style="display:none">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <div>No results found matching your filters.</div>
+        </div>
+      </div>
+
+      <!-- Tab: Content Calendar -->
+      <div class="aid-panel" id="aid-calendar" style="display:none">
+        <div class="aid-cal-toolbar">
+          <button class="btn btn-g" onclick="aidCalPrev()">&larr; Previous</button>
+          <div class="aid-cal-month" id="aid-cal-month"></div>
+          <button class="btn btn-g" onclick="aidCalNext()">Next &rarr;</button>
+        </div>
+        <div class="aid-cal-grid" id="aid-cal-grid"></div>
+        <div class="aid-cal-legend">
+          <span class="aid-cal-dot aid-cal-dot-script"></span> Script
+          <span class="aid-cal-dot aid-cal-dot-ad"></span> Ad
+          <span class="aid-cal-dot aid-cal-dot-qual"></span> Qualification
+          <span class="aid-cal-dot aid-cal-dot-kb"></span> KB Answer
+          <span class="aid-cal-dot aid-cal-dot-sched"></span> Scheduled
+        </div>
+        <div class="aid-cal-schedule-bar">
+          <button class="btn btn-p" onclick="aidShowScheduleContent()">Schedule Content</button>
+        </div>
+      </div>
+
+      <!-- Tab: Saved Prompts -->
+      <div class="aid-panel" id="aid-prompts" style="display:none">
+        <div class="aid-prompts-toolbar">
+          <button class="btn btn-p" onclick="aidShowSavePrompt()">Save New Prompt</button>
+        </div>
+        <div id="aid-prompts-list" class="aid-prompts-list"></div>
+        <div id="aid-prompts-empty" class="aid-empty" style="display:none">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <div>No saved prompts yet. Save prompt configurations from any AI tool to reuse them here.</div>
+        </div>
       </div>
     </div>
 
