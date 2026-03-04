@@ -38,7 +38,7 @@ function aidGetCalendar() {
 }
 
 function aidSetCalendar(items) {
-  try { localStorage.setItem(AID_CALENDAR_KEY, JSON.stringify(items)); } catch (e) {}
+  try { localStorage.setItem(AID_CALENDAR_KEY, JSON.stringify(items)); } catch (e) { console.warn('Failed to save calendar data:', e.message); }
 }
 
 function aidGetPrompts() {
@@ -46,7 +46,7 @@ function aidGetPrompts() {
 }
 
 function aidSetPrompts(items) {
-  try { localStorage.setItem(AID_PROMPTS_KEY, JSON.stringify(items)); } catch (e) {}
+  try { localStorage.setItem(AID_PROMPTS_KEY, JSON.stringify(items)); } catch (e) { console.warn('Failed to save prompts data:', e.message); }
 }
 
 // ── TOOL METADATA ────────────────────────────────────
@@ -147,7 +147,7 @@ function aidRenderChart() {
   var el = document.getElementById('aid-chart');
   if (!el) return;
   var rangeSelect = document.getElementById('aid-chart-range');
-  var days = rangeSelect ? parseInt(rangeSelect.value) : 30;
+  var days = rangeSelect ? parseInt(rangeSelect.value, 10) : 30;
   var history = aidGetHistory();
 
   // Build day buckets
@@ -371,7 +371,7 @@ function aidCopyResult(idx) {
 function aidDeleteResult(idx) {
   var history = aidGetHistory();
   history.splice(idx, 1);
-  try { localStorage.setItem(AID_HISTORY_KEY, JSON.stringify(history)); } catch (e) {}
+  try { localStorage.setItem(AID_HISTORY_KEY, JSON.stringify(history)); } catch (e) { console.warn('Failed to save history:', e.message); }
   aidFilterArchive();
 }
 
@@ -486,7 +486,7 @@ function aidCalDayClick(dateKey) {
   overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
 
   var dateParts = dateKey.split('-');
-  var dateLabel = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2])).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  var dateLabel = new Date(parseInt(dateParts[0], 10), parseInt(dateParts[1], 10) - 1, parseInt(dateParts[2], 10)).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
   var html = '<div class="aid-modal-header"><div class="aid-modal-title">' + dateLabel + '</div>'
     + '<button class="aid-modal-close" onclick="document.getElementById(\'aid-cal-modal\').remove()">&times;</button></div>'

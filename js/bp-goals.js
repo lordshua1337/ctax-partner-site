@@ -473,8 +473,8 @@ function bpgCustomGoal(templateId) {
 
 function bpgSaveCustomGoal(templateId) {
   var name = document.getElementById('bpg-custom-name').value.trim();
-  var target = parseInt(document.getElementById('bpg-custom-target').value);
-  var current = parseInt(document.getElementById('bpg-custom-current').value) || 0;
+  var target = parseInt(document.getElementById('bpg-custom-target').value, 10);
+  var current = parseInt(document.getElementById('bpg-custom-current').value, 10) || 0;
   var deadline = document.getElementById('bpg-custom-deadline').value;
 
   if (!name || !target || target <= 0) return;
@@ -554,7 +554,7 @@ function bpgShowLogEntry(goalIdx) {
 }
 
 function bpgSaveLog(goalIdx) {
-  var newVal = parseInt(document.getElementById('bpg-log-value').value);
+  var newVal = parseInt(document.getElementById('bpg-log-value').value, 10);
   var note = document.getElementById('bpg-log-note').value.trim();
   if (isNaN(newVal)) return;
 
@@ -653,7 +653,7 @@ function bpgSaveEdit(goalIdx) {
   if (!goal) return;
 
   goal.name = document.getElementById('bpg-edit-name').value.trim() || goal.name;
-  goal.target = parseInt(document.getElementById('bpg-edit-target').value) || goal.target;
+  goal.target = parseInt(document.getElementById('bpg-edit-target').value, 10) || goal.target;
   goal.deadline = document.getElementById('bpg-edit-deadline').value || goal.deadline;
 
   bpgSaveState(state);

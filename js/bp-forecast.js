@@ -12,13 +12,13 @@ function bpfGetInputs() {
     var bp = JSON.parse(localStorage.getItem('ctax_bp_data') || '{}');
     return {
       practiceType: bp.practiceType || 'CPA',
-      currentRefs: parseInt(bp.currentRefs) || 2,
-      targetRefs: parseInt(bp.targetRefs) || 10,
-      avgCommission: parseInt(bp.avgCommission) || 750,
-      monthlyBudget: parseInt(bp.monthlyBudget) || 500,
+      currentRefs: parseInt(bp.currentRefs, 10) || 2,
+      targetRefs: parseInt(bp.targetRefs, 10) || 10,
+      avgCommission: parseInt(bp.avgCommission, 10) || 750,
+      monthlyBudget: parseInt(bp.monthlyBudget, 10) || 500,
       conversionRate: parseFloat(bp.conversionRate) || 0.15,
       geography: bp.geography || 'Suburban',
-      yearsInPractice: parseInt(bp.yearsInPractice) || 5
+      yearsInPractice: parseInt(bp.yearsInPractice, 10) || 5
     };
   } catch (e) {
     return { practiceType: 'CPA', currentRefs: 2, targetRefs: 10, avgCommission: 750, monthlyBudget: 500, conversionRate: 0.15, geography: 'Suburban', yearsInPractice: 5 };
@@ -450,15 +450,27 @@ function bpfRunAI() {
     headers: typeof getApiHeaders === 'function' ? getApiHeaders() : { 'Content-Type': 'application/json' },
     body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1024, messages: [{ role: 'user', content: prompt }] })
   })
-  .then(function(r) { return r.json(); })
+  .then(function(r) {
+    if (!r.ok) throw new Error('API returned ' + r.status);
+    return r.json();
+  })
   .then(function(data) {
     var text = data.content ? data.content[0].text : '';
     var recs = [];
-    try { var match = text.match(/\[[\s\S]*\]/); if (match) recs = JSON.parse(match[0]); } catch (e) {}
+    try {
+      var match = text.match(/\[[\s\S]*\]/);
+      if (match) recs = JSON.parse(match[0]);
+    } catch (parseErr) {
+      console.warn('Failed to parse AI forecast response:', parseErr.message);
+    }
     if (recs.length === 0) recs = bpfFallbackRecs(s, inputs);
     bpfShowAIResults(recs);
   })
-  .catch(function() { bpfShowAIResults(bpfFallbackRecs(s, inputs)); });
+  .catch(function(err) {
+    console.warn('Forecast AI request failed:', err.message);
+    if (typeof showToast === 'function') showToast('Using smart recommendations (AI unavailable)', 'info');
+    bpfShowAIResults(bpfFallbackRecs(s, inputs));
+  });
 }
 
 function bpfFallbackRecs(s, inputs) {
