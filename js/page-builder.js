@@ -54,7 +54,7 @@ function pbInit() {
     storageManager: false,
     noticeOnUnload: false,
     canvas: {
-      styles: ['/css/pb-canvas.css']
+      styles: []
     },
     panels: { defaults: [] },
     deviceManager: {
@@ -239,7 +239,7 @@ function pbSetDevice(device) {
 }
 
 function pbShowPanel(panel) {
-  var panels = ['pb-blocks', 'pb-styles', 'pb-layers', 'pb-saved-blocks'];
+  var panels = ['pb-blocks', 'pb-tools', 'pb-styles', 'pb-layers', 'pb-saved-blocks'];
   panels.forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.style.display = (id === panel) ? 'block' : 'none';
@@ -308,15 +308,26 @@ function pbInjectCanvasStyles() {
     doc.head.appendChild(playfairLink);
   }
 
-  // Inject canvas styles if stylesheet link did not load
+  // Always inject inline styles to guarantee canvas renders correctly.
+  // The link tag may fail to load depending on server config/port.
   if (doc.querySelector('style[data-pb-canvas]')) return;
-  var links = doc.querySelectorAll('link[href*="pb-canvas"]');
-  if (links.length > 0) return;
   if (typeof PB_CANVAS_CSS !== 'undefined' && PB_CANVAS_CSS) {
     var style = doc.createElement('style');
     style.setAttribute('data-pb-canvas', '1');
     style.textContent = PB_CANVAS_CSS;
     doc.head.appendChild(style);
+  } else {
+    // Last resort: try link tags with relative + absolute paths
+    var paths = ['css/pb-canvas.css', '/css/pb-canvas.css'];
+    var existingLinks = doc.querySelectorAll('link[href*="pb-canvas"]');
+    if (existingLinks.length === 0) {
+      paths.forEach(function(p) {
+        var link = doc.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = p;
+        doc.head.appendChild(link);
+      });
+    }
   }
 }
 

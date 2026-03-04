@@ -8570,9 +8570,9 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 .pb-wrap{border-radius:12px;overflow:hidden;border:1px solid #e2e5ea}
 
 /* Toolbar */
-.pb-toolbar{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:#1a1a1a;border-bottom:1px solid #2a2a2a}
-.pb-toolbar-left{display:flex;align-items:center;gap:8px}
-.pb-toolbar-right{display:flex;align-items:center;gap:5px}
+.pb-toolbar{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:#1a1a1a;border-bottom:1px solid #2a2a2a;flex-wrap:wrap;gap:6px}
+.pb-toolbar-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pb-toolbar-right{display:flex;align-items:center;gap:5px;flex-shrink:0}
 .pb-device-group{display:flex;gap:1px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px}
 .pb-device-btn{display:flex;align-items:center;justify-content:center;width:30px;height:26px;border:none;border-radius:4px;background:transparent;color:rgba(255,255,255,0.35);cursor:pointer;transition:all 0.15s}
 .pb-device-btn:hover{color:rgba(255,255,255,0.7)}
@@ -8603,6 +8603,19 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 .pb-panel-body::-webkit-scrollbar{width:4px}
 .pb-panel-body::-webkit-scrollbar-track{background:transparent}
 .pb-panel-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
+
+/* ── Tools Panel ── */
+.pb-tools-grid{padding:12px}
+.pb-tools-section{margin-bottom:16px}
+.pb-tools-section:last-child{margin-bottom:0}
+.pb-tools-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.3);padding:0 0 8px;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.pb-tools-btn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:1px solid rgba(255,255,255,0.06);border-radius:8px;background:transparent;color:rgba(255,255,255,0.55);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:inherit;text-align:left;margin-bottom:4px}
+.pb-tools-btn:hover{background:rgba(255,255,255,0.06);color:#fff;border-color:rgba(255,255,255,0.12)}
+.pb-tools-btn:active{background:rgba(255,255,255,0.1)}
+.pb-tools-btn svg{flex-shrink:0;opacity:0.5}
+.pb-tools-btn:hover svg{opacity:1}
+.pb-tools-btn-ai{color:rgba(147,130,255,0.8)}
+.pb-tools-btn-ai:hover{color:#a78bfa;border-color:rgba(147,130,255,0.2);background:rgba(147,130,255,0.06)}
 
 /* ── GrapesJS overrides: make it neutral ── */
 

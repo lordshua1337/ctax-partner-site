@@ -501,19 +501,18 @@ var PB_SECTION_COLORS = {
 // This is loaded as a string for injecting into the iframe and for export.
 var PB_CANVAS_CSS = '';
 (function() {
-  // Load from the CSS file at runtime via fetch, or use the file-based load.
-  // The canonical source is css/pb-canvas.css loaded by GrapesJS canvas.styles config.
-  // This variable is kept for legacy export compatibility.
-  // It will be populated by pbInjectCanvasStyles if the stylesheet link fails.
-  try {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/css/pb-canvas.css', false);
-    xhr.send();
-    if (xhr.status === 200) {
-      PB_CANVAS_CSS = xhr.responseText;
-    }
-  } catch (e) {
-    // Fallback: will be injected via the link tag in canvas.styles
+  // Try relative first (works on GitHub Pages), then absolute (local dev)
+  var paths = ['css/pb-canvas.css', '/css/pb-canvas.css'];
+  for (var i = 0; i < paths.length; i++) {
+    try {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', paths[i], false);
+      xhr.send();
+      if (xhr.status === 200 && xhr.responseText.indexOf('pb-') !== -1) {
+        PB_CANVAS_CSS = xhr.responseText;
+        break;
+      }
+    } catch (e) { /* try next path */ }
   }
 })();
 
