@@ -103,6 +103,10 @@ function onPageLoaded(id) {
   if (id === 'portal' && typeof initNavSettingsUpgrade === 'function') {
     setTimeout(initNavSettingsUpgrade, 120);
   }
+  // Initialize professional touches: help chat + onboarding wizard (M3P3C1)
+  if (id === 'portal' && typeof initProfessionalTouches === 'function') {
+    setTimeout(initProfessionalTouches, 150);
+  }
   // Initialize payout countdown
   if (id === 'portal' && typeof initPayCountdown === 'function') {
     setTimeout(initPayCountdown, 80);
