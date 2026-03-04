@@ -15,10 +15,15 @@ var amCurrentTemplate = 1;
     input.addEventListener('change', function(){
       var file = input.files && input.files[0];
       if(!file) return;
+      var allowed = ['image/jpeg','image/png','image/gif','image/webp'];
+      if(allowed.indexOf(file.type)===-1){
+        if(typeof showToast==='function') showToast('Only JPEG, PNG, GIF, or WebP images allowed','error');
+        return;
+      }
       var reader = new FileReader();
       reader.onload = function(e){
         amLogoDataUrl = e.target.result;
-        if(label) label.textContent = '✓ ' + file.name;
+        if(label) label.textContent = file.name;
         if(drop){ drop.style.borderColor='var(--blue)'; drop.style.background='rgba(11,95,216,0.04)'; }
       };
       reader.readAsDataURL(file);

@@ -992,10 +992,25 @@ function setDetectChanges() {
 function setAvatarPreview(input) {
   var file = input.files && input.files[0];
   if (!file) return;
+  var allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+  if (allowed.indexOf(file.type) === -1) {
+    showToast('Only JPEG, PNG, GIF, or WebP images allowed', 'error');
+    return;
+  }
   var reader = new FileReader();
   reader.onload = function(e) {
     var container = document.getElementById('set-avatar-upload');
-    container.innerHTML = '<img src="' + e.target.result + '" alt="Avatar"><input type="file" accept="image/*" style="display:none" onchange="setAvatarPreview(this)">';
+    var img = document.createElement('img');
+    img.src = e.target.result;
+    img.alt = 'Avatar';
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/jpeg,image/png,image/gif,image/webp';
+    fileInput.style.display = 'none';
+    fileInput.onchange = function() { setAvatarPreview(this); };
+    container.innerHTML = '';
+    container.appendChild(img);
+    container.appendChild(fileInput);
     showToast('Profile photo updated', 'success');
   };
   reader.readAsDataURL(file);

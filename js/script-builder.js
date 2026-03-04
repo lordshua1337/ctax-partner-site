@@ -80,12 +80,14 @@ function copyText(text, btn) {
 }
 
 function copyAllScripts() {
+  var btn = document.querySelector('[onclick*="copyAllScripts"]');
   var all = Object.values(sbResults).join('\n\n---\n\n');
   navigator.clipboard.writeText(all).then(function(){
-    var btn = event.target.closest('button');
-    var orig = btn.innerHTML;
-    btn.textContent = '✓ Copied All';
-    setTimeout(function(){btn.innerHTML=orig;}, 2000);
+    if (btn) {
+      var orig = btn.innerHTML;
+      btn.textContent = 'Copied All';
+      setTimeout(function(){btn.innerHTML=orig;}, 2000);
+    }
     if (typeof showToast === 'function') showToast('All scripts copied', 'copied');
   });
 }
