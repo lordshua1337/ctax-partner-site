@@ -356,6 +356,18 @@
         <p class="portal-sec-desc">Real-time overview of your referral performance, earnings, and activity.</p>
       </div>
 
+      <!-- Welcome Banner (M3P1C1) -->
+      <div id="dash-welcome-banner" style="margin-bottom:24px"></div>
+
+      <!-- Quick Action Command Bar (M3P1C1) -->
+      <div id="dash-quick-actions" style="margin-bottom:24px"></div>
+
+      <!-- Partner Score + Module Progress Row (M3P1C1) -->
+      <div class="dash-score-modules-row" style="margin-bottom:24px">
+        <div id="dash-partner-score"></div>
+        <div id="dash-module-progress"></div>
+      </div>
+
       <!-- Tool Usage Stats -->
       <div class="dash-tool-stats" id="dash-tool-stats" style="margin-bottom:24px"></div>
       <script>if (typeof renderToolStats === 'function') renderToolStats('dash-tool-stats');</script>
@@ -557,9 +569,9 @@
         </div>
       </div>
 
-      <!-- Activity Feed -->
-      <div class="dash-activity-feed">
-        <div class="dash-activity-title">Recent Activity</div>
+      <!-- Live Activity Feed (M3P1C1) -->
+      <div class="dash-activity-feed" id="dash-live-activity">
+        <div class="dash-activity-title">Live Activity</div>
         <div class="dash-activity-item"><div class="dash-activity-dot dash-activity-dot-green"></div><span>You earned <strong>$2,736</strong> from the Williams case commission.</span><span class="dash-activity-time">2h ago</span></div>
         <div class="dash-activity-item"><div class="dash-activity-dot dash-activity-dot-blue"></div><span>Garcia referral moved to <strong>Investigation</strong> status.</span><span class="dash-activity-time">1d ago</span></div>
         <div class="dash-activity-item"><div class="dash-activity-dot dash-activity-dot-amber"></div><span>New payout scheduled: <strong>$2,736</strong> on March 1, 2026.</span><span class="dash-activity-time">2d ago</span></div>

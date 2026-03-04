@@ -204,7 +204,7 @@ function portalNav(el, secId) {
 }
 
 function portalAnimateEntrance(sec) {
-  var targets = sec.querySelectorAll('.portal-sec-header, .pb-stats, .pb-streak, .pb-tabs, .pb-quiz, .bp-form-grid, .bp-callout, .dash-kpi-row, .dash-table, .dash-activity-feed, .dash-quick-links, .bp-insights-row, .bp-whatif, .bp-month');
+  var targets = sec.querySelectorAll('.portal-sec-header, .pb-stats, .pb-streak, .pb-tabs, .pb-quiz, .bp-form-grid, .bp-callout, .dash-kpi-row, .dash-table, .dash-activity-feed, .dash-quick-links, .bp-insights-row, .bp-whatif, .bp-month, .wb-card, .qa-bar, .dash-score-modules-row, .dash-leaderboard, .dash-pipeline, .dash-goal-tracker, .dash-insights-banner');
   var delay = 0;
   targets.forEach(function(el) {
     if (el.dataset.entered) return;
@@ -229,6 +229,392 @@ function initDashGreeting() {
   var h = new Date().getHours();
   var greeting = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
   el.textContent = greeting + ', Josh';
+}
+
+// ═══ DASHBOARD COMMAND CENTER (M3P1C1) ═══
+
+// --- Partner Score System ---
+// Composite 0-100 score: Challenge (30) + Tools (20) + Referrals (30) + Pages (10) + Profile (10)
+function calcPartnerScore() {
+  var score = { challenge: 0, tools: 0, referrals: 0, pages: 0, profile: 0, total: 0 };
+
+  // Challenge progress (max 30 pts)
+  try {
+    var chState = JSON.parse(localStorage.getItem('ch_30day_v1') || '{}');
+    var completed = chState.completedDays ? Object.keys(chState.completedDays).filter(function(k) { return chState.completedDays[k]; }).length : 0;
+    score.challenge = Math.min(30, Math.round((completed / 30) * 30));
+  } catch (e) {}
+
+  // Tool usage (max 20 pts) -- 5 per tool, cap at 20
+  try {
+    var stats = JSON.parse(localStorage.getItem('ctax_tool_stats') || '{}');
+    var toolCount = 0;
+    ['script-builder', 'ad-maker', 'client-qualifier', 'knowledge-base'].forEach(function(t) {
+      if (stats[t] && stats[t].count > 0) toolCount++;
+    });
+    score.tools = toolCount * 5;
+  } catch (e) {}
+
+  // Referrals (max 30 pts) -- demo: 12 referrals = 30 pts at 10+
+  score.referrals = Math.min(30, Math.round((12 / 10) * 30));
+
+  // Pages published (max 10 pts)
+  try {
+    var pages = JSON.parse(localStorage.getItem('ctax_pb_pages') || '[]');
+    var published = pages.filter(function(p) { return p.published; }).length;
+    score.pages = Math.min(10, published * 5);
+  } catch (e) {}
+
+  // Profile completion (max 10 pts) -- check if brand uploaded + ICP
+  var hasBrand = document.querySelector('.portal-brand-loaded') ? 5 : 0;
+  var hasICP = (typeof ICPContext !== 'undefined' && ICPContext.hasProfile()) ? 5 : 0;
+  score.profile = hasBrand + hasICP;
+
+  score.total = score.challenge + score.tools + score.referrals + score.pages + score.profile;
+  return score;
+}
+
+function renderPartnerScore(containerId) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  var score = calcPartnerScore();
+  var pct = score.total;
+  var circumference = 2 * Math.PI * 54;
+  var offset = circumference - (pct / 100) * circumference;
+  var color = pct >= 80 ? '#22c55e' : pct >= 60 ? '#0B5FD8' : pct >= 40 ? '#eab308' : '#f97316';
+
+  var breakdown = [
+    { label: 'Challenge', val: score.challenge, max: 30 },
+    { label: 'AI Tools', val: score.tools, max: 20 },
+    { label: 'Referrals', val: score.referrals, max: 30 },
+    { label: 'Pages', val: score.pages, max: 10 },
+    { label: 'Profile', val: score.profile, max: 10 }
+  ];
+
+  var barsHtml = '';
+  breakdown.forEach(function(b) {
+    var w = Math.round((b.val / b.max) * 100);
+    barsHtml += '<div class="ps-breakdown-row">'
+      + '<span class="ps-breakdown-label">' + b.label + '</span>'
+      + '<div class="ps-breakdown-track"><div class="ps-breakdown-fill" style="width:' + w + '%;background:' + color + '"></div></div>'
+      + '<span class="ps-breakdown-val">' + b.val + '/' + b.max + '</span>'
+      + '</div>';
+  });
+
+  el.innerHTML = '<div class="ps-card">'
+    + '<div class="ps-ring-wrap">'
+    + '<svg class="ps-ring" width="130" height="130" viewBox="0 0 130 130">'
+    + '<circle cx="65" cy="65" r="54" fill="none" stroke="var(--off2)" stroke-width="7"/>'
+    + '<circle cx="65" cy="65" r="54" fill="none" stroke="' + color + '" stroke-width="7" stroke-linecap="round" stroke-dasharray="' + circumference.toFixed(2) + '" stroke-dashoffset="' + offset.toFixed(2) + '" transform="rotate(-90 65 65)" style="transition:stroke-dashoffset 1s ease"/>'
+    + '</svg>'
+    + '<div class="ps-ring-center">'
+    + '<div class="ps-ring-val" style="color:' + color + '">' + pct + '</div>'
+    + '<div class="ps-ring-label">Partner Score</div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="ps-breakdown">' + barsHtml + '</div>'
+    + '</div>';
+}
+
+// --- Module Progress Dashboard ---
+function renderModuleProgress(containerId) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+
+  // Challenge data
+  var chCompleted = 0, chStreak = 0, chDay = 1;
+  try {
+    var chState = JSON.parse(localStorage.getItem('ch_30day_v1') || '{}');
+    if (chState.completedDays) {
+      chCompleted = Object.keys(chState.completedDays).filter(function(k) { return chState.completedDays[k]; }).length;
+    }
+    chStreak = chState.streak || 0;
+    chDay = chState.currentDay || 1;
+  } catch (e) {}
+
+  // Tool stats
+  var toolTotal = 0;
+  try {
+    var stats = JSON.parse(localStorage.getItem('ctax_tool_stats') || '{}');
+    ['script-builder', 'ad-maker', 'client-qualifier', 'knowledge-base'].forEach(function(t) {
+      if (stats[t]) toolTotal += stats[t].count;
+    });
+  } catch (e) {}
+
+  // Pages
+  var pageCount = 0, publishedCount = 0;
+  try {
+    var pages = JSON.parse(localStorage.getItem('ctax_pb_pages') || '[]');
+    pageCount = pages.length;
+    publishedCount = pages.filter(function(p) { return p.published; }).length;
+  } catch (e) {}
+
+  // Business planner
+  var hasPlan = false;
+  try {
+    hasPlan = !!localStorage.getItem('ctax_bp_roadmap');
+  } catch (e) {}
+
+  var modules = [
+    {
+      icon: '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>',
+      label: '30-Day Challenge',
+      stat: 'Day ' + chDay + ' / 30',
+      detail: chCompleted + ' tasks done, ' + chStreak + ' day streak',
+      pct: Math.round((chCompleted / 30) * 100),
+      color: '#8b5cf6',
+      action: "portalNav(document.querySelector('[onclick*=portal-sec-challenge]'),'portal-sec-challenge')"
+    },
+    {
+      icon: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',
+      label: 'AI Tools',
+      stat: toolTotal + ' generations',
+      detail: 'Scripts, ads, qualifications & searches',
+      pct: Math.min(100, toolTotal * 10),
+      color: '#0B5FD8',
+      action: "portalNav(document.querySelector('[onclick*=portal-sec-ai-scripts]'),'portal-sec-ai-scripts')"
+    },
+    {
+      icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>',
+      label: 'Page Builder',
+      stat: pageCount + ' page' + (pageCount !== 1 ? 's' : '') + ' created',
+      detail: publishedCount + ' published',
+      pct: Math.min(100, pageCount * 25),
+      color: '#06b6d4',
+      action: "portalNav(document.querySelector('[onclick*=portal-sec-page-builder]'),'portal-sec-page-builder')"
+    },
+    {
+      icon: '<path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>',
+      label: 'Business Plan',
+      stat: hasPlan ? 'Roadmap active' : 'Not started',
+      detail: hasPlan ? 'Track your 90-day growth' : 'Generate your growth roadmap',
+      pct: hasPlan ? 50 : 0,
+      color: '#f59e0b',
+      action: "portalNav(document.querySelector('[onclick*=portal-sec-planner]'),'portal-sec-planner')"
+    }
+  ];
+
+  var html = '<div class="mp-header">'
+    + '<div class="mp-title">Module Progress</div>'
+    + '<div class="mp-subtitle">Your activity across portal modules</div>'
+    + '</div>'
+    + '<div class="mp-grid">';
+
+  modules.forEach(function(m) {
+    html += '<button class="mp-card" onclick="' + m.action + '">'
+      + '<div class="mp-card-top">'
+      + '<div class="mp-card-icon" style="background:' + m.color + '10;color:' + m.color + '">'
+      + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + m.icon + '</svg>'
+      + '</div>'
+      + '<div class="mp-card-pct" style="color:' + m.color + '">' + m.pct + '%</div>'
+      + '</div>'
+      + '<div class="mp-card-label">' + m.label + '</div>'
+      + '<div class="mp-card-stat">' + m.stat + '</div>'
+      + '<div class="mp-card-detail">' + m.detail + '</div>'
+      + '<div class="mp-card-bar"><div class="mp-card-bar-fill" style="width:' + m.pct + '%;background:' + m.color + '"></div></div>'
+      + '</button>';
+  });
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// --- Live Activity Feed ---
+function renderLiveActivity(containerId) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+
+  var events = [];
+
+  // Pull from tool history (localStorage)
+  try {
+    var history = JSON.parse(localStorage.getItem('ctax_tool_history') || '[]');
+    var toolLabels = {
+      'script-builder': { verb: 'Generated a script', dot: 'blue', icon: 'edit' },
+      'ad-maker': { verb: 'Created an ad', dot: 'cyan', icon: 'image' },
+      'client-qualifier': { verb: 'Qualified a client', dot: 'green', icon: 'search' },
+      'knowledge-base': { verb: 'Searched knowledge base', dot: 'purple', icon: 'book' }
+    };
+    history.slice(0, 8).forEach(function(h) {
+      var meta = toolLabels[h.tool] || { verb: 'Used a tool', dot: 'blue', icon: 'zap' };
+      events.push({
+        text: '<strong>' + meta.verb + '</strong>: ' + (h.label || '').replace(/</g, '&lt;'),
+        dot: meta.dot,
+        ts: h.timestamp
+      });
+    });
+  } catch (e) {}
+
+  // Pull from challenge state
+  try {
+    var chState = JSON.parse(localStorage.getItem('ch_30day_v1') || '{}');
+    if (chState.completedDays) {
+      var completedKeys = Object.keys(chState.completedDays).filter(function(k) { return chState.completedDays[k]; });
+      if (completedKeys.length > 0) {
+        events.push({
+          text: 'Completed <strong>' + completedKeys.length + ' challenge tasks</strong> so far',
+          dot: 'purple',
+          ts: Date.now() - 3600000 // approximate
+        });
+      }
+    }
+  } catch (e) {}
+
+  // Static referral events (always present in demo)
+  var staticEvents = [
+    { text: 'You earned <strong>$2,736</strong> from the Williams case commission.', dot: 'green', ts: Date.now() - 7200000 },
+    { text: 'Garcia referral moved to <strong>Investigation</strong> status.', dot: 'blue', ts: Date.now() - 86400000 },
+    { text: 'New payout scheduled: <strong>$2,736</strong> on March 1, 2026.', dot: 'amber', ts: Date.now() - 172800000 },
+    { text: 'Thompson case resolved -- $4,224 commission <strong>paid</strong>.', dot: 'green', ts: Date.now() - 432000000 }
+  ];
+  events = events.concat(staticEvents);
+
+  // Sort by timestamp descending, take first 8
+  events.sort(function(a, b) { return b.ts - a.ts; });
+  events = events.slice(0, 8);
+
+  if (!events.length) return;
+
+  var html = '<div class="dash-activity-title">Live Activity</div>';
+  events.forEach(function(ev) {
+    var ago = typeof timeAgo === 'function' ? timeAgo(ev.ts) : '';
+    html += '<div class="dash-activity-item">'
+      + '<div class="dash-activity-dot dash-activity-dot-' + ev.dot + '"></div>'
+      + '<span>' + ev.text + '</span>'
+      + '<span class="dash-activity-time">' + ago + '</span>'
+      + '</div>';
+  });
+  el.innerHTML = html;
+}
+
+// --- Quick Action Command Bar ---
+function renderQuickActions(containerId) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+
+  var actions = [
+    {
+      label: 'Submit Referral',
+      desc: 'Send a new client to CTAX',
+      icon: '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>',
+      color: '#DC2626',
+      section: 'portal-sec-submit'
+    },
+    {
+      label: 'Create Script',
+      desc: 'AI referral scripts',
+      icon: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',
+      color: '#0B5FD8',
+      section: 'portal-sec-ai-scripts'
+    },
+    {
+      label: 'Build Page',
+      desc: 'Landing page builder',
+      icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>',
+      color: '#06b6d4',
+      section: 'portal-sec-page-builder'
+    },
+    {
+      label: 'Qualify Client',
+      desc: 'AI qualification check',
+      icon: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+      color: '#22c55e',
+      section: 'portal-sec-ai-qualifier'
+    },
+    {
+      label: 'Growth Plan',
+      desc: '90-day business roadmap',
+      icon: '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+      color: '#f59e0b',
+      section: 'portal-sec-planner'
+    }
+  ];
+
+  var html = '<div class="qa-bar">';
+  actions.forEach(function(a) {
+    html += '<button class="qa-btn" onclick="portalNav(document.querySelector(\'[onclick*=' + a.section + ']\'),\'' + a.section + '\')">'
+      + '<div class="qa-icon" style="background:' + a.color + '12;color:' + a.color + '">'
+      + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + a.icon + '</svg>'
+      + '</div>'
+      + '<div class="qa-text">'
+      + '<div class="qa-label">' + a.label + '</div>'
+      + '<div class="qa-desc">' + a.desc + '</div>'
+      + '</div>'
+      + '</button>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// --- Welcome Banner with Status Summary ---
+function renderWelcomeBanner(containerId) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+
+  var h = new Date().getHours();
+  var greeting = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+
+  // Get practice type from ICP if available
+  var practiceType = '';
+  try {
+    if (typeof ICPContext !== 'undefined' && ICPContext.hasProfile()) {
+      var profile = ICPContext.load();
+      practiceType = profile.profession_type || '';
+    }
+  } catch (e) {}
+
+  // Status nuggets
+  var nuggets = [];
+
+  // Challenge status
+  try {
+    var chState = JSON.parse(localStorage.getItem('ch_30day_v1') || '{}');
+    var chDay = chState.currentDay || 0;
+    if (chDay > 0 && chDay <= 30) {
+      nuggets.push({ icon: '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/>', text: 'Day ' + chDay + ' of your 30-Day Challenge', color: '#8b5cf6' });
+    }
+  } catch (e) {}
+
+  // Pending referrals
+  nuggets.push({ icon: '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>', text: '3 referrals awaiting review', color: '#f59e0b' });
+
+  // Recent tool usage
+  try {
+    var stats = JSON.parse(localStorage.getItem('ctax_tool_stats') || '{}');
+    var totalUses = 0;
+    Object.keys(stats).forEach(function(k) { totalUses += stats[k].count || 0; });
+    if (totalUses > 0) {
+      nuggets.push({ icon: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>', text: totalUses + ' AI tool generations this month', color: '#0B5FD8' });
+    }
+  } catch (e) {}
+
+  var nuggetsHtml = '';
+  nuggets.forEach(function(n) {
+    nuggetsHtml += '<div class="wb-nugget">'
+      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="' + n.color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + n.icon + '</svg>'
+      + '<span>' + n.text + '</span>'
+      + '</div>';
+  });
+
+  el.innerHTML = '<div class="wb-card">'
+    + '<div class="wb-left">'
+    + '<div class="wb-greeting">' + greeting + ', Josh</div>'
+    + (practiceType ? '<div class="wb-practice">' + practiceType + '</div>' : '')
+    + '<div class="wb-summary">Here\'s what\'s happening in your partner portal today.</div>'
+    + '</div>'
+    + '<div class="wb-right">'
+    + nuggetsHtml
+    + '</div>'
+    + '</div>';
+}
+
+// --- Initialize all dashboard upgrades ---
+function initDashboardCommandCenter() {
+  renderWelcomeBanner('dash-welcome-banner');
+  renderQuickActions('dash-quick-actions');
+  renderPartnerScore('dash-partner-score');
+  renderModuleProgress('dash-module-progress');
+  renderLiveActivity('dash-live-activity');
 }
 
 // --- Partner brand ---

@@ -400,6 +400,89 @@
 .ts-label{font-size:12px;font-weight:600;color:var(--slate);margin-top:6px;letter-spacing:0.02em}
 @media(max-width:600px){.ts-grid{grid-template-columns:repeat(2,1fr)}}
 
+/* ── Welcome Banner (M3P1C1) ─────────────────────────── */
+.wb-card{display:flex;justify-content:space-between;align-items:flex-start;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,var(--navy3) 100%);border-radius:16px;padding:28px 32px;color:#fff;position:relative;overflow:hidden}
+.wb-card::after{content:'';position:absolute;top:-40%;right:-10%;width:300px;height:300px;background:radial-gradient(circle,rgba(0,200,224,0.12) 0%,transparent 65%);pointer-events:none}
+.wb-left{flex:1;min-width:0}
+.wb-greeting{font-family:'DM Serif Display',serif;font-size:26px;line-height:1.2}
+.wb-practice{font-size:13px;color:rgba(255,255,255,0.6);margin-top:4px;font-weight:500}
+.wb-summary{font-size:14px;color:rgba(255,255,255,0.7);margin-top:10px;line-height:1.5}
+.wb-right{display:flex;flex-direction:column;gap:8px;flex-shrink:0;margin-left:32px}
+.wb-nugget{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.85);background:rgba(255,255,255,0.07);border-radius:8px;padding:8px 14px;backdrop-filter:blur(4px)}
+.wb-nugget svg{flex-shrink:0}
+@media(max-width:768px){
+  .wb-card{flex-direction:column;gap:16px}
+  .wb-right{margin-left:0;flex-direction:row;flex-wrap:wrap}
+  .wb-greeting{font-size:22px}
+}
+
+/* ── Quick Action Command Bar (M3P1C1) ───────────────── */
+.qa-bar{display:flex;gap:10px;overflow-x:auto;padding:2px 0}
+.qa-btn{display:flex;align-items:center;gap:12px;background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:14px 18px;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s,transform 0.1s;flex:1;min-width:140px;text-align:left;font-family:'DM Sans',sans-serif}
+.qa-btn:hover{border-color:var(--blue);box-shadow:0 4px 16px rgba(11,95,216,0.08);transform:translateY(-1px)}
+.qa-btn:active{transform:translateY(0)}
+.qa-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qa-text{min-width:0}
+.qa-label{font-size:14px;font-weight:700;color:var(--navy);white-space:nowrap}
+.qa-desc{font-size:12px;color:var(--slate);margin-top:2px;white-space:nowrap}
+@media(max-width:900px){.qa-bar{flex-wrap:wrap}.qa-btn{min-width:calc(50% - 6px);flex:none}}
+@media(max-width:500px){.qa-btn{min-width:100%}}
+
+/* ── Partner Score (M3P1C1) ──────────────────────────── */
+.dash-score-modules-row{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start}
+.ps-card{background:var(--white);border:1px solid var(--off2);border-radius:14px;padding:24px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.ps-ring-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+.ps-ring-center{position:absolute;text-align:center}
+.ps-ring-val{font-family:'DM Serif Display',serif;font-size:36px;line-height:1}
+.ps-ring-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--slate);margin-top:4px}
+.ps-breakdown{width:100%}
+.ps-breakdown-row{display:flex;align-items:center;gap:8px;padding:5px 0}
+.ps-breakdown-label{font-size:12px;color:var(--slate);font-weight:600;width:70px;flex-shrink:0}
+.ps-breakdown-track{flex:1;height:6px;background:var(--off);border-radius:3px;overflow:hidden}
+.ps-breakdown-fill{height:100%;border-radius:3px;transition:width 0.8s ease}
+.ps-breakdown-val{font-size:11px;color:var(--slate);font-weight:700;width:36px;text-align:right;flex-shrink:0}
+@media(max-width:900px){.dash-score-modules-row{grid-template-columns:1fr}}
+
+/* ── Module Progress (M3P1C1) ────────────────────────── */
+.mp-header{margin-bottom:14px}
+.mp-title{font-size:14px;font-weight:700;color:var(--navy)}
+.mp-subtitle{font-size:12px;color:var(--slate);margin-top:2px}
+.mp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.mp-card{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:16px;text-align:left;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s;font-family:'DM Sans',sans-serif}
+.mp-card:hover{border-color:var(--blue);box-shadow:0 4px 12px rgba(11,95,216,0.06)}
+.mp-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.mp-card-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.mp-card-pct{font-size:20px;font-weight:800}
+.mp-card-label{font-size:13px;font-weight:700;color:var(--navy)}
+.mp-card-stat{font-size:12px;color:var(--body);margin-top:3px}
+.mp-card-detail{font-size:11px;color:var(--slate);margin-top:2px}
+.mp-card-bar{height:4px;background:var(--off);border-radius:2px;overflow:hidden;margin-top:10px}
+.mp-card-bar-fill{height:100%;border-radius:2px;transition:width 0.8s ease}
+@media(max-width:600px){.mp-grid{grid-template-columns:1fr}}
+
+/* ── Activity dot colors (extend) ────────────────────── */
+.dash-activity-dot-cyan{background:#06b6d4}
+.dash-activity-dot-purple{background:#8b5cf6}
+
+/* ── Dark mode for new dashboard components ──────────── */
+[data-theme="dark"] .wb-card{background:linear-gradient(135deg,#0e1726 0%,#14203a 100%);border:1px solid rgba(255,255,255,0.06)}
+[data-theme="dark"] .qa-btn{background:#141e30;border-color:rgba(255,255,255,0.06);color:#e0e4ec}
+[data-theme="dark"] .qa-btn:hover{border-color:#4BA3FF;box-shadow:0 4px 16px rgba(75,163,255,0.08)}
+[data-theme="dark"] .qa-label{color:#e0e4ec}
+[data-theme="dark"] .qa-desc{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .ps-card{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .ps-ring-label{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .ps-breakdown-label,[data-theme="dark"] .ps-breakdown-val{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .ps-breakdown-track{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .mp-title{color:#e0e4ec}
+[data-theme="dark"] .mp-subtitle{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .mp-card{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .mp-card:hover{border-color:#4BA3FF;box-shadow:0 4px 12px rgba(75,163,255,0.08)}
+[data-theme="dark"] .mp-card-label{color:#e0e4ec}
+[data-theme="dark"] .mp-card-stat{color:rgba(255,255,255,0.6)}
+[data-theme="dark"] .mp-card-detail{color:rgba(255,255,255,0.4)}
+[data-theme="dark"] .mp-card-bar{background:rgba(255,255,255,0.06)}
+
 /* ── Tone Variant Switcher ───────────────────────────── */
 .sb-variant-bar{display:flex;align-items:center;gap:6px;margin-bottom:20px;padding:8px 0}
 .sb-var-label{font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-right:4px}
