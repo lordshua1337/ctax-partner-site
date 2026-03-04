@@ -489,6 +489,9 @@ async function generateScript() {
     renderFollowup('', 'out-followup');
     renderTips(sbResults.tips);
 
+    // Track usage
+    trackToolUsage('script-builder');
+
     // Save to recent results
     saveToolResult('script-builder', type + ' · ' + channel, {
       results: { conversation: sbResults.conversation, email: sbResults.email, objections: sbResults.objections, tips: sbResults.tips, followup: '' },
@@ -512,6 +515,89 @@ async function generateScript() {
     }
   }
 }
+// ── GENERATE FROM ICP ────────────────────────────────────────
+function sbFillFromICP() {
+  if (typeof ICPContext === 'undefined' || !ICPContext.hasProfile()) {
+    if (typeof showToast === 'function') showToast('No ICP profile found. Build one first in the ICP Builder tool.', 'error');
+    return;
+  }
+  var profile = ICPContext.load();
+  if (!profile) return;
+
+  // Map profession_type to select value
+  var typeMap = {
+    'cpa': 'CPA / Tax Preparer',
+    'mortgage': 'Mortgage Broker / Loan Officer',
+    'financial_advisor': 'Financial Advisor / Wealth Manager',
+    'insurance': 'Insurance Agent / Broker',
+    'bookkeeper': 'Bookkeeper / Accountant',
+    'debt_settlement': 'Debt Settlement / Credit Counselor',
+    'real_estate': 'Real Estate Agent / Broker',
+    'attorney': 'Attorney / Law Firm',
+    'fintech': 'Fintech / Lending Platform'
+  };
+  var profType = profile.profession_type || '';
+  var matchedType = '';
+  Object.keys(typeMap).forEach(function(key) {
+    if (profType.toLowerCase().indexOf(key) !== -1) matchedType = typeMap[key];
+  });
+  if (matchedType) {
+    var typeEl = document.getElementById('sb-type');
+    if (typeEl) typeEl.value = matchedType;
+  }
+
+  // Auto-fill situation from ICP red flags
+  if (profile.sections && profile.sections.red_flags) {
+    var sitEl = document.getElementById('sb-situation');
+    if (sitEl && !sitEl.value.trim()) {
+      sitEl.value = 'Client fits our ICP profile. Key indicators: ' + profile.sections.red_flags.substring(0, 200);
+    }
+  }
+
+  if (typeof showToast === 'function') showToast('ICP profile loaded into form', 'copied');
+}
+
+// ── TOOL USAGE TRACKER ──────────────────────────────────────
+var TOOL_STATS_KEY = 'ctax_tool_stats';
+
+function trackToolUsage(toolName) {
+  try {
+    var stats = JSON.parse(localStorage.getItem(TOOL_STATS_KEY) || '{}');
+    if (!stats[toolName]) stats[toolName] = { count: 0, lastUsed: 0 };
+    stats[toolName].count++;
+    stats[toolName].lastUsed = Date.now();
+    localStorage.setItem(TOOL_STATS_KEY, JSON.stringify(stats));
+  } catch (e) { /* storage unavailable */ }
+}
+
+function getToolStats() {
+  try {
+    return JSON.parse(localStorage.getItem(TOOL_STATS_KEY) || '{}');
+  } catch (e) { return {}; }
+}
+
+function renderToolStats(containerId) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  var stats = getToolStats();
+  var tools = [
+    { key: 'script-builder', label: 'Scripts Generated', icon: 'edit' },
+    { key: 'ad-maker', label: 'Ads Created', icon: 'image' },
+    { key: 'client-qualifier', label: 'Clients Qualified', icon: 'search' },
+    { key: 'knowledge-base', label: 'Questions Asked', icon: 'book' }
+  ];
+  var html = '<div class="ts-grid">';
+  tools.forEach(function(t) {
+    var count = stats[t.key] ? stats[t.key].count : 0;
+    html += '<div class="ts-card">'
+      + '<div class="ts-count">' + count + '</div>'
+      + '<div class="ts-label">' + t.label + '</div>'
+      + '</div>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
 // ── TONE VARIANT SWITCHER ────────────────────────────────────
 function renderVariantButtons() {
   var container = document.getElementById('sb-variant-bar');

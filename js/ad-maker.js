@@ -159,6 +159,9 @@ function generateStaticAd(){
   window._amRealW = 1200;
   window._amRealH = 628;
 
+  // Track usage
+  if (typeof trackToolUsage === 'function') trackToolUsage('ad-maker');
+
   // Save to recent results
   if (typeof saveToolResult === 'function') {
     saveToolResult('ad-maker', firm + ' · Template ' + amCurrentTemplate, {

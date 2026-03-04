@@ -128,6 +128,9 @@ async function askKnowledgeBase() {
     input.focus();
     if (kbSection) kbSection.scrollIntoView({behavior:'smooth',block:'start'});
 
+    // Track usage
+    if (typeof trackToolUsage === 'function') trackToolUsage('knowledge-base');
+
     // Save to recent results
     if (typeof saveToolResult === 'function') {
       saveToolResult('knowledge-base', question.length > 50 ? question.substring(0, 50) + '...' : question, {

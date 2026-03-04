@@ -382,6 +382,24 @@
 .rr-item-label{font-size:13px;font-weight:600;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rr-item-meta{font-size:11px;color:var(--slate);margin-top:2px}
 
+/* ── AI Results History (Marketing Kit) ──────────────── */
+.rh-wrap{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:24px;margin-bottom:24px}
+.rh-header{margin-bottom:16px}
+.rh-title{font-family:'DM Serif Display',serif;font-size:18px;color:var(--navy)}
+.rh-desc{font-size:13px;color:var(--slate);margin-top:2px}
+.rh-list{display:flex;flex-direction:column;gap:8px}
+.rh-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--off);border-radius:8px}
+.rh-item-tool{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);min-width:120px;flex-shrink:0}
+.rh-item-label{font-size:14px;font-weight:500;color:var(--navy);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rh-item-time{font-size:12px;color:var(--slate);flex-shrink:0}
+
+/* ── Tool Usage Stats (Dashboard) ────────────────────── */
+.ts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ts-card{background:var(--white);border:1px solid var(--off2);border-radius:10px;padding:16px;text-align:center}
+.ts-count{font-family:'DM Serif Display',serif;font-size:28px;color:var(--navy);line-height:1}
+.ts-label{font-size:12px;font-weight:600;color:var(--slate);margin-top:6px;letter-spacing:0.02em}
+@media(max-width:600px){.ts-grid{grid-template-columns:repeat(2,1fr)}}
+
 /* ── Tone Variant Switcher ───────────────────────────── */
 .sb-variant-bar{display:flex;align-items:center;gap:6px;margin-bottom:20px;padding:8px 0}
 .sb-var-label{font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-right:4px}

@@ -356,6 +356,10 @@
         <p class="portal-sec-desc">Real-time overview of your referral performance, earnings, and activity.</p>
       </div>
 
+      <!-- Tool Usage Stats -->
+      <div class="dash-tool-stats" id="dash-tool-stats" style="margin-bottom:24px"></div>
+      <script>if (typeof renderToolStats === 'function') renderToolStats('dash-tool-stats');</script>
+
       <!-- Partner Leaderboard -->
       <div class="dash-leaderboard">
         <div class="dlb-header">
@@ -2013,6 +2017,38 @@
           <span id="mk-cobrand-desc">Upload your logo in the sidebar to automatically brand all downloadable assets.</span>
         </div>
       </div>
+
+      <!-- AI Results History -->
+      <div class="rh-wrap" id="portal-results-history" style="display:none">
+        <div class="rh-header">
+          <div class="rh-title">AI Results History</div>
+          <div class="rh-desc">Everything you've generated across all tools</div>
+        </div>
+        <div class="rh-list" id="rh-list"></div>
+      </div>
+      <script>
+      (function() {
+        if (typeof getToolHistory !== 'function') return;
+        var items = getToolHistory();
+        if (!items.length) return;
+        var wrap = document.getElementById('portal-results-history');
+        var list = document.getElementById('rh-list');
+        if (!wrap || !list) return;
+        wrap.style.display = 'block';
+        var toolLabels = { 'script-builder': 'Script Builder', 'ad-maker': 'Ad Maker', 'client-qualifier': 'Client Qualifier', 'knowledge-base': 'Knowledge Base' };
+        var html = '';
+        items.slice(0, 10).forEach(function(item) {
+          var ago = typeof timeAgo === 'function' ? timeAgo(item.timestamp) : '';
+          var toolName = toolLabels[item.tool] || item.tool;
+          html += '<div class="rh-item">'
+            + '<div class="rh-item-tool">' + toolName + '</div>'
+            + '<div class="rh-item-label">' + (item.label || 'Result') + '</div>'
+            + '<div class="rh-item-time">' + ago + '</div>'
+            + '</div>';
+        });
+        list.innerHTML = html;
+      })();
+      </script>
 
       <!-- Referral Link Generator -->
       <div class="rlg-wrap">

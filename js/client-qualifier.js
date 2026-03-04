@@ -164,6 +164,9 @@ async function qualifyClient() {
     document.getElementById('cq-loading').style.display = 'none';
     document.getElementById('cq-output').style.display = 'block';
 
+    // Track usage
+    if (typeof trackToolUsage === 'function') trackToolUsage('client-qualifier');
+
     // Save to recent results
     if (typeof saveToolResult === 'function') {
       saveToolResult('client-qualifier', (result.verdict_title || result.verdict) + ' · ' + debt, {
