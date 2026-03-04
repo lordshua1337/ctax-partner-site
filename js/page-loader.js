@@ -91,10 +91,6 @@ function onPageLoaded(id) {
   if (id === 'portal' && typeof calcProjection === 'function') {
     setTimeout(calcProjection, 80);
   }
-  // Initialize dashboard greeting
-  if (id === 'portal' && typeof initDashGreeting === 'function') {
-    setTimeout(initDashGreeting, 80);
-  }
   // Initialize dashboard command center (M3P1C1)
   if (id === 'portal' && typeof initDashboardCommandCenter === 'function') {
     setTimeout(initDashboardCommandCenter, 100);

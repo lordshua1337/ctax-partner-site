@@ -225,14 +225,6 @@ function portalAnimateEntrance(sec) {
   });
 }
 
-// --- Dashboard: Welcome greeting ---
-function initDashGreeting() {
-  var el = document.getElementById('dash-greeting');
-  if (!el) return;
-  var h = new Date().getHours();
-  var greeting = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
-  el.textContent = greeting + ', Josh';
-}
 
 // ═══ DASHBOARD COMMAND CENTER (M3P1C1) ═══
 
@@ -536,7 +528,7 @@ function renderQuickActions(containerId) {
       desc: 'Chain all tools together',
       icon: '<circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/>',
       color: '#8b5cf6',
-      onclick: 'showPipelineModal()'
+      onclick: 'if(typeof showPipelineModal==="function")showPipelineModal()'
     }
   ];
 
