@@ -99,6 +99,10 @@ function onPageLoaded(id) {
   if (id === 'portal' && typeof initDashboardCommandCenter === 'function') {
     setTimeout(initDashboardCommandCenter, 100);
   }
+  // Initialize navigation + settings upgrade (M3P2C1)
+  if (id === 'portal' && typeof initNavSettingsUpgrade === 'function') {
+    setTimeout(initNavSettingsUpgrade, 120);
+  }
   // Initialize payout countdown
   if (id === 'portal' && typeof initPayCountdown === 'function') {
     setTimeout(initPayCountdown, 80);

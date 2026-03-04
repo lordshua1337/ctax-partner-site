@@ -201,6 +201,9 @@ function portalNav(el, secId) {
 
   // Sync mobile bottom nav highlight
   mobNavSync(secId);
+
+  // Update breadcrumb
+  if (typeof updateBreadcrumb === 'function') updateBreadcrumb(secId);
 }
 
 function portalAnimateEntrance(sec) {
@@ -2300,7 +2303,10 @@ var SHORTCUT_DATA = [
   { keys: ['R'], desc: 'Go to Referrals' },
   { keys: ['E'], desc: 'Go to Earnings' },
   { keys: ['S'], desc: 'Submit a Referral' },
-  { keys: ['T'], desc: 'Toggle Tunes' }
+  { keys: ['T'], desc: 'Toggle Tunes' },
+  { keys: ['P'], desc: 'Open Page Builder' },
+  { keys: ['C'], desc: 'Open 30-Day Challenge' },
+  { keys: ['B'], desc: 'Open Business Planner' }
 ];
 
 function kbdHelpOpen() {
@@ -2333,6 +2339,415 @@ function kbdHelpClose() {
   if (overlay) overlay.classList.remove('kbd-help-open');
 }
 
+// ═══ M3P2C1: NAVIGATION + SETTINGS UPGRADE ═══
+
+// --- Collapsible Sidebar Sections ---
+var NAV_COLLAPSE_KEY = 'ctax_nav_collapsed';
+function initCollapsibleNav() {
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(NAV_COLLAPSE_KEY) || '{}'); } catch (e) {}
+
+  document.querySelectorAll('.portal-nav-group').forEach(function(group, i) {
+    var heading = group.querySelector('.portal-nav-heading');
+    if (!heading) return;
+    var key = 'nav_' + i;
+
+    // Add collapse toggle
+    heading.style.cursor = 'pointer';
+    heading.style.userSelect = 'none';
+    heading.classList.add('pnh-collapsible');
+
+    var chevron = document.createElement('span');
+    chevron.className = 'pnh-chevron';
+    chevron.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+    heading.appendChild(chevron);
+
+    // Restore saved state
+    if (saved[key]) {
+      group.classList.add('png-collapsed');
+    }
+
+    heading.addEventListener('click', function() {
+      group.classList.toggle('png-collapsed');
+      try {
+        var state = JSON.parse(localStorage.getItem(NAV_COLLAPSE_KEY) || '{}');
+        state[key] = group.classList.contains('png-collapsed');
+        localStorage.setItem(NAV_COLLAPSE_KEY, JSON.stringify(state));
+      } catch (e) {}
+    });
+  });
+}
+
+// --- Breadcrumb Navigation ---
+var BREADCRUMB_MAP = {
+  'portal-sec-dashboard': ['Dashboard'],
+  'portal-sec-referrals': ['Referrals'],
+  'portal-sec-earnings': ['Financials', 'Earnings'],
+  'portal-sec-payouts': ['Financials', 'Payouts'],
+  'portal-sec-submit': ['Tools', 'Submit Referral'],
+  'portal-sec-documents': ['Tools', 'Documents'],
+  'portal-sec-calculator': ['Tools', 'Revenue Calculator'],
+  'portal-sec-page-builder': ['Tools', 'Page Builder'],
+  'portal-sec-my-pages': ['Tools', 'My Pages'],
+  'portal-sec-tunes': ['Tools', 'Tunes'],
+  'portal-sec-ce': ['Resources', 'CE Webinars'],
+  'portal-sec-marketing': ['Resources', 'Marketing Kit'],
+  'portal-sec-playbook': ['Resources', 'Referral Playbook'],
+  'portal-sec-planner': ['Resources', 'Business Planner'],
+  'portal-sec-challenge': ['Resources', '30-Day Challenge'],
+  'portal-sec-ai-scripts': ['AI Tools', 'Script Builder'],
+  'portal-sec-ai-admaker': ['AI Tools', 'Ad Maker'],
+  'portal-sec-ai-qualifier': ['AI Tools', 'Client Qualifier'],
+  'portal-sec-ai-kb': ['AI Tools', 'Knowledge Base'],
+  'portal-sec-settings': ['Account', 'Settings'],
+  'portal-sec-support': ['Account', 'Support'],
+  'portal-sec-training': ['Onboarding']
+};
+
+function updateBreadcrumb(secId) {
+  var el = document.getElementById('portal-breadcrumb');
+  if (!el) return;
+  var crumbs = BREADCRUMB_MAP[secId] || ['Dashboard'];
+  var html = '<a class="bc-link" onclick="portalNav(document.getElementById(\'nav-dashboard\'),\'portal-sec-dashboard\')">Portal</a>';
+  crumbs.forEach(function(c, i) {
+    html += '<span class="bc-sep"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></span>';
+    if (i === crumbs.length - 1) {
+      html += '<span class="bc-current">' + c + '</span>';
+    } else {
+      html += '<span class="bc-link">' + c + '</span>';
+    }
+  });
+  el.innerHTML = html;
+}
+
+// --- Settings: Referral Link Manager ---
+function initReferralLink() {
+  var el = document.getElementById('set-referral-link');
+  if (!el) return;
+  var partnerId = 'CTX-JH-2847';
+  var link = 'https://communitytax.com/partner/' + partnerId;
+
+  el.innerHTML = '<div class="set-section-title">Your Referral Link</div>'
+    + '<div class="srl-card">'
+    + '<div class="srl-link-row">'
+    + '<input type="text" class="set-input srl-input" value="' + link + '" readonly id="srl-link-input">'
+    + '<button class="srl-copy" onclick="srlCopyLink()">Copy</button>'
+    + '</div>'
+    + '<div class="srl-stats">'
+    + '<div class="srl-stat"><div class="srl-stat-val">156</div><div class="srl-stat-label">Total Clicks</div></div>'
+    + '<div class="srl-stat"><div class="srl-stat-val">24</div><div class="srl-stat-label">Conversions</div></div>'
+    + '<div class="srl-stat"><div class="srl-stat-val">15.4%</div><div class="srl-stat-label">Conversion Rate</div></div>'
+    + '</div>'
+    + '<div class="srl-share-row">'
+    + '<button class="srl-share-btn" onclick="srlShareEmail()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Email</button>'
+    + '<button class="srl-share-btn" onclick="srlShareLinkedIn()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</button>'
+    + '<button class="srl-share-btn" onclick="srlGenerateQR()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/></svg> QR Code</button>'
+    + '</div>'
+    + '<div id="srl-qr-container" style="display:none;text-align:center;padding:16px 0"></div>'
+    + '</div>';
+}
+
+function srlCopyLink() {
+  var input = document.getElementById('srl-link-input');
+  if (input) {
+    navigator.clipboard.writeText(input.value).then(function() {
+      showToast('Referral link copied', 'success');
+    });
+  }
+}
+
+function srlShareEmail() {
+  var link = document.getElementById('srl-link-input');
+  if (link) {
+    window.open('mailto:?subject=Tax Resolution for Your Clients&body=I partner with Community Tax to help clients resolve IRS debt. Learn more: ' + encodeURIComponent(link.value));
+  }
+}
+
+function srlShareLinkedIn() {
+  var link = document.getElementById('srl-link-input');
+  if (link) {
+    window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(link.value), '_blank');
+  }
+}
+
+function srlGenerateQR() {
+  var container = document.getElementById('srl-qr-container');
+  if (!container) return;
+  if (container.style.display === 'block') {
+    container.style.display = 'none';
+    return;
+  }
+  // Simple QR code via SVG placeholder (a real implementation would use a QR library)
+  var link = 'https://communitytax.com/partner/CTX-JH-2847';
+  container.innerHTML = '<div style="background:#fff;display:inline-block;padding:16px;border-radius:12px;border:1px solid var(--off2)">'
+    + '<svg width="160" height="160" viewBox="0 0 160 160"><rect width="160" height="160" fill="#fff"/>'
+    + '<rect x="10" y="10" width="40" height="40" rx="4" fill="#0B5FD8"/><rect x="16" y="16" width="28" height="28" rx="2" fill="#fff"/><rect x="22" y="22" width="16" height="16" rx="1" fill="#0B5FD8"/>'
+    + '<rect x="110" y="10" width="40" height="40" rx="4" fill="#0B5FD8"/><rect x="116" y="16" width="28" height="28" rx="2" fill="#fff"/><rect x="122" y="22" width="16" height="16" rx="1" fill="#0B5FD8"/>'
+    + '<rect x="10" y="110" width="40" height="40" rx="4" fill="#0B5FD8"/><rect x="16" y="116" width="28" height="28" rx="2" fill="#fff"/><rect x="22" y="122" width="16" height="16" rx="1" fill="#0B5FD8"/>'
+    + '<rect x="60" y="10" width="8" height="8" fill="#0B5FD8"/><rect x="76" y="10" width="8" height="8" fill="#0B5FD8"/><rect x="92" y="10" width="8" height="8" fill="#0B5FD8"/>'
+    + '<rect x="60" y="26" width="8" height="8" fill="#0B5FD8"/><rect x="76" y="26" width="8" height="8" fill="#0B5FD8"/>'
+    + '<rect x="60" y="42" width="8" height="8" fill="#0B5FD8"/><rect x="92" y="42" width="8" height="8" fill="#0B5FD8"/>'
+    + '<rect x="60" y="60" width="8" height="8" fill="#0B5FD8"/><rect x="76" y="60" width="8" height="8" fill="#0B5FD8"/><rect x="92" y="60" width="8" height="8" fill="#0B5FD8"/><rect x="110" y="60" width="8" height="8" fill="#0B5FD8"/><rect x="140" y="60" width="8" height="8" fill="#0B5FD8"/>'
+    + '<rect x="10" y="60" width="8" height="8" fill="#0B5FD8"/><rect x="26" y="60" width="8" height="8" fill="#0B5FD8"/><rect x="42" y="60" width="8" height="8" fill="#0B5FD8"/>'
+    + '<rect x="60" y="76" width="8" height="8" fill="#0B5FD8"/><rect x="92" y="76" width="8" height="8" fill="#0B5FD8"/><rect x="110" y="76" width="8" height="8" fill="#0B5FD8"/><rect x="126" y="76" width="8" height="8" fill="#0B5FD8"/>'
+    + '<rect x="76" y="92" width="8" height="8" fill="#0B5FD8"/><rect x="60" y="92" width="8" height="8" fill="#0B5FD8"/><rect x="110" y="92" width="8" height="8" fill="#0B5FD8"/><rect x="140" y="92" width="8" height="8" fill="#0B5FD8"/>'
+    + '<rect x="60" y="110" width="8" height="8" fill="#0B5FD8"/><rect x="76" y="110" width="8" height="8" fill="#0B5FD8"/><rect x="110" y="110" width="8" height="8" fill="#0B5FD8"/><rect x="126" y="110" width="8" height="8" fill="#0B5FD8"/><rect x="140" y="110" width="8" height="8" fill="#0B5FD8"/>'
+    + '<rect x="60" y="126" width="8" height="8" fill="#0B5FD8"/><rect x="92" y="126" width="8" height="8" fill="#0B5FD8"/><rect x="110" y="126" width="8" height="8" fill="#0B5FD8"/><rect x="140" y="126" width="8" height="8" fill="#0B5FD8"/>'
+    + '<rect x="76" y="140" width="8" height="8" fill="#0B5FD8"/><rect x="92" y="140" width="8" height="8" fill="#0B5FD8"/><rect x="126" y="140" width="8" height="8" fill="#0B5FD8"/>'
+    + '</svg>'
+    + '<div style="font-size:12px;color:var(--slate);margin-top:8px">Scan to visit your referral page</div>'
+    + '</div>';
+  container.style.display = 'block';
+}
+
+// --- Settings: Brand Color Picker ---
+var BRAND_COLOR_KEY = 'ctax_brand_color';
+function initBrandColorPicker() {
+  var el = document.getElementById('set-brand-color');
+  if (!el) return;
+
+  var saved = localStorage.getItem(BRAND_COLOR_KEY) || '#0B5FD8';
+
+  el.innerHTML = '<div class="set-section-title">Brand Color</div>'
+    + '<p class="set-section-desc">Choose your primary brand color. This will be applied to co-branded materials and your partner page.</p>'
+    + '<div class="sbc-picker">'
+    + '<div class="sbc-presets" id="sbc-presets"></div>'
+    + '<div class="sbc-custom">'
+    + '<label class="set-label">Custom Color</label>'
+    + '<div class="sbc-custom-row">'
+    + '<input type="color" id="sbc-color-input" value="' + saved + '" class="sbc-color-input">'
+    + '<input type="text" id="sbc-hex-input" value="' + saved + '" class="set-input sbc-hex-input" maxlength="7">'
+    + '<div class="sbc-preview" id="sbc-preview" style="background:' + saved + '"></div>'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+
+  var presets = ['#0B5FD8', '#DC2626', '#059669', '#7C3AED', '#EA580C', '#0891B2', '#BE185D', '#4F46E5'];
+  var presetsEl = document.getElementById('sbc-presets');
+  presets.forEach(function(color) {
+    var btn = document.createElement('button');
+    btn.className = 'sbc-preset' + (color === saved ? ' sbc-preset-active' : '');
+    btn.style.background = color;
+    btn.onclick = function() {
+      sbcApplyColor(color);
+      document.querySelectorAll('.sbc-preset').forEach(function(p) { p.classList.remove('sbc-preset-active'); });
+      btn.classList.add('sbc-preset-active');
+    };
+    presetsEl.appendChild(btn);
+  });
+
+  document.getElementById('sbc-color-input').addEventListener('input', function() {
+    sbcApplyColor(this.value);
+  });
+  document.getElementById('sbc-hex-input').addEventListener('change', function() {
+    if (/^#[0-9a-fA-F]{6}$/.test(this.value)) {
+      sbcApplyColor(this.value);
+    }
+  });
+}
+
+function sbcApplyColor(color) {
+  localStorage.setItem(BRAND_COLOR_KEY, color);
+  var colorInput = document.getElementById('sbc-color-input');
+  var hexInput = document.getElementById('sbc-hex-input');
+  var preview = document.getElementById('sbc-preview');
+  if (colorInput) colorInput.value = color;
+  if (hexInput) hexInput.value = color;
+  if (preview) preview.style.background = color;
+
+  // Apply to portal layout
+  var layout = document.querySelector('.portal-layout');
+  if (layout) {
+    var rgb = hexToRgb(color);
+    layout.style.setProperty('--pa', color);
+    layout.style.setProperty('--pa-rgb', rgb.r + ',' + rgb.g + ',' + rgb.b);
+    layout.classList.add('portal-branded');
+  }
+  showToast('Brand color updated', 'success');
+}
+
+// --- Settings: Data Export ---
+function exportPartnerData() {
+  var data = {
+    exportDate: new Date().toISOString(),
+    partner: {
+      name: 'Josh Hohenstein',
+      company: 'Partner Tax Associates LLC',
+      partnerId: 'CTX-JH-2847',
+      tier: 'Premium'
+    },
+    toolUsage: {},
+    toolHistory: [],
+    challengeState: {},
+    pageBuilderPages: [],
+    brandColor: null,
+    settings: {}
+  };
+
+  try { data.toolUsage = JSON.parse(localStorage.getItem('ctax_tool_stats') || '{}'); } catch (e) {}
+  try { data.toolHistory = JSON.parse(localStorage.getItem('ctax_tool_history') || '[]'); } catch (e) {}
+  try { data.challengeState = JSON.parse(localStorage.getItem('ch_30day_v1') || '{}'); } catch (e) {}
+  try { data.pageBuilderPages = JSON.parse(localStorage.getItem('ctax_pb_pages') || '[]'); } catch (e) {}
+  try { data.brandColor = localStorage.getItem('ctax_brand_color'); } catch (e) {}
+
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'ctax-partner-data-' + new Date().toISOString().slice(0, 10) + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Data exported successfully', 'success');
+}
+
+// --- Enhanced Notification System ---
+var NOTIF_KEY = 'ctax_notifications';
+
+function getNotifications() {
+  try {
+    return JSON.parse(localStorage.getItem(NOTIF_KEY) || '[]');
+  } catch (e) { return []; }
+}
+
+function addNotification(text, type) {
+  type = type || 'info';
+  try {
+    var notifs = getNotifications();
+    notifs.unshift({
+      text: text,
+      type: type,
+      read: false,
+      ts: Date.now()
+    });
+    if (notifs.length > 20) notifs = notifs.slice(0, 20);
+    localStorage.setItem(NOTIF_KEY, JSON.stringify(notifs));
+    updateNotifBadge();
+  } catch (e) {}
+}
+
+function updateNotifBadge() {
+  var notifs = getNotifications();
+  var unread = notifs.filter(function(n) { return !n.read; }).length;
+  var badge = document.getElementById('portal-notif-badge');
+  if (badge) {
+    badge.textContent = unread;
+    badge.style.display = unread > 0 ? '' : 'none';
+  }
+}
+
+function renderNotifPanel() {
+  var panel = document.getElementById('portal-notif-panel');
+  if (!panel) return;
+  var notifs = getNotifications();
+
+  // Merge localStorage notifs with static ones
+  var staticNotifs = [
+    { text: 'Williams case moved to Resolution -- your $2,736 commission is on track.', type: 'earnings', ts: Date.now() - 7200000, read: false },
+    { text: 'New payout scheduled: $2,736 on March 1, 2026.', type: 'payout', ts: Date.now() - 18000000, read: false },
+    { text: 'Garcia referral assigned to S. Patel for investigation.', type: 'referral', ts: Date.now() - 86400000, read: false },
+    { text: 'Thompson case resolved -- $4,224 commission paid.', type: 'earnings', ts: Date.now() - 432000000, read: true },
+    { text: 'New CE webinar available: State Tax Compliance.', type: 'info', ts: Date.now() - 604800000, read: true }
+  ];
+
+  // Combine, dedup by text, sort by ts
+  var allNotifs = notifs.concat(staticNotifs);
+  var seen = {};
+  allNotifs = allNotifs.filter(function(n) {
+    if (seen[n.text]) return false;
+    seen[n.text] = true;
+    return true;
+  });
+  allNotifs.sort(function(a, b) { return b.ts - a.ts; });
+  allNotifs = allNotifs.slice(0, 12);
+
+  var typeIcons = {
+    'earnings': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>',
+    'referral': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
+    'payout': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+    'tool': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
+    'challenge': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>',
+    'info': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+  };
+
+  var html = '<div class="portal-notif-header">'
+    + '<span>Notifications</span>'
+    + '<button class="portal-notif-mark" onclick="markAllNotifRead()">Mark all read</button>'
+    + '</div>';
+
+  allNotifs.forEach(function(n) {
+    var ago = typeof timeAgo === 'function' ? timeAgo(n.ts) : '';
+    var icon = typeIcons[n.type] || typeIcons.info;
+    html += '<div class="portal-notif-item' + (!n.read ? ' portal-notif-item-unread' : '') + '">'
+      + '<span class="portal-notif-icon">' + icon + '</span>'
+      + n.text
+      + '<div class="portal-notif-time">' + ago + '</div>'
+      + '</div>';
+  });
+
+  panel.innerHTML = html;
+  updateNotifBadge();
+}
+
+function markAllNotifRead() {
+  try {
+    var notifs = getNotifications();
+    notifs.forEach(function(n) { n.read = true; });
+    localStorage.setItem(NOTIF_KEY, JSON.stringify(notifs));
+  } catch (e) {}
+  updateNotifBadge();
+  showToast('All notifications marked as read', 'info');
+  renderNotifPanel();
+}
+
+// Generate tool achievement notifications
+function checkToolAchievements() {
+  try {
+    var stats = JSON.parse(localStorage.getItem('ctax_tool_stats') || '{}');
+    var achieveKey = 'ctax_tool_achievements';
+    var achieved = JSON.parse(localStorage.getItem(achieveKey) || '{}');
+
+    var milestones = [
+      { tool: 'script-builder', count: 5, msg: 'Achievement: Generated 5 referral scripts!' },
+      { tool: 'ad-maker', count: 3, msg: 'Achievement: Created 3 marketing ads!' },
+      { tool: 'client-qualifier', count: 5, msg: 'Achievement: Qualified 5 clients!' },
+      { tool: 'knowledge-base', count: 10, msg: 'Achievement: Asked 10 knowledge base questions!' }
+    ];
+
+    milestones.forEach(function(m) {
+      var key = m.tool + '_' + m.count;
+      if (stats[m.tool] && stats[m.tool].count >= m.count && !achieved[key]) {
+        addNotification(m.msg, 'tool');
+        achieved[key] = Date.now();
+      }
+    });
+
+    localStorage.setItem(achieveKey, JSON.stringify(achieved));
+  } catch (e) {}
+}
+
+// --- Init all M3P2 features ---
+function initNavSettingsUpgrade() {
+  initCollapsibleNav();
+  initReferralLink();
+  initBrandColorPicker();
+  renderNotifPanel();
+  checkToolAchievements();
+
+  // Restore saved brand color
+  var savedColor = localStorage.getItem(BRAND_COLOR_KEY);
+  if (savedColor && typeof hexToRgb === 'function') {
+    var layout = document.querySelector('.portal-layout');
+    if (layout) {
+      var rgb = hexToRgb(savedColor);
+      layout.style.setProperty('--pa', savedColor);
+      layout.style.setProperty('--pa-rgb', rgb.r + ',' + rgb.g + ',' + rgb.b);
+      layout.classList.add('portal-branded');
+    }
+  }
+}
+
 // Global shortcut keys (single-key, no modifier, not inside input)
 document.addEventListener('keydown', function(e) {
   // Skip if user is typing in an input/textarea/select
@@ -2359,7 +2774,10 @@ document.addEventListener('keydown', function(e) {
     'd': 'portal-sec-dashboard',
     'r': 'portal-sec-referrals',
     'e': 'portal-sec-earnings',
-    's': 'portal-sec-submit'
+    's': 'portal-sec-submit',
+    'p': 'portal-sec-page-builder',
+    'c': 'portal-sec-challenge',
+    'b': 'portal-sec-planner'
   };
   if (shortcuts[e.key]) {
     e.preventDefault();

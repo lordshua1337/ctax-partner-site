@@ -464,6 +464,67 @@
 .dash-activity-dot-cyan{background:#06b6d4}
 .dash-activity-dot-purple{background:#8b5cf6}
 
+/* ── Breadcrumb (M3P2C1) ────────────────────────────── */
+.portal-breadcrumb{display:flex;align-items:center;gap:6px;padding:12px 28px 0;font-size:12px;color:var(--slate)}
+.bc-link{color:var(--blue);cursor:pointer;transition:color 0.15s;font-weight:500}
+.bc-link:hover{color:var(--navy)}
+.bc-sep{display:flex;align-items:center;color:var(--slate);opacity:0.4}
+.bc-current{font-weight:600;color:var(--navy)}
+
+/* ── Collapsible Sidebar (M3P2C1) ───────────────────── */
+.pnh-collapsible{display:flex;align-items:center;justify-content:space-between;padding-right:4px;transition:color 0.15s}
+.pnh-collapsible:hover{color:var(--blue)}
+.pnh-chevron{display:flex;transition:transform 0.2s ease;opacity:0.5}
+.png-collapsed .pnh-chevron{transform:rotate(-90deg)}
+.png-collapsed .portal-nav-item{display:none}
+
+/* ── Referral Link Manager (M3P2C1) ─────────────────── */
+.srl-card{background:var(--off);border:1px solid var(--off2);border-radius:12px;padding:20px}
+.srl-link-row{display:flex;gap:8px;margin-bottom:16px}
+.srl-input{flex:1;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--navy);background:var(--white)}
+.srl-copy{padding:8px 16px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background 0.15s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.srl-copy:hover{background:#0a4fb5}
+.srl-stats{display:flex;gap:16px;margin-bottom:16px}
+.srl-stat{flex:1;text-align:center;background:var(--white);border:1px solid var(--off2);border-radius:8px;padding:12px}
+.srl-stat-val{font-family:'DM Serif Display',serif;font-size:22px;color:var(--navy)}
+.srl-stat-label{font-size:11px;color:var(--slate);font-weight:600;margin-top:2px}
+.srl-share-row{display:flex;gap:8px}
+.srl-share-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--white);border:1px solid var(--off2);border-radius:8px;font-size:12px;font-weight:600;color:var(--navy);cursor:pointer;transition:border-color 0.15s,background 0.15s;font-family:'DM Sans',sans-serif}
+.srl-share-btn:hover{border-color:var(--blue);background:rgba(11,95,216,0.04)}
+
+/* ── Brand Color Picker (M3P2C1) ────────────────────── */
+.sbc-picker{margin-top:12px}
+.sbc-presets{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.sbc-preset{width:36px;height:36px;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:transform 0.1s,border-color 0.15s}
+.sbc-preset:hover{transform:scale(1.1)}
+.sbc-preset-active{border-color:var(--navy);box-shadow:0 0 0 2px var(--white),0 0 0 4px var(--navy)}
+.sbc-custom-row{display:flex;align-items:center;gap:10px}
+.sbc-color-input{width:44px;height:36px;border:1px solid var(--off2);border-radius:8px;padding:2px;cursor:pointer;background:var(--white)}
+.sbc-hex-input{width:100px;font-family:'DM Sans',sans-serif}
+.sbc-preview{width:36px;height:36px;border-radius:8px;border:1px solid var(--off2);flex-shrink:0}
+
+/* ── Data Export Button (M3P2C1) ────────────────────── */
+.set-export-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.15s;font-family:'DM Sans',sans-serif}
+.set-export-btn:hover{background:#0a4fb5}
+
+/* ── Notification icon in items (M3P2C1) ────────────── */
+.portal-notif-icon{flex-shrink:0;color:var(--slate);margin-right:6px;display:inline-flex}
+
+/* ── Dark mode for M3P2 components ──────────────────── */
+[data-theme="dark"] .portal-breadcrumb{color:rgba(255,255,255,0.4)}
+[data-theme="dark"] .bc-link{color:#4BA3FF}
+[data-theme="dark"] .bc-link:hover{color:#e0e4ec}
+[data-theme="dark"] .bc-current{color:#e0e4ec}
+[data-theme="dark"] .srl-card{background:#141e30;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .srl-input{background:#0e1726;color:#e0e4ec;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .srl-stat{background:#0e1726;border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .srl-stat-val{color:#e0e4ec}
+[data-theme="dark"] .srl-share-btn{background:#0e1726;border-color:rgba(255,255,255,0.06);color:#e0e4ec}
+[data-theme="dark"] .srl-share-btn:hover{border-color:#4BA3FF}
+[data-theme="dark"] .sbc-preset-active{border-color:#e0e4ec;box-shadow:0 0 0 2px #141e30,0 0 0 4px #e0e4ec}
+[data-theme="dark"] .sbc-color-input{background:#0e1726;border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .sbc-preview{border-color:rgba(255,255,255,0.08)}
+
 /* ── Dark mode for new dashboard components ──────────── */
 [data-theme="dark"] .wb-card{background:linear-gradient(135deg,#0e1726 0%,#14203a 100%);border:1px solid rgba(255,255,255,0.06)}
 [data-theme="dark"] .qa-btn{background:#141e30;border-color:rgba(255,255,255,0.06);color:#e0e4ec}
