@@ -864,15 +864,37 @@ function pbOpenPublishModal() {
   var errEl = document.getElementById('pb-pub-error');
   if (errEl) errEl.textContent = '';
   // Pre-fill if editing an existing page
+  var metaDescEl = document.getElementById('pb-pub-meta-desc');
+  var ogImageEl = document.getElementById('pb-pub-og-image');
+  var gaEl = document.getElementById('pb-pub-ga');
+  var pixelEl = document.getElementById('pb-pub-pixel');
+  var partnerNameEl = document.getElementById('pb-pub-partner-name');
+  var partnerPhoneEl = document.getElementById('pb-pub-partner-phone');
+  var partnerEmailEl = document.getElementById('pb-pub-partner-email');
+
   if (pbEditingSlug) {
     var existing = pbFindPage(pbEditingSlug);
     if (existing) {
       if (slugInput) slugInput.value = existing.slug;
       if (titleInput) titleInput.value = existing.title;
+      if (metaDescEl) metaDescEl.value = existing.metaDesc || '';
+      if (ogImageEl) ogImageEl.value = existing.ogImage || '';
+      if (gaEl) gaEl.value = existing.gaId || '';
+      if (pixelEl) pixelEl.value = existing.pixelId || '';
+      if (partnerNameEl) partnerNameEl.value = existing.partnerName || '';
+      if (partnerPhoneEl) partnerPhoneEl.value = existing.partnerPhone || '';
+      if (partnerEmailEl) partnerEmailEl.value = existing.partnerEmail || '';
     }
   } else {
     if (slugInput) slugInput.value = '';
     if (titleInput) titleInput.value = '';
+    if (metaDescEl) metaDescEl.value = '';
+    if (ogImageEl) ogImageEl.value = '';
+    if (gaEl) gaEl.value = '';
+    if (pixelEl) pixelEl.value = '';
+    if (partnerNameEl) partnerNameEl.value = '';
+    if (partnerPhoneEl) partnerPhoneEl.value = '';
+    if (partnerEmailEl) partnerEmailEl.value = '';
   }
   modal.classList.add('pb-pub-modal-open');
 }
@@ -992,6 +1014,15 @@ function pbPublish() {
   var css = pbEditor.getCss({ avoidProtected: true });
   var now = new Date().toISOString();
 
+  // Collect page settings
+  var metaDesc = (document.getElementById('pb-pub-meta-desc') || {}).value || '';
+  var ogImage = (document.getElementById('pb-pub-og-image') || {}).value || '';
+  var gaId = (document.getElementById('pb-pub-ga') || {}).value || '';
+  var pixelId = (document.getElementById('pb-pub-pixel') || {}).value || '';
+  var partnerName = (document.getElementById('pb-pub-partner-name') || {}).value || '';
+  var partnerPhone = (document.getElementById('pb-pub-partner-phone') || {}).value || '';
+  var partnerEmail = (document.getElementById('pb-pub-partner-email') || {}).value || '';
+
   // Build page object
   var page = {
     slug: slug,
@@ -999,7 +1030,14 @@ function pbPublish() {
     html: html,
     css: css,
     publishedAt: now,
-    updatedAt: now
+    updatedAt: now,
+    metaDesc: metaDesc.trim(),
+    ogImage: ogImage.trim(),
+    gaId: gaId.trim(),
+    pixelId: pixelId.trim(),
+    partnerName: partnerName.trim(),
+    partnerPhone: partnerPhone.trim(),
+    partnerEmail: partnerEmail.trim()
   };
 
   // Update existing or add new
@@ -1007,13 +1045,7 @@ function pbPublish() {
   var updatedPages = pages.map(function(p) {
     if (p.slug === pbEditingSlug || p.slug === slug) {
       found = true;
-      return Object.assign({}, p, {
-        slug: slug,
-        title: title,
-        html: html,
-        css: css,
-        updatedAt: now
-      });
+      return Object.assign({}, p, page, { updatedAt: now });
     }
     return p;
   });

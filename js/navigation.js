@@ -320,12 +320,62 @@ function renderLandingPage(slug) {
     'tick()})})()' +
     '<\/script>';
 
+  // SEO meta tags
+  var metaTags = '';
+  if (page.metaDesc) metaTags += '<meta name="description" content="' + page.metaDesc.replace(/"/g, '&quot;') + '">';
+  metaTags += '<meta property="og:title" content="' + (page.title || '').replace(/"/g, '&quot;') + '">';
+  if (page.metaDesc) metaTags += '<meta property="og:description" content="' + page.metaDesc.replace(/"/g, '&quot;') + '">';
+  if (page.ogImage) metaTags += '<meta property="og:image" content="' + page.ogImage.replace(/"/g, '&quot;') + '">';
+
+  // Analytics snippets
+  var analyticsScript = '';
+  if (page.gaId) {
+    analyticsScript += '<script async src="https://www.googletagmanager.com/gtag/js?id=' + page.gaId + '"><\/script>' +
+      '<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","' + page.gaId + '")<\/script>';
+  }
+  if (page.pixelId) {
+    analyticsScript += '<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","' + page.pixelId + '");fbq("track","PageView")<\/script>';
+  }
+
+  // Partner branding footer
+  var brandFooter = '';
+  if (page.partnerName || page.partnerPhone || page.partnerEmail) {
+    brandFooter = '<footer style="text-align:center;padding:24px 16px;background:var(--pb-bg-2,#f4f4f5);border-top:1px solid var(--pb-border,#e4e4e7);font-size:13px;color:var(--pb-text-2,#8a8a92)">';
+    if (page.partnerName) brandFooter += '<strong style="color:var(--pb-text-0,#18181b)">' + page.partnerName + '</strong><br>';
+    var contactParts = [];
+    if (page.partnerPhone) contactParts.push('<a href="tel:' + page.partnerPhone.replace(/[^\d+]/g, '') + '" style="color:var(--pb-accent,#18181b)">' + page.partnerPhone + '</a>');
+    if (page.partnerEmail) contactParts.push('<a href="mailto:' + page.partnerEmail + '" style="color:var(--pb-accent,#18181b)">' + page.partnerEmail + '</a>');
+    if (contactParts.length) brandFooter += contactParts.join(' &middot; ');
+    brandFooter += '</footer>';
+  }
+
+  // Form submission handler (captures leads to localStorage)
+  var formScript = '<script>' +
+    'document.querySelectorAll(".pb-form").forEach(function(form){' +
+    'form.addEventListener("submit",function(e){e.preventDefault()});' +
+    'var btn=form.querySelector("button");' +
+    'if(btn)btn.addEventListener("click",function(){' +
+    'var data={};var inputs=form.querySelectorAll("input,textarea,select");' +
+    'inputs.forEach(function(inp){if(inp.placeholder||inp.name)data[inp.name||inp.placeholder]=inp.value});' +
+    'data.page="' + slug + '";data.submitted=new Date().toISOString();' +
+    'var leads=JSON.parse(localStorage.getItem("ctax_pb_leads")||"[]");' +
+    'leads.push(data);localStorage.setItem("ctax_pb_leads",JSON.stringify(leads));' +
+    'btn.textContent="Submitted!";btn.disabled=true;btn.style.opacity="0.7";' +
+    'inputs.forEach(function(inp){inp.value=""})' +
+    '})})' +
+    '<\/script>';
+
+  // Page loading animation
+  var loadingCSS = 'body{opacity:0;animation:pb-fadein 0.4s ease 0.1s forwards}@keyframes pb-fadein{to{opacity:1}}';
+
   var fullHtml = '<!DOCTYPE html><html lang="en"><head>' +
     '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">' +
+    metaTags +
     '<title>' + page.title + '</title>' +
     fontLinks +
-    '<style>' + presetCSS + '\n' + canvasCss + '\n' + (page.css || '') + '</style>' +
-    '</head><body>' + (page.html || '') + countdownScript + '</body></html>';
+    analyticsScript +
+    '<style>' + loadingCSS + '\n' + presetCSS + '\n' + canvasCss + '\n' + (page.css || '') + '</style>' +
+    '</head><body>' + (page.html || '') + brandFooter + countdownScript + formScript + '</body></html>';
 
   lpEl.innerHTML = '<div class="lp-back-bar">' +
     '<button class="lp-back-btn" onclick="exitLandingPage();showPage(\'portal\')">' +

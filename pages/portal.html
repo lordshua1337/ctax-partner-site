@@ -3851,7 +3851,7 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
-          <div class="pb-pub-body">
+          <div class="pb-pub-body" style="max-height:60vh;overflow-y:auto">
             <label class="pb-pub-label" for="pb-pub-title">Page Title</label>
             <input class="pb-pub-input" type="text" id="pb-pub-title" placeholder="My Tax Practice" maxlength="80">
             <label class="pb-pub-label" for="pb-pub-slug">URL Slug</label>
@@ -3860,6 +3860,39 @@
               <input class="pb-pub-input pb-pub-slug-input" type="text" id="pb-pub-slug" placeholder="my-tax-practice" maxlength="60">
             </div>
             <p class="pb-pub-hint">Lowercase letters, numbers, and hyphens only.</p>
+
+            <!-- SEO Settings -->
+            <details class="pb-pub-section">
+              <summary class="pb-pub-section-title">SEO Settings</summary>
+              <label class="pb-pub-label" for="pb-pub-meta-desc">Meta Description</label>
+              <textarea class="pb-pub-input" id="pb-pub-meta-desc" rows="2" placeholder="A brief description for search engines (160 chars max)" maxlength="160" style="resize:vertical;font-family:inherit"></textarea>
+              <label class="pb-pub-label" for="pb-pub-og-image">Social Share Image URL</label>
+              <input class="pb-pub-input" type="url" id="pb-pub-og-image" placeholder="https://example.com/image.jpg">
+              <p class="pb-pub-hint">Used when shared on social media (Open Graph image).</p>
+            </details>
+
+            <!-- Analytics -->
+            <details class="pb-pub-section">
+              <summary class="pb-pub-section-title">Analytics</summary>
+              <label class="pb-pub-label" for="pb-pub-ga">Google Analytics ID</label>
+              <input class="pb-pub-input" type="text" id="pb-pub-ga" placeholder="G-XXXXXXXXXX">
+              <label class="pb-pub-label" for="pb-pub-pixel">Meta Pixel ID</label>
+              <input class="pb-pub-input" type="text" id="pb-pub-pixel" placeholder="1234567890">
+              <p class="pb-pub-hint">Tracking codes are injected into published pages only.</p>
+            </details>
+
+            <!-- Partner Branding -->
+            <details class="pb-pub-section">
+              <summary class="pb-pub-section-title">Partner Branding</summary>
+              <label class="pb-pub-label" for="pb-pub-partner-name">Your Name / Firm Name</label>
+              <input class="pb-pub-input" type="text" id="pb-pub-partner-name" placeholder="Smith Tax Advisory">
+              <label class="pb-pub-label" for="pb-pub-partner-phone">Phone Number</label>
+              <input class="pb-pub-input" type="tel" id="pb-pub-partner-phone" placeholder="(555) 123-4567">
+              <label class="pb-pub-label" for="pb-pub-partner-email">Email</label>
+              <input class="pb-pub-input" type="email" id="pb-pub-partner-email" placeholder="contact@smithtax.com">
+              <p class="pb-pub-hint">Shown in the branded footer on your published page.</p>
+            </details>
+
             <p class="pb-pub-error" id="pb-pub-error"></p>
           </div>
           <div class="pb-pub-footer">
