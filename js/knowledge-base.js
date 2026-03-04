@@ -142,6 +142,14 @@ async function askKnowledgeBase() {
     // Generate related questions
     kbGenerateRelated(question);
 
+    // M2P2C2: Save cross-tool context
+    if (typeof saveToolContext === 'function') {
+      saveToolContext('knowledge-base', { question: question, answer: (text || '').substring(0, 300) });
+    }
+
+    // M2P2C2: Show smart suggestions
+    setTimeout(function() { if (typeof showSmartSuggestions === 'function') showSmartSuggestions('knowledge-base'); }, 500);
+
   } catch(err) {
     document.getElementById('kb-loading').style.display = 'none';
     var isAuth = err.message && err.message.indexOf('401') !== -1;

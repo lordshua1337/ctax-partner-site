@@ -498,6 +498,14 @@ async function generateScript() {
       meta: type + ' · ' + style + ' · ' + channel
     });
 
+    // M2P2C2: Save cross-tool context
+    if (typeof saveToolContext === 'function') {
+      saveToolContext('script-builder', { type: type, channel: channel, style: style, situation: situation });
+    }
+
+    // M2P2C2: Show smart suggestions
+    setTimeout(function() { if (typeof showSmartSuggestions === 'function') showSmartSuggestions('script-builder'); }, 500);
+
     switchSbTab('conversation');
 
   } catch(err) {
@@ -1098,5 +1106,400 @@ function exportMarketingKit() {
     if (typeof showToast === 'function') showToast('Marketing Kit exported as HTML!', 'success');
   }
 }
+
+// ══════════════════════════════════════════
+//  M2P2C2: Cross-Tool Context Memory
+// ══════════════════════════════════════════
+
+var TOOL_CONTEXT_KEY = 'ctax_tool_context';
+
+function getToolContext() {
+  try { return JSON.parse(localStorage.getItem(TOOL_CONTEXT_KEY) || '{}'); } catch (e) { return {}; }
+}
+
+function setToolContext(ctx) {
+  try { localStorage.setItem(TOOL_CONTEXT_KEY, JSON.stringify(ctx)); } catch (e) {}
+}
+
+// Save context after any tool generates output
+function saveToolContext(toolName, context) {
+  var ctx = getToolContext();
+  ctx[toolName] = {
+    context: context,
+    timestamp: Date.now()
+  };
+  // Keep only the latest from each tool
+  setToolContext(ctx);
+}
+
+// Get enriched context from all tools for any AI prompt
+function getEnrichedContext() {
+  var ctx = getToolContext();
+  var parts = [];
+
+  if (ctx['client-qualifier'] && ctx['client-qualifier'].context) {
+    var cq = ctx['client-qualifier'].context;
+    parts.push('PREVIOUS CLIENT QUALIFICATION:');
+    if (cq.verdict) parts.push('- Verdict: ' + cq.verdict);
+    if (cq.debt) parts.push('- Estimated Debt: $' + cq.debt);
+    if (cq.issueType) parts.push('- Issue Type: ' + cq.issueType);
+    if (cq.confidence) parts.push('- Confidence: ' + cq.confidence + '%');
+    if (cq.analysis) parts.push('- Analysis Summary: ' + cq.analysis.substring(0, 200));
+  }
+
+  if (ctx['script-builder'] && ctx['script-builder'].context) {
+    var sb = ctx['script-builder'].context;
+    parts.push('PREVIOUS SCRIPT GENERATION:');
+    if (sb.type) parts.push('- Partner Type: ' + sb.type);
+    if (sb.channel) parts.push('- Channel: ' + sb.channel);
+    if (sb.style) parts.push('- Style: ' + sb.style);
+  }
+
+  if (ctx['ad-maker'] && ctx['ad-maker'].context) {
+    var am = ctx['ad-maker'].context;
+    parts.push('PREVIOUS AD CREATION:');
+    if (am.firm) parts.push('- Firm: ' + am.firm);
+    if (am.tagline) parts.push('- Tagline: ' + am.tagline);
+  }
+
+  if (ctx['knowledge-base'] && ctx['knowledge-base'].context) {
+    var kb = ctx['knowledge-base'].context;
+    parts.push('PREVIOUS KB QUESTION:');
+    if (kb.question) parts.push('- Question: ' + kb.question);
+    if (kb.answer) parts.push('- Answer Summary: ' + kb.answer.substring(0, 200));
+  }
+
+  return parts.length > 0 ? '\n\nCROSS-TOOL CONTEXT (from partner\'s recent tool usage):\n' + parts.join('\n') + '\n\n' : '';
+}
+
+
+// ══════════════════════════════════════════
+//  M2P2C2: Smart Suggestions (post-generation)
+// ══════════════════════════════════════════
+
+var TOOL_SUGGESTIONS = {
+  'script-builder': [
+    { tool: 'ad-maker', label: 'Create an Ad', desc: 'Generate a co-branded social ad using your script context', action: 'navToAdMaker' },
+    { tool: 'client-qualifier', label: 'Qualify This Client', desc: 'Score the client before your conversation', action: 'navToQualifier' },
+    { tool: 'page-builder', label: 'Build a Landing Page', desc: 'Create a page to send alongside your email', action: 'navToPageBuilder' }
+  ],
+  'ad-maker': [
+    { tool: 'script-builder', label: 'Write a Script', desc: 'Generate a referral script to pair with your ad', action: 'navToScriptBuilder' },
+    { tool: 'page-builder', label: 'Build a Landing Page', desc: 'Create a page that matches your ad campaign', action: 'navToPageBuilder' }
+  ],
+  'client-qualifier': [
+    { tool: 'script-builder', label: 'Generate Scripts', desc: 'Create scripts tailored to this client\'s qualification', action: 'navToScriptBuilder' },
+    { tool: 'ad-maker', label: 'Make an Ad', desc: 'Create targeted ads for similar client profiles', action: 'navToAdMaker' }
+  ],
+  'knowledge-base': [
+    { tool: 'script-builder', label: 'Write a Script', desc: 'Use this knowledge to craft a conversation', action: 'navToScriptBuilder' },
+    { tool: 'client-qualifier', label: 'Qualify a Client', desc: 'Apply what you learned to qualify a client', action: 'navToQualifier' }
+  ]
+};
+
+function showSmartSuggestions(completedTool) {
+  var suggestions = TOOL_SUGGESTIONS[completedTool];
+  if (!suggestions || !suggestions.length) return;
+
+  // Find or create the suggestions container
+  var containerId = completedTool === 'script-builder' ? 'sb-output' :
+                    completedTool === 'ad-maker' ? 'am-results' :
+                    completedTool === 'client-qualifier' ? 'cq-output' :
+                    completedTool === 'knowledge-base' ? 'kb-output' : null;
+
+  if (!containerId) return;
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  // Remove existing suggestions
+  var existing = container.querySelector('.smart-suggest');
+  if (existing) existing.remove();
+
+  var panel = document.createElement('div');
+  panel.className = 'smart-suggest';
+
+  var html = '<div class="smart-suggest-header">';
+  html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>';
+  html += '<span>What\'s Next?</span>';
+  html += '</div>';
+  html += '<div class="smart-suggest-list">';
+
+  suggestions.forEach(function(s) {
+    html += '<button class="smart-suggest-item" onclick="' + s.action + '()">';
+    html += '<div class="smart-suggest-item-label">' + s.label + '</div>';
+    html += '<div class="smart-suggest-item-desc">' + s.desc + '</div>';
+    html += '</button>';
+  });
+
+  html += '</div>';
+  panel.innerHTML = html;
+  container.appendChild(panel);
+}
+
+// Navigation helpers for smart suggestions
+function navToScriptBuilder() {
+  if (typeof portalNav === 'function') {
+    var nav = document.querySelector('[onclick*="portal-sec-scriptbuilder"]') || document.querySelector('[onclick*="portal-sec-ai-scriptbuilder"]');
+    if (nav) { portalNav(nav, nav.getAttribute('onclick').match(/portal-sec-[^'")]+/)[0]); return; }
+  }
+  if (typeof showPage === 'function') showPage('scripts');
+}
+
+function navToAdMaker() {
+  if (typeof portalNav === 'function') {
+    var nav = document.querySelector('[onclick*="portal-sec-admaker"]') || document.querySelector('[onclick*="portal-sec-ai-admaker"]');
+    if (nav) { portalNav(nav, nav.getAttribute('onclick').match(/portal-sec-[^'")]+/)[0]); return; }
+  }
+  if (typeof showPage === 'function') showPage('admaker');
+}
+
+function navToQualifier() {
+  if (typeof portalNav === 'function') {
+    var nav = document.querySelector('[onclick*="portal-sec-qualifier"]') || document.querySelector('[onclick*="portal-sec-ai-qualifier"]');
+    if (nav) { portalNav(nav, nav.getAttribute('onclick').match(/portal-sec-[^'")]+/)[0]); return; }
+  }
+  if (typeof showPage === 'function') showPage('qualifier');
+}
+
+function navToPageBuilder() {
+  if (typeof portalNav === 'function') {
+    var nav = document.querySelector('[onclick*="portal-sec-pagebuilder"]');
+    if (nav) { portalNav(nav, 'portal-sec-pagebuilder'); return; }
+  }
+  if (typeof showPage === 'function') showPage('portal');
+}
+
+
+// ══════════════════════════════════════════
+//  M2P2C2: AI Pipeline (Chain Tools)
+// ══════════════════════════════════════════
+
+var _pipelineRunning = false;
+
+function showPipelineModal() {
+  if (_pipelineRunning) {
+    if (typeof showToast === 'function') showToast('Pipeline already running.', 'warning');
+    return;
+  }
+
+  var overlay = document.createElement('div');
+  overlay.className = 'pipeline-overlay';
+  overlay.id = 'pipeline-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay && !_pipelineRunning) closePipeline(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'pipeline-modal';
+
+  var html = '<div class="pipeline-header">';
+  html += '<h3>AI Pipeline</h3>';
+  html += '<button class="pipeline-close" onclick="closePipeline()">&times;</button>';
+  html += '</div>';
+  html += '<div class="pipeline-body">';
+  html += '<p class="pipeline-desc">Run multiple tools in sequence. Each tool uses context from the previous one for smarter, connected outputs.</p>';
+
+  // Pipeline steps
+  html += '<div class="pipeline-steps">';
+  html += '<div class="pipeline-step pipeline-step-active" id="pipeline-step-0">';
+  html += '<div class="pipeline-step-num">1</div>';
+  html += '<div class="pipeline-step-info">';
+  html += '<div class="pipeline-step-title">Qualify Client</div>';
+  html += '<div class="pipeline-step-desc">Analyze the client situation and get a score</div>';
+  html += '</div>';
+  html += '<div class="pipeline-step-status" id="pipeline-status-0">Ready</div>';
+  html += '</div>';
+
+  html += '<div class="pipeline-connector"><svg width="16" height="20" viewBox="0 0 16 20"><path d="M8 0v20M4 16l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>';
+
+  html += '<div class="pipeline-step" id="pipeline-step-1">';
+  html += '<div class="pipeline-step-num">2</div>';
+  html += '<div class="pipeline-step-info">';
+  html += '<div class="pipeline-step-title">Generate Scripts</div>';
+  html += '<div class="pipeline-step-desc">Create tailored referral scripts using qualification data</div>';
+  html += '</div>';
+  html += '<div class="pipeline-step-status" id="pipeline-status-1">Waiting</div>';
+  html += '</div>';
+
+  html += '<div class="pipeline-connector"><svg width="16" height="20" viewBox="0 0 16 20"><path d="M8 0v20M4 16l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>';
+
+  html += '<div class="pipeline-step" id="pipeline-step-2">';
+  html += '<div class="pipeline-step-num">3</div>';
+  html += '<div class="pipeline-step-info">';
+  html += '<div class="pipeline-step-title">Create Ad</div>';
+  html += '<div class="pipeline-step-desc">Generate a social media ad using the script context</div>';
+  html += '</div>';
+  html += '<div class="pipeline-step-status" id="pipeline-status-2">Waiting</div>';
+  html += '</div>';
+  html += '</div>';
+
+  // Input fields
+  html += '<div class="pipeline-inputs" id="pipeline-inputs">';
+  html += '<div class="pipeline-input-group">';
+  html += '<label>Estimated Tax Debt</label>';
+  html += '<input type="text" id="pipeline-debt" class="pipeline-input" placeholder="e.g. $35,000">';
+  html += '</div>';
+  html += '<div class="pipeline-input-group">';
+  html += '<label>Issue Type</label>';
+  html += '<select id="pipeline-issue" class="pipeline-input">';
+  html += '<option value="Back taxes / unfiled returns">Back taxes / unfiled returns</option>';
+  html += '<option value="IRS audit / examination">IRS audit / examination</option>';
+  html += '<option value="Tax lien on property">Tax lien on property</option>';
+  html += '<option value="Wage garnishment">Wage garnishment</option>';
+  html += '<option value="Bank levy">Bank levy</option>';
+  html += '<option value="Penalty abatement">Penalty abatement</option>';
+  html += '</select>';
+  html += '</div>';
+  html += '<div class="pipeline-input-group">';
+  html += '<label>Your Practice Type</label>';
+  html += '<select id="pipeline-type" class="pipeline-input">';
+  html += '<option value="CPA / Tax Preparer">CPA / Tax Preparer</option>';
+  html += '<option value="Financial Advisor">Financial Advisor</option>';
+  html += '<option value="Insurance Agent">Insurance Agent</option>';
+  html += '<option value="Mortgage Broker">Mortgage Broker</option>';
+  html += '<option value="Attorney">Attorney</option>';
+  html += '<option value="Other">Other</option>';
+  html += '</select>';
+  html += '</div>';
+  html += '<div class="pipeline-input-group">';
+  html += '<label>Firm Name</label>';
+  html += '<input type="text" id="pipeline-firm" class="pipeline-input" placeholder="Your firm name">';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div id="pipeline-results" class="pipeline-results" style="display:none"></div>';
+
+  html += '<div class="pipeline-actions">';
+  html += '<button class="pipeline-btn-run" id="pipeline-run" onclick="runPipeline()">Run Full Pipeline</button>';
+  html += '</div>';
+  html += '</div>';
+
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function closePipeline() {
+  if (_pipelineRunning) return;
+  var el = document.getElementById('pipeline-overlay');
+  if (el) el.remove();
+}
+
+async function runPipeline() {
+  if (!CTAX_API_KEY) { if (!promptForApiKey()) { return; } }
+
+  var debt = (document.getElementById('pipeline-debt') || {}).value || '$25,000';
+  var issue = (document.getElementById('pipeline-issue') || {}).value || 'Back taxes';
+  var type = (document.getElementById('pipeline-type') || {}).value || 'CPA';
+  var firm = (document.getElementById('pipeline-firm') || {}).value || 'My Firm';
+
+  _pipelineRunning = true;
+  var runBtn = document.getElementById('pipeline-run');
+  if (runBtn) { runBtn.disabled = true; runBtn.textContent = 'Running...'; }
+
+  var inputsEl = document.getElementById('pipeline-inputs');
+  if (inputsEl) inputsEl.style.display = 'none';
+
+  var resultsEl = document.getElementById('pipeline-results');
+  if (resultsEl) { resultsEl.style.display = 'block'; resultsEl.innerHTML = ''; }
+
+  // Step 1: Qualify
+  updatePipelineStep(0, 'running');
+  try {
+    var qualPrompt = 'You are a client qualification expert for Community Tax. Analyze this potential client:\n' +
+      'Debt: ' + debt + '\nIssue: ' + issue + '\n\n' +
+      'Respond with a single JSON object (no markdown): {"verdict":"STRONG|LIKELY|WEAK","confidence":0-100,"caseValue":"$X-$Y","analysis":"2 sentences explaining the qualification"}';
+
+    var qualRes = await fetch(CTAX_API_URL, {
+      method: 'POST', headers: getApiHeaders(),
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 300, messages: [{ role: 'user', content: qualPrompt }] })
+    });
+    var qualData = await qualRes.json();
+    var qualText = qualData.content && qualData.content[0] ? qualData.content[0].text.trim() : '';
+    var qualResult = {};
+    try { qualResult = JSON.parse(qualText); } catch (e) { qualResult = { verdict: 'LIKELY', confidence: 60, analysis: qualText }; }
+
+    updatePipelineStep(0, 'done');
+    addPipelineResult('Qualification', '<strong>' + (qualResult.verdict || 'LIKELY') + '</strong> (' + (qualResult.confidence || 60) + '% confidence)<br>' + esc(qualResult.analysis || ''));
+
+    // Save context for next step
+    saveToolContext('client-qualifier', { verdict: qualResult.verdict, debt: debt, issueType: issue, confidence: qualResult.confidence, analysis: qualResult.analysis });
+
+  } catch (err) {
+    updatePipelineStep(0, 'error');
+    addPipelineResult('Qualification', '<span style="color:#dc2626">Error: ' + esc(err.message) + '</span>');
+  }
+
+  // Step 2: Generate Script
+  updatePipelineStep(1, 'running');
+  try {
+    var scriptPrompt = getEnrichedContext() + 'Generate a short referral conversation script (150 words max) for a ' + type + ' referring a client to Community Tax. Client has ' + debt + ' in ' + issue + '. Warm, professional tone. Just the script, no labels.';
+
+    var scriptRes = await fetch(CTAX_API_URL, {
+      method: 'POST', headers: getApiHeaders(),
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 400, messages: [{ role: 'user', content: scriptPrompt }] })
+    });
+    var scriptData = await scriptRes.json();
+    var scriptText = scriptData.content && scriptData.content[0] ? scriptData.content[0].text.trim() : '';
+
+    updatePipelineStep(1, 'done');
+    addPipelineResult('Script', '<div style="white-space:pre-wrap;font-size:13px;line-height:1.6">' + esc(scriptText.substring(0, 500)) + '</div>');
+
+    saveToolContext('script-builder', { type: type, channel: 'conversation', style: 'warm', situation: debt + ' ' + issue });
+
+  } catch (err) {
+    updatePipelineStep(1, 'error');
+    addPipelineResult('Script', '<span style="color:#dc2626">Error: ' + esc(err.message) + '</span>');
+  }
+
+  // Step 3: Generate Ad Headline
+  updatePipelineStep(2, 'running');
+  try {
+    var adPrompt = getEnrichedContext() + 'Generate 1 short social media ad headline (max 8 words) and 1 tagline (max 15 words) for ' + firm + ' partnered with Community Tax. Target: people with IRS debt. Format exactly as:\nHeadline: [text]\nTagline: [text]';
+
+    var adRes = await fetch(CTAX_API_URL, {
+      method: 'POST', headers: getApiHeaders(),
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 100, messages: [{ role: 'user', content: adPrompt }] })
+    });
+    var adData = await adRes.json();
+    var adText = adData.content && adData.content[0] ? adData.content[0].text.trim() : '';
+
+    updatePipelineStep(2, 'done');
+    addPipelineResult('Ad Copy', '<div style="font-size:13px;line-height:1.6">' + esc(adText) + '</div>');
+
+    saveToolContext('ad-maker', { firm: firm, tagline: adText });
+
+  } catch (err) {
+    updatePipelineStep(2, 'error');
+    addPipelineResult('Ad Copy', '<span style="color:#dc2626">Error: ' + esc(err.message) + '</span>');
+  }
+
+  _pipelineRunning = false;
+  if (runBtn) { runBtn.disabled = false; runBtn.textContent = 'Run Again'; }
+  if (typeof showToast === 'function') showToast('Pipeline complete! 3 tools chained.', 'success');
+}
+
+function updatePipelineStep(idx, status) {
+  var stepEl = document.getElementById('pipeline-step-' + idx);
+  var statusEl = document.getElementById('pipeline-status-' + idx);
+  if (stepEl) {
+    stepEl.className = 'pipeline-step';
+    if (status === 'running') stepEl.classList.add('pipeline-step-running');
+    if (status === 'done') stepEl.classList.add('pipeline-step-done');
+    if (status === 'error') stepEl.classList.add('pipeline-step-error');
+  }
+  if (statusEl) {
+    var labels = { running: 'Running...', done: 'Complete', error: 'Failed', waiting: 'Waiting' };
+    statusEl.textContent = labels[status] || status;
+  }
+}
+
+function addPipelineResult(title, html) {
+  var el = document.getElementById('pipeline-results');
+  if (!el) return;
+  el.innerHTML += '<div class="pipeline-result-card">' +
+    '<div class="pipeline-result-title">' + title + '</div>' +
+    '<div class="pipeline-result-content">' + html + '</div>' +
+    '</div>';
+}
+
 
 // ── END SCRIPT BUILDER ───────────────────────────────────────

@@ -174,12 +174,20 @@ function generateStaticAd(){
   if(formEl)    formEl.style.display = 'none';
   if(resultsEl){ resultsEl.style.visibility='hidden'; resultsEl.style.display='block'; }
 
+  // M2P2C2: Save cross-tool context
+  if (typeof saveToolContext === 'function') {
+    saveToolContext('ad-maker', { firm: firm, platform: platform, color: color, tagline: tagline, template: amCurrentTemplate });
+  }
+
   // Init at 16:9
   setTimeout(function(){
     resizeAd('16:9', 1200, 628);
     if(resultsEl) resultsEl.style.visibility = '';
     // Trigger AI headline suggestions
     generateHeadlines();
+
+    // M2P2C2: Show smart suggestions
+    setTimeout(function() { if (typeof showSmartSuggestions === 'function') showSmartSuggestions('ad-maker'); }, 500);
   }, 30);
 }
 

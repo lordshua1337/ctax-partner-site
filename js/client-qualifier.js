@@ -177,6 +177,17 @@ async function qualifyClient() {
       });
     }
 
+    // M2P2C2: Save cross-tool context
+    if (typeof saveToolContext === 'function') {
+      saveToolContext('client-qualifier', {
+        verdict: result.verdict, debt: debt, issueType: issue,
+        confidence: result.confidence, analysis: (cqAnalysisText || '').substring(0, 300)
+      });
+    }
+
+    // M2P2C2: Show smart suggestions
+    setTimeout(function() { if (typeof showSmartSuggestions === 'function') showSmartSuggestions('client-qualifier'); }, 500);
+
   } catch(err) {
     clearInterval(mint);
     document.getElementById('cq-loading').style.display = 'none';
