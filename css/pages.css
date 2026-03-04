@@ -2096,6 +2096,84 @@
   .pbf-field-actions{display:none}
 }
 
+/* ── M2P1C3: AI Campaign Builder ───────────────────── */
+.aic-setup{padding:16px 20px}
+.aic-icp-card{display:flex;align-items:center;gap:12px;padding:14px;border:1.5px solid var(--off2);border-radius:10px;margin-bottom:16px}
+.aic-icp-missing{border-color:#fbbf24;background:rgba(251,191,36,0.04)}
+.aic-icp-icon{flex-shrink:0}
+.aic-icp-info{flex:1;min-width:0}
+.aic-icp-name{font-size:14px;font-weight:600;color:var(--navy)}
+.aic-icp-detail{font-size:12px;color:var(--gray)}
+.aic-icp-badge{font-size:11px;font-weight:600;color:var(--blue);background:rgba(11,95,216,0.08);padding:4px 10px;border-radius:20px;white-space:nowrap}
+.aic-field{margin-bottom:14px}
+.aic-label{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.aic-select{width:100%;padding:10px 12px;border:1.5px solid var(--off2);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--navy);background:var(--white);box-sizing:border-box}
+.aic-channels{display:flex;flex-wrap:wrap;gap:8px}
+.aic-channel-opt{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid var(--off2);border-radius:8px;font-size:13px;color:var(--navy);cursor:pointer;transition:border-color 0.15s}
+.aic-channel-opt:has(input:checked){border-color:var(--blue);background:rgba(11,95,216,0.04)}
+.aic-comp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:16px}
+.aic-comp-card{display:flex;align-items:flex-start;gap:8px;padding:12px;border:1.5px solid var(--off2);border-radius:10px;cursor:pointer;transition:border-color 0.15s}
+.aic-comp-card:has(input:checked){border-color:var(--blue);background:rgba(11,95,216,0.03)}
+.aic-comp-check{flex-shrink:0;margin-top:2px}
+.aic-comp-content svg{color:var(--blue);margin-bottom:4px}
+.aic-comp-label{font-size:13px;font-weight:600;color:var(--navy)}
+.aic-comp-desc{font-size:11px;color:var(--gray);line-height:1.4}
+.aic-actions{margin-bottom:16px}
+.aic-history{border-top:1.5px solid var(--off2);padding-top:12px}
+.aic-history-label{font-size:12px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px}
+.aic-history-item{padding:10px 12px;border:1.5px solid var(--off2);border-radius:8px;cursor:pointer;margin-bottom:6px;transition:border-color 0.15s}
+.aic-history-item:hover{border-color:var(--blue)}
+.aic-history-name{font-size:13px;font-weight:600;color:var(--navy)}
+.aic-history-meta{font-size:11px;color:var(--gray);margin-top:2px}
+
+/* Campaign Results */
+.aic-campaign{padding:16px 20px}
+.aic-campaign-header{text-align:center;padding-bottom:16px;border-bottom:1.5px solid var(--off2);margin-bottom:16px}
+.aic-campaign-name{font-family:'DM Serif Display',serif;font-size:22px;color:var(--navy)}
+.aic-campaign-meta{display:flex;justify-content:center;gap:16px;font-size:12px;color:var(--gray);margin:8px 0 12px}
+.aic-campaign-meta span{padding:2px 8px;background:var(--off);border-radius:12px}
+.aic-campaign-actions{display:flex;gap:8px;justify-content:center}
+.aic-components-list{display:flex;flex-direction:column;gap:8px}
+.aic-comp-section{border:1.5px solid var(--off2);border-radius:10px;overflow:hidden}
+.aic-comp-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;cursor:pointer;transition:background 0.15s}
+.aic-comp-header:hover{background:rgba(11,95,216,0.02)}
+.aic-comp-header-left{display:flex;align-items:center;gap:10px}
+.aic-comp-title{font-size:14px;font-weight:600;color:var(--navy)}
+.aic-comp-arrow{color:var(--gray);transition:transform 0.2s}
+.aic-comp-open .aic-comp-arrow{transform:rotate(180deg)}
+.aic-comp-body{display:none;padding:0 16px 16px;border-top:1px solid var(--off2)}
+.aic-comp-open .aic-comp-body{display:block}
+.aic-comp-text{font-size:14px;line-height:1.75;color:var(--dark)}
+.aic-comp-text p{margin-bottom:8px}
+.aic-comp-text strong{color:var(--navy);font-weight:600}
+.aic-list-item{padding-left:16px;position:relative}
+.aic-list-item::before{content:'';position:absolute;left:4px;top:10px;width:5px;height:5px;border-radius:50%;background:var(--blue)}
+
+/* Dark mode */
+[data-theme="dark"] .aic-icp-card{border-color:rgba(255,255,255,0.1)}
+[data-theme="dark"] .aic-icp-name{color:var(--white)}
+[data-theme="dark"] .aic-label{color:var(--white)}
+[data-theme="dark"] .aic-select{border-color:rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--white)}
+[data-theme="dark"] .aic-channel-opt{border-color:rgba(255,255,255,0.1);color:var(--white)}
+[data-theme="dark"] .aic-comp-card{border-color:rgba(255,255,255,0.1)}
+[data-theme="dark"] .aic-comp-label{color:var(--white)}
+[data-theme="dark"] .aic-history{border-color:rgba(255,255,255,0.1)}
+[data-theme="dark"] .aic-history-item{border-color:rgba(255,255,255,0.1)}
+[data-theme="dark"] .aic-history-name{color:var(--white)}
+[data-theme="dark"] .aic-campaign-header{border-color:rgba(255,255,255,0.1)}
+[data-theme="dark"] .aic-campaign-name{color:var(--white)}
+[data-theme="dark"] .aic-campaign-meta span{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .aic-comp-section{border-color:rgba(255,255,255,0.1)}
+[data-theme="dark"] .aic-comp-title{color:var(--white)}
+[data-theme="dark"] .aic-comp-body{border-color:rgba(255,255,255,0.1)}
+[data-theme="dark"] .aic-comp-text{color:rgba(255,255,255,0.85)}
+[data-theme="dark"] .aic-comp-text strong{color:var(--white)}
+
+@media(max-width:600px){
+  .aic-comp-grid{grid-template-columns:1fr}
+  .aic-campaign-actions{flex-direction:column}
+}
+
 /* ── Knowledge Base Related Questions ────────────────── */
 .kb-related-btn{display:block;width:100%;text-align:left;background:var(--white);border:1.5px solid var(--off2);border-radius:8px;padding:10px 16px;font-size:14px;color:var(--navy);cursor:pointer;transition:all 0.13s;font-family:'DM Sans',sans-serif;margin-bottom:6px}
 .kb-related-btn:last-child{margin-bottom:0}
