@@ -505,6 +505,161 @@ document.addEventListener('DOMContentLoaded', function() {
   setTimeout(onboardRender, 500);
 });
 
+// ══════════════════════════════════════════
+//  M3P2C2: ICP INSIGHTS ENGINE
+//  AI-powered analysis of active ICP profile
+// ══════════════════════════════════════════
+
+var ICP_INSIGHTS_KEY = 'ctax_icp_insights';
+
+function icpGetInsights() {
+  try { return JSON.parse(localStorage.getItem(ICP_INSIGHTS_KEY) || 'null'); } catch (e) { return null; }
+}
+
+function icpSetInsights(data) {
+  try { localStorage.setItem(ICP_INSIGHTS_KEY, JSON.stringify(data)); } catch (e) {}
+}
+
+function icpShowInsights() {
+  var profile = ICPContext.load();
+  if (!profile) { if (typeof showToast === 'function') showToast('Build an ICP profile first', 'error'); return; }
+
+  var overlay = document.createElement('div');
+  overlay.className = 'aid-modal-overlay';
+  overlay.id = 'icp-insights-modal';
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'aid-modal';
+  modal.style.maxWidth = '720px';
+
+  // Check for cached insights
+  var cached = icpGetInsights();
+  var isCached = cached && cached.icp_title === profile.icp_title;
+
+  modal.innerHTML = '<div class="aid-modal-header">'
+    + '<div><div class="aid-modal-title">ICP Insights Engine</div>'
+    + '<div class="aid-modal-meta">AI-powered analysis of your ideal client profile</div></div>'
+    + '<button class="aid-modal-close" onclick="document.getElementById(\'icp-insights-modal\').remove()">&times;</button>'
+    + '</div>'
+    + '<div class="aid-modal-body" id="icp-insights-body">'
+    + (isCached ? icpRenderInsightsContent(cached) : '<div class="aid-empty-sm">Click "Generate Insights" to analyze your ICP profile with AI.</div>')
+    + '</div>'
+    + '<div class="aid-modal-footer">'
+    + '<button class="btn btn-g" onclick="document.getElementById(\'icp-insights-modal\').remove()">Close</button>'
+    + '<button class="btn btn-p" id="icp-gen-insights-btn" onclick="icpGenerateInsights()">'
+    + (isCached ? 'Regenerate' : 'Generate Insights')
+    + '</button>'
+    + '</div>';
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+async function icpGenerateInsights() {
+  var profile = ICPContext.load();
+  if (!profile) return;
+  if (typeof CTAX_API_URL === 'undefined' || typeof CTAX_API_KEY === 'undefined' || !CTAX_API_KEY) {
+    if (typeof promptForApiKey === 'function' && !promptForApiKey()) return;
+  }
+
+  var body = document.getElementById('icp-insights-body');
+  var btn = document.getElementById('icp-gen-insights-btn');
+  if (body) body.innerHTML = '<div style="text-align:center;padding:40px 0"><div class="sb-loader"></div><p style="font-size:14px;color:var(--slate);margin-top:16px">Analyzing your ICP profile...</p></div>';
+  if (btn) { btn.disabled = true; btn.textContent = 'Analyzing...'; }
+
+  var prompt = 'You are a senior sales strategist analyzing a partner\'s Ideal Client Profile for Community Tax (IRS tax resolution firm). Generate actionable insights based on this profile.\n\n'
+    + ICPContext.getPromptContext()
+    + '\n\nRespond in EXACTLY this format with sections separated by "---SECTION---":\n\n'
+    + 'SECTION 1 - MARKET SIZING (2-3 paragraphs):\n'
+    + 'Estimate the addressable market for this partner\'s ICP. How many potential referral clients exist in their typical practice? What percentage of their client base likely has unresolved tax issues? Use specific numbers and realistic estimates.\n\n'
+    + 'SECTION 2 - SEASONAL TIMING (4-6 items):\n'
+    + 'List the best times of year to prospect for this ICP. Format each as: <b>Month/Period:</b> Why this is a high-opportunity window. Include tax season, filing deadlines, IRS enforcement cycles, and life events.\n\n'
+    + 'SECTION 3 - COMPETITIVE POSITIONING (2-3 paragraphs):\n'
+    + 'How should this partner differentiate their referral approach from other options (DIY, other firms, doing nothing)? What\'s their unique advantage given their profession type and client relationships?\n\n'
+    + 'SECTION 4 - OUTREACH CALENDAR (exactly 6 items):\n'
+    + 'Create a 6-month outreach plan. Format each month as: <b>Month X - [Theme]:</b> Specific actions to take, messaging angle, and expected outcomes. Make it practical and actionable.\n\n'
+    + 'SECTION 5 - RISK FACTORS (3-4 items):\n'
+    + 'What could go wrong? Format each as: <b>Risk:</b> Description. <b>Mitigation:</b> How to prevent or address it.\n\n'
+    + 'Use <b>bold</b> for key terms. No markdown, no asterisks. Be specific and cite numbers when possible.';
+
+  try {
+    var resp = await fetch(CTAX_API_URL, {
+      method: 'POST',
+      headers: getApiHeaders(),
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    if (!resp.ok) throw new Error(resp.status === 401 ? '401' : 'API returned ' + resp.status);
+    var data = await resp.json();
+    if (data.error) throw new Error(data.error.message || 'API error');
+    var text = data.content && data.content[0] ? data.content[0].text : '';
+
+    var sections = text.split('---SECTION---');
+    var insights = {
+      icp_title: profile.icp_title,
+      market_sizing: (sections[0] || '').trim(),
+      seasonal_timing: (sections[1] || '').trim(),
+      competitive_positioning: (sections[2] || '').trim(),
+      outreach_calendar: (sections[3] || '').trim(),
+      risk_factors: (sections[4] || '').trim(),
+      generated_at: new Date().toISOString()
+    };
+
+    icpSetInsights(insights);
+    if (body) body.innerHTML = icpRenderInsightsContent(insights);
+    if (btn) { btn.disabled = false; btn.textContent = 'Regenerate'; }
+
+    if (typeof trackToolUsage === 'function') trackToolUsage('icp-insights');
+    if (typeof saveToolResult === 'function') {
+      saveToolResult('icp-insights', 'Insights for ' + profile.icp_title, { insights: insights });
+    }
+  } catch (err) {
+    var isAuth = err.message && err.message.indexOf('401') !== -1;
+    var msg = isAuth ? 'Invalid API key. Please check your key and try again.' : 'Unable to generate insights right now. Please try again.';
+    if (body) body.innerHTML = '<div class="aid-empty-sm" style="color:#c0392b">' + msg + '</div>';
+    if (btn) { btn.disabled = false; btn.textContent = 'Try Again'; }
+  }
+}
+
+function icpRenderInsightsContent(insights) {
+  var tabs = [
+    { key: 'market', label: 'Market Sizing', content: insights.market_sizing },
+    { key: 'seasonal', label: 'Seasonal Timing', content: insights.seasonal_timing },
+    { key: 'competitive', label: 'Positioning', content: insights.competitive_positioning },
+    { key: 'outreach', label: 'Outreach Calendar', content: insights.outreach_calendar },
+    { key: 'risks', label: 'Risk Factors', content: insights.risk_factors }
+  ];
+
+  var html = '<div class="icp-ins-tabs">';
+  tabs.forEach(function(t, i) {
+    html += '<button class="icp-ins-tab' + (i === 0 ? ' icp-ins-tab-active' : '') + '" onclick="icpInsTab(this,\'' + t.key + '\')">' + t.label + '</button>';
+  });
+  html += '</div>';
+
+  tabs.forEach(function(t, i) {
+    html += '<div class="icp-ins-panel' + (i === 0 ? ' icp-ins-panel-active' : '') + '" id="icp-ins-' + t.key + '" style="' + (i === 0 ? '' : 'display:none') + '">'
+      + '<div class="icp-ins-content">' + (t.content || '<em>No content available</em>') + '</div>'
+      + '</div>';
+  });
+
+  html += '<div style="font-size:11px;color:var(--mist);margin-top:12px;text-align:right">Generated ' + new Date(insights.generated_at).toLocaleString() + '</div>';
+  return html;
+}
+
+function icpInsTab(btn, key) {
+  var modal = btn.closest('.aid-modal-body');
+  if (!modal) return;
+  modal.querySelectorAll('.icp-ins-tab').forEach(function(t) { t.classList.remove('icp-ins-tab-active'); });
+  modal.querySelectorAll('.icp-ins-panel').forEach(function(p) { p.style.display = 'none'; p.classList.remove('icp-ins-panel-active'); });
+  btn.classList.add('icp-ins-tab-active');
+  var panel = document.getElementById('icp-ins-' + key);
+  if (panel) { panel.style.display = 'block'; panel.classList.add('icp-ins-panel-active'); }
+}
+
 // Auto-render badges on known containers whenever they appear
 var _icpBadgeIds = ['sb-icp-badge', 'res-icp-badge'];
 function _icpRenderAllBadges() {

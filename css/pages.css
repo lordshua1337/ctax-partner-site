@@ -1060,6 +1060,20 @@
 [data-theme="dark"] .icp-export-btn-title{color:#f3f4f6}
 [data-theme="dark"] .icp-export-btn-desc{color:#9ca3af}
 
+/* M3P2C2: ICP Insights Engine */
+.icp-ins-tabs{display:flex;gap:4px;border-bottom:1px solid var(--off2);margin-bottom:16px;overflow-x:auto}
+.icp-ins-tab{padding:8px 14px;font-size:13px;font-weight:600;color:var(--slate);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.icp-ins-tab:hover{color:var(--navy)}
+.icp-ins-tab-active{color:#7C3AED;border-bottom-color:#7C3AED}
+.icp-ins-content{font-size:14px;line-height:1.7;color:var(--body)}
+.icp-ins-content b{color:var(--navy)}
+[data-theme="dark"] .icp-ins-tabs{border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .icp-ins-tab{color:#9ca3af}
+[data-theme="dark"] .icp-ins-tab:hover{color:#f3f4f6}
+[data-theme="dark"] .icp-ins-tab-active{color:#a78bfa;border-bottom-color:#a78bfa}
+[data-theme="dark"] .icp-ins-content{color:#d1d5db}
+[data-theme="dark"] .icp-ins-content b{color:#f3f4f6}
+
 /* ── Knowledge Base Related Questions ────────────────── */
 .kb-related-btn{display:block;width:100%;text-align:left;background:var(--white);border:1.5px solid var(--off2);border-radius:8px;padding:10px 16px;font-size:14px;color:var(--navy);cursor:pointer;transition:all 0.13s;font-family:'DM Sans',sans-serif;margin-bottom:6px}
 .kb-related-btn:last-child{margin-bottom:0}
