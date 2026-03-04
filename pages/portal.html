@@ -3761,10 +3761,10 @@
             </div>
             <span class="pb-sep"></span>
             <div class="pb-undo-group">
-              <button class="pb-icon-btn" onclick="pbUndo()" title="Undo">
+              <button class="pb-icon-btn" onclick="pbUndo()" title="Undo (Cmd+Z)">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 105.64-8.36L1 10"/></svg>
               </button>
-              <button class="pb-icon-btn" onclick="pbRedo()" title="Redo">
+              <button class="pb-icon-btn" onclick="pbRedo()" title="Redo (Cmd+Shift+Z)">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-5.64-8.36L23 10"/></svg>
               </button>
             </div>
@@ -3785,6 +3785,10 @@
             </div>
           </div>
           <div class="pb-toolbar-right">
+            <button class="pb-tool-btn" onclick="pbStartFresh()" title="Start a new page from scratch">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Page
+            </button>
             <button class="pb-tool-btn" onclick="pbShowTemplates()" title="Choose a design template">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
               Templates

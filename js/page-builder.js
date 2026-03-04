@@ -32,16 +32,17 @@ function pbInit() {
     localStorage.setItem('ctax_pb_v5', '1');
   }
 
-  // Always show onboarding -- partner picks persona/template/theme each session
-  // Reset builder state so onboarding starts clean
-  localStorage.removeItem(PB_STORAGE_KEY);
-  localStorage.removeItem('ctax_pb_persona');
-  localStorage.removeItem('ctax_pb_theme');
-  localStorage.removeItem('ctax_pb_accent');
-  localStorage.removeItem('ctax_pb_boho_palette');
-  var savedHtml = PB_TEMPLATES.referral.html;
-  var savedCss = '';
-  var isFirstVisit = true;
+  // Restore previous session if partner has already onboarded
+  var savedData = null;
+  try {
+    var raw = localStorage.getItem(PB_STORAGE_KEY);
+    if (raw) savedData = JSON.parse(raw);
+  } catch (e) { /* ignore corrupt data */ }
+  var savedPersona = localStorage.getItem('ctax_pb_persona');
+  var savedTheme = localStorage.getItem('ctax_pb_theme');
+  var isFirstVisit = !savedPersona || !savedTheme || !savedData;
+  var savedHtml = (savedData && savedData.html) ? savedData.html : PB_TEMPLATES.referral.html;
+  var savedCss = (savedData && savedData.css) ? savedData.css : '';
 
   pbEditor = grapesjs.init({
     container: '#gjs',
@@ -98,6 +99,20 @@ function pbInit() {
 
   // Keyboard shortcut for save
   pbEditor.Commands.add('pb:save', { run: function() { pbSave(); } });
+
+  // Keyboard shortcuts for undo/redo (Cmd+Z / Cmd+Shift+Z)
+  document.addEventListener('keydown', function(e) {
+    if (!pbEditor) return;
+    if ((e.metaKey || e.ctrlKey) && e.key === 'z') {
+      if (e.shiftKey) {
+        e.preventDefault();
+        pbRedo();
+      } else {
+        e.preventDefault();
+        pbUndo();
+      }
+    }
+  });
 
   // Apply saved mode (guided/advanced)
   pbApplyMode(pbGetMode());
@@ -1059,6 +1074,12 @@ function pbRenderMyPages() {
     html += '<button class="pb-mp-btn" onclick="pbEditPage(\'' + pbEscapeAttr(page.slug) + '\')" title="Edit in builder">';
     html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit';
     html += '</button>';
+    html += '<button class="pb-mp-btn" onclick="pbDuplicatePage(\'' + pbEscapeAttr(page.slug) + '\')" title="Duplicate page">';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Duplicate';
+    html += '</button>';
+    html += '<button class="pb-mp-btn" onclick="pbCopyPageUrl(\'' + pbEscapeAttr(page.slug) + '\')" title="Copy live URL">';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> Copy URL';
+    html += '</button>';
     html += '<button class="pb-mp-btn pb-mp-btn-danger" onclick="pbConfirmUnpublish(\'' + pbEscapeAttr(page.slug) + '\')" title="Unpublish">';
     html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Unpublish';
     html += '</button>';
@@ -1110,6 +1131,61 @@ function pbConfirmUnpublish(slug) {
   if (confirm('Unpublish "' + slug + '"? This removes the live page.')) {
     pbUnpublish(slug);
     pbRenderMyPages();
+  }
+}
+
+function pbDuplicatePage(slug) {
+  var page = pbFindPage(slug);
+  if (!page) return;
+  var pages = pbGetPages();
+  var newSlug = slug + '-copy';
+  var counter = 1;
+  while (pages.some(function(p) { return p.slug === newSlug; })) {
+    counter++;
+    newSlug = slug + '-copy-' + counter;
+  }
+  var now = new Date().toISOString();
+  var newPage = {
+    slug: newSlug,
+    title: page.title + ' (Copy)',
+    html: page.html,
+    css: page.css,
+    publishedAt: now,
+    updatedAt: now
+  };
+  pbSetPages(pages.concat([newPage]));
+  pbRenderMyPages();
+  if (typeof showToast === 'function') {
+    showToast('Duplicated as "' + newSlug + '"', 'success');
+  }
+}
+
+function pbCopyPageUrl(slug) {
+  var url = window.location.origin + window.location.pathname + '#lp/' + slug;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(function() {
+      if (typeof showToast === 'function') {
+        showToast('URL copied to clipboard', 'success');
+      }
+    }).catch(function() {
+      pbFallbackCopyText(url);
+    });
+  } else {
+    pbFallbackCopyText(url);
+  }
+}
+
+function pbFallbackCopyText(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch (e) { /* ignore */ }
+  document.body.removeChild(ta);
+  if (typeof showToast === 'function') {
+    showToast('URL copied to clipboard', 'success');
   }
 }
 
@@ -1234,6 +1310,21 @@ function pbShowColorBar(component) {
   var bar = document.getElementById('pb-color-bar');
   if (!bar) return;
 
+  // Image tools (background removal)
+  if (pbShowImageTools(component)) {
+    var h = '<div class="pb-cb-row">';
+    h += '<span class="pb-cb-label">Image Tools</span>';
+    h += '<div class="pb-cb-swatches">';
+    h += '<button class="pb-cb-img-btn" onclick="pbRemoveBackground(pbEditor.getSelected())" title="Remove background from this image">';
+    h += '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>';
+    h += ' Remove Background';
+    h += '</button>';
+    h += '</div></div>';
+    bar.innerHTML = h;
+    bar.classList.add('pb-color-bar-open');
+    return;
+  }
+
   var context = pbGetColorContext(component);
   if (!context) {
     pbHideColorBar();
@@ -1324,6 +1415,121 @@ function pbNormalizeColor(color) {
     return '#' + r + g + b;
   }
   return color;
+}
+
+// ══════════════════════════════════════════
+//  Start fresh (re-run onboarding wizard)
+// ══════════════════════════════════════════
+function pbStartFresh() {
+  if (pbEditor) {
+    var wrapper = pbEditor.getWrapper();
+    var hasContent = wrapper && wrapper.components().length > 0;
+    if (hasContent && !confirm('Start a new page? Current unsaved work will be lost.')) {
+      return;
+    }
+  }
+  localStorage.removeItem(PB_STORAGE_KEY);
+  localStorage.removeItem('ctax_pb_persona');
+  localStorage.removeItem('ctax_pb_theme');
+  localStorage.removeItem('ctax_pb_accent');
+  localStorage.removeItem('ctax_pb_boho_palette');
+  pbEditingSlug = null;
+  pbShowOnboarding();
+}
+
+// ══════════════════════════════════════════
+//  Background Removal (Canvas API)
+// ══════════════════════════════════════════
+
+function pbRemoveBackground(component) {
+  if (!component) return;
+  var src = component.get('src') || (component.getAttributes && component.getAttributes().src);
+  if (!src) {
+    if (typeof showToast === 'function') showToast('Select an image first', 'info');
+    return;
+  }
+
+  // Show processing state
+  if (typeof showToast === 'function') showToast('Removing background...', 'info');
+
+  var img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function() {
+    try {
+      var canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+
+      var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      var data = imageData.data;
+
+      // Sample corners to detect background color
+      var samples = [];
+      var w = canvas.width;
+      var h = canvas.height;
+      var samplePoints = [
+        [0, 0], [w - 1, 0], [0, h - 1], [w - 1, h - 1],
+        [Math.floor(w * 0.1), 0], [Math.floor(w * 0.9), 0],
+        [0, Math.floor(h * 0.1)], [w - 1, Math.floor(h * 0.1)]
+      ];
+
+      samplePoints.forEach(function(pt) {
+        var idx = (pt[1] * w + pt[0]) * 4;
+        samples.push([data[idx], data[idx + 1], data[idx + 2]]);
+      });
+
+      // Average the corner samples for background color
+      var bgR = 0, bgG = 0, bgB = 0;
+      samples.forEach(function(s) { bgR += s[0]; bgG += s[1]; bgB += s[2]; });
+      bgR = Math.round(bgR / samples.length);
+      bgG = Math.round(bgG / samples.length);
+      bgB = Math.round(bgB / samples.length);
+
+      // Remove pixels similar to background (tolerance-based)
+      var tolerance = 40;
+      for (var i = 0; i < data.length; i += 4) {
+        var dr = Math.abs(data[i] - bgR);
+        var dg = Math.abs(data[i + 1] - bgG);
+        var db = Math.abs(data[i + 2] - bgB);
+        var distance = Math.sqrt(dr * dr + dg * dg + db * db);
+        if (distance < tolerance) {
+          data[i + 3] = 0; // fully transparent
+        } else if (distance < tolerance * 1.5) {
+          // Feather edges for smoother result
+          var alpha = Math.round(((distance - tolerance) / (tolerance * 0.5)) * 255);
+          data[i + 3] = Math.min(data[i + 3], alpha);
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+
+      // Convert to data URL and update the component
+      var newSrc = canvas.toDataURL('image/png');
+      component.set('src', newSrc);
+      if (component.addAttributes) {
+        component.addAttributes({ src: newSrc });
+      }
+      pbSave();
+      if (typeof showToast === 'function') showToast('Background removed', 'success');
+    } catch (e) {
+      if (typeof showToast === 'function') showToast('Could not remove background -- image may be cross-origin', 'error');
+    }
+  };
+  img.onerror = function() {
+    if (typeof showToast === 'function') showToast('Could not load image for processing', 'error');
+  };
+  img.src = src;
+}
+
+// Show background removal button when image is selected
+function pbShowImageTools(component) {
+  if (!component) return false;
+  var tag = (component.get('tagName') || '').toLowerCase();
+  var type = component.get('type') || '';
+  if (tag !== 'img' && type !== 'image') return false;
+  return true;
 }
 
 // ══════════════════════════════════════════
