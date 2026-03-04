@@ -2926,10 +2926,8 @@ function initProfessionalTouches() {
     document.body.appendChild(container);
   }
 
-  // Show onboarding wizard for first-time users
-  if (obWizardShouldShow()) {
-    setTimeout(obWizardStart, 1000);
-  }
+  // Onboarding wizard disabled -- guided-tour spotlight handles onboarding
+  // The spotlight walkthrough (guided-tour.js) is preferred over the modal wizard
 }
 
 // Global shortcut keys (single-key, no modifier, not inside input)
