@@ -3300,18 +3300,7 @@
             </div>
           </div>
           <div class="ch-hero-badges" id="ch-hero-badges">
-            <div class="ch-badge ch-badge-earned" title="Week 1 Complete">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
-            </div>
-            <div class="ch-badge ch-badge-earned" title="3-Day Streak">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-            </div>
-            <div class="ch-badge" title="7-Day Streak (Locked)">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-            </div>
-            <div class="ch-badge" title="Perfect Week (Locked)">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            </div>
+            <!-- JS renders dynamic badges -->
           </div>
         </div>
       </div>
@@ -3349,6 +3338,9 @@
         </div>
       </div>
 
+      <!-- Streak Freeze -->
+      <div id="ch-streak-freeze" class="ch-streak-freeze"></div>
+
       <!-- Upcoming Days Preview -->
       <div class="ch-upcoming">
         <div class="ch-upcoming-title">Coming Up Next</div>
@@ -3356,6 +3348,9 @@
           <!-- JS fills upcoming 3 days -->
         </div>
       </div>
+
+      <!-- Catch-Up Mode -->
+      <div id="ch-catchup" class="ch-catchup" style="display:none"></div>
 
       <!-- Leaderboard Mini -->
       <div class="ch-leaderboard">

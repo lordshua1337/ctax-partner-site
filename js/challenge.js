@@ -100,11 +100,35 @@ var CH_DAYS = [
   { day: 30, title: 'Celebrate and submit a referral', desc: 'You made it to Day 30! Submit a referral to close out strong and carry your momentum into next month.', pts: 250, tool: 'portal-sec-submit' }
 ];
 
+// ═══ M4P1C1: BADGE SYSTEM ═══
+var CH_BADGES = [
+  { id: 'first-day', name: 'First Day', desc: 'Completed your first challenge task', icon: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>', check: function(s) { return chCountDone(s) >= 1; } },
+  { id: '3-streak', name: '3-Day Streak', desc: 'Maintained a 3-day streak', icon: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/><line x1="6" y1="18" x2="6" y2="22"/>', check: function(s) { return s.bestStreak >= 3; } },
+  { id: '7-streak', name: '7-Day Streak', desc: 'Maintained a 7-day streak', icon: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/><circle cx="17" cy="5" r="3"/>', check: function(s) { return s.bestStreak >= 7; } },
+  { id: 'week-complete', name: 'Week Complete', desc: 'Completed all 7 days in Week 1', icon: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/>', check: function(s) { for(var i=1;i<=7;i++) if(!s.completedDays[i]) return false; return true; } },
+  { id: '14-day', name: '14-Day Hero', desc: 'Completed 14 challenge tasks', icon: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>', check: function(s) { return chCountDone(s) >= 14; } },
+  { id: '21-day', name: '21-Day Warrior', desc: 'Completed 21 challenge tasks', icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>', check: function(s) { return chCountDone(s) >= 21; } },
+  { id: 'perfect-month', name: 'Perfect Month', desc: 'Completed all 30 days with zero skips', icon: '<circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>', check: function(s) { var skips=0; for(var k in s.skippedDays) if(s.skippedDays[k]) skips++; return chCountDone(s) >= 30 && skips === 0; } }
+];
+
+function chCountDone(state) {
+  var n = 0;
+  for (var k in state.completedDays) {
+    if (state.completedDays[k]) n++;
+  }
+  return n;
+}
+
 function chGetState() {
   try {
     var raw = localStorage.getItem(CH_STORAGE_KEY);
     if (!raw) return chDefaultState();
-    return JSON.parse(raw);
+    var parsed = JSON.parse(raw);
+    // Ensure new fields exist for backwards compat
+    if (!parsed.badges) parsed.badges = {};
+    if (typeof parsed.streakFreezes === 'undefined') parsed.streakFreezes = 1;
+    if (!parsed.weekFreezeUsed) parsed.weekFreezeUsed = {};
+    return parsed;
   } catch (e) {
     return chDefaultState();
   }
@@ -118,7 +142,10 @@ function chDefaultState() {
     skippedDays: {},
     points: 1280,
     streak: 9,
-    bestStreak: 9
+    bestStreak: 9,
+    badges: {},
+    streakFreezes: 1,
+    weekFreezeUsed: {}
   };
 }
 
@@ -160,11 +187,16 @@ function chInit() {
   if (!grid) return;
 
   var state = chGetState();
+  chCheckBadges(state);
   chRenderGrid(state);
   chRenderToday(state);
   chRenderUpcoming(state);
   chUpdateStats(state);
   chUpdateIdentity(state);
+  chRenderBadges(state);
+  chRenderLeaderboard(state);
+  chRenderCatchUp(state);
+  chRenderStreakFreeze(state);
 }
 
 function chRenderGrid(state) {
@@ -278,6 +310,9 @@ function chCompleteDay() {
   state.streak = state.streak + 1;
   if (state.streak > state.bestStreak) state.bestStreak = state.streak;
 
+  // Check for new badges
+  var newBadges = chCheckBadges(state);
+
   chSaveState(state);
 
   // Animate completion
@@ -293,32 +328,45 @@ function chCompleteDay() {
   chRenderGrid(state);
   chUpdateStats(state);
   chUpdateIdentity(state);
+  chRenderBadges(state);
+  chRenderLeaderboard(state);
+  chRenderCatchUp(state);
 
   // Show toast
-  if (typeof portalToast === 'function') {
-    portalToast('+' + day.pts + ' points earned! Day ' + state.currentDay + ' complete.', 'success');
+  if (typeof showToast === 'function') {
+    showToast('+' + day.pts + ' points earned! Day ' + state.currentDay + ' complete.', 'success');
   }
 
-  // Milestone celebrations at tier boundaries
-  var doneDays = 0;
-  for (var k in state.completedDays) {
-    if (state.completedDays[k]) doneDays++;
+  // Milestone celebrations with confetti at Days 7, 14, 21, 30
+  var doneDays = chCountDone(state);
+  var milestones = {
+    7: { title: 'Week 1 Complete!', sub: 'You are now "The Connector." Keep this momentum going!' },
+    14: { title: 'Two Weeks Strong!', sub: 'You leveled up to "The Builder." You\'re in the top 30% of partners.' },
+    21: { title: 'Three Weeks Crushed!', sub: 'You are now "The Rainmaker." The finish line is in sight.' },
+    30: { title: 'Challenge Complete!', sub: 'You finished all 30 days. You are a top-tier partner. Incredible.' }
+  };
+  if (milestones[doneDays]) {
+    setTimeout(function() {
+      chShowCelebration(milestones[doneDays].title, milestones[doneDays].sub, doneDays === 30);
+    }, 800);
   }
-  if (doneDays === 7 && typeof portalToast === 'function') {
-    setTimeout(function() { portalToast('Week 1 complete! You are now "The Connector."', 'success'); }, 1500);
-  } else if (doneDays === 14 && typeof portalToast === 'function') {
-    setTimeout(function() { portalToast('Week 2 done! You leveled up to "The Builder."', 'success'); }, 1500);
-  } else if (doneDays === 21 && typeof portalToast === 'function') {
-    setTimeout(function() { portalToast('Week 3 crushed! You are now "The Rainmaker."', 'success'); }, 1500);
-  } else if (doneDays === 30 && typeof portalToast === 'function') {
-    setTimeout(function() { portalToast('Challenge complete! You finished all 30 days. Top tier.', 'success'); }, 1500);
+
+  // Show badge unlock toasts
+  if (newBadges && newBadges.length) {
+    newBadges.forEach(function(badge, i) {
+      setTimeout(function() {
+        if (typeof showToast === 'function') {
+          showToast('Badge Unlocked: ' + badge.name + '!', 'success');
+        }
+      }, 1600 + (i * 800));
+    });
   }
 
   // If tool is linked, prompt to navigate
   if (day.tool) {
     setTimeout(function() {
-      if (typeof portalToast === 'function') {
-        portalToast('Tip: Open ' + day.title.split(' ').slice(0, 3).join(' ') + '... to follow through.', 'info');
+      if (typeof showToast === 'function') {
+        showToast('Tip: Open ' + day.title.split(' ').slice(0, 3).join(' ') + '... to follow through.', 'info');
       }
     }, 3000);
   }
@@ -329,8 +377,23 @@ function chSkipDay() {
   if (state.completedDays[state.currentDay]) return;
 
   state.skippedDays[state.currentDay] = true;
-  state.streak = 0;
   state.currentDay = Math.min(state.currentDay + 1, 31);
+
+  // Streak freeze: if user has a freeze available this week, preserve streak
+  var week = Math.ceil(state.currentDay / 7);
+  if (state.streakFreezes > 0 && !state.weekFreezeUsed[week]) {
+    state.weekFreezeUsed[week] = true;
+    state.streakFreezes = Math.max(0, state.streakFreezes - 1);
+    // streak preserved
+    if (typeof showToast === 'function') {
+      showToast('Streak Freeze used! Your ' + state.streak + '-day streak is safe. Skip used for this week.', 'info');
+    }
+  } else {
+    state.streak = 0;
+    if (typeof showToast === 'function') {
+      showToast('Day skipped. Your streak was reset -- get back on track tomorrow!', 'warning');
+    }
+  }
 
   chSaveState(state);
   chRenderGrid(state);
@@ -338,15 +401,288 @@ function chSkipDay() {
   chRenderUpcoming(state);
   chUpdateStats(state);
   chUpdateIdentity(state);
-
-  if (typeof portalToast === 'function') {
-    portalToast('Day skipped. Your streak was reset -- get back on track tomorrow!', 'warning');
-  }
+  chRenderBadges(state);
+  chRenderLeaderboard(state);
+  chRenderCatchUp(state);
+  chRenderStreakFreeze(state);
 }
 
 function chResetChallenge() {
   try { localStorage.removeItem(CH_STORAGE_KEY); } catch (e) { /* ignore */ }
   chInit();
+}
+
+// ═══ M4P1C1: BADGE CHECK + RENDER ═══
+
+function chCheckBadges(state) {
+  if (!state.badges) state.badges = {};
+  var newlyEarned = [];
+  CH_BADGES.forEach(function(badge) {
+    if (!state.badges[badge.id] && badge.check(state)) {
+      state.badges[badge.id] = Date.now();
+      newlyEarned.push(badge);
+    }
+  });
+  return newlyEarned;
+}
+
+function chRenderBadges(state) {
+  var el = document.getElementById('ch-hero-badges');
+  if (!el) return;
+  var html = '';
+  CH_BADGES.forEach(function(badge) {
+    var earned = state.badges && state.badges[badge.id];
+    var cls = 'ch-badge-v2' + (earned ? ' ch-badge-v2-earned' : '');
+    html += '<div class="' + cls + '" title="' + badge.name + (earned ? '' : ' (Locked)') + '">'
+      + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + badge.icon + '</svg>'
+      + '<div class="ch-badge-v2-label">' + badge.name + '</div>'
+      + '</div>';
+  });
+  el.innerHTML = html;
+}
+
+// ═══ M4P1C1: MILESTONE CELEBRATION WITH CONFETTI ═══
+
+function chShowCelebration(title, sub, isFinal) {
+  // Create overlay
+  var overlay = document.createElement('div');
+  overlay.className = 'ch-celebrate-overlay';
+  overlay.id = 'ch-celebrate-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) chCloseCelebration(); };
+
+  overlay.innerHTML = '<div class="ch-celebrate-modal">'
+    + '<div class="ch-celebrate-confetti" id="ch-celebrate-confetti"></div>'
+    + '<div class="ch-celebrate-content">'
+    + '<div class="ch-celebrate-icon">' + (isFinal
+      ? '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>'
+      : '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>')
+    + '</div>'
+    + '<div class="ch-celebrate-title">' + title + '</div>'
+    + '<div class="ch-celebrate-sub">' + sub + '</div>'
+    + '<button class="ch-celebrate-btn" onclick="chCloseCelebration()">Keep Going</button>'
+    + '</div>'
+    + '</div>';
+
+  document.body.appendChild(overlay);
+  requestAnimationFrame(function() { overlay.classList.add('ch-celebrate-open'); });
+
+  // Launch confetti particles
+  chLaunchConfetti();
+}
+
+function chCloseCelebration() {
+  var overlay = document.getElementById('ch-celebrate-overlay');
+  if (overlay) {
+    overlay.classList.remove('ch-celebrate-open');
+    setTimeout(function() { if (overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 300);
+  }
+}
+
+function chLaunchConfetti() {
+  var container = document.getElementById('ch-celebrate-confetti');
+  if (!container) return;
+
+  var colors = ['#0B5FD8', '#00C8E0', '#FFD700', '#FF6B6B', '#8B5CF6', '#10B981', '#F59E0B'];
+  var shapes = ['circle', 'square', 'rect'];
+
+  for (var i = 0; i < 60; i++) {
+    var particle = document.createElement('div');
+    particle.className = 'ch-confetti-particle';
+    var color = colors[Math.floor(Math.random() * colors.length)];
+    var shape = shapes[Math.floor(Math.random() * shapes.length)];
+    var size = 6 + Math.random() * 6;
+    var left = 10 + Math.random() * 80;
+    var delay = Math.random() * 0.6;
+    var dur = 2 + Math.random() * 1.5;
+    var rotation = Math.random() * 360;
+
+    particle.style.cssText = 'position:absolute;left:' + left + '%;top:-10px;'
+      + 'width:' + (shape === 'rect' ? size * 2 : size) + 'px;'
+      + 'height:' + size + 'px;'
+      + 'background:' + color + ';'
+      + (shape === 'circle' ? 'border-radius:50%;' : 'border-radius:1px;')
+      + 'animation:chConfettiFall ' + dur + 's ease-in ' + delay + 's forwards;'
+      + 'transform:rotate(' + rotation + 'deg);'
+      + 'opacity:0.9;';
+
+    container.appendChild(particle);
+  }
+}
+
+// ═══ M4P1C1: DYNAMIC LEADERBOARD ═══
+
+function chRenderLeaderboard(state) {
+  var el = document.querySelector('.ch-lb-list');
+  if (!el) return;
+
+  var doneDays = chCountDone(state);
+  var userPts = state.points || 0;
+
+  // Static competitors + user data
+  var entries = [
+    { name: 'S. Patel', init: 'SP', day: 30, pts: 4500, color: '#FFD700' },
+    { name: 'J. Lopez', init: 'JL', day: 28, pts: 4200, color: '#C0C0C0' },
+    { name: 'A. Wright', init: 'AW', day: 24, pts: 3600, color: '#CD7F32' },
+    { name: 'M. Chen', init: 'MC', day: 20, pts: 2900, color: '#8B5CF6' },
+    { name: 'R. Kumar', init: 'RK', day: 18, pts: 2600, color: '#10B981' },
+    { name: 'K. Davis', init: 'KD', day: 15, pts: 2100, color: '#F59E0B' },
+    { name: 'T. Nguyen', init: 'TN', day: 12, pts: 1700, color: '#EC4899' },
+    { name: 'You', init: 'JH', day: state.currentDay, pts: userPts, color: 'var(--blue)', isUser: true }
+  ];
+
+  // Sort by points descending
+  entries.sort(function(a, b) { return b.pts - a.pts; });
+
+  var html = '';
+  entries.forEach(function(e, i) {
+    var rank = i + 1;
+    var cls = 'ch-lb-row' + (e.isUser ? ' ch-lb-row-you' : '');
+    if (rank <= 3) cls += ' ch-lb-row-top3';
+    html += '<div class="' + cls + '">'
+      + '<div class="ch-lb-rank">' + rank + '</div>'
+      + '<div class="ch-lb-avatar" style="background:' + e.color + '">' + e.init + '</div>'
+      + '<div class="ch-lb-info"><div class="ch-lb-name">' + e.name + '</div><div class="ch-lb-day">Day ' + e.day + '</div></div>'
+      + '<div class="ch-lb-pts">' + e.pts.toLocaleString() + ' pts</div>'
+      + '</div>';
+  });
+
+  el.innerHTML = html;
+
+  // Update rank stat
+  var rankEl = document.getElementById('ch-rank');
+  var userRank = entries.findIndex(function(e) { return e.isUser; }) + 1;
+  if (rankEl) {
+    var pct = Math.round(((entries.length - userRank) / entries.length) * 100);
+    rankEl.textContent = 'Top ' + Math.max(5, pct) + '%';
+  }
+}
+
+// ═══ M4P1C1: CATCH-UP MODE ═══
+
+function chRenderCatchUp(state) {
+  var container = document.getElementById('ch-catchup');
+  if (!container) return;
+
+  // Find skipped days that haven't been caught up
+  var skippedList = [];
+  for (var k in state.skippedDays) {
+    if (state.skippedDays[k] && !state.completedDays[k]) {
+      skippedList.push(parseInt(k, 10));
+    }
+  }
+  skippedList.sort(function(a, b) { return a - b; });
+
+  if (!skippedList.length) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'block';
+  var html = '<div class="ch-catchup-header">'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 105.64-8.36"/></svg>'
+    + '<span>Catch-Up Mode</span>'
+    + '<span class="ch-catchup-count">' + skippedList.length + ' skipped</span>'
+    + '</div>'
+    + '<div class="ch-catchup-desc">Complete skipped tasks to earn bonus points and fill gaps in your journey.</div>'
+    + '<div class="ch-catchup-list">';
+
+  skippedList.forEach(function(d) {
+    var task = CH_DAYS[d - 1];
+    var bonus = Math.round(task.pts * 0.5);
+    html += '<div class="ch-catchup-card">'
+      + '<div class="ch-catchup-day">Day ' + d + '</div>'
+      + '<div class="ch-catchup-info">'
+      + '<div class="ch-catchup-title">' + task.title + '</div>'
+      + '<div class="ch-catchup-bonus">+' + bonus + ' bonus pts</div>'
+      + '</div>'
+      + '<button class="ch-catchup-btn" onclick="chCatchUpDay(' + d + ')">Catch Up</button>'
+      + '</div>';
+  });
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function chCatchUpDay(dayNum) {
+  var state = chGetState();
+  if (state.completedDays[dayNum]) return;
+
+  var task = CH_DAYS[dayNum - 1];
+  var bonus = Math.round(task.pts * 0.5);
+
+  state.completedDays[dayNum] = true;
+  delete state.skippedDays[dayNum];
+  state.points = state.points + bonus;
+
+  var newBadges = chCheckBadges(state);
+  chSaveState(state);
+
+  chRenderGrid(state);
+  chUpdateStats(state);
+  chRenderBadges(state);
+  chRenderLeaderboard(state);
+  chRenderCatchUp(state);
+
+  if (typeof showToast === 'function') {
+    showToast('Day ' + dayNum + ' caught up! +' + bonus + ' bonus points.', 'success');
+  }
+
+  // Check milestones
+  var doneDays = chCountDone(state);
+  var milestones = {
+    7: { title: 'Week 1 Complete!', sub: 'You caught up and earned it!' },
+    14: { title: 'Two Weeks Strong!', sub: 'Catch-up mode paid off!' },
+    21: { title: 'Three Weeks Crushed!', sub: 'The persistence is paying off!' },
+    30: { title: 'Challenge Complete!', sub: 'Every single day accounted for!' }
+  };
+  if (milestones[doneDays]) {
+    setTimeout(function() {
+      chShowCelebration(milestones[doneDays].title, milestones[doneDays].sub, doneDays === 30);
+    }, 600);
+  }
+
+  if (newBadges && newBadges.length) {
+    newBadges.forEach(function(badge, i) {
+      setTimeout(function() {
+        if (typeof showToast === 'function') showToast('Badge Unlocked: ' + badge.name + '!', 'success');
+      }, 1200 + (i * 800));
+    });
+  }
+}
+
+// ═══ M4P1C1: STREAK FREEZE ═══
+
+function chRenderStreakFreeze(state) {
+  var el = document.getElementById('ch-streak-freeze');
+  if (!el) return;
+
+  var freezes = state.streakFreezes || 0;
+  var week = Math.ceil(state.currentDay / 7);
+  var usedThisWeek = state.weekFreezeUsed && state.weekFreezeUsed[week];
+
+  el.innerHTML = '<div class="ch-freeze-inner">'
+    + '<div class="ch-freeze-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/></svg></div>'
+    + '<div class="ch-freeze-info">'
+    + '<div class="ch-freeze-label">Streak Freeze</div>'
+    + '<div class="ch-freeze-desc">' + (freezes > 0
+      ? (usedThisWeek ? 'Used this week. Resets next week.' : freezes + ' available -- skip a day without losing your streak')
+      : 'No freezes available. Complete 7+ days to earn one.') + '</div>'
+    + '</div>'
+    + '<div class="ch-freeze-count">' + freezes + '</div>'
+    + '</div>';
+
+  // Award a new freeze at every 7 completed days
+  var done = chCountDone(state);
+  var freezesEarned = Math.floor(done / 7);
+  var freezesUsed = 0;
+  for (var k in state.weekFreezeUsed) {
+    if (state.weekFreezeUsed[k]) freezesUsed++;
+  }
+  var shouldHave = Math.max(0, freezesEarned - freezesUsed);
+  if (shouldHave > state.streakFreezes) {
+    state.streakFreezes = shouldHave;
+    chSaveState(state);
+  }
 }
 
 // ── PDF EXPORT: 30-Day Momentum Challenge Progress Report ──
