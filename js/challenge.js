@@ -355,6 +355,9 @@ function chCompleteDay() {
   state.streak = state.streak + 1;
   if (state.streak > state.bestStreak) state.bestStreak = state.streak;
 
+  // M4P1C2: Log completion for analytics
+  if (typeof chaLogCompletion === 'function') chaLogCompletion(state.currentDay);
+
   // Check for new badges
   var newBadges = chCheckBadges(state);
 
