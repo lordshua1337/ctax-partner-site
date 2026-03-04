@@ -17,8 +17,8 @@
     return {
       gridStroke: dark ? 'rgba(255,255,255,0.06)' : 'rgba(10,22,40,0.06)',
       labelFill: dark ? 'rgba(255,255,255,0.5)' : 'rgba(10,22,40,0.45)',
-      networkStroke: dark ? 'rgba(255,255,255,0.12)' : 'rgba(10,22,40,0.12)',
-      groupStroke: dark ? 'rgba(255,255,255,0.25)' : 'rgba(10,22,40,0.25)',
+      networkStroke: dark ? 'rgba(255,255,255,0.2)' : 'rgba(10,22,40,0.18)',
+      groupStroke: dark ? 'rgba(255,255,255,0.35)' : 'rgba(10,22,40,0.35)',
       dotFill: dark ? '#FFFFFF' : '#FFFFFF',
       emptySegment: dark ? 'rgba(255,255,255,0.08)' : 'rgba(10,22,40,0.06)',
       bonusCount: dark ? '#FFFFFF' : '#0A1628',
@@ -128,6 +128,8 @@
       gridLines += '<line x1="' + padL + '" y1="' + gy.toFixed(1) + '" x2="' + (W - padR) + '" y2="' + gy.toFixed(1) + '" stroke="' + colors.gridStroke + '" stroke-width="1"/>';
       yLabels += '<text x="' + (padL - 8) + '" y="' + (gy + 4).toFixed(1) + '" fill="' + colors.labelFill + '" font-size="10" text-anchor="end" font-family="DM Sans, sans-serif">' + Math.round(val) + '</text>';
     }
+    // Y-axis unit label
+    yLabels += '<text x="' + (padL - 8) + '" y="' + (padT - 6) + '" fill="' + colors.labelFill + '" font-size="9" text-anchor="end" font-family="DM Sans, sans-serif" font-weight="600">REFERRALS</text>';
 
     // X-axis labels (every 5 days)
     var xLabels = '';
@@ -145,8 +147,8 @@
       '<svg viewBox="0 0 ' + W + ' ' + H + '" class="dash-vel-svg" preserveAspectRatio="xMidYMid meet">',
       '<defs>',
       '  <linearGradient id="vel-user-grad" x1="0" y1="0" x2="0" y2="1">',
-      '    <stop offset="0%" stop-color="#0B5FD8" stop-opacity="0.35"/>',
-      '    <stop offset="100%" stop-color="#0B5FD8" stop-opacity="0.02"/>',
+      '    <stop offset="0%" stop-color="#0B5FD8" stop-opacity="0.12"/>',
+      '    <stop offset="100%" stop-color="#0B5FD8" stop-opacity="0.01"/>',
       '  </linearGradient>',
       '  <linearGradient id="vel-line-grad" x1="0" y1="0" x2="1" y2="0">',
       '    <stop offset="0%" stop-color="#0B5FD8"/>',
@@ -158,12 +160,12 @@
       yLabels,
       xLabels,
       // Network line
-      '<path d="' + buildLine(network) + '" fill="none" stroke="' + colors.networkStroke + '" stroke-width="1.5" stroke-dasharray="4,4"/>',
+      '<path d="' + buildLine(network) + '" fill="none" stroke="' + colors.networkStroke + '" stroke-width="1.5" stroke-dasharray="4,4" stroke-linecap="round"/>',
       // Group line
-      '<path d="' + buildLine(group) + '" fill="none" stroke="' + colors.groupStroke + '" stroke-width="1.5" stroke-dasharray="6,3"/>',
-      // User area fill
+      '<path d="' + buildLine(group) + '" fill="none" stroke="' + colors.groupStroke + '" stroke-width="2" stroke-dasharray="6,3" stroke-linecap="round"/>',
+      // User area fill (subtle, not mountain-shaped)
       '<path d="' + buildArea(user) + '" fill="url(#vel-user-grad)"/>',
-      // User line
+      // User line (bold primary line)
       '<path d="' + buildLine(user) + '" fill="none" stroke="url(#vel-line-grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>',
       // Live dot with pulse
       '<circle cx="' + dotX + '" cy="' + dotY + '" r="8" fill="#4BA3FF" opacity="0.2" class="dash-pulse-ring"/>',
