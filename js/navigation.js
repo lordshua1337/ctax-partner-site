@@ -287,6 +287,20 @@ function renderLandingPage(slug) {
     return;
   }
 
+  // Check schedule visibility (M1P3C2)
+  if (typeof pbIsPageVisible === 'function' && !pbIsPageVisible(slug)) {
+    lpEl.innerHTML = '<div class="lp-back-bar">' +
+      '<button class="lp-back-btn" onclick="exitLandingPage();showPage(\'portal\')">' +
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back to Portal</button>' +
+      '<span class="lp-slug">#lp/' + slug + '</span>' +
+      '</div>' +
+      '<div class="lp-404"><h2>Coming Soon</h2><p>This page is not yet available. Check back later.</p>' +
+      '<button class="lp-back-btn" onclick="exitLandingPage();showPage(\'portal\')" style="border-color:#d1d5db;color:#374151">Go to Portal</button></div>';
+    lpEl.classList.add('active');
+    document.title = 'Coming Soon';
+    return;
+  }
+
   // Build full HTML for the iframe
   var canvasCss = (typeof PB_CANVAS_CSS !== 'undefined') ? PB_CANVAS_CSS : '';
   var presetCSS = (typeof pbGetPresetInlineCSS === 'function') ? pbGetPresetInlineCSS() : '';

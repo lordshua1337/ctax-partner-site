@@ -1115,6 +1115,16 @@ function pbRenderMyPages() {
     html += '<div class="pb-mp-title">' + pbEscapeHtml(page.title) + '</div>';
     html += '<div class="pb-mp-slug">#lp/' + pbEscapeHtml(page.slug) + '</div>';
     html += '<div class="pb-mp-date">Published ' + dateStr + '</div>';
+    // Schedule status badge
+    var _schedStatus = pbGetPageScheduleStatus(page.slug);
+    if (_schedStatus.state !== 'live') {
+      html += '<div class="pb-mp-sched-badge pb-mp-sched-' + _schedStatus.state + '">' + _schedStatus.label + '</div>';
+    }
+    // Notes count badge
+    var _noteCount = pbGetNoteCount(page.slug);
+    if (_noteCount > 0) {
+      html += '<div class="pb-mp-notes-badge">' + _noteCount + ' open note' + (_noteCount > 1 ? 's' : '') + '</div>';
+    }
     html += '</div>';
     html += '<div class="pb-mp-actions">';
     html += '<button class="pb-mp-btn" onclick="pbViewPage(\'' + pbEscapeAttr(page.slug) + '\')" title="View live page">';
@@ -1143,6 +1153,15 @@ function pbRenderMyPages() {
     html += '</button>';
     html += '<button class="pb-mp-btn" onclick="pbExportTemplate(\'' + pbEscapeAttr(page.slug) + '\')" title="Export as template">';
     html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Export';
+    html += '</button>';
+    html += '<button class="pb-mp-btn pb-mp-btn-schedule" onclick="pbShowScheduleModal(\'' + pbEscapeAttr(page.slug) + '\')" title="Schedule">';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Schedule';
+    html += '</button>';
+    html += '<button class="pb-mp-btn pb-mp-btn-notes" onclick="pbShowNotesModal(\'' + pbEscapeAttr(page.slug) + '\')" title="Notes">';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Notes';
+    html += '</button>';
+    html += '<button class="pb-mp-btn pb-mp-btn-download" onclick="pbDownloadPage(\'' + pbEscapeAttr(page.slug) + '\')" title="Download HTML">';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download';
     html += '</button>';
     html += '<button class="pb-mp-btn pb-mp-btn-danger" onclick="pbConfirmUnpublish(\'' + pbEscapeAttr(page.slug) + '\')" title="Unpublish">';
     html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Unpublish';
@@ -2498,6 +2517,730 @@ function pbImportTemplate() {
   };
   input.click();
 }
+
+// ══════════════════════════════════════════
+//  M1P3C2: Page Scheduling System
+// ══════════════════════════════════════════
+
+var PB_SCHEDULES_KEY = 'ctax_pb_schedules';
+
+function pbGetSchedules() {
+  try {
+    var raw = localStorage.getItem(PB_SCHEDULES_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+
+function pbSetSchedules(schedules) {
+  try { localStorage.setItem(PB_SCHEDULES_KEY, JSON.stringify(schedules)); } catch (e) {}
+}
+
+function pbShowScheduleModal(slug) {
+  var page = pbFindPage(slug);
+  if (!page) return;
+
+  var schedules = pbGetSchedules();
+  var sched = schedules[slug] || {};
+
+  var overlay = document.createElement('div');
+  overlay.className = 'pb-sched-overlay';
+  overlay.id = 'pb-sched-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) pbCloseSchedule(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'pb-sched-modal';
+
+  var html = '<div class="pb-sched-header">';
+  html += '<h3>Schedule: ' + pbEscapeHtml(page.title) + '</h3>';
+  html += '<button class="pb-sched-close" onclick="pbCloseSchedule()">&times;</button>';
+  html += '</div>';
+  html += '<div class="pb-sched-body">';
+
+  // Status indicator
+  var status = pbGetPageScheduleStatus(slug);
+  html += '<div class="pb-sched-status pb-sched-status-' + status.state + '">';
+  html += '<div class="pb-sched-status-dot"></div>';
+  html += '<span>' + status.label + '</span>';
+  html += '</div>';
+
+  // Publish date
+  html += '<div class="pb-sched-field">';
+  html += '<label>Go Live Date</label>';
+  html += '<input type="datetime-local" id="pb-sched-publish" class="pb-sched-input" value="' + (sched.publishAt || '') + '">';
+  html += '<p class="pb-sched-hint">Page will become visible at this time</p>';
+  html += '</div>';
+
+  // Unpublish date
+  html += '<div class="pb-sched-field">';
+  html += '<label>Take Offline Date (optional)</label>';
+  html += '<input type="datetime-local" id="pb-sched-unpublish" class="pb-sched-input" value="' + (sched.unpublishAt || '') + '">';
+  html += '<p class="pb-sched-hint">Page will be hidden after this time (great for limited-time offers)</p>';
+  html += '</div>';
+
+  // Timezone note
+  html += '<div class="pb-sched-tz">Times are in your local timezone (' + Intl.DateTimeFormat().resolvedOptions().timeZone + ')</div>';
+
+  html += '<div class="pb-sched-actions">';
+  html += '<button class="pb-sched-btn-save" onclick="pbSaveSchedule(\'' + pbEscapeAttr(slug) + '\')">Save Schedule</button>';
+  if (sched.publishAt || sched.unpublishAt) {
+    html += '<button class="pb-sched-btn-clear" onclick="pbClearSchedule(\'' + pbEscapeAttr(slug) + '\')">Clear Schedule</button>';
+  }
+  html += '</div>';
+  html += '</div>';
+
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function pbCloseSchedule() {
+  var el = document.getElementById('pb-sched-overlay');
+  if (el) el.remove();
+}
+
+function pbSaveSchedule(slug) {
+  var publishAt = (document.getElementById('pb-sched-publish') || {}).value || '';
+  var unpublishAt = (document.getElementById('pb-sched-unpublish') || {}).value || '';
+
+  var schedules = pbGetSchedules();
+  schedules[slug] = {
+    publishAt: publishAt,
+    unpublishAt: unpublishAt,
+    updatedAt: new Date().toISOString()
+  };
+  pbSetSchedules(schedules);
+  pbCloseSchedule();
+
+  if (typeof showToast === 'function') {
+    if (publishAt) {
+      showToast('Page scheduled for ' + new Date(publishAt).toLocaleString(), 'success');
+    } else {
+      showToast('Schedule saved', 'success');
+    }
+  }
+  pbRenderMyPages();
+}
+
+function pbClearSchedule(slug) {
+  var schedules = pbGetSchedules();
+  delete schedules[slug];
+  pbSetSchedules(schedules);
+  pbCloseSchedule();
+  if (typeof showToast === 'function') showToast('Schedule cleared', 'info');
+  pbRenderMyPages();
+}
+
+function pbGetPageScheduleStatus(slug) {
+  var schedules = pbGetSchedules();
+  var sched = schedules[slug];
+  if (!sched) return { state: 'live', label: 'Live Now' };
+
+  var now = Date.now();
+  if (sched.publishAt && new Date(sched.publishAt).getTime() > now) {
+    return { state: 'scheduled', label: 'Scheduled: ' + new Date(sched.publishAt).toLocaleDateString() };
+  }
+  if (sched.unpublishAt && new Date(sched.unpublishAt).getTime() < now) {
+    return { state: 'expired', label: 'Expired: ' + new Date(sched.unpublishAt).toLocaleDateString() };
+  }
+  return { state: 'live', label: 'Live Now' };
+}
+
+// Check page visibility based on schedule (used by live page viewer)
+function pbIsPageVisible(slug) {
+  var schedules = pbGetSchedules();
+  var sched = schedules[slug];
+  if (!sched) return true;
+
+  var now = Date.now();
+  if (sched.publishAt && new Date(sched.publishAt).getTime() > now) return false;
+  if (sched.unpublishAt && new Date(sched.unpublishAt).getTime() < now) return false;
+  return true;
+}
+
+
+// ══════════════════════════════════════════
+//  M1P3C2: Multi-Page Sites (Group Pages)
+// ══════════════════════════════════════════
+
+var PB_SITES_KEY = 'ctax_pb_sites';
+
+function pbGetSites() {
+  try {
+    var raw = localStorage.getItem(PB_SITES_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+}
+
+function pbSetSites(sites) {
+  try { localStorage.setItem(PB_SITES_KEY, JSON.stringify(sites)); } catch (e) {}
+}
+
+function pbShowCreateSiteModal() {
+  var pages = pbGetPages();
+  if (pages.length < 2) {
+    if (typeof showToast === 'function') showToast('Create at least 2 pages before grouping into a site.', 'warning');
+    return;
+  }
+
+  var overlay = document.createElement('div');
+  overlay.className = 'pb-site-overlay';
+  overlay.id = 'pb-site-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) pbCloseSiteModal(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'pb-site-modal';
+
+  var html = '<div class="pb-site-header">';
+  html += '<h3>Create Multi-Page Site</h3>';
+  html += '<button class="pb-site-close" onclick="pbCloseSiteModal()">&times;</button>';
+  html += '</div>';
+  html += '<div class="pb-site-body">';
+
+  html += '<div class="pb-site-field">';
+  html += '<label>Site Name</label>';
+  html += '<input type="text" id="pb-site-name" class="pb-site-input" placeholder="My Tax Resolution Site">';
+  html += '</div>';
+
+  html += '<div class="pb-site-field">';
+  html += '<label>Select Pages (check to include)</label>';
+  html += '<div class="pb-site-page-list" id="pb-site-page-list">';
+  pages.forEach(function(page) {
+    html += '<label class="pb-site-page-item">';
+    html += '<input type="checkbox" value="' + pbEscapeAttr(page.slug) + '" class="pb-site-page-cb">';
+    html += '<span class="pb-site-page-title">' + pbEscapeHtml(page.title) + '</span>';
+    html += '<span class="pb-site-page-slug">/' + pbEscapeHtml(page.slug) + '</span>';
+    html += '</label>';
+  });
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="pb-site-field">';
+  html += '<label>Home Page</label>';
+  html += '<select id="pb-site-home" class="pb-site-input">';
+  pages.forEach(function(page) {
+    html += '<option value="' + pbEscapeAttr(page.slug) + '">' + pbEscapeHtml(page.title) + '</option>';
+  });
+  html += '</select>';
+  html += '</div>';
+
+  html += '<div class="pb-site-field">';
+  html += '<label>Navigation Style</label>';
+  html += '<select id="pb-site-nav-style" class="pb-site-input">';
+  html += '<option value="horizontal">Horizontal Bar</option>';
+  html += '<option value="minimal">Minimal (logo + links)</option>';
+  html += '<option value="centered">Centered Links</option>';
+  html += '</select>';
+  html += '</div>';
+
+  html += '<div class="pb-site-actions">';
+  html += '<button class="pb-site-btn-create" onclick="pbCreateSite()">Create Site</button>';
+  html += '</div>';
+  html += '</div>';
+
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function pbCloseSiteModal() {
+  var el = document.getElementById('pb-site-overlay');
+  if (el) el.remove();
+}
+
+function pbCreateSite() {
+  var name = (document.getElementById('pb-site-name') || {}).value || '';
+  if (!name.trim()) {
+    if (typeof showToast === 'function') showToast('Enter a site name.', 'warning');
+    return;
+  }
+
+  var checkboxes = document.querySelectorAll('.pb-site-page-cb:checked');
+  var pageSlugs = [];
+  checkboxes.forEach(function(cb) { pageSlugs.push(cb.value); });
+
+  if (pageSlugs.length < 2) {
+    if (typeof showToast === 'function') showToast('Select at least 2 pages for a site.', 'warning');
+    return;
+  }
+
+  var homePage = (document.getElementById('pb-site-home') || {}).value || pageSlugs[0];
+  var navStyle = (document.getElementById('pb-site-nav-style') || {}).value || 'horizontal';
+
+  var sites = pbGetSites();
+  var site = {
+    id: 'site-' + Date.now(),
+    name: name.trim(),
+    pageSlugs: pageSlugs,
+    homePage: homePage,
+    navStyle: navStyle,
+    createdAt: new Date().toISOString()
+  };
+  sites.push(site);
+  pbSetSites(sites);
+  pbCloseSiteModal();
+
+  if (typeof showToast === 'function') showToast('Site "' + name + '" created with ' + pageSlugs.length + ' pages!', 'success');
+  pbRenderMyPages();
+}
+
+function pbShowSitesPanel() {
+  var sites = pbGetSites();
+  var overlay = document.createElement('div');
+  overlay.className = 'pb-site-overlay';
+  overlay.id = 'pb-site-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) pbCloseSiteModal(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'pb-site-modal';
+
+  var html = '<div class="pb-site-header">';
+  html += '<h3>My Sites</h3>';
+  html += '<button class="pb-site-close" onclick="pbCloseSiteModal()">&times;</button>';
+  html += '</div>';
+  html += '<div class="pb-site-body">';
+
+  if (sites.length === 0) {
+    html += '<div class="pb-site-empty">No sites yet. Group 2+ pages into a multi-page site with shared navigation.</div>';
+    html += '<div class="pb-site-actions"><button class="pb-site-btn-create" onclick="pbCloseSiteModal();pbShowCreateSiteModal()">Create Your First Site</button></div>';
+  } else {
+    sites.forEach(function(site) {
+      html += '<div class="pb-site-card">';
+      html += '<div class="pb-site-card-header">';
+      html += '<div class="pb-site-card-name">' + pbEscapeHtml(site.name) + '</div>';
+      html += '<span class="pb-site-card-count">' + site.pageSlugs.length + ' pages</span>';
+      html += '</div>';
+      html += '<div class="pb-site-card-pages">';
+      site.pageSlugs.forEach(function(slug) {
+        var isHome = slug === site.homePage;
+        html += '<span class="pb-site-card-page' + (isHome ? ' pb-site-home' : '') + '">' + (isHome ? '(home) ' : '') + slug + '</span>';
+      });
+      html += '</div>';
+      html += '<div class="pb-site-card-actions">';
+      html += '<button class="pb-site-btn-download" onclick="pbDownloadSite(\'' + site.id + '\')">Download ZIP</button>';
+      html += '<button class="pb-site-btn-delete" onclick="pbDeleteSite(\'' + site.id + '\')">Delete</button>';
+      html += '</div>';
+      html += '</div>';
+    });
+    html += '<div class="pb-site-actions"><button class="pb-site-btn-create" onclick="pbCloseSiteModal();pbShowCreateSiteModal()">Create Another Site</button></div>';
+  }
+
+  html += '</div>';
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function pbDeleteSite(siteId) {
+  if (!confirm('Delete this site grouping? Pages will not be deleted.')) return;
+  var sites = pbGetSites().filter(function(s) { return s.id !== siteId; });
+  pbSetSites(sites);
+  pbCloseSiteModal();
+  pbShowSitesPanel();
+  if (typeof showToast === 'function') showToast('Site deleted. Pages are still available.', 'info');
+}
+
+
+// ══════════════════════════════════════════
+//  M1P3C2: Full Static Site Download (ZIP)
+// ══════════════════════════════════════════
+
+function pbBuildPageHtml(page) {
+  var h = '<!DOCTYPE html>\n<html lang="en">\n<head>\n';
+  h += '<meta charset="UTF-8">\n';
+  h += '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n';
+  h += '<title>' + pbEscapeHtml(page.title) + '</title>\n';
+  if (page.metaDesc) h += '<meta name="description" content="' + pbEscapeAttr(page.metaDesc) + '">\n';
+  if (page.ogImage) {
+    h += '<meta property="og:image" content="' + pbEscapeAttr(page.ogImage) + '">\n';
+    h += '<meta property="og:title" content="' + pbEscapeAttr(page.title) + '">\n';
+    h += '<meta property="og:type" content="website">\n';
+  }
+  h += '<style>\n' + (page.css || '') + '\n</style>\n';
+  if (page.gaId) {
+    h += '<script async src="https://www.googletagmanager.com/gtag/js?id=' + pbEscapeAttr(page.gaId) + '"><\/script>\n';
+    h += '<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","' + pbEscapeAttr(page.gaId) + '");<\/script>\n';
+  }
+  if (page.pixelId) {
+    h += '<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","' + pbEscapeAttr(page.pixelId) + '");fbq("track","PageView");<\/script>\n';
+  }
+  h += '</head>\n<body>\n';
+  h += (page.html || '');
+  h += '\n</body>\n</html>';
+  return h;
+}
+
+function pbBuildSiteNav(site, currentSlug) {
+  var pages = pbGetPages();
+  var style = site.navStyle || 'horizontal';
+  var nav = '<nav class="pb-site-nav pb-site-nav-' + style + '">';
+
+  if (style === 'minimal') {
+    nav += '<div class="pb-site-nav-inner">';
+    nav += '<strong class="pb-site-nav-brand">' + pbEscapeHtml(site.name) + '</strong>';
+    nav += '<div class="pb-site-nav-links">';
+  } else if (style === 'centered') {
+    nav += '<div class="pb-site-nav-inner pb-site-nav-centered">';
+  } else {
+    nav += '<div class="pb-site-nav-inner">';
+  }
+
+  site.pageSlugs.forEach(function(slug) {
+    var p = pages.find(function(pg) { return pg.slug === slug; });
+    if (!p) return;
+    var active = slug === currentSlug ? ' pb-site-nav-active' : '';
+    nav += '<a href="' + slug + '.html" class="pb-site-nav-link' + active + '">' + pbEscapeHtml(p.title) + '</a>';
+  });
+
+  if (style === 'minimal') {
+    nav += '</div></div>';
+  } else {
+    nav += '</div>';
+  }
+  nav += '</nav>';
+  return nav;
+}
+
+function pbGetSiteNavCss() {
+  return '.pb-site-nav{background:#111827;padding:0 20px;font-family:system-ui,sans-serif}' +
+    '.pb-site-nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;min-height:56px;flex-wrap:wrap}' +
+    '.pb-site-nav-centered{justify-content:center}' +
+    '.pb-site-nav-brand{color:#fff;font-size:16px;margin-right:auto}' +
+    '.pb-site-nav-links{display:flex;gap:4px;margin-left:auto}' +
+    '.pb-site-nav-link{color:rgba(255,255,255,0.7);text-decoration:none;padding:8px 14px;font-size:14px;font-weight:500;border-radius:6px;transition:all 0.15s}' +
+    '.pb-site-nav-link:hover{color:#fff;background:rgba(255,255,255,0.08)}' +
+    '.pb-site-nav-active{color:#fff;background:rgba(255,255,255,0.12)}' +
+    '@media(max-width:640px){.pb-site-nav-inner{flex-direction:column;padding:12px 0}.pb-site-nav-links{flex-wrap:wrap;justify-content:center}}';
+}
+
+function pbDownloadSite(siteId) {
+  var sites = pbGetSites();
+  var site = sites.find(function(s) { return s.id === siteId; });
+  if (!site) return;
+
+  var pages = pbGetPages();
+  var navCss = pbGetSiteNavCss();
+
+  // Build file list
+  var files = [];
+  site.pageSlugs.forEach(function(slug) {
+    var page = pages.find(function(p) { return p.slug === slug; });
+    if (!page) return;
+
+    var navHtml = pbBuildSiteNav(site, slug);
+    var fullPage = Object.assign({}, page, {
+      html: navHtml + '\n' + page.html,
+      css: navCss + '\n' + (page.css || '')
+    });
+
+    var filename = slug === site.homePage ? 'index.html' : slug + '.html';
+    files.push({ name: filename, content: pbBuildPageHtml(fullPage) });
+  });
+
+  if (files.length === 0) {
+    if (typeof showToast === 'function') showToast('No pages found for this site.', 'error');
+    return;
+  }
+
+  // Use JSZip if available, otherwise download pages individually
+  if (typeof JSZip !== 'undefined') {
+    var zip = new JSZip();
+    files.forEach(function(f) { zip.file(f.name, f.content); });
+    zip.generateAsync({ type: 'blob' }).then(function(blob) {
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = site.name.replace(/[^a-zA-Z0-9-_]/g, '-') + '.zip';
+      a.click();
+      URL.revokeObjectURL(url);
+      if (typeof showToast === 'function') showToast('Site downloaded as ZIP!', 'success');
+    });
+  } else {
+    // Fallback: download pages individually
+    files.forEach(function(f) {
+      var blob = new Blob([f.content], { type: 'text/html' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = f.name;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+    if (typeof showToast === 'function') showToast(files.length + ' pages downloaded. (Add JSZip for ZIP export)', 'success');
+  }
+}
+
+// Single-page download (non-site pages)
+function pbDownloadPage(slug) {
+  var page = pbFindPage(slug);
+  if (!page) return;
+
+  var htmlStr = pbBuildPageHtml(page);
+  var blob = new Blob([htmlStr], { type: 'text/html' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = slug + '.html';
+  a.click();
+  URL.revokeObjectURL(url);
+  if (typeof showToast === 'function') showToast('Page downloaded!', 'success');
+}
+
+
+// ══════════════════════════════════════════
+//  M1P3C2: Collaboration Notes (per-page)
+// ══════════════════════════════════════════
+
+var PB_NOTES_KEY = 'ctax_pb_page_notes';
+
+function pbGetNotes() {
+  try {
+    var raw = localStorage.getItem(PB_NOTES_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+
+function pbSetNotes(notes) {
+  try { localStorage.setItem(PB_NOTES_KEY, JSON.stringify(notes)); } catch (e) {}
+}
+
+function pbShowNotesModal(slug) {
+  var page = pbFindPage(slug);
+  if (!page) return;
+
+  var notes = pbGetNotes();
+  var pageNotes = notes[slug] || [];
+
+  var overlay = document.createElement('div');
+  overlay.className = 'pb-notes-overlay';
+  overlay.id = 'pb-notes-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) pbCloseNotes(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'pb-notes-modal';
+
+  var html = '<div class="pb-notes-header">';
+  html += '<h3>Notes: ' + pbEscapeHtml(page.title) + '</h3>';
+  html += '<button class="pb-notes-close" onclick="pbCloseNotes()">&times;</button>';
+  html += '</div>';
+
+  html += '<div class="pb-notes-body" id="pb-notes-body">';
+  if (pageNotes.length === 0) {
+    html += '<div class="pb-notes-empty">No notes yet. Add feedback, revision requests, or ideas below.</div>';
+  } else {
+    pageNotes.forEach(function(note, idx) {
+      var date = new Date(note.createdAt);
+      var dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' at ' + date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      var statusClass = note.resolved ? ' pb-notes-resolved' : '';
+      html += '<div class="pb-notes-item' + statusClass + '">';
+      html += '<div class="pb-notes-item-top">';
+      html += '<span class="pb-notes-author">' + pbEscapeHtml(note.author || 'Partner') + '</span>';
+      html += '<span class="pb-notes-date">' + dateStr + '</span>';
+      html += '</div>';
+      html += '<div class="pb-notes-text">' + pbEscapeHtml(note.text) + '</div>';
+      if (note.category) {
+        html += '<span class="pb-notes-tag pb-notes-tag-' + note.category + '">' + note.category + '</span>';
+      }
+      html += '<div class="pb-notes-item-actions">';
+      if (!note.resolved) {
+        html += '<button class="pb-notes-btn-resolve" onclick="pbResolveNote(\'' + pbEscapeAttr(slug) + '\',' + idx + ')">Resolve</button>';
+      } else {
+        html += '<span class="pb-notes-resolved-label">Resolved</span>';
+      }
+      html += '<button class="pb-notes-btn-delete" onclick="pbDeleteNote(\'' + pbEscapeAttr(slug) + '\',' + idx + ')">Delete</button>';
+      html += '</div>';
+      html += '</div>';
+    });
+  }
+  html += '</div>';
+
+  // Add note form
+  html += '<div class="pb-notes-form">';
+  html += '<div class="pb-notes-form-row">';
+  html += '<select id="pb-notes-category" class="pb-notes-cat-select">';
+  html += '<option value="">Category...</option>';
+  html += '<option value="feedback">Feedback</option>';
+  html += '<option value="revision">Revision</option>';
+  html += '<option value="idea">Idea</option>';
+  html += '<option value="bug">Bug</option>';
+  html += '</select>';
+  html += '<input type="text" id="pb-notes-author" class="pb-notes-author-input" placeholder="Your name" value="' + (localStorage.getItem('ctax_partner_name') || '') + '">';
+  html += '</div>';
+  html += '<textarea id="pb-notes-text" class="pb-notes-textarea" placeholder="Write a note..." rows="3"></textarea>';
+  html += '<button class="pb-notes-btn-add" onclick="pbAddNote(\'' + pbEscapeAttr(slug) + '\')">Add Note</button>';
+  html += '</div>';
+
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function pbCloseNotes() {
+  var el = document.getElementById('pb-notes-overlay');
+  if (el) el.remove();
+}
+
+function pbAddNote(slug) {
+  var text = (document.getElementById('pb-notes-text') || {}).value || '';
+  if (!text.trim()) return;
+
+  var author = (document.getElementById('pb-notes-author') || {}).value || 'Partner';
+  var category = (document.getElementById('pb-notes-category') || {}).value || '';
+
+  var notes = pbGetNotes();
+  if (!notes[slug]) notes[slug] = [];
+  notes[slug].push({
+    text: text.trim(),
+    author: author.trim(),
+    category: category,
+    createdAt: new Date().toISOString(),
+    resolved: false
+  });
+  pbSetNotes(notes);
+
+  // Save author for next time
+  try { localStorage.setItem('ctax_partner_name', author.trim()); } catch (e) {}
+
+  pbCloseNotes();
+  pbShowNotesModal(slug);
+  if (typeof showToast === 'function') showToast('Note added!', 'success');
+}
+
+function pbResolveNote(slug, idx) {
+  var notes = pbGetNotes();
+  if (notes[slug] && notes[slug][idx]) {
+    notes[slug][idx] = Object.assign({}, notes[slug][idx], { resolved: true, resolvedAt: new Date().toISOString() });
+    pbSetNotes(notes);
+    pbCloseNotes();
+    pbShowNotesModal(slug);
+  }
+}
+
+function pbDeleteNote(slug, idx) {
+  if (!confirm('Delete this note?')) return;
+  var notes = pbGetNotes();
+  if (notes[slug]) {
+    notes[slug] = notes[slug].filter(function(_, i) { return i !== idx; });
+    pbSetNotes(notes);
+    pbCloseNotes();
+    pbShowNotesModal(slug);
+  }
+}
+
+function pbGetNoteCount(slug) {
+  var notes = pbGetNotes();
+  var pageNotes = notes[slug] || [];
+  return pageNotes.filter(function(n) { return !n.resolved; }).length;
+}
+
+
+// ══════════════════════════════════════════
+//  M1P3C2: Page Clone from URL
+// ══════════════════════════════════════════
+
+function pbShowCloneModal() {
+  var overlay = document.createElement('div');
+  overlay.className = 'pb-clone-overlay';
+  overlay.id = 'pb-clone-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) pbCloseClone(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'pb-clone-modal';
+
+  var html = '<div class="pb-clone-header">';
+  html += '<h3>Clone Page from URL</h3>';
+  html += '<button class="pb-clone-close" onclick="pbCloseClone()">&times;</button>';
+  html += '</div>';
+  html += '<div class="pb-clone-body">';
+  html += '<p class="pb-clone-desc">Paste any landing page URL to use its structure as a starting point. Content will be extracted and loaded into the editor.</p>';
+  html += '<div class="pb-clone-field">';
+  html += '<input type="url" id="pb-clone-url" class="pb-clone-input" placeholder="https://example.com/landing-page">';
+  html += '</div>';
+  html += '<div id="pb-clone-status" class="pb-clone-status" style="display:none"></div>';
+  html += '<div class="pb-clone-actions">';
+  html += '<button class="pb-clone-btn" id="pb-clone-btn" onclick="pbClonePage()">Clone Page</button>';
+  html += '</div>';
+  html += '<div class="pb-clone-note">Note: Images and external resources may not transfer. You can replace them in the editor.</div>';
+  html += '</div>';
+
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function pbCloseClone() {
+  var el = document.getElementById('pb-clone-overlay');
+  if (el) el.remove();
+}
+
+function pbClonePage() {
+  var urlInput = document.getElementById('pb-clone-url');
+  var statusEl = document.getElementById('pb-clone-status');
+  var btnEl = document.getElementById('pb-clone-btn');
+  if (!urlInput || !statusEl) return;
+
+  var url = urlInput.value.trim();
+  if (!url || !url.match(/^https?:\/\//)) {
+    statusEl.style.display = 'block';
+    statusEl.className = 'pb-clone-status pb-clone-error';
+    statusEl.textContent = 'Enter a valid URL starting with http:// or https://';
+    return;
+  }
+
+  statusEl.style.display = 'block';
+  statusEl.className = 'pb-clone-status pb-clone-loading';
+  statusEl.textContent = 'Fetching page structure...';
+  if (btnEl) btnEl.disabled = true;
+
+  // Use a CORS proxy to fetch the page
+  var proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+
+  fetch(proxyUrl)
+    .then(function(res) {
+      if (!res.ok) throw new Error('Failed to fetch');
+      return res.text();
+    })
+    .then(function(htmlStr) {
+      // Parse the HTML
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(htmlStr, 'text/html');
+
+      // Extract body content
+      var body = doc.body;
+      if (!body) throw new Error('No body content found');
+
+      // Clean scripts, iframes, noscript
+      var remove = body.querySelectorAll('script, iframe, noscript, link[rel="stylesheet"], style');
+      remove.forEach(function(el) { el.remove(); });
+
+      // Extract inline styles from head
+      var styles = '';
+      var styleTags = doc.querySelectorAll('style');
+      styleTags.forEach(function(tag) { styles += tag.textContent + '\n'; });
+
+      var clonedHtml = body.innerHTML;
+
+      // Load into editor
+      if (pbEditor) {
+        pbEditor.setComponents(clonedHtml);
+        if (styles) pbEditor.setStyle(styles);
+        pbInjectCanvasStyles();
+        pbSave();
+        pbCloseClone();
+        if (typeof showToast === 'function') showToast('Page cloned! Customize it in the editor.', 'success');
+      } else {
+        statusEl.className = 'pb-clone-status pb-clone-error';
+        statusEl.textContent = 'Open the Page Builder first, then try cloning.';
+      }
+    })
+    .catch(function(err) {
+      statusEl.className = 'pb-clone-status pb-clone-error';
+      statusEl.textContent = 'Could not fetch page. The site may block external access. Try a different URL.';
+    })
+    .finally(function() {
+      if (btnEl) btnEl.disabled = false;
+    });
+}
+
 
 // ══════════════════════════════════════════
 //  Lifecycle
