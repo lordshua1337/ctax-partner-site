@@ -3883,6 +3883,10 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               Preview
             </button>
+            <button class="pb-tool-btn" onclick="pbSaveBlockFromSelection()" title="Save selected component as reusable block">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8m-4-4h8"/></svg>
+              Save Block
+            </button>
             <button class="pb-tool-btn pb-tool-btn-publish" onclick="pbOpenPublishModal()" title="Publish this page">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
               Publish
@@ -3914,11 +3918,13 @@
               <button class="pb-panel-tab pb-panel-tab-active" data-panel="pb-blocks" onclick="pbShowPanel('pb-blocks')">Blocks</button>
               <button class="pb-panel-tab" data-panel="pb-styles" onclick="pbShowPanel('pb-styles')">Styles</button>
               <button class="pb-panel-tab" data-panel="pb-layers" onclick="pbShowPanel('pb-layers')">Layers</button>
+              <button class="pb-panel-tab" data-panel="pb-saved-blocks" onclick="pbShowPanel('pb-saved-blocks');pbRenderSavedBlocksPanel()">My Blocks</button>
             </div>
             <div class="pb-panel-body">
               <div id="pb-blocks"></div>
               <div id="pb-styles" style="display:none"></div>
               <div id="pb-layers" style="display:none"></div>
+              <div id="pb-saved-blocks" style="display:none"><div id="pb-saved-blocks-panel"></div></div>
             </div>
           </aside>
         </div>

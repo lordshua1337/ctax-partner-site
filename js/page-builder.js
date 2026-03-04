@@ -91,6 +91,9 @@ function pbInit() {
   // Add custom blocks
   pbAddBlocks(pbEditor);
 
+  // Load saved reusable blocks (M1P1C2)
+  pbLoadSavedBlocks();
+
   // Auto-save on change
   pbEditor.on('change:changesCount', function() { pbSave(); });
 
@@ -236,7 +239,7 @@ function pbSetDevice(device) {
 }
 
 function pbShowPanel(panel) {
-  var panels = ['pb-blocks', 'pb-styles', 'pb-layers'];
+  var panels = ['pb-blocks', 'pb-styles', 'pb-layers', 'pb-saved-blocks'];
   panels.forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.style.display = (id === panel) ? 'block' : 'none';
@@ -1053,6 +1056,12 @@ function pbPublish() {
     updatedPages = pages.concat([page]);
   }
 
+  // Save version history before overwriting (M1P1C2)
+  if (found) {
+    var prevPage = pages.find(function(p) { return p.slug === slug || p.slug === pbEditingSlug; });
+    if (prevPage) pbSaveVersion(slug, prevPage);
+  }
+
   pbSetPages(updatedPages);
   pbEditingSlug = slug;
   pbClosePublishModal();
@@ -1119,6 +1128,12 @@ function pbRenderMyPages() {
     html += '</button>';
     html += '<button class="pb-mp-btn" onclick="pbCopyPageUrl(\'' + pbEscapeAttr(page.slug) + '\')" title="Copy live URL">';
     html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> Copy URL';
+    html += '</button>';
+    html += '<button class="pb-mp-btn pb-mp-btn-analytics" onclick="pbRenderAnalytics(\'' + pbEscapeAttr(page.slug) + '\')" title="View analytics">';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Analytics';
+    html += '</button>';
+    html += '<button class="pb-mp-btn" onclick="pbShowVersionHistory(\'' + pbEscapeAttr(page.slug) + '\')" title="Version history">';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> History';
     html += '</button>';
     html += '<button class="pb-mp-btn pb-mp-btn-danger" onclick="pbConfirmUnpublish(\'' + pbEscapeAttr(page.slug) + '\')" title="Unpublish">';
     html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Unpublish';
@@ -1758,6 +1773,382 @@ function pbValidateForPublish() {
   return { valid: errors.length === 0, warnings: warnings, errors: errors };
 }
 
+
+// ══════════════════════════════════════════
+//  M1P1C2: Global Blocks (Save & Reuse Custom Blocks)
+// ══════════════════════════════════════════
+
+var PB_SAVED_BLOCKS_KEY = 'ctax_pb_saved_blocks';
+
+function pbGetSavedBlocks() {
+  try {
+    var raw = localStorage.getItem(PB_SAVED_BLOCKS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+}
+
+function pbSetSavedBlocks(blocks) {
+  try { localStorage.setItem(PB_SAVED_BLOCKS_KEY, JSON.stringify(blocks)); } catch (e) {}
+}
+
+function pbSaveBlockFromSelection() {
+  if (!pbEditor) return;
+  var selected = pbEditor.getSelected();
+  if (!selected) {
+    if (typeof showToast === 'function') showToast('Select a component to save as a reusable block.', 'warning');
+    return;
+  }
+
+  var blockHtml = selected.toHTML();
+  // Get only styles for this component
+  var blockCss = '';
+  try {
+    var rules = pbEditor.CssComposer.getAll();
+    var componentClasses = selected.getClasses();
+    rules.forEach(function(rule) {
+      var sel = rule.selectorsToString();
+      var match = componentClasses.some(function(cls) { return sel.indexOf(cls) !== -1; });
+      if (match) blockCss += sel + '{' + rule.getDeclaration() + '}\n';
+    });
+  } catch (e) {}
+
+  // Prompt for name
+  var name = prompt('Name this reusable block:');
+  if (!name || !name.trim()) return;
+
+  var blocks = pbGetSavedBlocks();
+  var newBlock = {
+    id: 'custom-' + Date.now(),
+    name: name.trim(),
+    html: blockHtml,
+    css: blockCss,
+    savedAt: new Date().toISOString(),
+    category: 'My Blocks'
+  };
+  blocks.push(newBlock);
+  pbSetSavedBlocks(blocks);
+
+  // Register with GrapesJS
+  pbRegisterSavedBlock(newBlock);
+  pbRenderSavedBlocksPanel();
+
+  if (typeof showToast === 'function') showToast('Block "' + name + '" saved! Find it in My Blocks.', 'success');
+}
+
+function pbRegisterSavedBlock(block) {
+  if (!pbEditor) return;
+  var bm = pbEditor.BlockManager;
+  if (bm.get(block.id)) return; // already registered
+
+  bm.add(block.id, {
+    label: block.name,
+    category: 'My Blocks',
+    content: block.html + (block.css ? '<style>' + block.css + '</style>' : ''),
+    media: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8m-4-4h8"/></svg>'
+  });
+}
+
+function pbLoadSavedBlocks() {
+  var blocks = pbGetSavedBlocks();
+  blocks.forEach(function(block) { pbRegisterSavedBlock(block); });
+}
+
+function pbDeleteSavedBlock(blockId) {
+  var blocks = pbGetSavedBlocks().filter(function(b) { return b.id !== blockId; });
+  pbSetSavedBlocks(blocks);
+  if (pbEditor) {
+    try { pbEditor.BlockManager.remove(blockId); } catch (e) {}
+  }
+  pbRenderSavedBlocksPanel();
+  if (typeof showToast === 'function') showToast('Block removed.', 'info');
+}
+
+function pbRenderSavedBlocksPanel() {
+  var panel = document.getElementById('pb-saved-blocks-panel');
+  if (!panel) return;
+  var blocks = pbGetSavedBlocks();
+
+  if (blocks.length === 0) {
+    panel.innerHTML = '<div class="pb-sb-empty">No saved blocks yet. Select a component and click "Save Block" to create reusable blocks.</div>';
+    return;
+  }
+
+  var html = '<div class="pb-sb-list">';
+  blocks.forEach(function(block) {
+    var date = new Date(block.savedAt);
+    var dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    html += '<div class="pb-sb-item">';
+    html += '<div class="pb-sb-info">';
+    html += '<div class="pb-sb-name">' + pbEscapeHtml(block.name) + '</div>';
+    html += '<div class="pb-sb-date">Saved ' + dateStr + '</div>';
+    html += '</div>';
+    html += '<button class="pb-sb-del" onclick="pbDeleteSavedBlock(\'' + block.id + '\')" title="Delete">';
+    html += '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>';
+    html += '</button>';
+    html += '</div>';
+  });
+  html += '</div>';
+  panel.innerHTML = html;
+}
+
+// ══════════════════════════════════════════
+//  M1P1C2: Version History (Undo snapshots of published pages)
+// ══════════════════════════════════════════
+
+var PB_HISTORY_KEY = 'ctax_pb_page_history';
+var PB_MAX_VERSIONS = 10;
+
+function pbGetHistory() {
+  try {
+    var raw = localStorage.getItem(PB_HISTORY_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+
+function pbSetHistory(history) {
+  try { localStorage.setItem(PB_HISTORY_KEY, JSON.stringify(history)); } catch (e) {}
+}
+
+function pbSaveVersion(slug, page) {
+  var history = pbGetHistory();
+  if (!history[slug]) history[slug] = [];
+  var version = {
+    html: page.html,
+    css: page.css,
+    savedAt: new Date().toISOString(),
+    versionNum: history[slug].length + 1
+  };
+  history[slug].push(version);
+  // Cap at max versions
+  if (history[slug].length > PB_MAX_VERSIONS) {
+    history[slug] = history[slug].slice(-PB_MAX_VERSIONS);
+  }
+  pbSetHistory(history);
+}
+
+function pbShowVersionHistory(slug) {
+  var history = pbGetHistory();
+  var versions = history[slug] || [];
+
+  if (versions.length === 0) {
+    if (typeof showToast === 'function') showToast('No version history yet. Publish changes to create versions.', 'info');
+    return;
+  }
+
+  // Create modal
+  var overlay = document.createElement('div');
+  overlay.className = 'pb-vh-overlay';
+  overlay.id = 'pb-vh-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) pbCloseVersionHistory(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'pb-vh-modal';
+  var html = '<div class="pb-vh-header">';
+  html += '<div class="pb-vh-title">Version History: ' + pbEscapeHtml(slug) + '</div>';
+  html += '<button class="pb-vh-close" onclick="pbCloseVersionHistory()">&times;</button>';
+  html += '</div>';
+  html += '<div class="pb-vh-body">';
+  html += '<div class="pb-vh-list">';
+
+  // Show current version first
+  var page = pbFindPage(slug);
+  if (page) {
+    html += '<div class="pb-vh-item pb-vh-current">';
+    html += '<div class="pb-vh-item-info">';
+    html += '<div class="pb-vh-item-num">Current Version</div>';
+    html += '<div class="pb-vh-item-date">' + new Date(page.updatedAt).toLocaleString() + '</div>';
+    html += '</div>';
+    html += '<span class="pb-vh-badge">Live</span>';
+    html += '</div>';
+  }
+
+  // Show previous versions (newest first)
+  versions.slice().reverse().forEach(function(v, i) {
+    html += '<div class="pb-vh-item">';
+    html += '<div class="pb-vh-item-info">';
+    html += '<div class="pb-vh-item-num">Version ' + v.versionNum + '</div>';
+    html += '<div class="pb-vh-item-date">' + new Date(v.savedAt).toLocaleString() + '</div>';
+    html += '</div>';
+    html += '<button class="pb-vh-restore" onclick="pbRestoreVersion(\'' + pbEscapeAttr(slug) + '\', ' + (versions.length - 1 - i) + ')">Restore</button>';
+    html += '</div>';
+  });
+
+  html += '</div>';
+
+  // Preview pane
+  html += '<div class="pb-vh-preview">';
+  html += '<div class="pb-vh-preview-label">Select a version to preview</div>';
+  html += '</div>';
+
+  html += '</div>';
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function pbCloseVersionHistory() {
+  var overlay = document.getElementById('pb-vh-overlay');
+  if (overlay) overlay.remove();
+}
+
+function pbRestoreVersion(slug, versionIndex) {
+  var history = pbGetHistory();
+  var versions = history[slug] || [];
+  if (!versions[versionIndex]) return;
+
+  var version = versions[versionIndex];
+  if (!confirm('Restore version ' + version.versionNum + '? Current version will be saved to history first.')) return;
+
+  // Save current as a version before restoring
+  var page = pbFindPage(slug);
+  if (page) pbSaveVersion(slug, page);
+
+  // Update the page with restored version
+  var pages = pbGetPages().map(function(p) {
+    if (p.slug === slug) {
+      return Object.assign({}, p, { html: version.html, css: version.css, updatedAt: new Date().toISOString() });
+    }
+    return p;
+  });
+  pbSetPages(pages);
+
+  // If currently editing this page, reload in editor
+  if (pbEditingSlug === slug && pbEditor) {
+    pbEditor.setComponents(version.html || '');
+    pbEditor.setStyle(version.css || '');
+    pbInjectCanvasStyles();
+    pbSave();
+  }
+
+  pbCloseVersionHistory();
+  pbRenderMyPages();
+  if (typeof showToast === 'function') showToast('Restored version ' + version.versionNum + '!', 'success');
+}
+
+// ══════════════════════════════════════════
+//  M1P1C2: Page Analytics Tracking
+// ══════════════════════════════════════════
+
+var PB_ANALYTICS_KEY = 'ctax_pb_analytics';
+
+function pbGetAnalytics() {
+  try {
+    var raw = localStorage.getItem(PB_ANALYTICS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+
+function pbTrackPageView(slug) {
+  var analytics = pbGetAnalytics();
+  if (!analytics[slug]) {
+    analytics[slug] = { views: 0, uniqueVisitors: [], formSubmissions: 0, ctaClicks: 0, firstView: null, lastView: null, dailyViews: {} };
+  }
+  analytics[slug].views++;
+  analytics[slug].lastView = new Date().toISOString();
+  if (!analytics[slug].firstView) analytics[slug].firstView = analytics[slug].lastView;
+
+  // Track daily views
+  var dateKey = new Date().toISOString().slice(0, 10);
+  analytics[slug].dailyViews[dateKey] = (analytics[slug].dailyViews[dateKey] || 0) + 1;
+
+  // Track unique visitor (simple fingerprint)
+  var fp = navigator.userAgent.length + '_' + screen.width + 'x' + screen.height;
+  if (analytics[slug].uniqueVisitors.indexOf(fp) === -1) {
+    analytics[slug].uniqueVisitors.push(fp);
+  }
+
+  try { localStorage.setItem(PB_ANALYTICS_KEY, JSON.stringify(analytics)); } catch (e) {}
+}
+
+function pbTrackFormSubmit(slug) {
+  var analytics = pbGetAnalytics();
+  if (!analytics[slug]) return;
+  analytics[slug].formSubmissions++;
+  try { localStorage.setItem(PB_ANALYTICS_KEY, JSON.stringify(analytics)); } catch (e) {}
+}
+
+function pbTrackCtaClick(slug) {
+  var analytics = pbGetAnalytics();
+  if (!analytics[slug]) return;
+  analytics[slug].ctaClicks++;
+  try { localStorage.setItem(PB_ANALYTICS_KEY, JSON.stringify(analytics)); } catch (e) {}
+}
+
+function pbRenderAnalytics(slug) {
+  var analytics = pbGetAnalytics();
+  var data = analytics[slug] || { views: 0, uniqueVisitors: [], formSubmissions: 0, ctaClicks: 0 };
+  var uniqueCount = data.uniqueVisitors ? data.uniqueVisitors.length : 0;
+  var convRate = data.views > 0 ? Math.round((data.formSubmissions / data.views) * 100) : 0;
+  var ctaRate = data.views > 0 ? Math.round((data.ctaClicks / data.views) * 100) : 0;
+
+  // Create analytics modal
+  var overlay = document.createElement('div');
+  overlay.className = 'pb-an-overlay';
+  overlay.id = 'pb-an-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) pbCloseAnalytics(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'pb-an-modal';
+
+  var html = '<div class="pb-an-header">';
+  html += '<div class="pb-an-title">Page Analytics: ' + pbEscapeHtml(slug) + '</div>';
+  html += '<button class="pb-an-close" onclick="pbCloseAnalytics()">&times;</button>';
+  html += '</div>';
+
+  html += '<div class="pb-an-body">';
+
+  // KPI cards
+  html += '<div class="pb-an-kpis">';
+  html += '<div class="pb-an-kpi"><div class="pb-an-kpi-val">' + data.views + '</div><div class="pb-an-kpi-label">Total Views</div></div>';
+  html += '<div class="pb-an-kpi"><div class="pb-an-kpi-val">' + uniqueCount + '</div><div class="pb-an-kpi-label">Unique Visitors</div></div>';
+  html += '<div class="pb-an-kpi"><div class="pb-an-kpi-val">' + data.formSubmissions + '</div><div class="pb-an-kpi-label">Form Submissions</div></div>';
+  html += '<div class="pb-an-kpi"><div class="pb-an-kpi-val">' + convRate + '%</div><div class="pb-an-kpi-label">Conversion Rate</div></div>';
+  html += '<div class="pb-an-kpi"><div class="pb-an-kpi-val">' + data.ctaClicks + '</div><div class="pb-an-kpi-label">CTA Clicks</div></div>';
+  html += '<div class="pb-an-kpi"><div class="pb-an-kpi-val">' + ctaRate + '%</div><div class="pb-an-kpi-label">CTA Click Rate</div></div>';
+  html += '</div>';
+
+  // Daily views sparkline (last 14 days)
+  var dailyViews = data.dailyViews || {};
+  var last14 = [];
+  for (var i = 13; i >= 0; i--) {
+    var d = new Date();
+    d.setDate(d.getDate() - i);
+    var key = d.toISOString().slice(0, 10);
+    last14.push({ date: key, views: dailyViews[key] || 0 });
+  }
+  var maxDaily = Math.max.apply(null, last14.map(function(d) { return d.views; })) || 1;
+
+  html += '<div class="pb-an-chart-section">';
+  html += '<div class="pb-an-chart-title">Daily Views (Last 14 Days)</div>';
+  html += '<div class="pb-an-chart">';
+  last14.forEach(function(day) {
+    var heightPct = (day.views / maxDaily) * 100;
+    var dayLabel = day.date.slice(5); // MM-DD
+    html += '<div class="pb-an-bar-wrap" title="' + day.date + ': ' + day.views + ' views">';
+    html += '<div class="pb-an-bar" style="height:' + Math.max(2, heightPct) + '%"></div>';
+    html += '<div class="pb-an-bar-label">' + dayLabel + '</div>';
+    html += '</div>';
+  });
+  html += '</div></div>';
+
+  // Dates
+  if (data.firstView) {
+    html += '<div class="pb-an-dates">';
+    html += '<span>First view: ' + new Date(data.firstView).toLocaleDateString() + '</span>';
+    html += '<span>Last view: ' + new Date(data.lastView).toLocaleDateString() + '</span>';
+    html += '</div>';
+  }
+
+  html += '</div>';
+  modal.innerHTML = html;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function pbCloseAnalytics() {
+  var overlay = document.getElementById('pb-an-overlay');
+  if (overlay) overlay.remove();
+}
 
 // ══════════════════════════════════════════
 //  Lifecycle
