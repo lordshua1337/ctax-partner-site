@@ -1064,9 +1064,14 @@ function pbBuildBohoCSS(pal) {
 // ================================================================
 function pbApplyThemeToCanvas() {
   if (typeof pbEditor === 'undefined' || !pbEditor) return;
-  var frame = pbEditor.Canvas.getFrameEl();
-  if (!frame) return;
-  var doc = frame.contentDocument;
+  var doc = null;
+  try {
+    var frame = pbEditor.Canvas.getFrameEl();
+    if (frame) doc = frame.contentDocument;
+  } catch (e) { /* ignore */ }
+  if (!doc) {
+    try { doc = pbEditor.Canvas.getDocument(); } catch (e) { /* ignore */ }
+  }
   if (!doc || !doc.documentElement) return;
 
   var themeId = localStorage.getItem('ctax_pb_theme') || 'clean';

@@ -446,9 +446,14 @@ var PB_PERSONAS = [
 function pbApplyPersonaCopy(personaId) {
   if (typeof pbEditor === 'undefined' || !pbEditor) return;
 
-  var frame = pbEditor.Canvas.getFrameEl();
-  if (!frame) return;
-  var doc = frame.contentDocument;
+  var doc = null;
+  try {
+    var frame = pbEditor.Canvas.getFrameEl();
+    if (frame) doc = frame.contentDocument;
+  } catch (e) { /* ignore */ }
+  if (!doc) {
+    try { doc = pbEditor.Canvas.getDocument(); } catch (e) { /* ignore */ }
+  }
   if (!doc) return;
 
   localStorage.setItem('ctax_pb_persona', personaId);

@@ -8751,10 +8751,13 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 #pb-onboard-overlay .pb-tp-accents{display:flex;gap:8px;flex-wrap:wrap}
 
 /* Onboarding step indicator */
-.pb-onboard-steps{display:flex;align-items:center;gap:8px;padding:0 24px 12px}
-.pb-onboard-step{width:8px;height:8px;border-radius:50%;background:#e5e7eb;transition:all 0.2s}
-.pb-onboard-step-active{background:#2563eb;width:24px;border-radius:4px}
-.pb-onboard-step-done{background:#10b981}
+.pb-onboard-steps{display:flex;align-items:center;justify-content:center;gap:0;padding:16px 24px 8px}
+.pb-onboard-step{width:28px;height:28px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#9ca3af;transition:all 0.2s;flex-shrink:0}
+.pb-onboard-step span{line-height:1}
+.pb-onboard-step-active{background:#2563eb;color:#fff;box-shadow:0 2px 8px rgba(37,99,235,0.3)}
+.pb-onboard-step-done{background:#10b981;color:#fff}
+.pb-onboard-step-line{width:48px;height:2px;background:#e5e7eb;transition:background 0.2s}
+.pb-onboard-step-line-done{background:#10b981}
 
 /* Onboarding theme preview mini cards */
 .pb-onboard-theme-card{position:relative;border:2px solid #e5e7eb;border-radius:10px;padding:12px;cursor:pointer;transition:all 0.2s;min-height:80px}

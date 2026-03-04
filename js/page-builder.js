@@ -44,6 +44,12 @@ function pbInit() {
   var savedHtml = (savedData && savedData.html) ? savedData.html : PB_TEMPLATES.referral.html;
   var savedCss = (savedData && savedData.css) ? savedData.css : '';
 
+  // Build absolute URL for canvas CSS (relative URLs don't resolve inside the GrapesJS iframe)
+  var _base = window.location.href.split('?')[0].split('#')[0];
+  if (!_base.endsWith('/')) _base = _base.substring(0, _base.lastIndexOf('/') + 1);
+  var _canvasCssUrl = _base + 'css/pb-canvas.css';
+  var _fontUrl = 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap';
+
   pbEditor = grapesjs.init({
     container: '#gjs',
     height: '100%',
@@ -54,7 +60,7 @@ function pbInit() {
     storageManager: false,
     noticeOnUnload: false,
     canvas: {
-      styles: []
+      styles: [_fontUrl, _canvasCssUrl]
     },
     panels: { defaults: [] },
     deviceManager: {
@@ -81,12 +87,25 @@ function pbInit() {
     layerManager: { appendTo: '#pb-layers' }
   });
 
-  // Ensure canvas styles are loaded (fallback: inject inline)
+  // Ensure canvas styles are loaded (belt-and-suspenders: link tags via config + inline injection)
   pbEditor.on('canvas:frame:load', function() {
     pbInjectCanvasStyles();
-    // Start countdown timers in the canvas
     pbStartCanvasCountdowns();
   });
+
+  // Fallback: re-check CSS injection after delays to handle frame reload timing
+  function _ensureCanvasCss() {
+    try {
+      var fr = pbEditor && pbEditor.Canvas.getFrameEl();
+      var d = fr && fr.contentDocument;
+      if (d && !d.querySelector('style[data-pb-canvas]')) {
+        pbInjectCanvasStyles();
+      }
+    } catch (e) { /* ignore */ }
+  }
+  setTimeout(_ensureCanvasCss, 800);
+  setTimeout(_ensureCanvasCss, 1500);
+  setTimeout(_ensureCanvasCss, 3000);
 
   // Add custom blocks
   pbAddBlocks(pbEditor);
@@ -282,10 +301,17 @@ function pbPreview() {
 // Helper: inject canvas styles + fonts into the GrapesJS iframe
 function pbInjectCanvasStyles() {
   if (!pbEditor) return;
-  var frame = pbEditor.Canvas.getFrameEl();
-  if (!frame) return;
-  var doc = frame.contentDocument;
-  if (!doc) return;
+
+  // Try multiple methods to get the iframe document
+  var doc = null;
+  try {
+    var frame = pbEditor.Canvas.getFrameEl();
+    if (frame) doc = frame.contentDocument;
+  } catch (e) { /* ignore */ }
+  if (!doc) {
+    try { doc = pbEditor.Canvas.getDocument(); } catch (e) { /* ignore */ }
+  }
+  if (!doc || !doc.head) return;
 
   // Inject font links if not already present
   if (!doc.querySelector('link[href*="DM+Sans"]')) {
@@ -308,25 +334,25 @@ function pbInjectCanvasStyles() {
     doc.head.appendChild(playfairLink);
   }
 
-  // Always inject inline styles to guarantee canvas renders correctly.
-  // The link tag may fail to load depending on server config/port.
+  // Inject inline CSS for guaranteed rendering.
+  // Skip only if already present in THIS document.
   if (doc.querySelector('style[data-pb-canvas]')) return;
+
   if (typeof PB_CANVAS_CSS !== 'undefined' && PB_CANVAS_CSS) {
     var style = doc.createElement('style');
     style.setAttribute('data-pb-canvas', '1');
     style.textContent = PB_CANVAS_CSS;
     doc.head.appendChild(style);
   } else {
-    // Last resort: try link tags with relative + absolute paths
-    var paths = ['css/pb-canvas.css', '/css/pb-canvas.css'];
-    var existingLinks = doc.querySelectorAll('link[href*="pb-canvas"]');
-    if (existingLinks.length === 0) {
-      paths.forEach(function(p) {
-        var link = doc.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = p;
-        doc.head.appendChild(link);
-      });
+    // Fallback: inject link tag with absolute URL
+    var base = window.location.href.split('?')[0].split('#')[0];
+    if (!base.endsWith('/')) base = base.substring(0, base.lastIndexOf('/') + 1);
+    var absUrl = base + 'css/pb-canvas.css';
+    if (!doc.querySelector('link[href*="pb-canvas"]')) {
+      var link = doc.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = absUrl;
+      doc.head.appendChild(link);
     }
   }
 }
@@ -372,6 +398,9 @@ function pbLoadTemplate(key) {
   pbEditor.setComponents(t.html);
   pbEditor.setStyle('');
   pbInjectCanvasStyles();
+  // Re-inject after delays to handle GrapesJS frame reload after setComponents
+  setTimeout(pbInjectCanvasStyles, 300);
+  setTimeout(pbInjectCanvasStyles, 800);
   pbSave();
   pbUpdateCount();
 
@@ -431,6 +460,20 @@ function pbShowOnboarding() {
   document.body.appendChild(overlay);
 }
 
+function pbBuildStepIndicator(current) {
+  var labels = ['You', 'Goal', 'Style'];
+  var h = '<div class="pb-onboard-steps">';
+  for (var i = 1; i <= 3; i++) {
+    var cls = 'pb-onboard-step';
+    if (i === current) cls += ' pb-onboard-step-active';
+    else if (i < current) cls += ' pb-onboard-step-done';
+    h += '<div class="' + cls + '"><span>' + i + '</span></div>';
+    if (i < 3) h += '<div class="pb-onboard-step-line' + (i < current ? ' pb-onboard-step-line-done' : '') + '"></div>';
+  }
+  h += '</div>';
+  return h;
+}
+
 function pbRenderOnboardStep(modal, step) {
   if (!modal) modal = document.getElementById('pb-onboard-modal');
   if (!modal) return;
@@ -439,6 +482,7 @@ function pbRenderOnboardStep(modal, step) {
 
   if (step === 1) {
     // Step 1: Persona
+    h += pbBuildStepIndicator(1);
     h += '<div class="pb-tpl-header">';
     h += '<div><div class="pb-tpl-title">What type of professional are you?</div>';
     h += '<div class="pb-tpl-subtitle">We will tailor the copy and messaging to your industry.</div></div>';
@@ -463,6 +507,7 @@ function pbRenderOnboardStep(modal, step) {
 
   } else if (step === 2) {
     // Step 2: Template
+    h += pbBuildStepIndicator(2);
     h += '<div class="pb-tpl-header">';
     h += '<div><div class="pb-tpl-title">What is the goal of your page?</div>';
     h += '<div class="pb-tpl-subtitle">Pick a template structure. You can change everything later.</div></div>';
@@ -495,6 +540,7 @@ function pbRenderOnboardStep(modal, step) {
 
   } else if (step === 3) {
     // Step 3: Theme + Accent
+    h += pbBuildStepIndicator(3);
     h += '<div class="pb-tpl-header">';
     h += '<div><div class="pb-tpl-title">Pick a look</div>';
     h += '<div class="pb-tpl-subtitle">Choose a visual style and accent color for your page.</div></div>';
@@ -636,11 +682,13 @@ function pbOnboardBuild() {
   var overlay = document.getElementById('pb-onboard-overlay');
   if (overlay) overlay.remove();
 
-  // Apply theme + persona copy after canvas has settled
+  // Apply theme + persona copy + re-inject CSS after canvas has settled
   // Use multiple attempts to handle GrapesJS frame reload timing
   var _applyCount = 0;
   function _applyThemeAndCopy() {
     _applyCount++;
+    // Re-inject canvas CSS in case frame reloaded
+    pbInjectCanvasStyles();
     if (typeof pbApplyThemeToCanvas === 'function') {
       pbApplyThemeToCanvas();
     }
