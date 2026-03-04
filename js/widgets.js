@@ -282,11 +282,23 @@ function acceptCookies(){
   if (localStorage.getItem('ctax_cookies_accepted')) return;
   setTimeout(function(){
     // Skip cookie banner on portal pages
-    var page = document.querySelector('.page-content.active');
-    if (page && page.id === 'portal') return;
+    var portalPage = document.getElementById('page-portal');
+    if (portalPage && portalPage.classList.contains('active')) return;
     var el = document.getElementById('cookie-consent');
     if(el) el.classList.add('cc-visible');
   }, 3000);
+
+  // Also hide cookie banner when navigating to portal
+  var _origShowPage = window.showPage;
+  if (_origShowPage) {
+    window.showPage = function(id) {
+      _origShowPage(id);
+      if (id === 'portal') {
+        var el = document.getElementById('cookie-consent');
+        if (el) el.classList.remove('cc-visible');
+      }
+    };
+  }
 })();
 
 // ── CHAT WIDGET ──────────────────────────────────────
