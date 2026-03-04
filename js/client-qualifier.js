@@ -67,12 +67,14 @@ async function qualifyClient() {
     + (notes ? '- Additional context: ' + notes + '\n' : '')
     + '\nRespond in EXACTLY this format with sections separated by "---SECTION---":\n\n'
     + 'SECTION 1 — JSON (no other text):\n'
-    + '{"verdict": "STRONG|LIKELY|WEAK|NOT_QUALIFIED", "verdict_title": "short title", "verdict_desc": "one sentence explanation", "resolution_path": "primary recommended program", "case_value_low": "$X,XXX", "case_value_high": "$XX,XXX", "commission_low": "$X,XXX", "commission_high": "$X,XXX"}\n'
-    + 'Rules: verdict=STRONG if debt>$15k with active enforcement. LIKELY if debt>$7k with clear issue. WEAK if debt uncertain or borderline. NOT_QUALIFIED if debt clearly under $7k.\n\n'
+    + '{"verdict": "STRONG|LIKELY|WEAK|NOT_QUALIFIED", "verdict_title": "short title", "verdict_desc": "one sentence explanation", "resolution_path": "primary recommended program", "case_value_low": "$X,XXX", "case_value_high": "$XX,XXX", "commission_low": "$X,XXX", "commission_high": "$X,XXX", "confidence": 85}\n'
+    + 'Rules: verdict=STRONG if debt>$15k with active enforcement. LIKELY if debt>$7k with clear issue. WEAK if debt uncertain or borderline. NOT_QUALIFIED if debt clearly under $7k. confidence is 0-100 score indicating how sure you are this is a good referral.\n\n'
     + 'SECTION 2 — ANALYSIS (2-3 paragraphs, use <b>bold</b> for key terms, no markdown/asterisks):\n'
     + 'Explain why this client does or does not qualify. Be specific about which resolution program fits and why. If the client has multiple issues, address each. Mention urgency factors (active levies, garnishments, etc.).\n\n'
     + 'SECTION 3 — TALKING POINTS (4-5 lines, each starting with <b>bold label:</b>):\n'
-    + 'Give the partner specific things to say to this client. Frame each around the client\'s situation. Include how to bring up the $295 investigation fee naturally. Use plain, conversational language — not salesy.';
+    + 'Give the partner specific things to say to this client. Frame each around the client\'s situation. Include how to bring up the $295 investigation fee naturally. Use plain, conversational language — not salesy.\n\n'
+    + 'SECTION 4 — NEXT STEPS (exactly 3 lines, numbered 1-3):\n'
+    + 'The exact 3 things the partner should do next with this client, in order. Be specific and actionable — not generic advice. Include timeframes (e.g., "within 48 hours", "this week").';
 
   try {
     var resp = await fetch(CTAX_API_URL, {
@@ -94,9 +96,10 @@ async function qualifyClient() {
     var jsonRaw = (sections[0] || '').trim();
     var analysis = (sections[1] || '').trim();
     var talking = (sections[2] || '').trim();
+    var nextSteps = (sections[3] || '').trim();
 
     // Parse JSON
-    var result = {verdict:'LIKELY',verdict_title:'Likely Candidate',verdict_desc:'This client appears to be a reasonable referral.',resolution_path:'Installment Agreement',case_value_low:'$8,000',case_value_high:'$20,000',commission_low:'$1,500',commission_high:'$3,000'};
+    var result = {verdict:'LIKELY',verdict_title:'Likely Candidate',verdict_desc:'This client appears to be a reasonable referral.',resolution_path:'Installment Agreement',case_value_low:'$8,000',case_value_high:'$20,000',commission_low:'$1,500',commission_high:'$3,000',confidence:70};
     try {
       var jm = jsonRaw.match(/\{[\s\S]*\}/);
       if(jm) result = JSON.parse(jm[0]);
@@ -125,6 +128,38 @@ async function qualifyClient() {
     // Analysis & talking points
     document.getElementById('cq-analysis-text').innerHTML = analysis;
     document.getElementById('cq-talking-text').innerHTML = talking;
+
+    // Confidence gauge
+    var conf = parseInt(result.confidence) || 70;
+    var gaugeEl = document.getElementById('cq-confidence');
+    if (gaugeEl) {
+      var gaugeColor = conf >= 80 ? '#22c55e' : conf >= 60 ? '#eab308' : conf >= 40 ? '#f97316' : '#ef4444';
+      gaugeEl.innerHTML = '<div class="f-sec-lbl" style="margin-bottom:12px">REFERRAL CONFIDENCE</div>'
+        + '<div style="display:flex;align-items:center;gap:16px">'
+        + '<div style="flex:1;height:8px;background:var(--off2);border-radius:4px;overflow:hidden">'
+        + '<div style="width:' + conf + '%;height:100%;background:' + gaugeColor + ';border-radius:4px;transition:width 0.6s ease"></div>'
+        + '</div>'
+        + '<div style="font-size:24px;font-weight:700;color:' + gaugeColor + ';min-width:50px;text-align:right">' + conf + '%</div>'
+        + '</div>'
+        + '<div style="font-size:13px;color:var(--slate);margin-top:6px">' + (conf >= 80 ? 'High confidence — this is a strong referral candidate.' : conf >= 60 ? 'Moderate confidence — worth pursuing, gather more details if possible.' : 'Lower confidence — consider gathering more information before referring.') + '</div>';
+      gaugeEl.style.display = 'block';
+    }
+
+    // Next steps / action plan
+    var stepsEl = document.getElementById('cq-next-steps');
+    if (stepsEl && nextSteps) {
+      var stepsHtml = '<div class="f-sec-lbl" style="margin-bottom:12px">YOUR NEXT 3 STEPS</div>';
+      var stepLines = nextSteps.split('\n').filter(function(l) { return l.trim(); });
+      stepLines.forEach(function(line, i) {
+        var cleanLine = line.replace(/^\d+[\.\)]\s*/, '');
+        stepsHtml += '<div class="cq-step">'
+          + '<div class="cq-step-num">' + (i + 1) + '</div>'
+          + '<div class="cq-step-text">' + cleanLine + '</div>'
+          + '</div>';
+      });
+      stepsEl.innerHTML = stepsHtml;
+      stepsEl.style.display = 'block';
+    }
 
     document.getElementById('cq-loading').style.display = 'none';
     document.getElementById('cq-output').style.display = 'block';

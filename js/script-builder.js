@@ -450,6 +450,35 @@ async function generateScript() {
       renderFollowup(sbResults.followup, 'out-followup');
     });
 
+    // Generate 2 alternative tone variations (async, non-blocking)
+    sbResults.variants = { original: { conversation: sbResults.conversation, email: sbResults.email } };
+    var altTones = style === 'formal and professional'
+      ? ['warm and conversational', 'direct and concise']
+      : style === 'warm and conversational'
+      ? ['formal and professional', 'direct and concise']
+      : style === 'direct and concise'
+      ? ['formal and professional', 'warm and conversational']
+      : ['formal and professional', 'direct and concise'];
+
+    altTones.forEach(function(altStyle, vi) {
+      var varPrompt = icpBlock + 'Rewrite this referral script in a ' + altStyle + ' tone for a ' + type + ' talking to a client via ' + channel + '. Keep the same key points and Community Tax details. 200-300 words. No section labels, just the script.\n\nOriginal script:\n' + sbResults.conversation;
+      fetch(CTAX_API_URL, {
+        method: 'POST',
+        headers: getApiHeaders(),
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 600,
+          messages: [{role: 'user', content: varPrompt}]
+        })
+      }).then(function(r){return r.json();}).then(function(d){
+        var altText = d.content && d.content[0] ? d.content[0].text.trim() : '';
+        if (altText) {
+          sbResults.variants[altStyle] = { conversation: altText };
+          renderVariantButtons();
+        }
+      });
+    });
+
     document.getElementById('sb-output-meta').textContent = type + ' · ' + style + ' · ' + channel;
     document.getElementById('sb-loading').style.display='none';
     document.getElementById('sb-output').style.display='block';
@@ -483,4 +512,47 @@ async function generateScript() {
     }
   }
 }
+// ── TONE VARIANT SWITCHER ────────────────────────────────────
+function renderVariantButtons() {
+  var container = document.getElementById('sb-variant-bar');
+  if (!container || !sbResults.variants) return;
+  var keys = Object.keys(sbResults.variants);
+  if (keys.length < 2) { container.style.display = 'none'; return; }
+  container.style.display = 'flex';
+
+  var toneLabels = {
+    'original': 'Original',
+    'formal and professional': 'Formal',
+    'warm and conversational': 'Warm',
+    'direct and concise': 'Direct',
+    'educational and detailed': 'Educational'
+  };
+
+  var html = '<span class="sb-var-label">Tone:</span>';
+  keys.forEach(function(key) {
+    var label = toneLabels[key] || key;
+    var active = key === (sbResults._activeVariant || 'original') ? ' sb-var-active' : '';
+    html += '<button class="sb-var-btn' + active + '" onclick="switchVariant(\'' + key.replace(/'/g, "\\'") + '\')">' + label + '</button>';
+  });
+  container.innerHTML = html;
+}
+
+function switchVariant(key) {
+  if (!sbResults.variants || !sbResults.variants[key]) return;
+  sbResults._activeVariant = key;
+  var v = sbResults.variants[key];
+  if (v.conversation) {
+    var el = document.getElementById('out-conversation');
+    if (el) {
+      el.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">' +
+          '<div style="font-size:13px;color:var(--slate)">Word-for-word script — use exactly as written or adapt to your voice.</div>' +
+          '<button class="sb-copy-btn" onclick="copyText(sbResults.variants[\'' + key.replace(/'/g, "\\'") + '\'].conversation, this)">Copy</button>' +
+        '</div>' +
+        '<div style="white-space:pre-wrap;font-size:15px;line-height:1.8;color:var(--navy)">' + esc(v.conversation) + '</div>';
+    }
+  }
+  renderVariantButtons();
+}
+
 // ── END SCRIPT BUILDER ───────────────────────────────────────

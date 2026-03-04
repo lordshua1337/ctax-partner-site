@@ -382,6 +382,30 @@
 .rr-item-label{font-size:13px;font-weight:600;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rr-item-meta{font-size:11px;color:var(--slate);margin-top:2px}
 
+/* ── Tone Variant Switcher ───────────────────────────── */
+.sb-variant-bar{display:flex;align-items:center;gap:6px;margin-bottom:20px;padding:8px 0}
+.sb-var-label{font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-right:4px}
+.sb-var-btn{background:var(--off);border:1.5px solid var(--off2);border-radius:6px;padding:6px 14px;font-size:13px;font-weight:600;color:var(--slate);cursor:pointer;transition:all 0.13s;font-family:'DM Sans',sans-serif}
+.sb-var-btn:hover{border-color:var(--blue);color:var(--blue)}
+.sb-var-btn.sb-var-active{background:var(--blue);border-color:var(--blue);color:var(--white)}
+
+/* ── Client Qualifier Steps ──────────────────────────── */
+.cq-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.cq-step:last-child{margin-bottom:0}
+.cq-step-num{width:28px;height:28px;border-radius:50%;background:var(--blue);color:var(--white);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cq-step-text{font-size:15px;color:var(--body);line-height:1.6;padding-top:3px}
+
+/* ── Ad Maker Headline Suggestions ───────────────────── */
+.am-hl-list{display:flex;gap:8px;flex-wrap:wrap}
+.am-hl-btn{background:var(--white);border:1.5px solid var(--off2);border-radius:8px;padding:8px 16px;font-size:14px;font-weight:600;color:var(--navy);cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.am-hl-btn:hover{border-color:var(--blue);color:var(--blue);box-shadow:0 2px 8px rgba(11,95,216,0.1)}
+.am-hl-btn.am-hl-copied{background:var(--blue);border-color:var(--blue);color:var(--white)}
+
+/* ── Knowledge Base Related Questions ────────────────── */
+.kb-related-btn{display:block;width:100%;text-align:left;background:var(--white);border:1.5px solid var(--off2);border-radius:8px;padding:10px 16px;font-size:14px;color:var(--navy);cursor:pointer;transition:all 0.13s;font-family:'DM Sans',sans-serif;margin-bottom:6px}
+.kb-related-btn:last-child{margin-bottom:0}
+.kb-related-btn:hover{border-color:var(--blue);color:var(--blue);background:rgba(11,95,216,0.02)}
+
 .price-ph{background:linear-gradient(155deg,var(--navy) 0%,var(--navy2) 60%,var(--navy3) 100%);padding:72px 0 0;position:relative;overflow:hidden;text-align:center}
 .price-ph::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 100%,rgba(11,95,216,0.1) 0%,transparent 60%);pointer-events:none}
 .price-ph-inner{position:relative;z-index:1;padding-bottom:60px}

@@ -136,6 +136,9 @@ async function askKnowledgeBase() {
       });
     }
 
+    // Generate related questions
+    kbGenerateRelated(question);
+
   } catch(err) {
     document.getElementById('kb-loading').style.display = 'none';
     var isAuth = err.message && err.message.indexOf('401') !== -1;
@@ -153,6 +156,35 @@ async function askKnowledgeBase() {
       }
     }
   }
+}
+
+// ── RELATED QUESTIONS ──────────────────────────────────────
+function kbGenerateRelated(originalQuestion) {
+  var container = document.getElementById('kb-related');
+  if (!container) return;
+  container.style.display = 'none';
+
+  fetch(CTAX_API_URL, {
+    method: 'POST',
+    headers: getApiHeaders(),
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 150,
+      system: 'You are a Community Tax partner program assistant. Based on the question asked, suggest 3 natural follow-up questions a partner might ask next. One per line, no numbering, no quotes.',
+      messages: [{role: 'user', content: 'The partner just asked: "' + originalQuestion + '"\n\nSuggest 3 follow-up questions:'}]
+    })
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    var text = d.content && d.content[0] ? d.content[0].text.trim() : '';
+    var lines = text.split('\n').filter(function(l) { return l.trim(); }).slice(0, 3);
+    if (!lines.length) return;
+    container.style.display = 'block';
+    var html = '<div style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-bottom:10px">Related Questions</div>';
+    lines.forEach(function(line) {
+      var clean = line.replace(/^\d+[\.\)]\s*/, '').replace(/^[-*]\s*/, '').replace(/^["']|["']$/g, '');
+      html += '<button class="kb-related-btn" onclick="document.getElementById(\'kb-input\').value=this.textContent;askKnowledgeBase()">' + clean + '</button>';
+    });
+    container.innerHTML = html;
+  }).catch(function() { /* silently fail */ });
 }
 
 // Revenue Calculator

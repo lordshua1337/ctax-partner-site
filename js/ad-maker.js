@@ -175,7 +175,54 @@ function generateStaticAd(){
   setTimeout(function(){
     resizeAd('16:9', 1200, 628);
     if(resultsEl) resultsEl.style.visibility = '';
+    // Trigger AI headline suggestions
+    generateHeadlines();
   }, 30);
+}
+
+// ── AI HEADLINE SUGGESTIONS ──────────────────────────────
+function generateHeadlines() {
+  var inputs = window._amInputs || {};
+  var firm = inputs.firm || '';
+  if (!firm || typeof CTAX_API_URL === 'undefined' || !CTAX_API_KEY) return;
+
+  var container = document.getElementById('am-headlines');
+  if (!container) return;
+  container.style.display = 'block';
+  container.innerHTML = '<div class="f-sec-lbl" style="margin-bottom:10px">AI HEADLINE SUGGESTIONS</div><div style="font-size:14px;color:var(--slate)">Generating headlines...</div>';
+
+  var prompt = 'Generate exactly 3 short, punchy ad headlines (max 8 words each) for a co-branded social media ad between "' + firm + '" and Community Tax (IRS tax resolution firm). The ads target people with IRS tax debt. Format: one headline per line, numbered 1-3. No quotes, no explanation. Headlines should be emotional, urgent, and action-oriented.';
+
+  fetch(CTAX_API_URL, {
+    method: 'POST',
+    headers: getApiHeaders(),
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 200,
+      messages: [{role: 'user', content: prompt}]
+    })
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    var text = d.content && d.content[0] ? d.content[0].text.trim() : '';
+    var lines = text.split('\n').filter(function(l) { return l.trim(); }).slice(0, 3);
+    var html = '<div class="f-sec-lbl" style="margin-bottom:10px">AI HEADLINE SUGGESTIONS</div><div class="am-hl-list">';
+    lines.forEach(function(line) {
+      var clean = line.replace(/^\d+[\.\)]\s*/, '').replace(/^["']|["']$/g, '');
+      html += '<button class="am-hl-btn" onclick="amApplyHeadline(this)" title="Click to copy">' + clean + '</button>';
+    });
+    html += '</div><div style="font-size:11px;color:var(--slate);margin-top:6px">Click a headline to copy it for your ad caption</div>';
+    container.innerHTML = html;
+  }).catch(function() {
+    container.style.display = 'none';
+  });
+}
+
+function amApplyHeadline(btn) {
+  var text = btn.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.classList.add('am-hl-copied');
+    setTimeout(function() { btn.classList.remove('am-hl-copied'); }, 1500);
+    if (typeof showToast === 'function') showToast('Headline copied', 'copied');
+  });
 }
 
 // ── BATCH DOWNLOAD ALL SIZES ──────────────────────────────
