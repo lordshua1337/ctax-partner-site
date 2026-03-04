@@ -499,6 +499,15 @@ function bpRenderRoadmap(roadmap) {
   // Industry benchmarks panel
   html += '<div id="bp-benchmarks" class="bp-benchmarks" style="display:none"></div>';
 
+  // Weekly check-in prompt
+  html += '<div id="bp-weekly-checkin" style="display:none"></div>';
+
+  // Actual vs Projected referrals
+  html += '<div id="bp-actuals" class="bp-actuals" style="display:none"></div>';
+
+  // Visual Gantt timeline
+  html += '<div id="bp-gantt" class="bp-gantt" style="display:none"></div>';
+
   // Email drip toggle
   var dripEnabled = false;
   try { dripEnabled = localStorage.getItem('bp_email_drip') === 'true'; } catch (e) { /* ignore */ }
@@ -638,6 +647,13 @@ function bpRenderRoadmap(roadmap) {
 
   // Render benchmarks
   setTimeout(function() { bpRenderBenchmarks(roadmap.inputs); }, 100);
+
+  // Render progress dashboard components (M5P2)
+  bpSaveStartDate();
+  setTimeout(function() { bpRenderGantt(roadmap); }, 150);
+  setTimeout(function() { bpRenderActuals(roadmap.inputs); }, 180);
+  setTimeout(function() { bpCheckWeeklyCheckin(); }, 200);
+  setTimeout(function() { bpSyncWithChallenge(); }, 250);
 
   // Restore AI insights if available
   bpTryRestoreAI();
@@ -1076,6 +1092,400 @@ function bpResetPlanner() {
     localStorage.removeItem('bp_saved_inputs');
     localStorage.removeItem('bp_ai_roadmap');
   } catch (e) { /* ignore */ }
+}
+
+// ═══ M5P2C1: PROGRESS DASHBOARD -- GANTT TIMELINE + TRACKING ═══
+
+// Render visual Gantt-style timeline with task completion, milestones, and projections
+function bpRenderGantt(roadmap) {
+  var container = document.getElementById('bp-gantt');
+  if (!container) return;
+  var saved = bpLoadProgress();
+  var timeline = roadmap.inputs.timeline || 90;
+  var totalDays = timeline;
+  var startDate = new Date();
+  try {
+    var savedInputs = bpLoadInputs();
+    if (savedInputs && savedInputs._startDate) startDate = new Date(savedInputs._startDate);
+  } catch (e) {}
+
+  // Build flat task array with month mapping
+  var tasks = [];
+  var monthBoundaries = [];
+  var taskIdx = 0;
+  roadmap.months.forEach(function(month, mi) {
+    var monthStart = Math.round(mi * (totalDays / roadmap.months.length));
+    var monthEnd = Math.round((mi + 1) * (totalDays / roadmap.months.length));
+    monthBoundaries.push({ start: monthStart, end: monthEnd, label: month.label });
+    month.tasks.forEach(function(task, ti) {
+      var taskDayStart = monthStart + Math.round(ti * (monthEnd - monthStart) / month.tasks.length);
+      var taskDayEnd = monthStart + Math.round((ti + 1) * (monthEnd - monthStart) / month.tasks.length);
+      tasks.push({
+        id: 'bp-t-' + taskIdx,
+        title: task.title,
+        type: task.type,
+        priority: task.priority,
+        dayStart: taskDayStart,
+        dayEnd: taskDayEnd,
+        monthIndex: mi,
+        done: saved['bp-t-' + taskIdx] === true
+      });
+      taskIdx++;
+    });
+  });
+
+  // Calculate days elapsed since roadmap start
+  var now = new Date();
+  var elapsed = Math.max(0, Math.round((now - startDate) / (1000 * 60 * 60 * 24)));
+  if (elapsed > totalDays) elapsed = totalDays;
+  var elapsedPct = (elapsed / totalDays) * 100;
+
+  // Projected vs actual
+  var totalTasks = tasks.length;
+  var doneCount = tasks.filter(function(t) { return t.done; }).length;
+  var expectedDone = 0;
+  tasks.forEach(function(t) { if (t.dayEnd <= elapsed) expectedDone++; });
+
+  var html = '<div class="bp-gantt-header">';
+  html += '<div class="bp-gantt-title">';
+  html += '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+  html += ' Progress Timeline</div>';
+  html += '<div class="bp-gantt-legend">';
+  html += '<span class="bp-gantt-leg"><span class="bp-gantt-leg-dot bp-gantt-dot-done"></span>Done</span>';
+  html += '<span class="bp-gantt-leg"><span class="bp-gantt-leg-dot bp-gantt-dot-todo"></span>To Do</span>';
+  html += '<span class="bp-gantt-leg"><span class="bp-gantt-leg-dot bp-gantt-dot-late"></span>Overdue</span>';
+  html += '</div></div>';
+
+  // Gantt chart area
+  html += '<div class="bp-gantt-chart">';
+
+  // Month headers
+  html += '<div class="bp-gantt-months">';
+  monthBoundaries.forEach(function(mb) {
+    var widthPct = ((mb.end - mb.start) / totalDays) * 100;
+    html += '<div class="bp-gantt-month" style="width:' + widthPct + '%">' + mb.label.split(':')[0] + '</div>';
+  });
+  html += '</div>';
+
+  // Task bars
+  html += '<div class="bp-gantt-bars">';
+  tasks.forEach(function(task) {
+    var leftPct = (task.dayStart / totalDays) * 100;
+    var widthPct = Math.max(3, ((task.dayEnd - task.dayStart) / totalDays) * 100);
+    var cls = 'bp-gantt-bar bp-gantt-type-' + task.type;
+    if (task.done) {
+      cls += ' bp-gantt-done';
+    } else if (task.dayEnd <= elapsed) {
+      cls += ' bp-gantt-late';
+    }
+    html += '<div class="bp-gantt-row">';
+    html += '<div class="bp-gantt-row-label" title="' + task.title + '">' + task.title.substring(0, 30) + (task.title.length > 30 ? '...' : '') + '</div>';
+    html += '<div class="bp-gantt-row-track">';
+    html += '<div class="' + cls + '" style="left:' + leftPct + '%;width:' + widthPct + '%"></div>';
+    html += '</div></div>';
+  });
+  html += '</div>';
+
+  // Today marker
+  if (elapsed > 0 && elapsed < totalDays) {
+    html += '<div class="bp-gantt-today" style="left:calc(' + elapsedPct + '% + 120px)">';
+    html += '<div class="bp-gantt-today-line"></div>';
+    html += '<div class="bp-gantt-today-label">Day ' + elapsed + '</div>';
+    html += '</div>';
+  }
+
+  // Milestone markers
+  html += '<div class="bp-gantt-milestones">';
+  monthBoundaries.forEach(function(mb, i) {
+    if (i === 0) return;
+    var leftPct = (mb.start / totalDays) * 100;
+    html += '<div class="bp-gantt-milestone" style="left:calc(' + leftPct + '% + 120px)">';
+    html += '<div class="bp-gantt-ms-diamond"></div>';
+    html += '<div class="bp-gantt-ms-label">' + mb.label.split(':')[0] + ' Start</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  html += '</div>'; // close chart
+
+  // Status comparison
+  html += '<div class="bp-gantt-status">';
+  var diff = doneCount - expectedDone;
+  var statusIcon, statusText, statusClass;
+  if (elapsed === 0) {
+    statusIcon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+    statusText = 'Your roadmap starts today! Complete tasks to see your progress here.';
+    statusClass = 'bp-status-neutral';
+  } else if (diff >= 2) {
+    statusIcon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>';
+    statusText = 'Ahead of schedule! You\'ve completed ' + doneCount + ' tasks vs ' + expectedDone + ' expected by Day ' + elapsed + '. Keep this momentum!';
+    statusClass = 'bp-status-ahead';
+  } else if (diff >= 0) {
+    statusIcon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+    statusText = 'On track! ' + doneCount + ' tasks done, ' + expectedDone + ' expected by Day ' + elapsed + '.';
+    statusClass = 'bp-status-ontrack';
+  } else {
+    statusIcon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+    statusText = Math.abs(diff) + ' tasks behind schedule. You\'ve done ' + doneCount + ' vs ' + expectedDone + ' expected by Day ' + elapsed + '. Focus on overdue items (shown in red).';
+    statusClass = 'bp-status-behind';
+  }
+  html += '<div class="bp-gantt-status-card ' + statusClass + '">';
+  html += '<div class="bp-gantt-status-icon">' + statusIcon + '</div>';
+  html += '<div class="bp-gantt-status-text">' + statusText + '</div>';
+  html += '</div>';
+
+  // Mini stats
+  html += '<div class="bp-gantt-stats">';
+  html += '<div class="bp-gantt-stat"><div class="bp-gantt-stat-val">' + doneCount + '/' + totalTasks + '</div><div class="bp-gantt-stat-label">Tasks Done</div></div>';
+  html += '<div class="bp-gantt-stat"><div class="bp-gantt-stat-val">Day ' + elapsed + '/' + totalDays + '</div><div class="bp-gantt-stat-label">Timeline</div></div>';
+  var velocity = elapsed > 0 ? (doneCount / elapsed * 7).toFixed(1) : '0';
+  html += '<div class="bp-gantt-stat"><div class="bp-gantt-stat-val">' + velocity + '</div><div class="bp-gantt-stat-label">Tasks/Week</div></div>';
+  var projectedEnd = doneCount > 0 ? Math.round((totalTasks / doneCount) * elapsed) : totalDays;
+  html += '<div class="bp-gantt-stat"><div class="bp-gantt-stat-val">Day ' + Math.min(projectedEnd, totalDays * 2) + '</div><div class="bp-gantt-stat-label">Projected Finish</div></div>';
+  html += '</div>';
+  html += '</div>';
+
+  container.innerHTML = html;
+  container.style.display = 'block';
+}
+
+// Weekly check-in system
+function bpCheckWeeklyCheckin() {
+  var container = document.getElementById('bp-weekly-checkin');
+  if (!container) return;
+  var now = new Date();
+  var lastCheckin = null;
+  try { lastCheckin = localStorage.getItem('bp_last_checkin'); } catch (e) {}
+
+  // Show if last checkin was 7+ days ago or never
+  var showCheckin = false;
+  if (!lastCheckin) {
+    showCheckin = true;
+  } else {
+    var daysSince = Math.round((now - new Date(lastCheckin)) / (1000 * 60 * 60 * 24));
+    showCheckin = daysSince >= 7;
+  }
+
+  if (!showCheckin) {
+    container.style.display = 'none';
+    return;
+  }
+
+  var html = '<div class="bp-checkin-card">';
+  html += '<div class="bp-checkin-header">';
+  html += '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>';
+  html += '<span>Weekly Check-In</span>';
+  html += '</div>';
+  html += '<p class="bp-checkin-prompt">Quick pulse check -- how did this week go?</p>';
+  html += '<div class="bp-checkin-fields">';
+  html += '<div class="bp-checkin-field">';
+  html += '<label class="bp-checkin-label">Referrals submitted this week</label>';
+  html += '<input type="number" id="bp-checkin-refs" class="bp-checkin-input" min="0" value="0" placeholder="0">';
+  html += '</div>';
+  html += '<div class="bp-checkin-field">';
+  html += '<label class="bp-checkin-label">New conversations started</label>';
+  html += '<input type="number" id="bp-checkin-convos" class="bp-checkin-input" min="0" value="0" placeholder="0">';
+  html += '</div>';
+  html += '<div class="bp-checkin-field">';
+  html += '<label class="bp-checkin-label">Biggest win or lesson learned</label>';
+  html += '<input type="text" id="bp-checkin-win" class="bp-checkin-input" placeholder="e.g. Got 2 referrals from one lunch meeting">';
+  html += '</div>';
+  html += '</div>';
+  html += '<div class="bp-checkin-actions">';
+  html += '<button class="btn btn-p" onclick="bpSubmitCheckin()">Submit Check-In</button>';
+  html += '<button class="btn btn-g" onclick="bpDismissCheckin()">Skip This Week</button>';
+  html += '</div>';
+  html += '</div>';
+  container.innerHTML = html;
+  container.style.display = 'block';
+}
+
+function bpSubmitCheckin() {
+  var refs = parseInt(document.getElementById('bp-checkin-refs').value) || 0;
+  var convos = parseInt(document.getElementById('bp-checkin-convos').value) || 0;
+  var win = document.getElementById('bp-checkin-win').value || '';
+  var now = new Date().toISOString().slice(0, 10);
+
+  // Save checkin history
+  var history = [];
+  try {
+    var raw = localStorage.getItem('bp_checkin_history');
+    if (raw) history = JSON.parse(raw);
+  } catch (e) {}
+
+  history.push({ date: now, refs: refs, convos: convos, win: win });
+  try {
+    localStorage.setItem('bp_checkin_history', JSON.stringify(history));
+    localStorage.setItem('bp_last_checkin', now);
+  } catch (e) {}
+
+  // Update actual referrals tracker
+  var totalActualRefs = 0;
+  history.forEach(function(h) { totalActualRefs += (h.refs || 0); });
+  try { localStorage.setItem('bp_actual_refs', totalActualRefs.toString()); } catch (e) {}
+
+  var container = document.getElementById('bp-weekly-checkin');
+  if (container) container.style.display = 'none';
+
+  if (typeof showToast === 'function') {
+    showToast('Check-in saved! ' + refs + ' referrals logged this week.', 'success');
+  }
+
+  // Refresh the Gantt and actuals display
+  bpRefreshActuals();
+}
+
+function bpDismissCheckin() {
+  try { localStorage.setItem('bp_last_checkin', new Date().toISOString().slice(0, 10)); } catch (e) {}
+  var container = document.getElementById('bp-weekly-checkin');
+  if (container) container.style.display = 'none';
+}
+
+// Actual vs Projected referrals panel
+function bpRenderActuals(inputs) {
+  var container = document.getElementById('bp-actuals');
+  if (!container) return;
+
+  var timeline = inputs.timeline || 90;
+  var refGoal = inputs.refGoal || 5;
+  var now = new Date();
+  var startDate = now;
+  try {
+    var saved = bpLoadInputs();
+    if (saved && saved._startDate) startDate = new Date(saved._startDate);
+  } catch (e) {}
+
+  var weeksElapsed = Math.max(1, Math.round((now - startDate) / (1000 * 60 * 60 * 24 * 7)));
+  var totalWeeks = Math.ceil(timeline / 7);
+  var weeklyTarget = refGoal / totalWeeks;
+
+  // Get actual data from check-in history
+  var history = [];
+  try {
+    var raw = localStorage.getItem('bp_checkin_history');
+    if (raw) history = JSON.parse(raw);
+  } catch (e) {}
+
+  var totalActual = 0;
+  history.forEach(function(h) { totalActual += (h.refs || 0); });
+  var projectedByNow = Math.round(weeklyTarget * weeksElapsed * 10) / 10;
+  var diff = totalActual - projectedByNow;
+  var onTrack = diff >= 0;
+
+  var html = '<div class="bp-actuals-header">';
+  html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>';
+  html += '<span>Actual vs Projected Referrals</span>';
+  html += '</div>';
+
+  // Visual comparison bars
+  html += '<div class="bp-actuals-chart">';
+  var maxVal = Math.max(refGoal, totalActual, projectedByNow, 1);
+
+  // Projected bar
+  html += '<div class="bp-actuals-row">';
+  html += '<div class="bp-actuals-label">Projected (Week ' + weeksElapsed + ')</div>';
+  html += '<div class="bp-actuals-bar-wrap"><div class="bp-actuals-bar bp-actuals-bar-projected" style="width:' + Math.min(100, (projectedByNow / maxVal) * 100) + '%"></div></div>';
+  html += '<div class="bp-actuals-val">' + projectedByNow.toFixed(1) + '</div>';
+  html += '</div>';
+
+  // Actual bar
+  html += '<div class="bp-actuals-row">';
+  html += '<div class="bp-actuals-label">Actual</div>';
+  html += '<div class="bp-actuals-bar-wrap"><div class="bp-actuals-bar bp-actuals-bar-actual' + (onTrack ? ' bp-actuals-ahead' : ' bp-actuals-behind') + '" style="width:' + Math.min(100, (totalActual / maxVal) * 100) + '%"></div></div>';
+  html += '<div class="bp-actuals-val">' + totalActual + '</div>';
+  html += '</div>';
+
+  // Goal bar
+  html += '<div class="bp-actuals-row">';
+  html += '<div class="bp-actuals-label">' + timeline + '-Day Goal</div>';
+  html += '<div class="bp-actuals-bar-wrap"><div class="bp-actuals-bar bp-actuals-bar-goal" style="width:100%"></div></div>';
+  html += '<div class="bp-actuals-val">' + refGoal + '</div>';
+  html += '</div>';
+  html += '</div>';
+
+  // Delta message
+  html += '<div class="bp-actuals-delta ' + (onTrack ? 'bp-delta-pos' : 'bp-delta-neg') + '">';
+  if (onTrack) {
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> ';
+    html += 'You\'re ' + Math.abs(diff).toFixed(1) + ' referrals ahead of schedule!';
+  } else {
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg> ';
+    html += Math.abs(diff).toFixed(1) + ' referrals behind target. Submit your weekly check-in to update!';
+  }
+  html += '</div>';
+
+  // Check-in history mini-table
+  if (history.length > 0) {
+    html += '<div class="bp-actuals-history">';
+    html += '<div class="bp-actuals-hist-title">Check-In History</div>';
+    html += '<div class="bp-actuals-hist-table">';
+    html += '<div class="bp-actuals-hist-head"><span>Week</span><span>Referrals</span><span>Conversations</span><span>Notes</span></div>';
+    history.slice(-5).forEach(function(h, i) {
+      html += '<div class="bp-actuals-hist-row">';
+      html += '<span>' + h.date + '</span>';
+      html += '<span>' + (h.refs || 0) + '</span>';
+      html += '<span>' + (h.convos || 0) + '</span>';
+      html += '<span class="bp-actuals-hist-win">' + (h.win || '-') + '</span>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+  }
+
+  container.innerHTML = html;
+  container.style.display = 'block';
+}
+
+function bpRefreshActuals() {
+  var inputs = bpLoadInputs();
+  if (inputs) bpRenderActuals(inputs);
+}
+
+// Challenge sync: detect overlapping tasks and auto-complete
+function bpSyncWithChallenge() {
+  if (typeof chGetState !== 'function') return;
+  var state = chGetState();
+  if (!state || !state.completedDays) return;
+  var progress = bpLoadProgress();
+  var changed = false;
+
+  // Map challenge days to business planner task IDs
+  var challengeMap = {
+    1: 'bp-t-0',   // Day 1: setup onboarding -> first BP task
+    4: 'bp-t-2',   // Day 4: email script -> marketing task
+    9: 'bp-t-3',   // Day 9: follow-up script -> action task
+    14: 'bp-t-5',  // Day 14: social post -> marketing
+    21: 'bp-t-8',  // Day 21: advanced outreach -> growth
+    28: 'bp-t-10'  // Day 28: systematize -> growth
+  };
+
+  for (var dayNum in challengeMap) {
+    if (state.completedDays[dayNum] && !progress[challengeMap[dayNum]]) {
+      progress[challengeMap[dayNum]] = true;
+      changed = true;
+      // Visually update the task
+      var wrap = document.getElementById(challengeMap[dayNum] + '-wrap');
+      if (wrap) wrap.classList.add('bp-task-done');
+      var cb = document.getElementById(challengeMap[dayNum]);
+      if (cb) cb.checked = true;
+    }
+  }
+
+  if (changed) {
+    bpSaveProgress(progress);
+    // Show sync notification
+    if (typeof showToast === 'function') {
+      showToast('Challenge progress synced with your roadmap!', 'success');
+    }
+  }
+}
+
+// Save start date when generating roadmap for first time
+function bpSaveStartDate() {
+  var inputs = bpLoadInputs();
+  if (inputs && !inputs._startDate) {
+    inputs._startDate = new Date().toISOString().slice(0, 10);
+    try { localStorage.setItem('bp_saved_inputs', JSON.stringify(inputs)); } catch (e) {}
+  }
 }
 
 // ═══ M5P1C1: REAL INTELLIGENCE -- AI-POWERED ROADMAP ═══
