@@ -1074,6 +1074,99 @@
 [data-theme="dark"] .icp-ins-content{color:#d1d5db}
 [data-theme="dark"] .icp-ins-content b{color:#f3f4f6}
 
+/* M3P3C2: Partner Certification Quiz */
+.cert-progress{margin-bottom:20px}
+.cert-progress-bar{height:6px;background:var(--off);border-radius:3px;overflow:hidden}
+.cert-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--navy));border-radius:3px;transition:width 0.3s}
+.cert-progress-label{font-size:12px;color:var(--slate);margin-top:6px;text-align:right}
+.cert-category{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.cert-question{font-size:17px;font-weight:600;color:var(--navy);line-height:1.5;margin-bottom:20px}
+.cert-options{display:flex;flex-direction:column;gap:10px}
+.cert-option{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--white);border:1.5px solid var(--off2);border-radius:10px;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--body);text-align:left}
+.cert-option:hover{border-color:var(--blue);background:rgba(11,95,216,0.03)}
+.cert-option-letter{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--off);font-weight:700;font-size:13px;color:var(--slate);flex-shrink:0;transition:all 0.15s}
+.cert-option:hover .cert-option-letter{background:rgba(11,95,216,0.1);color:var(--blue)}
+.cert-option-text{flex:1}
+.cert-option-correct{border-color:#059669;background:rgba(5,150,105,0.06)}
+.cert-option-correct .cert-option-letter{background:#059669;color:#fff}
+.cert-option-wrong{border-color:#EF4444;background:rgba(239,68,68,0.06)}
+.cert-option-wrong .cert-option-letter{background:#EF4444;color:#fff}
+
+.cert-result-header{text-align:center;padding:24px 0 20px}
+.cert-result-score{font-family:'DM Serif Display',serif;font-size:56px;line-height:1}
+.cert-result-tier{font-size:18px;font-weight:700;margin-top:4px}
+.cert-result-detail{font-size:13px;color:var(--slate);margin-top:8px}
+.cert-badge-display{display:flex;align-items:center;gap:12px;justify-content:center;padding:16px;background:var(--off);border-radius:10px;margin-bottom:24px}
+.cert-badge-icon{width:52px;height:52px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;background:var(--white)}
+.cert-badge-text{font-size:16px;font-weight:700}
+.cert-fail-msg{text-align:center;padding:14px 16px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:8px;color:#EF4444;font-size:14px;margin-bottom:24px}
+
+.cert-cats-title{font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--slate);margin-bottom:12px}
+.cert-cat-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.cert-cat-label{font-size:13px;color:var(--body);width:140px;flex-shrink:0}
+.cert-cat-bar-wrap{flex:1;height:8px;background:var(--off);border-radius:4px;overflow:hidden}
+.cert-cat-bar{height:100%;border-radius:4px;transition:width 0.4s}
+.cert-cat-val{font-size:13px;font-weight:700;width:36px;text-align:right;flex-shrink:0}
+
+.cert-review-title{font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--slate);margin:24px 0 12px}
+.cert-review-item{padding:12px 14px;background:var(--off);border-radius:8px;margin-bottom:8px}
+.cert-review-q{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.cert-review-wrong{font-size:13px;color:#EF4444;margin-bottom:2px}
+.cert-review-correct{font-size:13px;color:#059669;font-weight:600}
+
+.cert-result-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:24px;padding-top:16px;border-top:1px solid var(--off2)}
+
+.cert-badges-row{display:flex;gap:12px;justify-content:center;margin-bottom:16px}
+.cert-badge-card{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 20px;border:2px solid;border-radius:12px;background:var(--white)}
+.cert-badge-tier{font-size:13px;font-weight:700}
+.cert-badge-score{font-size:12px;color:var(--slate)}
+
+.cert-hist-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--off2)}
+.cert-hist-row:last-child{border-bottom:none}
+.cert-hist-score{font-family:'DM Serif Display',serif;font-size:28px;width:60px;text-align:center;flex-shrink:0}
+.cert-hist-info{flex:1}
+.cert-hist-tier{font-size:14px;font-weight:700}
+.cert-hist-meta{font-size:12px;color:var(--slate);margin-top:2px}
+
+.cert-section{margin-bottom:24px}
+.cert-cta{display:flex;gap:8px;margin-top:12px}
+.cert-widget{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--off);border-radius:10px}
+.cert-widget-empty{display:flex;align-items:center;gap:8px;flex:1;font-size:13px;color:var(--slate)}
+.cert-widget-earned{background:var(--white);border:1.5px solid var(--off2)}
+.cert-widget-badge{width:36px;height:36px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;background:var(--off);flex-shrink:0}
+.cert-widget-tier{font-size:14px;font-weight:700}
+.cert-widget-score{font-size:12px;color:var(--slate)}
+
+/* Dark mode */
+[data-theme="dark"] .cert-option{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);color:#d1d5db}
+[data-theme="dark"] .cert-option:hover{border-color:rgba(96,165,250,0.4);background:rgba(96,165,250,0.06)}
+[data-theme="dark"] .cert-option-letter{background:rgba(255,255,255,0.06);color:#9ca3af}
+[data-theme="dark"] .cert-option:hover .cert-option-letter{background:rgba(96,165,250,0.15);color:#60a5fa}
+[data-theme="dark"] .cert-option-correct{border-color:rgba(5,150,105,0.5);background:rgba(5,150,105,0.1)}
+[data-theme="dark"] .cert-option-wrong{border-color:rgba(239,68,68,0.5);background:rgba(239,68,68,0.1)}
+[data-theme="dark"] .cert-question{color:#f3f4f6}
+[data-theme="dark"] .cert-category{color:#60a5fa}
+[data-theme="dark"] .cert-progress-bar{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .cert-result-detail{color:#9ca3af}
+[data-theme="dark"] .cert-badge-display{background:rgba(255,255,255,0.04)}
+[data-theme="dark"] .cert-badge-icon{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .cert-review-item{background:rgba(255,255,255,0.04)}
+[data-theme="dark"] .cert-review-q{color:#f3f4f6}
+[data-theme="dark"] .cert-cat-label{color:#d1d5db}
+[data-theme="dark"] .cert-cat-bar-wrap{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .cert-badge-card{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.1)}
+[data-theme="dark"] .cert-badge-score{color:#9ca3af}
+[data-theme="dark"] .cert-hist-row{border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .cert-hist-meta{color:#9ca3af}
+[data-theme="dark"] .cert-widget{background:rgba(255,255,255,0.04)}
+[data-theme="dark"] .cert-widget-empty{color:#9ca3af}
+[data-theme="dark"] .cert-widget-earned{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .cert-widget-badge{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .cert-widget-score{color:#9ca3af}
+[data-theme="dark"] .cert-result-actions{border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .cert-fail-msg{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.2)}
+[data-theme="dark"] .cert-cats-title,[data-theme="dark"] .cert-review-title{color:#9ca3af}
+
 /* ── Knowledge Base Related Questions ────────────────── */
 .kb-related-btn{display:block;width:100%;text-align:left;background:var(--white);border:1.5px solid var(--off2);border-radius:8px;padding:10px 16px;font-size:14px;color:var(--navy);cursor:pointer;transition:all 0.13s;font-family:'DM Sans',sans-serif;margin-bottom:6px}
 .kb-related-btn:last-child{margin-bottom:0}

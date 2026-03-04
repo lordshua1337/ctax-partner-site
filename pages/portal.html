@@ -2636,6 +2636,19 @@
         </div>
       </div>
 
+      <!-- Certification Badge + Quiz -->
+      <div class="cert-section">
+        <div id="cert-badge-widget"></div>
+        <div class="cert-cta">
+          <button class="btn btn-p" onclick="certShowQuiz()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15l-3.5 2 .67-3.89L6 10.11l3.91-.57L12 6l2.09 3.54L18 10.11l-3.17 3L15.5 17z"/></svg>
+            Take Certification Quiz
+          </button>
+          <button class="btn btn-g" onclick="certShowCertHistory()">View History</button>
+        </div>
+      </div>
+      <script>if(typeof certRenderBadgeWidget==='function')certRenderBadgeWidget('cert-badge-widget');</script>
+
       <!-- Training Modules -->
       <div class="trn-modules-title">Onboarding Modules</div>
       <div class="trn-time-estimate">~2 hours to complete all modules</div>
