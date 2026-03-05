@@ -83,6 +83,13 @@ function onPageLoaded(id) {
       }
     });
   }
+  // Initialize labs mode on portal load
+  if (id === 'portal' && typeof initLabsMode === 'function') {
+    initLabsMode();
+  }
+  if (id === 'portal' && typeof markLabsSections === 'function') {
+    markLabsSections();
+  }
   // Initialize portal brand upload
   if (id === 'portal' && typeof initPortalBrand === 'function') {
     setTimeout(initPortalBrand, 80);

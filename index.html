@@ -382,9 +382,17 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
         </span>
       </span>
     </label>
-    <button id="tier-toggle" onclick="cycleTier()" class="nav-icon-btn" title="Switch partner tier" aria-label="Switch partner tier"><span id="tier-icon">E</span></button>
-    <button class="nav-cta-outline" onclick="showPage('contact')">Start Referral</button>
-    <button class="nav-cta" onclick="showPage('portal')">Dashboard</button>
+    <div class="tier-dropdown" id="tier-dropdown">
+      <button class="nav-icon-btn tier-dropdown-trigger" id="tier-toggle" title="Switch partner tier" aria-label="Switch partner tier"><span id="tier-icon">E</span></button>
+      <div class="tier-dropdown-menu">
+        <button class="tier-dropdown-item" onclick="setTier('enterprise')">Enterprise</button>
+        <button class="tier-dropdown-item" onclick="setTier('direct')">Direct</button>
+        <button class="tier-dropdown-item" onclick="setTier('strategic')">Strategic</button>
+      </div>
+    </div>
+    <button class="nav-cta-outline" onclick="showPage('contact')">Submit a Referral</button>
+    <button class="nav-cta-outline" onclick="showPage('portal')">Dashboard</button>
+    <button class="nav-cta" onclick="openLabs()">CTAX Labs</button>
   </div>
 
   <div class="notif-wrap notif-mobile" id="notifWrapMobile">
@@ -901,6 +909,7 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
 <script src="js/pb-color-presets.js" defer></script>
 <script src="js/pb-copy.js" defer></script>
 <script src="js/page-builder.js" defer></script>
+<script src="js/labs.js" defer></script>
 <script src="js/widgets.js" defer></script>
 <script src="js/dashboard.js" defer></script>
 <script src="js/hero-mesh.js" defer></script>

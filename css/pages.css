@@ -4856,6 +4856,24 @@ body.lp-active{overflow:hidden}
 .portal-topbar-left{display:flex;align-items:center;gap:10px}
 .portal-topbar-right{display:flex;align-items:center;gap:10px;margin-left:auto}
 .portal-demo-badge{font-size:11px;font-weight:600;letter-spacing:0.08em;color:var(--slate);background:var(--off);border:1px solid var(--off2);padding:4px 10px;border-radius:6px}
+
+/* Portal Mode Switcher */
+.pm-switcher{display:flex;gap:0;border:1px solid var(--off2);border-radius:8px;overflow:hidden;background:var(--off)}
+.pm-btn{font-size:11px;font-weight:600;letter-spacing:0.04em;padding:5px 12px;border:none;background:transparent;color:var(--slate);cursor:pointer;transition:all 0.2s ease;white-space:nowrap}
+.pm-btn:hover{color:var(--navy);background:rgba(11,95,216,0.04)}
+.pm-btn-active{background:var(--blue)!important;color:#fff!important}
+[data-theme="dark"] .pm-switcher{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.08)}
+[data-theme="dark"] .pm-btn{color:rgba(255,255,255,0.4)}
+[data-theme="dark"] .pm-btn:hover{color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .pm-btn-active{background:var(--blue)!important;color:#fff!important}
+
+/* Labs mode: hide portal-only nav items */
+body.labs-mode .portal-nav-item:not([data-labs]):not([data-shared]){display:none}
+body.labs-mode .portal-nav-group[data-portal-only]{display:none}
+/* Portal mode (default): hide labs-only nav items */
+body:not(.labs-mode):not(.full-mode) .portal-nav-item[data-labs]{display:none}
+body:not(.labs-mode):not(.full-mode) .portal-nav-group[data-labs-only]{display:none}
+/* Full mode: show everything (no extra rules needed) */
 .portal-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px}
 
 /* Sections */
@@ -4880,6 +4898,8 @@ body.lp-active{overflow:hidden}
 [data-theme="dark"] .portal-main{background:#0c1220}
 [data-theme="dark"] .portal-topbar{background:#0f1724;border-bottom-color:rgba(255,255,255,0.06)}
 [data-theme="dark"] .portal-demo-badge{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.4)}
+/* Dark mode branded label for labs/full modes */
+[data-theme="dark"] .portal-logo-label{color:rgba(255,255,255,0.3)}
 [data-theme="dark"] .portal-sec-title{color:#e0e4ec}
 [data-theme="dark"] .portal-branded .portal-logo-white{display:block}
 [data-theme="dark"] .portal-branded .portal-logo-dark{display:none}
@@ -5824,6 +5844,8 @@ select.set-input{padding-right:36px;background-image:url("data:image/svg+xml,%3C
   .portal-topbar{justify-content:space-between}
   .portal-topbar .sr-btn{display:none}
   .portal-topbar .portal-demo-badge{display:none}
+  .pm-switcher{border-radius:6px}
+  .pm-btn{padding:4px 8px;font-size:10px}
   .portal-section{padding:24px 16px}
   #dash-performance-hub{margin-left:-16px;margin-right:-16px;padding:24px 16px}
   #portal-sec-dashboard .dash-kpi-row{grid-template-columns:1fr 1fr!important}

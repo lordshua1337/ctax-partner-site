@@ -493,6 +493,16 @@ function cycleTier() {
   applyTierText(next);
 }
 
+function setTier(tier) {
+  if (tier === 'enterprise') {
+    document.documentElement.removeAttribute('data-tier');
+  } else {
+    document.documentElement.setAttribute('data-tier', tier);
+  }
+  localStorage.setItem('ctax_tier', tier);
+  applyTierText(tier);
+}
+
 // Keys where we need innerHTML (contain <br> or other markup)
 var TIER_HTML_KEYS = { 'pship-heading': true, 'testi-heading': true };
 
