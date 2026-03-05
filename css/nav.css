@@ -262,6 +262,7 @@
   z-index:1100;overflow:hidden;padding:4px
 }
 .portal-dropdown:hover .portal-dropdown-menu{display:block}
+.portal-dropdown-menu::before{content:'';position:absolute;top:-10px;left:0;right:0;height:10px}
 .portal-dropdown-item{
   display:flex;align-items:flex-start;gap:10px;width:100%;
   padding:10px 12px;border:none;background:none;border-radius:7px;
