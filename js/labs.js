@@ -14,7 +14,8 @@
     'portal-sec-ai-kb',
     'portal-sec-ai-dashboard',
     'portal-sec-page-builder',
-    'portal-sec-my-pages'
+    'portal-sec-my-pages',
+    'portal-sec-page-metrics'
   ];
 
   // Sections on both: portal-sec-challenge

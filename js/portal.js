@@ -188,9 +188,17 @@ function portalNav(el, secId) {
     document.body.classList.remove('pb-immersive');
     if (typeof pbDestroy === 'function') pbDestroy();
   }
-  // Render My Pages grid when entering that section
+  // Render My Pages gallery when entering that section
   if (secId === 'portal-sec-my-pages') {
-    if (typeof pbRenderMyPages === 'function') pbRenderMyPages();
+    if (typeof pgRender === 'function') {
+      pgRender();
+    } else if (typeof pbRenderMyPages === 'function') {
+      pbRenderMyPages();
+    }
+  }
+  // Render Page Metrics dashboard
+  if (secId === 'portal-sec-page-metrics') {
+    if (typeof pmRenderDashboard === 'function') pmRenderDashboard();
   }
 
   // Pro gate check (shows overlay on locked sections)
@@ -2391,6 +2399,7 @@ var BREADCRUMB_MAP = {
   'portal-sec-calculator': ['Tools', 'Revenue Calculator'],
   'portal-sec-page-builder': ['Tools', 'Page Builder'],
   'portal-sec-my-pages': ['Tools', 'My Pages'],
+  'portal-sec-page-metrics': ['Tools', 'Page Metrics'],
   'portal-sec-tunes': ['Tools', 'Tunes'],
   'portal-sec-ce': ['Resources', 'CE Webinars'],
   'portal-sec-marketing': ['Resources', 'Marketing Kit'],
