@@ -372,6 +372,28 @@
 @media(max-width:960px){.sb-tpl-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){.sb-tpl-grid{grid-template-columns:repeat(2,1fr)}}
 
+/* ── Script Builder Chat Bubbles ──────────────────────── */
+.sb-chat-thread{display:flex;flex-direction:column;gap:12px}
+.sb-bubble{max-width:85%;padding:14px 18px;border-radius:14px;font-size:15px;line-height:1.75;color:var(--navy);position:relative}
+.sb-bubble-partner{align-self:flex-start;background:linear-gradient(135deg,rgba(11,95,216,0.06),rgba(0,200,224,0.04));border:1px solid rgba(11,95,216,0.1);border-bottom-left-radius:4px}
+.sb-bubble-client{align-self:flex-end;background:var(--off);border:1px solid var(--off2);border-bottom-right-radius:4px}
+.sb-bubble-label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px}
+.sb-bubble-partner .sb-bubble-label{color:var(--blue)}
+.sb-bubble-client .sb-bubble-label{color:var(--slate);text-align:right}
+.sb-bubble-text{white-space:pre-wrap}
+.sb-stage-dir{text-align:center;font-size:13px;font-style:italic;color:var(--slate);padding:8px 0}
+
+/* ── Script Builder Timeline ────────────────────────── */
+.sb-timeline{display:flex;flex-direction:column;gap:0;padding-left:16px}
+.sb-tl-item{display:flex;gap:16px;padding-bottom:28px;position:relative}
+.sb-tl-item:not(.sb-tl-last)::before{content:'';position:absolute;left:7px;top:18px;bottom:0;width:2px;background:var(--off2)}
+.sb-tl-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--off2);background:var(--white);flex-shrink:0;margin-top:2px;position:relative;z-index:1}
+.sb-tl-done{border-color:var(--blue);background:var(--blue)}
+.sb-tl-done::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--white)}
+.sb-tl-active{border-color:var(--blue);background:var(--white);box-shadow:0 0 0 4px rgba(11,95,216,0.15)}
+.sb-tl-day{font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin-bottom:2px}
+.sb-tl-label{font-size:14px;color:var(--body);line-height:1.5}
+
 /* ── Recent Results Panel (shared) ───────────────────── */
 .rr-container{margin-bottom:28px}
 .rr-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}

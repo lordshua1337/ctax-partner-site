@@ -570,27 +570,24 @@ function exitLandingPage() {
 })();
 
 function handleResourceDownload(btn, name) {
-  var resources = {
-    'Partner Program Overview': 'COMMUNITY TAX - PARTNER PROGRAM OVERVIEW\n\n1. About Community Tax\n- 15+ years in IRS tax resolution\n- $2.3B in tax debt resolved\n- 120,000+ clients served\n- Licensed in 48 states\n\n2. Partner Program\n- 3 tiers: Direct (8%), Enterprise (13%), Strategic (18%)\n- ~80% client conversion rate\n- $295 investigation fee (low barrier for clients)\n- Dedicated account manager for Enterprise+\n\n3. How It Works\n- You refer clients with IRS tax debt\n- We handle all resolution work\n- You earn revenue share on every case\n- Average case value: $15,000-$40,000\n\n4. Getting Started\n- Apply at partners.communitytax.com\n- 15-min intro call with partner manager\n- Sign agreement, get portal access\n- Submit first referral in < 1 week\n\nContact: partners@communitytax.com | 1-855-332-2873',
-    'Revenue Share Breakdown': 'COMMUNITY TAX - REVENUE SHARE BREAKDOWN\n\nDirect Tier (8% share)\n- No minimum referrals\n- Self-service portal\n- Example: $20K case = $1,600 your share\n\nEnterprise Tier (13% share)\n- 10+ referrals/quarter\n- Dedicated account manager\n- Co-branded materials\n- Example: $20K case = $2,600 your share\n\nStrategic Tier (18% share)\n- 25+ referrals/quarter\n- API integration available\n- Custom reporting\n- White-label options\n- Example: $20K case = $3,600 your share\n\nPayout Schedule: Monthly, NET-30\nPayment Methods: ACH, Check\n\nContact: partners@communitytax.com',
-    'Client Identification Guide': 'COMMUNITY TAX - CLIENT IDENTIFICATION GUIDE\n\nSigns Your Client May Need Tax Resolution:\n\n1. IRS Notices\n- CP14 (Balance Due)\n- CP501-CP504 (Collection notices)\n- Letter 1058 (Intent to Levy)\n- Letter 3172 (Notice of Federal Tax Lien)\n\n2. Verbal Cues\n- "I haven\'t filed in a few years"\n- "I owe the IRS but can\'t afford to pay"\n- "I got a letter about a lien/levy"\n- "My refund was offset"\n\n3. Financial Red Flags\n- Tax liens on credit report\n- Wage garnishment\n- Bank levy\n- Unfiled returns (2+ years)\n- Estimated debt > $10,000\n\nThe Conversation:\n"I work with a firm that specializes in IRS resolution. They\'ve resolved $2.3B in tax debt. The first step is a $295 investigation - would you like me to connect you?"\n\nContact: partners@communitytax.com',
-    'Email Referral Template Pack': 'COMMUNITY TAX - EMAIL REFERRAL TEMPLATES\n\nTemplate 1: Initial Outreach\nSubject: Quick question about your tax situation\n\nHi [Name],\n\nDuring our recent conversation, you mentioned some concerns about [IRS notices/back taxes/unfiled returns]. I wanted to let you know about a resource that might help.\n\nI partner with Community Tax, a firm that specializes in IRS tax resolution. They\'ve helped resolve over $2.3 billion in tax debt for 120,000+ clients.\n\nThe first step is a $295 tax investigation where they review your full IRS account and present your options. No obligation beyond that.\n\nWould you like me to connect you? I can make a warm introduction.\n\nBest,\n[Your Name]\n\n---\nTemplate 2: Follow-Up\nSubject: Following up on tax resolution\n\nHi [Name], just checking in on this...',
-    'Objection Handling Playbook': 'COMMUNITY TAX - OBJECTION HANDLING PLAYBOOK\n\nObjection: "I can\'t afford it"\nResponse: "The investigation is only $295, and resolution fees can be structured into affordable monthly payments. Most clients find the cost of NOT resolving far exceeds the cost of resolution - penalties and interest compound daily."\n\nObjection: "I\'ll handle it myself"\nResponse: "You absolutely can. But the IRS has a team of professionals on their side. Community Tax has enrolled agents and tax attorneys who negotiate these cases every day. Their clients see an average resolution of 70-80% of what they owe."\n\nObjection: "I don\'t trust tax resolution companies"\nResponse: "That\'s fair - there are bad actors in this space. Community Tax has been around 15 years, resolved $2.3B, and has 120K+ clients. They\'re BBB accredited. I personally partner with them because I trust them with my clients."\n\nObjection: "I\'ll wait and see"\nResponse: "The IRS charges penalties and interest daily. A $20K debt can grow to $30K in 18 months just from penalties. The sooner you act, the more options you have."',
-    'Partner Kit: Everything You Need': 'COMMUNITY TAX - COMPLETE PARTNER KIT\n\nThis kit contains everything you need to start referring clients:\n\n1. Program Overview (see Partner Program Overview)\n2. Revenue Share Details (see Revenue Share Breakdown)\n3. Client Identification Guide (see guide)\n4. Email Templates (see template pack)\n5. Objection Handling (see playbook)\n6. Compliance Guidelines:\n   - Never guarantee specific outcomes\n   - Always disclose your referral relationship\n   - Direct clients to communitytax.com for verification\n   - Do not provide tax advice unless licensed\n\n7. Key Contacts:\n   Partner Support: partners@communitytax.com\n   New Partnerships: 1-855-332-2873\n   Hours: Mon-Fri, 8am-7pm CST\n\n8. Quick Start:\n   Step 1: Log in to Partner Portal\n   Step 2: Click "New Referral"\n   Step 3: Enter client name, phone, email, estimated debt\n   Step 4: We call them within 24 hours\n   Step 5: Track status in real-time'
-  };
+  // Use branded PDF generator if available
+  if (typeof ResourcePDFs !== 'undefined' && ResourcePDFs.hasGenerator(name)) {
+    btn.innerHTML = '<div class="rl-spinner" style="width:14px;height:14px;border-width:2px;margin:0 auto"></div> Generating PDF...';
+    btn.style.pointerEvents = 'none';
+    ResourcePDFs.generate(name).then(function() {
+      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Downloaded';
+      btn.style.background = 'rgba(0,229,204,0.1)';
+      btn.style.color = 'var(--cyan-text)';
+      btn.style.borderColor = 'rgba(0,229,204,0.3)';
+      btn.style.pointerEvents = '';
+    }).catch(function() {
+      btn.innerHTML = 'Retry Download';
+      btn.style.pointerEvents = '';
+    });
+    return;
+  }
 
-  var content = resources[name] || 'COMMUNITY TAX - ' + name.toUpperCase() + '\n\nThis resource is being prepared. Contact partners@communitytax.com for immediate access.';
-  
-  var blob = new Blob([content], {type: 'text/plain'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ +/g, '-').toLowerCase() + '.txt';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  
+  // Fallback for any unmapped resources
   btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Downloaded';
   btn.style.background = 'rgba(0,229,204,0.1)';
   btn.style.color = 'var(--cyan-text)';

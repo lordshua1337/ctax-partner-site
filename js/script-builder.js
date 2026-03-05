@@ -227,12 +227,71 @@ function esc(t){ return t.replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function renderConversation(text, containerId) {
   var el = document.getElementById(containerId);
   if(!el) return;
-  el.innerHTML =
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">' +
-      '<div style="font-size:13px;color:var(--slate)">Word-for-word script — use exactly as written or adapt to your voice.</div>' +
-      '<button class="sb-copy-btn" onclick="copyText(sbResults.conversation, this)">Copy</button>' +
-    '</div>' +
-    '<div style="white-space:pre-wrap;font-size:15px;line-height:1.8;color:var(--navy)">' + esc(text) + '</div>';
+
+  // Parse text into chat-style bubbles
+  var lines = text.split('\n');
+  var bubbles = [];
+  var currentSpeaker = '';
+  var currentLines = [];
+
+  lines.forEach(function(line) {
+    var trimmed = line.trim();
+    if (!trimmed) return;
+
+    // Detect stage directions [like this]
+    if (/^\[.*\]$/.test(trimmed)) {
+      if (currentLines.length) {
+        bubbles.push({ speaker: currentSpeaker, text: currentLines.join('\n') });
+        currentLines = [];
+      }
+      bubbles.push({ speaker: 'stage', text: trimmed.replace(/^\[|\]$/g, '') });
+      return;
+    }
+
+    // Detect speaker labels like "You:", "Partner:", "Client:", "Advisor:", etc.
+    var speakerMatch = trimmed.match(/^(You|Partner|Advisor|Agent|Broker|Attorney|Counselor|Professional):\s*(.*)/i);
+    var clientMatch = trimmed.match(/^(Client|Prospect|Customer|Them|Borrower|Seller):\s*(.*)/i);
+
+    if (speakerMatch) {
+      if (currentLines.length) bubbles.push({ speaker: currentSpeaker, text: currentLines.join('\n') });
+      currentSpeaker = 'partner';
+      currentLines = speakerMatch[2] ? [speakerMatch[2]] : [];
+    } else if (clientMatch) {
+      if (currentLines.length) bubbles.push({ speaker: currentSpeaker, text: currentLines.join('\n') });
+      currentSpeaker = 'client';
+      currentLines = clientMatch[2] ? [clientMatch[2]] : [];
+    } else {
+      if (!currentSpeaker) currentSpeaker = 'partner';
+      currentLines.push(trimmed);
+    }
+  });
+  if (currentLines.length) bubbles.push({ speaker: currentSpeaker, text: currentLines.join('\n') });
+
+  // If we couldn't parse any bubbles, fall back to plain text
+  var hasSpeakers = bubbles.some(function(b) { return b.speaker === 'partner' || b.speaker === 'client'; });
+
+  var html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">' +
+    '<div style="font-size:13px;color:var(--slate)">Word-for-word script — use exactly as written or adapt to your voice.</div>' +
+    '<button class="sb-copy-btn" onclick="copyText(sbResults.conversation, this)">Copy</button>' +
+  '</div>';
+
+  if (!hasSpeakers) {
+    html += '<div style="white-space:pre-wrap;font-size:15px;line-height:1.8;color:var(--navy)">' + esc(text) + '</div>';
+  } else {
+    html += '<div class="sb-chat-thread">';
+    bubbles.forEach(function(b) {
+      if (b.speaker === 'stage') {
+        html += '<div class="sb-stage-dir">' + esc(b.text) + '</div>';
+      } else if (b.speaker === 'client') {
+        html += '<div class="sb-bubble sb-bubble-client"><div class="sb-bubble-label">Client</div><div class="sb-bubble-text">' + esc(b.text) + '</div></div>';
+      } else {
+        html += '<div class="sb-bubble sb-bubble-partner"><div class="sb-bubble-label">You</div><div class="sb-bubble-text">' + esc(b.text) + '</div></div>';
+      }
+    });
+    html += '</div>';
+  }
+
+  el.innerHTML = html;
 }
 
 // TAB 2: Email — copy block at top, design rationale below
@@ -288,17 +347,15 @@ function generateEmailRationale(emailText) {
   });
 }
 
-// TAB 3: Objection responses — clean Q&A pairs only
+// TAB 3: Objection responses — expandable Q&A cards
 function renderObjections(text, containerId) {
   var el = document.getElementById(containerId);
   if(!el) return;
   var html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">' +
-    '<div style="font-size:13px;color:var(--slate)">Three objection/response pairs tailored to your client situation.</div>' +
+    '<div style="font-size:13px;color:var(--slate)">Click each objection to reveal your response.</div>' +
     '<button class="sb-copy-btn" onclick="copyText(sbResults.objections, this)">Copy All</button>' +
   '</div>';
 
-  var blocks = text.split(/\n(?=\*\*Objection|\*\*Response:|\*\*Q:|\d+\.)/).filter(Boolean);
-  // Re-join into pairs
   var pairs = [];
   var raw = text.split(/\*\*Objection:\*\*|\*\*Response:\*\*/).filter(function(s){return s.trim();});
   if(raw.length >= 2) {
@@ -308,34 +365,101 @@ function renderObjections(text, containerId) {
   }
 
   if(pairs.length === 0) {
-    // Fallback: just show clean pre-wrap
     html += '<div style="white-space:pre-wrap;font-size:15px;line-height:1.8">' + esc(text) + '</div>';
   } else {
     pairs.forEach(function(pair, i){
-      html += '<div style="background:var(--white);border:1px solid var(--off2);border-radius:10px;padding:20px 24px;margin-bottom:14px">' +
-        '<div style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);margin-bottom:8px">Objection ' + (i+1) + '</div>' +
-        '<div style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--off2)">' + esc(pair.q) + '</div>' +
-        '<div style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin-bottom:8px">Your Response</div>' +
-        '<div style="font-size:15px;color:var(--body);line-height:1.75">' + esc(pair.a) + '</div>' +
+      var id = 'sb-obj-' + i;
+      html += '<div class="sb-objection-card" style="background:var(--white);border:1px solid var(--off2);border-radius:10px;margin-bottom:14px;overflow:hidden">' +
+        '<div class="sb-obj-trigger" onclick="toggleObjection(\'' + id + '\', this)" style="padding:18px 24px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:background 0.15s" onmouseover="this.style.background=\'var(--off)\'" onmouseout="this.style.background=\'\'">' +
+          '<div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,rgba(11,95,216,0.08),rgba(0,200,224,0.08));display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:14px;font-weight:700;color:var(--blue)">' + (i+1) + '</span></div>' +
+          '<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600;color:var(--navy)">' + esc(pair.q) + '</div></div>' +
+          '<svg class="sb-obj-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--slate)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;transition:transform 0.2s"><polyline points="6 9 12 15 18 9"/></svg>' +
+        '</div>' +
+        '<div id="' + id + '" class="sb-obj-body" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease">' +
+          '<div style="padding:0 24px 20px;border-top:1px solid var(--off2)">' +
+            '<div style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin:16px 0 8px">Your Response</div>' +
+            '<div style="font-size:15px;color:var(--body);line-height:1.75">' + esc(pair.a) + '</div>' +
+            '<button class="sb-copy-btn" style="margin-top:12px;font-size:12px" onclick="copyText(' + JSON.stringify(pair.a).replace(/'/g, "\\'") + ', this)">Copy Response</button>' +
+          '</div>' +
+        '</div>' +
       '</div>';
     });
   }
   el.innerHTML = html;
+  // Auto-expand first objection
+  setTimeout(function() {
+    var first = document.getElementById('sb-obj-0');
+    if (first) {
+      first.style.maxHeight = first.scrollHeight + 'px';
+      var chev = first.previousElementSibling.querySelector('.sb-obj-chevron');
+      if (chev) chev.style.transform = 'rotate(180deg)';
+    }
+  }, 50);
 }
 
-// TAB 4: Follow-up — just the message, copy ready
+function toggleObjection(id, trigger) {
+  var body = document.getElementById(id);
+  if (!body) return;
+  var isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+  var chevron = trigger.querySelector('.sb-obj-chevron');
+  if (isOpen) {
+    body.style.maxHeight = '0px';
+    if (chevron) chevron.style.transform = '';
+  } else {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    if (chevron) chevron.style.transform = 'rotate(180deg)';
+  }
+}
+
+// TAB 4: Follow-up — timeline style
 function renderFollowup(text, containerId) {
   var el = document.getElementById(containerId || 'out-followup');
   if(!el) return;
   if(!text) {
-    el.innerHTML = '<div style="color:var(--slate);font-size:15px;font-style:italic">Generating follow-up message...</div>';
+    el.innerHTML = '<div style="color:var(--slate);font-size:15px;font-style:italic">Generating follow-up sequence...</div>';
     return;
   }
+
+  var channel = (document.getElementById('sb-channel') || {}).value || 'email';
+
   el.innerHTML =
-    '<div style="font-size:13px;color:var(--slate);margin-bottom:16px">Send this 5\u20137 days after your initial email if you haven\'t heard back.</div>' +
-    '<div style="background:#f8fafc;border:1px solid var(--off2);border-radius:10px;padding:24px 28px;position:relative">' +
-      '<button class="sb-copy-btn" onclick="copyText(sbResults.followup, this)">Copy</button>' +
-      '<div style="white-space:pre-wrap;font-size:15px;line-height:1.85;color:var(--navy);padding-right:60px">' + esc(text) + '</div>' +
+    '<div class="sb-timeline">' +
+      // Day 0 - Initial contact
+      '<div class="sb-tl-item">' +
+        '<div class="sb-tl-dot sb-tl-done"></div>' +
+        '<div class="sb-tl-content">' +
+          '<div class="sb-tl-day">Day 0</div>' +
+          '<div class="sb-tl-label">Initial referral ' + esc(channel) + ' sent</div>' +
+        '</div>' +
+      '</div>' +
+      // Day 5-7 - Follow-up
+      '<div class="sb-tl-item">' +
+        '<div class="sb-tl-dot sb-tl-active"></div>' +
+        '<div class="sb-tl-content" style="flex:1">' +
+          '<div class="sb-tl-day">Day 5\u20137</div>' +
+          '<div class="sb-tl-label" style="margin-bottom:12px">Follow-up message</div>' +
+          '<div style="background:#f8fafc;border:1px solid var(--off2);border-radius:10px;padding:20px 24px;position:relative">' +
+            '<button class="sb-copy-btn" onclick="copyText(sbResults.followup, this)">Copy</button>' +
+            '<div style="white-space:pre-wrap;font-size:15px;line-height:1.85;color:var(--navy);padding-right:60px">' + esc(text) + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      // Day 14 - Soft check-in
+      '<div class="sb-tl-item">' +
+        '<div class="sb-tl-dot"></div>' +
+        '<div class="sb-tl-content">' +
+          '<div class="sb-tl-day">Day 14</div>' +
+          '<div class="sb-tl-label">Soft check-in during next scheduled interaction</div>' +
+        '</div>' +
+      '</div>' +
+      // Day 30 - Long-term
+      '<div class="sb-tl-item sb-tl-last">' +
+        '<div class="sb-tl-dot"></div>' +
+        '<div class="sb-tl-content">' +
+          '<div class="sb-tl-day">Day 30+</div>' +
+          '<div class="sb-tl-label">Re-introduce if situation comes up naturally</div>' +
+        '</div>' +
+      '</div>' +
     '</div>';
 }
 
@@ -1381,6 +1505,53 @@ function closePipeline() {
   if (_pipelineRunning) return;
   var el = document.getElementById('pipeline-overlay');
   if (el) el.remove();
+}
+
+// ── PDF EXPORT ──────────────────────────────────────────
+function downloadScriptPdf() {
+  if (typeof CTAX_PDF === 'undefined') {
+    if (typeof showToast === 'function') showToast('PDF system not loaded. Please refresh and try again.', 'error');
+    return;
+  }
+  var meta = (document.getElementById('sb-output-meta') || {}).textContent || '';
+  var doc = CTAX_PDF.createDoc();
+
+  // Cover
+  doc += CTAX_PDF.createCover('Referral Script Package', meta || 'Custom AI-Generated Scripts', 'Generated by CTAX Studios Script Builder');
+
+  // Conversation Script
+  doc += CTAX_PDF.createPage(
+    '<h2 style="color:#0A1628;font-family:DM Serif Display,serif;font-size:22px;margin-bottom:16px">Conversation Script</h2>' +
+    '<div style="white-space:pre-wrap;font-size:13px;line-height:1.8;color:#1a2a3a">' + CTAX_PDF.esc(sbResults.conversation || '') + '</div>'
+  );
+
+  // Email Template
+  var emailText = sbResults.email || '';
+  var subjectMatch = emailText.match(/^Subject:\s*(.+?)\n\n/i);
+  var subject = subjectMatch ? subjectMatch[1].trim() : '';
+  var body = subjectMatch ? emailText.slice(subjectMatch[0].length).trim() : emailText.trim();
+  doc += CTAX_PDF.createPage(
+    '<h2 style="color:#0A1628;font-family:DM Serif Display,serif;font-size:22px;margin-bottom:16px">Email Template</h2>' +
+    (subject ? '<div style="background:#f0f4f8;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:13px"><strong>Subject:</strong> ' + CTAX_PDF.esc(subject) + '</div>' : '') +
+    '<div style="white-space:pre-wrap;font-size:13px;line-height:1.8;color:#1a2a3a">' + CTAX_PDF.esc(body) + '</div>'
+  );
+
+  // Objection Responses
+  doc += CTAX_PDF.createPage(
+    '<h2 style="color:#0A1628;font-family:DM Serif Display,serif;font-size:22px;margin-bottom:16px">Objection Responses</h2>' +
+    '<div style="white-space:pre-wrap;font-size:13px;line-height:1.8;color:#1a2a3a">' + CTAX_PDF.esc(sbResults.objections || '') + '</div>'
+  );
+
+  // Follow-up
+  if (sbResults.followup) {
+    doc += CTAX_PDF.createPage(
+      '<h2 style="color:#0A1628;font-family:DM Serif Display,serif;font-size:22px;margin-bottom:16px">Follow-Up Message</h2>' +
+      '<div style="white-space:pre-wrap;font-size:13px;line-height:1.8;color:#1a2a3a">' + CTAX_PDF.esc(sbResults.followup) + '</div>'
+    );
+  }
+
+  doc += '</div>';
+  CTAX_PDF.renderPdf(doc, 'CTAX-Script-Package.pdf');
 }
 
 async function runPipeline() {

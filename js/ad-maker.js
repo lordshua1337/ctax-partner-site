@@ -183,8 +183,9 @@ function generateStaticAd(){
   setTimeout(function(){
     resizeAd('16:9', 1200, 628);
     if(resultsEl) resultsEl.style.visibility = '';
-    // Trigger AI headline suggestions
+    // Trigger AI headline suggestions + platform captions
     generateHeadlines();
+    generateCaptions();
 
     // M2P2C2: Show smart suggestions
     setTimeout(function() { if (typeof showSmartSuggestions === 'function') showSmartSuggestions('ad-maker'); }, 500);
@@ -306,7 +307,10 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
   var configs = {
     1: { bg:'linear-gradient(135deg,#0A1628 0%,#112244 60%,#1a3160 100%)', text:'#fff', sub:'rgba(255,255,255,0.82)', ctaBg:brandColor, ctaText:'#fff', pill:'rgba(255,255,255,0.38)', div:'rgba(255,255,255,0.1)' },
     2: { bg:'linear-gradient(135deg,'+brandColor+' 0%,#0099CC 100%)',       text:'#fff', sub:'rgba(255,255,255,0.88)', ctaBg:'#fff',       ctaText:brandColor, pill:'rgba(255,255,255,0.55)', div:'rgba(255,255,255,0.18)' },
-    3: { bg:'#ffffff', text:'#0A1628', sub:'rgba(10,22,40,0.72)', ctaBg:brandColor, ctaText:'#fff', pill:'rgba(10,22,40,0.38)', div:'rgba(10,22,40,0.08)' }
+    3: { bg:'#ffffff', text:'#0A1628', sub:'rgba(10,22,40,0.72)', ctaBg:brandColor, ctaText:'#fff', pill:'rgba(10,22,40,0.38)', div:'rgba(10,22,40,0.08)' },
+    4: { bg:'linear-gradient(135deg,#0A1628 0%,'+brandColor+' 50%,#00C8E0 100%)', text:'#fff', sub:'rgba(255,255,255,0.9)', ctaBg:'rgba(255,255,255,0.95)', ctaText:'#0A1628', pill:'rgba(255,255,255,0.45)', div:'rgba(255,255,255,0.15)' },
+    5: { bg:'#0A1628', text:'#fff', sub:'rgba(255,255,255,0.75)', ctaBg:brandColor, ctaText:'#fff', pill:'rgba(255,255,255,0.35)', div:'rgba(255,255,255,0.08)' },
+    6: { bg:'#f8fafc', text:'#0A1628', sub:'rgba(10,22,40,0.6)', ctaBg:'#0A1628', ctaText:'#fff', pill:'rgba(10,22,40,0.3)', div:'rgba(10,22,40,0.06)' }
   };
   var t = configs[tpl] || configs[1];
 
@@ -334,6 +338,17 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
       +'</div>';
   };
 
+  // Headline variations by template
+  var headlines = {
+    1: { wide: 'Owe the IRS? <span style="background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">There\'s a Way Out.</span>', square: 'You Don\'t Have to<br>Face the <span style="background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">IRS Alone.</span>', tall: 'IRS Debt<br>Stealing Your<br><span style="background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Peace of Mind?</span>' },
+    2: { wide: 'Owe the IRS? <span style="background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">There\'s a Way Out.</span>', square: 'You Don\'t Have to<br>Face the <span style="background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">IRS Alone.</span>', tall: 'IRS Debt<br>Stealing Your<br><span style="background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Peace of Mind?</span>' },
+    3: { wide: 'Owe the IRS? <span style="background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">There\'s a Way Out.</span>', square: 'You Don\'t Have to<br>Face the <span style="background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">IRS Alone.</span>', tall: 'IRS Debt<br>Stealing Your<br><span style="background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Peace of Mind?</span>' },
+    4: { wide: 'Tax Debt? <span style="color:rgba(255,255,255,0.95)">We\'ve Resolved<br>$2.3 Billion.</span>', square: 'Stop the<br>IRS Before<br><span style="color:rgba(255,255,255,0.95)">They Stop You.</span>', tall: 'Take<br>Control<br>of Your<br><span style="color:rgba(255,255,255,0.95)">Tax Debt.</span>' },
+    5: { wide: '<span style="color:'+brandColor+'">$2.3B</span> in Tax Debt<br>Resolved.', square: 'The IRS<br>Won\'t Wait.<br><span style="color:'+brandColor+'">Neither Should You.</span>', tall: 'Resolve<br>Your<br><span style="color:'+brandColor+'">Tax Debt</span><br>Today.' },
+    6: { wide: 'Owe the IRS?<br><span style="color:'+brandColor+'">Get real help.</span>', square: 'Tax debt doesn\'t<br>fix itself.', tall: 'IRS<br>Resolution<br><span style="color:'+brandColor+'">Starts Here.</span>' }
+  };
+  var hl = headlines[tpl] || headlines[1];
+
   // Detect format
   var ratio = w / h;
   var fmt = ratio > 1.6 ? '16x9' : ratio > 1.1 ? '5x4' : Math.abs(ratio-1) < 0.15 ? '1x1' : ratio > 0.65 ? '4x5' : '9x16';
@@ -350,19 +365,19 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
     return '<div style="font-size:'+fs+';color:'+t.pill+';text-align:'+(align||'left')+'">Referred by '+firm+'</div>';
   };
 
-  if(fmt === '16x9'){
-    return wrap('26px 32px',
-      '<div style="display:flex;justify-content:space-between;align-items:center">'
-        +'<div style="flex:1;min-width:0">'+partnerLogo('28px','','15px')+tagEl('10px')+'</div>'
-        +'<div style="flex-shrink:0;display:flex;align-items:center;gap:8px">'+divider('20px')+ctaxLogo('22px')+'</div>'
-      +'</div>'
-      +'<div>'+eyebrow('9px')
-        +'<div style="font-family:DM Serif Display,serif;font-size:38px;line-height:1.08;color:'+t.text+';letter-spacing:-0.02em">Owe the IRS? <span style=\"background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">There’s a Way Out.</span></div>'
-      +'</div>'
-      +'<div>'
-        +'<div style="font-size:13px;color:'+t.sub+';line-height:1.5;margin-bottom:10px">$2.3B resolved. Confidential consultations. Real relief for real people.</div>'
-        +ctaBlock('13px','12px')
-      +'</div>'
+  if(fmt === ‘16x9’){
+    return wrap(‘26px 32px’,
+      ‘<div style="display:flex;justify-content:space-between;align-items:center">’
+        +’<div style="flex:1;min-width:0">’+partnerLogo(‘28px’,’’,’15px’)+tagEl(‘10px’)+’</div>’
+        +’<div style="flex-shrink:0;display:flex;align-items:center;gap:8px">’+divider(‘20px’)+ctaxLogo(‘22px’)+’</div>’
+      +’</div>’
+      +’<div>’+eyebrow(‘9px’)
+        +’<div style="font-family:DM Serif Display,serif;font-size:38px;line-height:1.08;color:’+t.text+’;letter-spacing:-0.02em">’+hl.wide+’</div>’
+      +’</div>’
+      +’<div>’
+        +’<div style="font-size:13px;color:’+t.sub+’;line-height:1.5;margin-bottom:10px">$2.3B resolved. Confidential consultations. Real relief for real people.</div>’
+        +ctaBlock(‘13px’,’12px’)
+      +’</div>’
     );
   }
 
@@ -373,7 +388,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
         +'<div style="flex-shrink:0;display:flex;align-items:center;gap:10px">'+divider('24px')+ctaxLogo('26px')+'</div>'
       +'</div>'
       +'<div>'+eyebrow('11px')
-        +'<div style="font-family:DM Serif Display,serif;font-size:52px;line-height:1.06;color:'+t.text+';letter-spacing:-0.02em">You Don’t Have to<br>Face the <span style=\"background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">IRS Alone.</span></div>'
+        +’<div style="font-family:DM Serif Display,serif;font-size:52px;line-height:1.06;color:’+t.text+’;letter-spacing:-0.02em">’+hl.square+’</div>’
         +'<div style="font-size:16px;color:'+t.sub+';line-height:1.55;margin-top:20px;max-width:80%">120,000+ clients helped. No judgment. Real results.</div>'
       +'</div>'
       +ctaBlock('15px','13px')
@@ -387,7 +402,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
         +'<div style="flex-shrink:0">'+ctaxLogo('26px')+'</div>'
       +'</div>'
       +'<div>'+eyebrow('11px')
-        +'<div style="font-family:DM Serif Display,serif;font-size:58px;line-height:1.06;color:'+t.text+';letter-spacing:-0.025em">IRS Debt<br>Stealing Your<br><span style=\"background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">Peace of Mind?</span></div>'
+        +'<div style="font-family:DM Serif Display,serif;font-size:58px;line-height:1.06;color:'+t.text+';letter-spacing:-0.025em">'+hl.tall+'</div>'
         +'<div style="font-size:17px;color:'+t.sub+';line-height:1.6;margin-top:24px">We’ve helped 120,000+ clients resolve tax debt — quietly, legally, for less than you think.</div>'
       +'</div>'
       +ctaBlock('16px','14px')
@@ -401,7 +416,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
         +'<div style="flex-shrink:0">'+ctaxLogo('30px')+'</div>'
       +'</div>'
       +'<div>'+eyebrow('13px')
-        +'<div style="font-family:DM Serif Display,serif;font-size:80px;line-height:1.04;color:'+t.text+';letter-spacing:-0.025em">IRS Debt<br>Stealing<br>Your <span style=\"background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">Peace<br>of Mind?</span></div>'
+        +'<div style="font-family:DM Serif Display,serif;font-size:80px;line-height:1.04;color:'+t.text+';letter-spacing:-0.025em">'+hl.tall+'</div>'
         +'<div style="font-size:20px;color:'+t.sub+';line-height:1.65;margin-top:32px">We’ve helped 120,000+ clients resolve tax debt quietly and legally.</div>'
       +'</div>'
       +ctaBlock('20px','17px')
@@ -415,7 +430,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
       +'<div style="display:flex;align-items:center;gap:10px">'+divider('22px')+ctaxLogo('24px')+'</div>'
     +'</div>'
     +'<div>'+eyebrow('10px')
-      +'<div style="font-family:DM Serif Display,serif;font-size:52px;line-height:1.07;color:'+t.text+';letter-spacing:-0.02em">Owe the IRS?<br><span style=\"background:linear-gradient(90deg,#0B5FD8,#00C8E0);background-size:200px 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text\">There’s a Way Out.</span></div>'
+      +’<div style="font-family:DM Serif Display,serif;font-size:52px;line-height:1.07;color:’+t.text+’;letter-spacing:-0.02em">’+hl.wide+’</div>’
     +'</div>'
     +'<div>'
       +'<div style="font-size:14px;color:'+t.sub+';line-height:1.5;margin-bottom:10px">$2.3B resolved. Confidential. Real relief for real people.</div>'
@@ -600,6 +615,94 @@ async function amRunBatchExport() {
   temp.remove();
   if (runBtn) { runBtn.disabled = false; runBtn.textContent = 'Done!'; }
   if (typeof showToast === 'function') showToast('All ad sizes exported!', 'success');
+}
+
+// ── AI Platform Captions ─────────────────────────────────────
+
+function generateCaptions() {
+  var firm = (document.getElementById('am-firm') || {}).value || '';
+  var platform = (document.getElementById('am-platform') || {}).value || 'Facebook';
+  var tagline = (document.getElementById('am-tagline') || {}).value || '';
+  var captionsWrap = document.getElementById('am-captions');
+  var captionsList = document.getElementById('am-captions-list');
+  if (!captionsWrap || !captionsList) return;
+
+  captionsWrap.style.display = 'block';
+  captionsList.innerHTML = '<div style="text-align:center;padding:20px;color:var(--slate)"><div class="spin" style="width:20px;height:20px;border:2px solid var(--off2);border-top-color:var(--blue);border-radius:50%;animation:spin .6s linear infinite;margin:0 auto 8px"></div>Generating captions...</div>';
+
+  var prompt = 'You are a social media marketing expert for tax resolution services. '
+    + 'Generate 3 ready-to-post social media captions for a co-branded ad between '
+    + (firm ? '"' + firm + '"' : 'a tax professional') + ' and Community Tax (a tax resolution company). '
+    + (tagline ? 'The firm tagline is: "' + tagline + '". ' : '')
+    + 'Target platform: ' + platform + '. '
+    + 'Each caption should: match the tone of ' + platform + ' (professional for LinkedIn, conversational for Facebook, punchy for Instagram), '
+    + 'include a clear CTA, mention the partnership, and be ready to copy-paste. '
+    + 'Return JSON array: [{"label":"Caption style name","text":"The full caption text","hashtags":"#relevant #hashtags"}]';
+
+  var apiUrl = typeof CTAX_API_URL !== 'undefined' ? CTAX_API_URL : 'https://ctax-api-proxy.vercel.app/api/chat';
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: typeof getApiHeaders === 'function' ? getApiHeaders() : { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1024, messages: [{ role: 'user', content: prompt }] })
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('API returned ' + r.status);
+    return r.json();
+  })
+  .then(function(data) {
+    var text = data.content ? data.content[0].text : '';
+    var captions = [];
+    try {
+      var match = text.match(/\[[\s\S]*\]/);
+      if (match) captions = JSON.parse(match[0]);
+    } catch (e) {
+      console.warn('Caption parse error:', e.message);
+    }
+    if (!captions.length) {
+      captions = [
+        { label: 'Professional', text: 'Tax debt doesn\'t resolve itself. ' + (firm || 'Our firm') + ' has partnered with Community Tax to help clients find real solutions. Book a free consultation today.', hashtags: '#TaxRelief #TaxDebt #IRS' },
+        { label: 'Empathetic', text: 'Owing the IRS is stressful. You don\'t have to face it alone. Through our partnership with Community Tax, we connect clients to proven tax resolution. DM us to learn more.', hashtags: '#TaxHelp #DebtFree #TaxResolution' },
+        { label: 'Direct', text: '$2.3B in tax debt resolved. 120,000+ clients helped. ' + (firm || 'We') + ' + Community Tax = your path to IRS relief. Link in bio.', hashtags: '#TaxDebtRelief #IRSHelp #FinancialFreedom' }
+      ];
+    }
+    renderCaptions(captions);
+  })
+  .catch(function(err) {
+    console.error('Caption generation error:', err);
+    captionsList.innerHTML = '<div style="color:#c0392b;font-size:14px">Failed to generate captions. Please try again.</div>';
+  });
+}
+
+function renderCaptions(captions) {
+  var list = document.getElementById('am-captions-list');
+  if (!list) return;
+  list.innerHTML = '';
+  captions.forEach(function(c) {
+    var card = document.createElement('div');
+    card.style.cssText = 'background:var(--off);border:1px solid var(--off2);border-radius:8px;padding:14px 16px';
+    var escaped = (c.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    var hashtags = (c.hashtags || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    card.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+      + '<span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue)">' + ((c.label || 'Caption').replace(/</g, '&lt;')) + '</span>'
+      + '<button class="btn btn-s" style="font-size:11px;padding:4px 10px" onclick="copyCaptionText(this)">Copy</button>'
+      + '</div>'
+      + '<div class="am-caption-text" style="font-size:14px;color:var(--navy);line-height:1.6;white-space:pre-wrap">' + escaped + '</div>'
+      + (hashtags ? '<div style="font-size:12px;color:var(--slate);margin-top:6px">' + hashtags + '</div>' : '');
+    list.appendChild(card);
+  });
+}
+
+function copyCaptionText(btn) {
+  var card = btn.closest('.am-captions-list > div') || btn.parentElement.parentElement;
+  var textEl = card.querySelector('.am-caption-text');
+  if (!textEl) return;
+  var hashEl = card.querySelector('div:last-child');
+  var fullText = textEl.textContent;
+  if (hashEl && hashEl !== textEl) fullText += '\n\n' + hashEl.textContent;
+  navigator.clipboard.writeText(fullText).then(function() {
+    btn.textContent = 'Copied!';
+    setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+  });
 }
 
 // ── END AD MAKER ─────────────────────────────────────────────

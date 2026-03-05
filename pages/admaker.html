@@ -47,7 +47,7 @@
 
         <div class="ff ff-static">
           <label class="fl" style="position:relative;top:auto;left:auto;transform:none;margin-bottom:8px;display:block">Ad template</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px" id="am-template-picker">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" id="am-template-picker">
             <div class="am-tpl-opt am-tpl-selected" data-tpl="1" onclick="selectTemplate(1)">
               <div style="height:52px;background:linear-gradient(135deg,#0A1628,#1a3160);border-radius:6px;margin-bottom:6px;display:flex;align-items:center;justify-content:center">
                 <div style="width:60%;height:4px;background:linear-gradient(90deg,#0B5FD8,#00C8E0);border-radius:2px"></div>
@@ -65,6 +65,24 @@
                 <div style="width:60%;height:4px;background:linear-gradient(90deg,#0B5FD8,#00C8E0);border-radius:2px"></div>
               </div>
               <div style="font-size:11px;font-weight:600;color:var(--navy)">Clean White</div>
+            </div>
+            <div class="am-tpl-opt" data-tpl="4" onclick="selectTemplate(4)">
+              <div style="height:52px;background:linear-gradient(135deg,#0A1628 0%,#0B5FD8 50%,#00C8E0 100%);border-radius:6px;margin-bottom:6px;display:flex;align-items:center;justify-content:center">
+                <div style="width:40%;height:4px;background:rgba(255,255,255,0.7);border-radius:2px"></div>
+              </div>
+              <div style="font-size:11px;font-weight:600;color:var(--navy)">Gradient Mesh</div>
+            </div>
+            <div class="am-tpl-opt" data-tpl="5" onclick="selectTemplate(5)">
+              <div style="height:52px;background:#0A1628;border-radius:6px;margin-bottom:6px;display:flex;align-items:center;justify-content:center">
+                <div style="font-size:16px;font-weight:900;color:#fff;letter-spacing:-0.05em;opacity:0.85">Aa</div>
+              </div>
+              <div style="font-size:11px;font-weight:600;color:var(--navy)">Bold Type</div>
+            </div>
+            <div class="am-tpl-opt" data-tpl="6" onclick="selectTemplate(6)">
+              <div style="height:52px;background:#f8fafc;border:1px solid rgba(10,22,40,0.06);border-radius:6px;margin-bottom:6px;display:flex;align-items:center;justify-content:center">
+                <div style="width:40%;height:2px;background:#0A1628;border-radius:1px"></div>
+              </div>
+              <div style="font-size:11px;font-weight:600;color:var(--navy)">Minimal</div>
             </div>
           </div>
         </div>
@@ -161,6 +179,18 @@
 
     <!-- AI Headline Suggestions -->
     <div id="am-headlines" style="display:none;background:rgba(11,95,216,0.03);border:1px solid rgba(11,95,216,0.1);border-radius:10px;padding:16px 20px;margin:16px 0"></div>
+
+    <!-- AI Platform Captions -->
+    <div id="am-captions" style="display:none;background:var(--white);border:1px solid var(--off2);border-radius:10px;padding:20px 24px;margin:16px 0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div class="f-sec-lbl">PLATFORM CAPTIONS</div>
+        <button class="btn btn-s" style="font-size:12px;padding:6px 14px" onclick="generateCaptions()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.33"/></svg>
+          Regenerate
+        </button>
+      </div>
+      <div id="am-captions-list" style="display:grid;gap:12px"></div>
+    </div>
 
     <p style="text-align:center;font-size:13px;color:var(--slate)"><a onclick="resetAdMaker()" style="color:var(--blue);cursor:pointer;text-decoration:none">Make another</a></p>
   </div>
