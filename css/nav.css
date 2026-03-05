@@ -256,13 +256,13 @@
 .portal-dropdown-trigger svg{transition:transform 0.2s}
 .portal-dropdown:hover .portal-dropdown-trigger svg{transform:rotate(180deg)}
 .portal-dropdown-menu{
-  display:none;position:absolute;top:calc(100% + 8px);right:0;
+  display:none;position:absolute;top:100%;right:0;
   min-width:220px;background:var(--white);border:1px solid var(--off2);
   border-radius:10px;box-shadow:0 8px 28px rgba(10,22,40,0.12);
-  z-index:1100;overflow:hidden;padding:4px
+  z-index:1100;overflow:hidden;padding:4px;margin-top:2px
 }
 .portal-dropdown:hover .portal-dropdown-menu{display:block}
-.portal-dropdown-menu::before{content:'';position:absolute;top:-10px;left:0;right:0;height:10px}
+.portal-dropdown-menu::before{content:'';position:absolute;top:-16px;left:-12px;right:-12px;height:20px}
 .portal-dropdown-item{
   display:flex;align-items:flex-start;gap:10px;width:100%;
   padding:10px 12px;border:none;background:none;border-radius:7px;
