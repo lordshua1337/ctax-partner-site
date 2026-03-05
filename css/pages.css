@@ -9442,7 +9442,8 @@ body.pb-immersive .scroll-to-top{display:none!important}
 }
 
 /* ── Page Insights lightbulb button + tooltip ── */
-.pi-wrap{position:absolute;top:8px;right:8px;z-index:10}
+.pi-wrap{position:relative;z-index:10}
+.pi-wrap-topbar{display:flex;align-items:center}
 .pi-btn{position:relative;width:28px;height:28px;list-style:none;border:none;background-color:transparent;border-radius:50%;cursor:grab;padding:0}
 .pi-svg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transition:all 0.3s}
 .pi-svg2{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);fill:#f4af03;opacity:0;transition:opacity 0.3s}
@@ -9450,9 +9451,9 @@ body.pb-immersive .scroll-to-top{display:none!important}
 .pi-btn:hover .pi-svg2{opacity:1;fill:#f4af03}
 @keyframes piPulse{0%{transform:scale(1)}14%{transform:scale(1.4)}30%{transform:scale(1)}46%{transform:scale(1.3)}62%{transform:scale(1)}100%{transform:scale(1)}}
 .pi-btn.pi-pulse{animation:piPulse 0.7s ease-out}
-.pi-tooltip{position:absolute;top:calc(100% + 10px);right:0;width:260px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.1);padding:14px 16px;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity 0.2s,visibility 0.2s,transform 0.2s;pointer-events:none;max-width:calc(100vw - 48px)}
-.pi-tooltip::before{content:'';position:absolute;top:-6px;right:10px;width:10px;height:10px;background:#fff;border-left:1px solid #e5e7eb;border-top:1px solid #e5e7eb;transform:rotate(45deg)}
-.pi-wrap:hover .pi-tooltip{opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto}
+.pi-tooltip{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-4px);width:260px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.1);padding:14px 16px;opacity:0;visibility:hidden;transition:opacity 0.2s,visibility 0.2s,transform 0.2s;pointer-events:none;max-width:calc(100vw - 48px)}
+.pi-tooltip::before{content:'';position:absolute;top:-6px;left:50%;margin-left:-5px;width:10px;height:10px;background:#fff;border-left:1px solid #e5e7eb;border-top:1px solid #e5e7eb;transform:rotate(45deg)}
+.pi-wrap:hover .pi-tooltip{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);pointer-events:auto}
 .pi-tooltip-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#6b7280;margin-bottom:8px}
 .pi-tooltip-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
 .pi-tooltip-list li{font-size:13px;line-height:1.45;color:#374151;padding-left:14px;position:relative}
@@ -9460,10 +9461,11 @@ body.pb-immersive .scroll-to-top{display:none!important}
 .pi-tooltip-list li::before{content:'';position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:#f4af03}
 
 @media(max-width:768px){
-  .pi-wrap{position:static;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .pi-wrap-topbar{display:flex;align-items:center}
   .pi-btn{width:24px;height:24px;flex-shrink:0}
-  .pi-tooltip{position:absolute;top:calc(100% + 6px);right:auto;left:0;width:min(300px,calc(100vw - 48px))}
-  .pi-tooltip::before{right:auto;left:16px}
+  .pi-tooltip{left:0;transform:translateX(0) translateY(-4px);width:min(280px,calc(100vw - 48px))}
+  .pi-tooltip::before{left:16px;margin-left:0}
+  .pi-wrap:hover .pi-tooltip{transform:translateX(0) translateY(0)}
 }
 
 /* ── AI Tools Landing Page ── */

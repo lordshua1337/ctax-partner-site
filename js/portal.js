@@ -212,6 +212,9 @@ function portalNav(el, secId) {
 
   // Update breadcrumb
   if (typeof updateBreadcrumb === 'function') updateBreadcrumb(secId);
+
+  // Update topbar quick tips
+  if (typeof updateQuickTips === 'function') updateQuickTips(secId);
 }
 
 function portalAnimateEntrance(sec) {
@@ -2973,4 +2976,130 @@ document.addEventListener('keydown', function(e) {
     toggleTunes();
     return;
   }
+});
+
+// ── TOPBAR QUICK TIPS ──────────────────────────────────
+var PI_TIPS = {
+  'portal-sec-dashboard': [
+    '<strong>Check KPIs each morning</strong> to spot trends before they become problems.',
+    '<strong>Click any metric card</strong> to drill into the details behind the number.',
+    '<strong>Use the pipeline tracker</strong> to follow every referral from submission to payout.'
+  ],
+  'portal-sec-referrals': [
+    '<strong>Sort by status</strong> to surface referrals that need your attention right now.',
+    '<strong>Click any row</strong> to see the full timeline and history for that referral.',
+    '<strong>Use filters</strong> to quickly find referrals at a specific stage.'
+  ],
+  'portal-sec-earnings': [
+    '<strong>Review monthly trends</strong> to identify your highest-performing periods.',
+    '<strong>Use the breakdown view</strong> to see which referral types earn the most.',
+    '<strong>Export reports</strong> for your own bookkeeping or tax filing.'
+  ],
+  'portal-sec-payouts': [
+    '<strong>Keep your payment method current</strong> to avoid delays on your next payout.',
+    '<strong>Download your 1099</strong> well before the filing deadline.',
+    '<strong>Check payout history</strong> to reconcile with your own records.'
+  ],
+  'portal-sec-submit': [
+    '<strong>Add as much detail as possible</strong> -- it speeds up processing significantly.',
+    '<strong>Double-check contact info</strong> before hitting submit to avoid delays.',
+    '<strong>Include the debt amount</strong> for faster qualification routing.'
+  ],
+  'portal-sec-documents': [
+    '<strong>Upload signed authorizations</strong> immediately to keep cases moving fast.',
+    '<strong>Organize by client name</strong> so you can find any file in seconds.',
+    '<strong>Check document status</strong> to see what the resolution team still needs.'
+  ],
+  'portal-sec-calculator': [
+    '<strong>Adjust referral volume</strong> to see exactly how earnings scale at each tier.',
+    '<strong>Try different tier levels</strong> to set realistic monthly growth goals.',
+    '<strong>Use the projections</strong> to plan your referral pipeline for the quarter.'
+  ],
+  'portal-sec-ce': [
+    '<strong>CE credits boost your credibility</strong> with clients and prospects.',
+    '<strong>Join live sessions</strong> to ask questions and get real-time answers.',
+    '<strong>Complete all modules</strong> to earn your certificate of completion.'
+  ],
+  'portal-sec-marketing': [
+    '<strong>Co-branded materials</strong> build trust faster than generic outreach.',
+    '<strong>Personalize email templates</strong> -- even small tweaks boost open rates.',
+    '<strong>Download assets</strong> in multiple formats for social, print, and email.'
+  ],
+  'portal-sec-training': [
+    '<strong>Complete all modules</strong> to unlock your full partner toolkit.',
+    '<strong>Each module takes ~5 minutes</strong> -- quick wins to get you started.',
+    '<strong>Review key concepts</strong> before your next client conversation.'
+  ],
+  'portal-sec-playbook': [
+    '<strong>Practice scripts out loud</strong> before your next client meeting.',
+    '<strong>Use the objection handlers</strong> for the most common pushbacks you\'ll hear.',
+    '<strong>Bookmark your favorites</strong> for quick reference during calls.'
+  ],
+  'portal-sec-planner': [
+    '<strong>Answer honestly</strong> for the most useful, personalized roadmap.',
+    '<strong>Revisit your plan monthly</strong> to measure real progress against goals.',
+    '<strong>Share insights</strong> with your team to align on strategy.'
+  ],
+  'portal-sec-challenge': [
+    '<strong>Complete tasks daily</strong> to build momentum -- streaks compound fast.',
+    '<strong>Each action is designed</strong> to generate a real referral opportunity.',
+    '<strong>Check the leaderboard</strong> to see how you stack up against peers.'
+  ],
+  'portal-sec-ai-scripts': [
+    '<strong>Pick a scenario</strong> that matches your next real conversation.',
+    '<strong>Customize the tone</strong> so it sounds like you, not a robot.',
+    '<strong>Download as PDF</strong> to have scripts ready offline.'
+  ],
+  'portal-sec-ai-admaker': [
+    '<strong>Choose your platform first</strong> -- sizing adjusts automatically.',
+    '<strong>Upload your logo</strong> for professional co-branded ads.',
+    '<strong>Try all 6 templates</strong> to find the look that fits your brand.'
+  ],
+  'portal-sec-ai-qualifier': [
+    '<strong>Enter real client details</strong> for the most accurate qualification score.',
+    '<strong>High-score leads convert faster</strong> -- prioritize them in your pipeline.',
+    '<strong>Download the report</strong> to share with your team.'
+  ],
+  'portal-sec-ai-kb': [
+    '<strong>Ask in plain English</strong> -- the AI understands full questions and context.',
+    '<strong>Try asking about</strong> commission tiers, timelines, or program policies.',
+    '<strong>Copy answers</strong> to paste into client emails or conversations.'
+  ],
+  'portal-sec-settings': [
+    '<strong>Complete your profile</strong> -- it builds trust with the internal team.',
+    '<strong>Set notification preferences</strong> so you only get alerts that matter.',
+    '<strong>Update your branding</strong> to customize co-branded materials.'
+  ],
+  'portal-sec-support': [
+    '<strong>Search existing tickets</strong> first before creating a new one.',
+    '<strong>Include screenshots</strong> when reporting issues for faster resolution.',
+    '<strong>Check the knowledge base</strong> for instant answers to common questions.'
+  ],
+  'portal-sec-my-pages': [
+    '<strong>Check analytics</strong> to see which landing pages actually convert.',
+    '<strong>Duplicate a top performer</strong> and tweak the copy for a new audience.',
+    '<strong>Share your page link</strong> directly with prospects.'
+  ],
+  'portal-sec-page-metrics': [
+    '<strong>Check each category score</strong> to identify your weakest areas.',
+    '<strong>Click "Full Report"</strong> for detailed per-check analysis with fix suggestions.',
+    '<strong>Re-run audits</strong> after making changes to track improvement.'
+  ],
+  'portal-sec-tunes': [
+    '<strong>Pick a station</strong> that matches your work vibe -- focus or energy.',
+    '<strong>Music keeps playing</strong> while you navigate to other portal pages.',
+    '<strong>Adjust volume</strong> with the slider in the bottom bar.'
+  ]
+};
+
+function updateQuickTips(secId) {
+  var list = document.getElementById('pi-tooltip-list');
+  if (!list) return;
+  var tips = PI_TIPS[secId] || PI_TIPS['portal-sec-dashboard'];
+  list.innerHTML = tips.map(function(t) { return '<li>' + t + '</li>'; }).join('');
+}
+
+// Init tips for dashboard on load
+document.addEventListener('DOMContentLoaded', function() {
+  updateQuickTips('portal-sec-dashboard');
 });
