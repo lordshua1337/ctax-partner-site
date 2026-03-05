@@ -321,11 +321,35 @@ function toggleNotifPanel(evt){
   var target = wrap ? wrap.querySelector('.notif-panel') : null;
   panels.forEach(function(p){ if(p !== target) p.classList.remove('active'); });
   if(target) target.classList.toggle('active');
+  var sp = document.getElementById('settingsPanel');
+  if(sp) sp.classList.remove('active');
 }
+// ── SETTINGS PANEL ──────────────────────────────────
+function toggleSettingsPanel(evt){
+  var panel = document.getElementById('settingsPanel');
+  if(!panel) return;
+  document.querySelectorAll('.notif-panel').forEach(function(p){ p.classList.remove('active'); });
+  panel.classList.toggle('active');
+  if(evt) evt.stopPropagation();
+}
+
+// ── CYCLE TIER (click to rotate E -> D -> S -> E) ──
+var TIER_CYCLE = ['enterprise', 'direct', 'strategic'];
+function cycleTier(){
+  var current = localStorage.getItem('ctax_tier') || 'enterprise';
+  var idx = TIER_CYCLE.indexOf(current);
+  var next = TIER_CYCLE[(idx + 1) % TIER_CYCLE.length];
+  setTier(next);
+}
+
 (function(){
   document.addEventListener('click', function(e){
     if(!e.target.closest('.notif-wrap')){
       document.querySelectorAll('.notif-panel').forEach(function(p){ p.classList.remove('active'); });
+    }
+    if(!e.target.closest('.settings-wrap')){
+      var sp = document.getElementById('settingsPanel');
+      if(sp) sp.classList.remove('active');
     }
   });
 })();
