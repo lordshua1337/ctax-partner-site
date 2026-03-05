@@ -163,8 +163,6 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);l
 .notif-wrap{position:relative}
 .notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:#ef4444}
 .notif-panel{display:none}
-.settings-wrap{position:relative}
-.settings-panel{display:none}
 .skip-nav{position:absolute;top:-100%}
 @media(max-width:1024px){.nav-links{display:none}.nav-right .nav-cta-outline,.nav-right .portal-dropdown,.nav-right .nav-right-divider{display:none}.nav-cta-mobile{display:inline-flex}.nav-hamburger{display:flex;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:8px}.nav-hamburger span{width:18px;height:2px;background:var(--ink);border-radius:2px}}
 @media(max-width:768px){#site-nav{padding:0 16px;height:60px}.page{padding-top:60px}.hero-wrap{padding:48px 0}.h-cta-row{flex-direction:column;width:100%;max-width:320px}.h-cta-primary,.h-cta-secondary{width:100%;text-align:center}.h-title,.h-sub,.h-cta-row,.h-stats,.hero-reveal{opacity:1!important;transform:none!important;animation:none!important}}
@@ -375,58 +373,39 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
         </div>
       </div>
     </div>
-    <div class="settings-wrap" id="settingsWrap">
-      <button class="nav-icon-btn settings-trigger" onclick="toggleSettingsPanel(event)" title="Settings" aria-label="Settings">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-      </button>
-      <div class="settings-panel" id="settingsPanel">
-        <div class="settings-header">
-          <span class="settings-title">Settings</span>
-        </div>
-        <div class="settings-row">
-          <div class="settings-row-label">
-            <span class="settings-row-name">Dark Mode</span>
-            <span class="settings-row-desc">Toggle light / dark theme</span>
-          </div>
-          <label class="dm-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
-            <input type="checkbox" id="dm-input" onchange="toggleDarkMode()">
-            <span class="dm-slider dm-round">
-              <span class="dm-sun-moon">
-                <svg id="dm-moon-dot-1" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-                <svg id="dm-moon-dot-2" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-                <svg id="dm-moon-dot-3" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-                <svg id="dm-light-ray-1" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-                <svg id="dm-light-ray-2" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-                <svg id="dm-light-ray-3" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-              </span>
-              <span class="dm-clouds">
-                <svg id="dm-cloud-1" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
-                <svg id="dm-cloud-2" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
-                <svg id="dm-cloud-3" class="dm-cloud-dark" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
-                <svg id="dm-cloud-4" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
-                <svg id="dm-cloud-5" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
-                <svg id="dm-cloud-6" class="dm-cloud-dark" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
-              </span>
-              <span class="dm-stars">
-                <svg id="dm-star-1" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
-                <svg id="dm-star-2" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
-                <svg id="dm-star-3" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
-                <svg id="dm-star-4" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
-              </span>
-            </span>
-          </label>
-        </div>
-        <div class="settings-row">
-          <div class="settings-row-label">
-            <span class="settings-row-name">Partner Tier</span>
-            <span class="settings-row-desc">Preview as different tier</span>
-          </div>
-          <div class="settings-tier-btns">
-            <button class="settings-tier-btn" data-tier="enterprise" onclick="setTier('enterprise')">Enterprise</button>
-            <button class="settings-tier-btn" data-tier="direct" onclick="setTier('direct')">Direct</button>
-            <button class="settings-tier-btn" data-tier="strategic" onclick="setTier('strategic')">Strategic</button>
-          </div>
-        </div>
+    <label class="dm-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="dm-input" onchange="toggleDarkMode()">
+      <span class="dm-slider dm-round">
+        <span class="dm-sun-moon">
+          <svg id="dm-moon-dot-1" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+          <svg id="dm-moon-dot-2" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+          <svg id="dm-moon-dot-3" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+          <svg id="dm-light-ray-1" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+          <svg id="dm-light-ray-2" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+          <svg id="dm-light-ray-3" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+        </span>
+        <span class="dm-clouds">
+          <svg id="dm-cloud-1" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+          <svg id="dm-cloud-2" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+          <svg id="dm-cloud-3" class="dm-cloud-dark" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+          <svg id="dm-cloud-4" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+          <svg id="dm-cloud-5" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+          <svg id="dm-cloud-6" class="dm-cloud-dark" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+        </span>
+        <span class="dm-stars">
+          <svg id="dm-star-1" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+          <svg id="dm-star-2" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+          <svg id="dm-star-3" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+          <svg id="dm-star-4" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+        </span>
+      </span>
+    </label>
+    <div class="tier-dropdown" id="tier-dropdown">
+      <button class="nav-icon-btn tier-dropdown-trigger" id="tier-toggle" title="Switch partner tier" aria-label="Switch partner tier"><span id="tier-icon">E</span></button>
+      <div class="tier-dropdown-menu">
+        <button class="tier-dropdown-item" onclick="setTier('enterprise')">Enterprise</button>
+        <button class="tier-dropdown-item" onclick="setTier('direct')">Direct</button>
+        <button class="tier-dropdown-item" onclick="setTier('strategic')">Strategic</button>
       </div>
     </div>
     <span class="nav-right-divider"></span>

@@ -321,41 +321,13 @@ function toggleNotifPanel(evt){
   var target = wrap ? wrap.querySelector('.notif-panel') : null;
   panels.forEach(function(p){ if(p !== target) p.classList.remove('active'); });
   if(target) target.classList.toggle('active');
-  // Close settings panel when opening notifications
-  var sp = document.getElementById('settingsPanel');
-  if(sp) sp.classList.remove('active');
-}
-// ── SETTINGS PANEL ──────────────────────────────────
-function toggleSettingsPanel(evt){
-  var panel = document.getElementById('settingsPanel');
-  if(!panel) return;
-  // Close notif panels when opening settings
-  document.querySelectorAll('.notif-panel').forEach(function(p){ p.classList.remove('active'); });
-  panel.classList.toggle('active');
-  if(evt) evt.stopPropagation();
-}
-function updateSettingsTierHighlight(){
-  var tier = localStorage.getItem('ctax_tier') || 'enterprise';
-  document.querySelectorAll('.settings-tier-btn').forEach(function(btn){
-    if(btn.getAttribute('data-tier') === tier){
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
 }
 (function(){
   document.addEventListener('click', function(e){
     if(!e.target.closest('.notif-wrap')){
       document.querySelectorAll('.notif-panel').forEach(function(p){ p.classList.remove('active'); });
     }
-    if(!e.target.closest('.settings-wrap')){
-      var sp = document.getElementById('settingsPanel');
-      if(sp) sp.classList.remove('active');
-    }
   });
-  // Highlight active tier on load
-  updateSettingsTierHighlight();
 })();
 
 // ── DARK MODE ──────────────────────────────────────
@@ -529,7 +501,6 @@ function setTier(tier) {
   }
   localStorage.setItem('ctax_tier', tier);
   applyTierText(tier);
-  updateSettingsTierHighlight();
 }
 
 // Keys where we need innerHTML (contain <br> or other markup)
