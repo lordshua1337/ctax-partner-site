@@ -126,6 +126,14 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);l
 .nav-cta{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.02em;padding:8px 18px;border-radius:7px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;box-shadow:0 2px 8px rgba(11,95,216,0.25);transition:all 0.18s ease;white-space:nowrap;flex-shrink:0}
 .nav-cta-outline{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.02em;padding:8px 18px;border-radius:7px;border:1.5px solid var(--mist);cursor:pointer;background:transparent;color:var(--body);transition:all 0.18s ease;white-space:nowrap;flex-shrink:0}
 .nav-icon-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;border:1px solid rgba(10,22,40,0.08);background:none;cursor:pointer;color:var(--slate);transition:all 0.18s ease;flex-shrink:0}
+.portal-dropdown{position:relative;flex-shrink:0}
+.portal-dropdown-trigger{display:inline-flex;align-items:center;gap:5px}
+.portal-dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);right:0;min-width:220px;background:var(--white);border:1px solid var(--off2);border-radius:10px;box-shadow:0 8px 28px rgba(10,22,40,0.12);z-index:1100;overflow:hidden;padding:4px}
+.portal-dropdown:hover .portal-dropdown-menu{display:block}
+.portal-dropdown-item{display:flex;align-items:flex-start;gap:10px;width:100%;padding:10px 12px;border:none;background:none;border-radius:7px;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;transition:background 0.15s;flex-wrap:wrap}
+.portal-dropdown-item:hover{background:rgba(11,95,216,0.05)}
+.portal-dropdown-item svg{flex-shrink:0;margin-top:1px;color:var(--blue)}
+.portal-dropdown-desc{display:block;width:100%;font-size:11px;font-weight:400;color:var(--slate);padding-left:26px;margin-top:-2px}
 .nav-hamburger{display:none}
 .nav-cta-mobile{display:none}
 .hero-wrap{min-height:calc(100vh - 64px);background:#f8f9fc;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 40px 0}
@@ -155,8 +163,10 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);l
 .notif-wrap{position:relative}
 .notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:#ef4444}
 .notif-panel{display:none}
+.settings-wrap{position:relative}
+.settings-panel{display:none}
 .skip-nav{position:absolute;top:-100%}
-@media(max-width:1024px){.nav-links{display:none}.nav-right .nav-cta-outline,.nav-right .nav-cta{display:none}.nav-cta-mobile{display:inline-flex}.nav-hamburger{display:flex;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:8px}.nav-hamburger span{width:18px;height:2px;background:var(--ink);border-radius:2px}}
+@media(max-width:1024px){.nav-links{display:none}.nav-right .nav-cta-outline,.nav-right .portal-dropdown,.nav-right .nav-right-divider{display:none}.nav-cta-mobile{display:inline-flex}.nav-hamburger{display:flex;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:8px}.nav-hamburger span{width:18px;height:2px;background:var(--ink);border-radius:2px}}
 @media(max-width:768px){#site-nav{padding:0 16px;height:60px}.page{padding-top:60px}.hero-wrap{padding:48px 0}.h-cta-row{flex-direction:column;width:100%;max-width:320px}.h-cta-primary,.h-cta-secondary{width:100%;text-align:center}.h-title,.h-sub,.h-cta-row,.h-stats,.hero-reveal{opacity:1!important;transform:none!important;animation:none!important}}
 [data-theme="dark"]{--white:#0c1220;--off:#111827;--off2:#1a2234;--mist:#2a3650;--slate:#7889a4;--ink:#e8ecf2;--body:#b0b8cc}
 [data-theme="dark"] body{background:#0c1220;color:#e8ecf2}
@@ -167,6 +177,11 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);l
 [data-theme="dark"] .nav-cta-outline{color:rgba(255,255,255,0.8);border-color:rgba(255,255,255,0.15)}
 [data-theme="dark"] .nav-cta-outline:hover{color:#fff;border-color:var(--sky);background:rgba(75,163,255,0.08)}
 [data-theme="dark"] .nav-right-divider{background:rgba(255,255,255,0.1)}
+[data-theme="dark"] .portal-dropdown-menu{background:#1a1f2e;border-color:rgba(255,255,255,0.08);box-shadow:0 8px 28px rgba(0,0,0,0.35)}
+[data-theme="dark"] .portal-dropdown-item{color:#e2e8f0}
+[data-theme="dark"] .portal-dropdown-item:hover{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .portal-dropdown-item svg{color:var(--sky)}
+[data-theme="dark"] .portal-dropdown-desc{color:#7889a4}
 [data-theme="dark"] .nav-icon-btn{color:rgba(255,255,255,0.5)}
 [data-theme="dark"] .nav-hamburger span{background:#e8ecf2}
 </style>
@@ -360,45 +375,80 @@ window.loadHtml2Canvas=function(){if(window.html2canvas)return Promise.resolve()
         </div>
       </div>
     </div>
-    <label class="dm-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
-      <input type="checkbox" id="dm-input" onchange="toggleDarkMode()">
-      <span class="dm-slider dm-round">
-        <span class="dm-sun-moon">
-          <svg id="dm-moon-dot-1" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-          <svg id="dm-moon-dot-2" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-          <svg id="dm-moon-dot-3" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-          <svg id="dm-light-ray-1" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-          <svg id="dm-light-ray-2" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-          <svg id="dm-light-ray-3" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-        </span>
-        <span class="dm-clouds">
-          <svg id="dm-cloud-1" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
-          <svg id="dm-cloud-2" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
-          <svg id="dm-cloud-3" class="dm-cloud-dark" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
-          <svg id="dm-cloud-4" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
-          <svg id="dm-cloud-5" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
-          <svg id="dm-cloud-6" class="dm-cloud-dark" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
-        </span>
-        <span class="dm-stars">
-          <svg id="dm-star-1" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
-          <svg id="dm-star-2" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
-          <svg id="dm-star-3" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
-          <svg id="dm-star-4" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
-        </span>
-      </span>
-    </label>
-    <div class="tier-dropdown" id="tier-dropdown">
-      <button class="nav-icon-btn tier-dropdown-trigger" id="tier-toggle" title="Switch partner tier" aria-label="Switch partner tier"><span id="tier-icon">E</span></button>
-      <div class="tier-dropdown-menu">
-        <button class="tier-dropdown-item" onclick="setTier('enterprise')">Enterprise</button>
-        <button class="tier-dropdown-item" onclick="setTier('direct')">Direct</button>
-        <button class="tier-dropdown-item" onclick="setTier('strategic')">Strategic</button>
+    <div class="settings-wrap" id="settingsWrap">
+      <button class="nav-icon-btn settings-trigger" onclick="toggleSettingsPanel(event)" title="Settings" aria-label="Settings">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </button>
+      <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+          <span class="settings-title">Settings</span>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-label">
+            <span class="settings-row-name">Dark Mode</span>
+            <span class="settings-row-desc">Toggle light / dark theme</span>
+          </div>
+          <label class="dm-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+            <input type="checkbox" id="dm-input" onchange="toggleDarkMode()">
+            <span class="dm-slider dm-round">
+              <span class="dm-sun-moon">
+                <svg id="dm-moon-dot-1" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+                <svg id="dm-moon-dot-2" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+                <svg id="dm-moon-dot-3" class="dm-moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+                <svg id="dm-light-ray-1" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+                <svg id="dm-light-ray-2" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+                <svg id="dm-light-ray-3" class="dm-light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+              </span>
+              <span class="dm-clouds">
+                <svg id="dm-cloud-1" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+                <svg id="dm-cloud-2" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+                <svg id="dm-cloud-3" class="dm-cloud-dark" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+                <svg id="dm-cloud-4" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+                <svg id="dm-cloud-5" class="dm-cloud-light" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+                <svg id="dm-cloud-6" class="dm-cloud-dark" viewBox="0 0 100 60"><path d="M90 55A10 10 0 0 0 80 45H78A15 15 0 0 0 50 35 20 20 0 0 0 12 45H10A10 10 0 0 0 10 55Z"/></svg>
+              </span>
+              <span class="dm-stars">
+                <svg id="dm-star-1" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+                <svg id="dm-star-2" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+                <svg id="dm-star-3" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+                <svg id="dm-star-4" class="dm-star" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5H20l-6 4.5 2.5 8L10 15l-6.5 5 2.5-8L0 7.5h7.5z"/></svg>
+              </span>
+            </span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-label">
+            <span class="settings-row-name">Partner Tier</span>
+            <span class="settings-row-desc">Preview as different tier</span>
+          </div>
+          <div class="settings-tier-btns">
+            <button class="settings-tier-btn" data-tier="enterprise" onclick="setTier('enterprise')">Enterprise</button>
+            <button class="settings-tier-btn" data-tier="direct" onclick="setTier('direct')">Direct</button>
+            <button class="settings-tier-btn" data-tier="strategic" onclick="setTier('strategic')">Strategic</button>
+          </div>
+        </div>
       </div>
     </div>
     <span class="nav-right-divider"></span>
     <button class="nav-cta-outline" onclick="showPage('contact')">Submit Referral</button>
-    <button class="nav-cta-outline" onclick="showPage('portal')">Dashboard</button>
-    <button class="nav-cta" onclick="openLabs()">CTAX Labs</button>
+    <div class="portal-dropdown">
+      <button class="nav-cta portal-dropdown-trigger">
+        Portal
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="portal-dropdown-menu">
+        <button class="portal-dropdown-item" onclick="showPage('portal')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Dashboard
+          <span class="portal-dropdown-desc">Referrals, earnings, payouts</span>
+        </button>
+        <button class="portal-dropdown-item" onclick="openLabs()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4"/></svg>
+          CTAX Labs
+          <span class="portal-dropdown-desc">Page builder, AI tools, analytics</span>
+        </button>
+      </div>
+    </div>
   </div>
 
   <div class="notif-wrap notif-mobile" id="notifWrapMobile">

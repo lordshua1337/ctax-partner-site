@@ -201,6 +201,40 @@
 [data-theme="dark"] .tier-dropdown-item{color:rgba(255,255,255,0.7)}
 [data-theme="dark"] .tier-dropdown-item:hover{background:rgba(255,255,255,0.06);color:#fff}
 
+/* ── Settings Panel ── */
+.settings-wrap{position:relative}
+.settings-trigger{position:relative}
+.settings-panel{
+  display:none;position:absolute;top:calc(100% + 10px);right:0;width:300px;
+  background:var(--white);border:1px solid var(--off2);border-radius:14px;
+  box-shadow:0 12px 40px rgba(10,22,40,0.12);z-index:1100;overflow:hidden
+}
+.settings-panel.active{display:block}
+.settings-header{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--off2)}
+.settings-title{font-size:14px;font-weight:700;color:var(--navy);letter-spacing:-0.01em}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--off2)}
+.settings-row:last-child{border-bottom:none}
+.settings-row-label{display:flex;flex-direction:column;gap:1px;min-width:0}
+.settings-row-name{font-size:13px;font-weight:600;color:var(--ink)}
+.settings-row-desc{font-size:11px;color:var(--slate)}
+.settings-tier-btns{display:flex;gap:4px}
+.settings-tier-btn{
+  font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;
+  padding:5px 10px;border-radius:6px;border:1px solid var(--off2);
+  background:none;color:var(--body);cursor:pointer;transition:all 0.15s;white-space:nowrap
+}
+.settings-tier-btn:hover{border-color:var(--blue);color:var(--blue)}
+.settings-tier-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+[data-theme="dark"] .settings-panel{background:#1a1f2e;border-color:rgba(255,255,255,0.08);box-shadow:0 12px 40px rgba(0,0,0,0.35)}
+[data-theme="dark"] .settings-header{border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .settings-title{color:#e2e8f0}
+[data-theme="dark"] .settings-row{border-color:rgba(255,255,255,0.06)}
+[data-theme="dark"] .settings-row-name{color:#e2e8f0}
+[data-theme="dark"] .settings-row-desc{color:#7889a4}
+[data-theme="dark"] .settings-tier-btn{border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7)}
+[data-theme="dark"] .settings-tier-btn:hover{border-color:var(--sky);color:var(--sky)}
+[data-theme="dark"] .settings-tier-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
 /* ── Notifications ── */
 .notif-wrap{position:relative}
 .notif-bell{position:relative}
@@ -249,6 +283,37 @@
   color:var(--blue);border-color:var(--blue);
   background:rgba(11,95,216,0.04)
 }
+
+/* ── Portal Dropdown (Dashboard + Labs) ── */
+.portal-dropdown{position:relative;flex-shrink:0}
+.portal-dropdown-trigger{display:inline-flex;align-items:center;gap:5px}
+.portal-dropdown-trigger svg{transition:transform 0.2s}
+.portal-dropdown:hover .portal-dropdown-trigger svg{transform:rotate(180deg)}
+.portal-dropdown-menu{
+  display:none;position:absolute;top:calc(100% + 8px);right:0;
+  min-width:220px;background:var(--white);border:1px solid var(--off2);
+  border-radius:10px;box-shadow:0 8px 28px rgba(10,22,40,0.12);
+  z-index:1100;overflow:hidden;padding:4px
+}
+.portal-dropdown:hover .portal-dropdown-menu{display:block}
+.portal-dropdown-item{
+  display:flex;align-items:flex-start;gap:10px;width:100%;
+  padding:10px 12px;border:none;background:none;border-radius:7px;
+  font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;
+  text-align:left;font-family:'DM Sans',sans-serif;
+  transition:background 0.15s;flex-wrap:wrap
+}
+.portal-dropdown-item:hover{background:rgba(11,95,216,0.05)}
+.portal-dropdown-item svg{flex-shrink:0;margin-top:1px;color:var(--blue)}
+.portal-dropdown-desc{
+  display:block;width:100%;font-size:11px;font-weight:400;
+  color:var(--slate);padding-left:26px;margin-top:-2px
+}
+[data-theme="dark"] .portal-dropdown-menu{background:#1a1f2e;border-color:rgba(255,255,255,0.08);box-shadow:0 8px 28px rgba(0,0,0,0.35)}
+[data-theme="dark"] .portal-dropdown-item{color:#e2e8f0}
+[data-theme="dark"] .portal-dropdown-item:hover{background:rgba(255,255,255,0.06)}
+[data-theme="dark"] .portal-dropdown-item svg{color:var(--sky)}
+[data-theme="dark"] .portal-dropdown-desc{color:#7889a4}
 
 /* Mobile nav updates */
 .mob-section{padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
