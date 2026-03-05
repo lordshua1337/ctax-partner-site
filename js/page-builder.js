@@ -889,6 +889,264 @@ function pbShowTemplates() {
 }
 
 // ══════════════════════════════════════════
+//  New Templates Gallery (Partner Portal collection)
+// ══════════════════════════════════════════
+var PB_NEW_TEMPLATES = [
+  {
+    id: 'lead-gen',
+    name: 'Lead Generation',
+    category: 'Service Business',
+    desc: 'Trust-forward dark green + cream. Converts visitors into consultations.',
+    gradient: 'linear-gradient(135deg, #2d5016, #4a7c2f)',
+    sections: ['Hero', 'Trust Bar', 'Problem/Solution', 'How It Works', 'Testimonials', 'CTA Banner', 'Footer'],
+    html: [
+      '<section class="pb-hero-centered" style="background:linear-gradient(135deg,#2d5016,#4a7c2f);min-height:500px">',
+      '  <div class="pb-badge" style="background:rgba(255,255,255,0.15);color:#fff">Trusted Professional Services</div>',
+      '  <h1 style="color:#fff;font-family:Playfair Display,serif">Your Partner in Financial Success</h1>',
+      '  <p class="pb-hero-sub" style="color:rgba(255,255,255,0.85)">We help businesses and individuals navigate complex financial challenges with proven expertise and personalized solutions.</p>',
+      '  <div class="pb-hero-actions"><a href="#" class="pb-btn pb-btn-glow" style="background:#c8a96e;color:#1a1a1a">Schedule a Consultation</a></div>',
+      '</section>',
+      '<section class="pb-stats-row" style="background:#faf8f3;border-bottom:1px solid #e8e4dc">',
+      '  <div class="pb-stat"><span class="pb-stat-val" style="color:#2d5016">500+</span><span class="pb-stat-label">Clients Served</span></div>',
+      '  <div class="pb-stat-sep">&#8226;</div>',
+      '  <div class="pb-stat"><span class="pb-stat-val" style="color:#2d5016">98%</span><span class="pb-stat-label">Satisfaction</span></div>',
+      '  <div class="pb-stat-sep">&#8226;</div>',
+      '  <div class="pb-stat"><span class="pb-stat-val" style="color:#2d5016">$2M+</span><span class="pb-stat-label">Saved for Clients</span></div>',
+      '</section>',
+      '<section class="pb-benefits-cards" style="background:#faf8f3;padding:64px 48px"><h2 style="text-align:center;margin-bottom:40px;font-family:Playfair Display,serif">How We Help</h2>',
+      '  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto">',
+      '    <div style="background:#fff;padding:32px;border-radius:12px;border:1px solid #e8e4dc"><h3 style="color:#2d5016;margin-bottom:8px">Expert Guidance</h3><p style="color:#5a5a5a;font-size:14px">Personalized advice from licensed professionals who understand your situation.</p></div>',
+      '    <div style="background:#fff;padding:32px;border-radius:12px;border:1px solid #e8e4dc"><h3 style="color:#2d5016;margin-bottom:8px">Proven Results</h3><p style="color:#5a5a5a;font-size:14px">Track record of delivering measurable outcomes for every client we serve.</p></div>',
+      '    <div style="background:#fff;padding:32px;border-radius:12px;border:1px solid #e8e4dc"><h3 style="color:#2d5016;margin-bottom:8px">Full Support</h3><p style="color:#5a5a5a;font-size:14px">We handle the complexity so you can focus on what matters most to you.</p></div>',
+      '  </div></section>',
+      '<section class="pb-cta-dark" style="background:#2d5016;padding:64px 48px;text-align:center">',
+      '  <h2 style="color:#fff;font-family:Playfair Display,serif;margin-bottom:16px">Ready to Get Started?</h2>',
+      '  <p style="color:rgba(255,255,255,0.8);margin-bottom:32px">Book a free consultation and let us show you what is possible.</p>',
+      '  <a href="#" class="pb-btn pb-btn-glow" style="background:#c8a96e;color:#1a1a1a">Book Now</a>',
+      '</section>'
+    ].join('\n')
+  },
+  {
+    id: 'saas',
+    name: 'SaaS Product',
+    category: 'Software',
+    desc: 'Dark navy + electric blue. Technical and product-centric.',
+    gradient: 'linear-gradient(135deg, #060b18, #2563eb)',
+    sections: ['Hero + Preview', 'Social Proof', 'Features', 'Pricing', 'FAQ', 'CTA'],
+    html: [
+      '<section class="pb-hero-centered" style="background:linear-gradient(135deg,#060b18,#0d1526);min-height:500px">',
+      '  <div class="pb-badge" style="background:rgba(37,99,235,0.2);color:#3b82f6;border:1px solid rgba(37,99,235,0.3)">Now Available</div>',
+      '  <h1 style="color:#f1f5f9;font-family:Syne,sans-serif">The Smarter Way to<br><span style="color:#2563eb">Manage Your Workflow</span></h1>',
+      '  <p class="pb-hero-sub" style="color:#94a3b8">Automate repetitive tasks, track progress in real-time, and ship faster with our all-in-one platform.</p>',
+      '  <div class="pb-hero-actions"><a href="#" class="pb-btn pb-btn-glow" style="background:#2563eb;color:#fff">Start Free Trial</a><a href="#" class="pb-btn-secondary" style="color:#94a3b8;border-color:rgba(148,163,184,0.3)">Watch Demo</a></div>',
+      '</section>',
+      '<section class="pb-stats-row" style="background:#0d1526;border-bottom:1px solid #1e2d47;border-top:1px solid #1e2d47">',
+      '  <div class="pb-stat"><span class="pb-stat-val" style="color:#2563eb">10K+</span><span class="pb-stat-label" style="color:#94a3b8">Active Users</span></div>',
+      '  <div class="pb-stat-sep" style="color:#1e2d47">&#8226;</div>',
+      '  <div class="pb-stat"><span class="pb-stat-val" style="color:#2563eb">99.9%</span><span class="pb-stat-label" style="color:#94a3b8">Uptime</span></div>',
+      '  <div class="pb-stat-sep" style="color:#1e2d47">&#8226;</div>',
+      '  <div class="pb-stat"><span class="pb-stat-val" style="color:#2563eb">4.8/5</span><span class="pb-stat-label" style="color:#94a3b8">G2 Rating</span></div>',
+      '</section>',
+      '<section style="background:#060b18;padding:80px 48px"><div style="max-width:1000px;margin:0 auto;text-align:center">',
+      '  <h2 style="color:#f1f5f9;font-family:Syne,sans-serif;margin-bottom:40px">Everything You Need</h2>',
+      '  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">',
+      '    <div style="background:#0d1526;padding:32px;border-radius:12px;border:1px solid #1e2d47"><h3 style="color:#f1f5f9;margin-bottom:8px">Automation</h3><p style="color:#94a3b8;font-size:14px">Set it and forget it. Smart workflows that handle the busywork.</p></div>',
+      '    <div style="background:#0d1526;padding:32px;border-radius:12px;border:1px solid #1e2d47"><h3 style="color:#f1f5f9;margin-bottom:8px">Analytics</h3><p style="color:#94a3b8;font-size:14px">Real-time dashboards with the metrics that actually matter.</p></div>',
+      '    <div style="background:#0d1526;padding:32px;border-radius:12px;border:1px solid #1e2d47"><h3 style="color:#f1f5f9;margin-bottom:8px">Integrations</h3><p style="color:#94a3b8;font-size:14px">Connect with 50+ tools you already use. Zero configuration.</p></div>',
+      '  </div></div></section>',
+      '<section class="pb-cta-dark" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);padding:64px 48px;text-align:center">',
+      '  <h2 style="color:#fff;font-family:Syne,sans-serif;margin-bottom:16px">Start Building Today</h2>',
+      '  <p style="color:rgba(255,255,255,0.8);margin-bottom:32px">Free 14-day trial. No credit card required.</p>',
+      '  <a href="#" class="pb-btn pb-btn-glow" style="background:#fff;color:#2563eb">Get Started Free</a>',
+      '</section>'
+    ].join('\n')
+  },
+  {
+    id: 'b2b',
+    name: 'Professional Services',
+    category: 'B2B',
+    desc: 'Black + white + amber. High-contrast editorial design.',
+    gradient: 'linear-gradient(135deg, #0a0a0a, #d97706)',
+    sections: ['Hero', 'Clients', 'Services', 'Case Study', 'Contact'],
+    html: [
+      '<section class="pb-hero-centered" style="background:#0a0a0a;min-height:500px">',
+      '  <h1 style="color:#fafafa;font-family:Cormorant Garamond,serif;font-size:56px">Strategic Advisory<br><span style="color:#d97706">for Modern Businesses</span></h1>',
+      '  <p class="pb-hero-sub" style="color:#a3a3a3">We partner with industry leaders to solve complex challenges and drive sustainable growth.</p>',
+      '  <div class="pb-hero-actions"><a href="#" class="pb-btn pb-btn-glow" style="background:#d97706;color:#fff">Get in Touch</a></div>',
+      '</section>',
+      '<section style="background:#fafafa;padding:48px;border-bottom:1px solid #e5e5e5"><div style="max-width:800px;margin:0 auto;text-align:center">',
+      '  <p style="color:#525252;font-size:13px;text-transform:uppercase;letter-spacing:2px;margin-bottom:24px">Trusted By</p>',
+      '  <div style="display:flex;justify-content:center;gap:48px;flex-wrap:wrap;opacity:0.4">',
+      '    <span style="font-size:20px;font-weight:700;color:#0a0a0a">Acme Corp</span>',
+      '    <span style="font-size:20px;font-weight:700;color:#0a0a0a">Globex</span>',
+      '    <span style="font-size:20px;font-weight:700;color:#0a0a0a">Initech</span>',
+      '    <span style="font-size:20px;font-weight:700;color:#0a0a0a">Umbrella</span>',
+      '  </div></div></section>',
+      '<section style="background:#fff;padding:80px 48px"><div style="max-width:900px;margin:0 auto">',
+      '  <h2 style="font-family:Cormorant Garamond,serif;font-size:36px;margin-bottom:40px;color:#0a0a0a">Our Services</h2>',
+      '  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">',
+      '    <div style="padding:32px;border:1px solid #e5e5e5;border-radius:8px"><h3 style="color:#0a0a0a;margin-bottom:8px">Strategy Consulting</h3><p style="color:#525252;font-size:14px">Market analysis, competitive positioning, and growth strategy development.</p></div>',
+      '    <div style="padding:32px;border:1px solid #e5e5e5;border-radius:8px"><h3 style="color:#0a0a0a;margin-bottom:8px">Digital Transformation</h3><p style="color:#525252;font-size:14px">End-to-end modernization of systems, processes, and customer experience.</p></div>',
+      '    <div style="padding:32px;border:1px solid #e5e5e5;border-radius:8px"><h3 style="color:#0a0a0a;margin-bottom:8px">Financial Advisory</h3><p style="color:#525252;font-size:14px">M&A support, valuation, restructuring, and capital markets advisory.</p></div>',
+      '    <div style="padding:32px;border:1px solid #e5e5e5;border-radius:8px"><h3 style="color:#0a0a0a;margin-bottom:8px">Talent & Organization</h3><p style="color:#525252;font-size:14px">Leadership development, org design, and culture transformation.</p></div>',
+      '  </div></div></section>',
+      '<section class="pb-cta-dark" style="background:#0a0a0a;padding:64px 48px;text-align:center">',
+      '  <h2 style="color:#fafafa;font-family:Cormorant Garamond,serif;margin-bottom:16px">Let Us Talk</h2>',
+      '  <p style="color:#a3a3a3;margin-bottom:32px">Every engagement starts with a conversation.</p>',
+      '  <a href="#" class="pb-btn pb-btn-glow" style="background:#d97706;color:#fff">Schedule a Call</a>',
+      '</section>'
+    ].join('\n')
+  },
+  {
+    id: 'event',
+    name: 'Event / Launch',
+    category: 'Announcement',
+    desc: 'Purple + pink + yellow. Bold, kinetic energy with countdown.',
+    gradient: 'linear-gradient(135deg, #7c3aed, #ec4899)',
+    sections: ['Hero + Countdown', 'Speakers', 'Agenda', 'Early Bird CTA'],
+    html: [
+      '<section class="pb-hero-centered" style="background:linear-gradient(135deg,#7c3aed,#ec4899);min-height:500px">',
+      '  <div class="pb-badge" style="background:rgba(245,158,11,0.2);color:#f59e0b;border:1px solid rgba(245,158,11,0.3)">Coming Soon</div>',
+      '  <h1 style="color:#fff;font-family:Anton,sans-serif;font-size:64px;text-transform:uppercase;letter-spacing:2px">The Future<br>Starts Here</h1>',
+      '  <p class="pb-hero-sub" style="color:rgba(255,255,255,0.85)">Join 500+ industry leaders for a day of insights, networking, and breakthrough ideas.</p>',
+      '  <div style="display:flex;gap:16px;justify-content:center;margin:32px 0">',
+      '    <div style="background:rgba(0,0,0,0.3);padding:16px 24px;border-radius:12px;text-align:center"><div style="font-size:32px;font-weight:800;color:#f59e0b">14</div><div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase">Days</div></div>',
+      '    <div style="background:rgba(0,0,0,0.3);padding:16px 24px;border-radius:12px;text-align:center"><div style="font-size:32px;font-weight:800;color:#f59e0b">08</div><div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase">Hours</div></div>',
+      '    <div style="background:rgba(0,0,0,0.3);padding:16px 24px;border-radius:12px;text-align:center"><div style="font-size:32px;font-weight:800;color:#f59e0b">42</div><div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase">Minutes</div></div>',
+      '  </div>',
+      '  <div class="pb-hero-actions"><a href="#" class="pb-btn pb-btn-glow" style="background:#f59e0b;color:#0c0015;font-weight:800">Get Early Bird Tickets</a></div>',
+      '</section>',
+      '<section style="background:#0c0015;padding:80px 48px"><div style="max-width:800px;margin:0 auto;text-align:center">',
+      '  <h2 style="color:#f5f3ff;font-family:Anton,sans-serif;text-transform:uppercase;letter-spacing:1px;margin-bottom:40px">Featured Speakers</h2>',
+      '  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">',
+      '    <div style="background:#1a0a2e;padding:32px;border-radius:16px;border:1px solid #2e1065"><div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#ec4899);margin:0 auto 16px"></div><h3 style="color:#f5f3ff;margin-bottom:4px">Alex Morgan</h3><p style="color:#a78bfa;font-size:13px">CEO, TechVentures</p></div>',
+      '    <div style="background:#1a0a2e;padding:32px;border-radius:16px;border:1px solid #2e1065"><div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#ec4899,#f59e0b);margin:0 auto 16px"></div><h3 style="color:#f5f3ff;margin-bottom:4px">Dr. Sarah Liu</h3><p style="color:#a78bfa;font-size:13px">Head of AI, Stanford</p></div>',
+      '    <div style="background:#1a0a2e;padding:32px;border-radius:16px;border:1px solid #2e1065"><div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#7c3aed);margin:0 auto 16px"></div><h3 style="color:#f5f3ff;margin-bottom:4px">Marcus Chen</h3><p style="color:#a78bfa;font-size:13px">Founder, BuildFast</p></div>',
+      '  </div></div></section>',
+      '<section class="pb-cta-dark" style="background:linear-gradient(135deg,#ec4899,#f59e0b);padding:64px 48px;text-align:center">',
+      '  <h2 style="color:#fff;font-family:Anton,sans-serif;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">Don\'t Miss Out</h2>',
+      '  <p style="color:rgba(255,255,255,0.9);margin-bottom:32px">Early bird pricing ends soon. Lock in your spot today.</p>',
+      '  <a href="#" class="pb-btn pb-btn-glow" style="background:#0c0015;color:#f59e0b;font-weight:800">Register Now</a>',
+      '</section>'
+    ].join('\n')
+  },
+  {
+    id: 'ecommerce',
+    name: 'E-Commerce',
+    category: 'Digital Product',
+    desc: 'Burnt orange + teal. Warm, premium, aspirational.',
+    gradient: 'linear-gradient(135deg, #c2410c, #0d9488)',
+    sections: ['Hero + Product', 'Features', 'Gallery', 'Pricing', 'CTA'],
+    html: [
+      '<section class="pb-hero-centered" style="background:linear-gradient(135deg,#c2410c,#ea580c);min-height:500px">',
+      '  <div class="pb-badge" style="background:rgba(255,255,255,0.15);color:#fff">New Collection</div>',
+      '  <h1 style="color:#fff;font-family:Fraunces,serif">Crafted with Care.<br><span style="color:#fef7f0">Built to Last.</span></h1>',
+      '  <p class="pb-hero-sub" style="color:rgba(255,255,255,0.85)">Premium products designed for people who value quality over quantity.</p>',
+      '  <div class="pb-hero-actions"><a href="#" class="pb-btn pb-btn-glow" style="background:#0d9488;color:#fff">Shop Now</a><a href="#" class="pb-btn-secondary" style="color:#fff;border-color:rgba(255,255,255,0.3)">View Catalog</a></div>',
+      '</section>',
+      '<section style="background:#fef7f0;padding:80px 48px"><div style="max-width:1000px;margin:0 auto;text-align:center">',
+      '  <h2 style="font-family:Fraunces,serif;color:#1c1917;margin-bottom:40px">Why Choose Us</h2>',
+      '  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">',
+      '    <div style="background:#fff;padding:32px;border-radius:12px;border:1px solid #e7e5e4"><h3 style="color:#c2410c;margin-bottom:8px">Premium Materials</h3><p style="color:#57534e;font-size:14px">Sourced responsibly, built to outlast trends.</p></div>',
+      '    <div style="background:#fff;padding:32px;border-radius:12px;border:1px solid #e7e5e4"><h3 style="color:#c2410c;margin-bottom:8px">Free Returns</h3><p style="color:#57534e;font-size:14px">30-day hassle-free returns on every order.</p></div>',
+      '    <div style="background:#fff;padding:32px;border-radius:12px;border:1px solid #e7e5e4"><h3 style="color:#0d9488;margin-bottom:8px">Sustainable</h3><p style="color:#57534e;font-size:14px">Carbon neutral shipping, eco-friendly packaging.</p></div>',
+      '  </div></div></section>',
+      '<section class="pb-cta-dark" style="background:#0d9488;padding:64px 48px;text-align:center">',
+      '  <h2 style="color:#fff;font-family:Fraunces,serif;margin-bottom:16px">Start Shopping</h2>',
+      '  <p style="color:rgba(255,255,255,0.85);margin-bottom:32px">Free shipping on orders over $50. Join 10,000+ happy customers.</p>',
+      '  <a href="#" class="pb-btn pb-btn-glow" style="background:#c2410c;color:#fff">Browse Collection</a>',
+      '</section>'
+    ].join('\n')
+  },
+  {
+    id: 'custom',
+    name: 'Custom Builder',
+    category: 'Flexible',
+    desc: 'Modular blocks with variable brand colors. Mix and match.',
+    gradient: 'linear-gradient(135deg, #6366f1, #f59e0b)',
+    sections: ['Hero', 'Stats', 'Features', 'Testimonials', 'FAQ', 'CTA', 'Form'],
+    html: [
+      '<section class="pb-hero-centered" style="background:linear-gradient(135deg,#6366f1,#818cf8);min-height:500px">',
+      '  <h1 style="color:#fff;font-family:DM Serif Display,serif">Build Exactly<br>What You Need</h1>',
+      '  <p class="pb-hero-sub" style="color:rgba(255,255,255,0.85)">A modular template system. Start here, customize everything.</p>',
+      '  <div class="pb-hero-actions"><a href="#" class="pb-btn pb-btn-glow" style="background:#f59e0b;color:#0f172a">Get Started</a></div>',
+      '</section>',
+      '<section class="pb-stats-row" style="background:#f8fafc;border-bottom:1px solid #e2e8f0">',
+      '  <div class="pb-stat"><span class="pb-stat-val" style="color:#6366f1">100+</span><span class="pb-stat-label">Components</span></div>',
+      '  <div class="pb-stat-sep">&#8226;</div>',
+      '  <div class="pb-stat"><span class="pb-stat-val" style="color:#6366f1">6</span><span class="pb-stat-label">Color Schemes</span></div>',
+      '  <div class="pb-stat-sep">&#8226;</div>',
+      '  <div class="pb-stat"><span class="pb-stat-val" style="color:#6366f1">Unlimited</span><span class="pb-stat-label">Customization</span></div>',
+      '</section>',
+      '<section style="background:#fff;padding:80px 48px"><div style="max-width:900px;margin:0 auto;text-align:center">',
+      '  <h2 style="font-family:DM Serif Display,serif;color:#0f172a;margin-bottom:40px">Featured Blocks</h2>',
+      '  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">',
+      '    <div style="background:#f8fafc;padding:24px;border-radius:12px;border:1px solid #e2e8f0"><h3 style="color:#6366f1;font-size:16px;margin-bottom:6px">Hero Sections</h3><p style="color:#64748b;font-size:13px">4 variants: centered, split, gradient, minimal</p></div>',
+      '    <div style="background:#f8fafc;padding:24px;border-radius:12px;border:1px solid #e2e8f0"><h3 style="color:#6366f1;font-size:16px;margin-bottom:6px">Social Proof</h3><p style="color:#64748b;font-size:13px">Stats rows, logo bars, counter strips</p></div>',
+      '    <div style="background:#f8fafc;padding:24px;border-radius:12px;border:1px solid #e2e8f0"><h3 style="color:#6366f1;font-size:16px;margin-bottom:6px">Testimonials</h3><p style="color:#64748b;font-size:13px">Quote blocks, card grids, mini strips</p></div>',
+      '  </div></div></section>',
+      '<section class="pb-cta-dark" style="background:#0f172a;padding:64px 48px;text-align:center">',
+      '  <h2 style="color:#f8fafc;font-family:DM Serif Display,serif;margin-bottom:16px">Start Building</h2>',
+      '  <p style="color:#94a3b8;margin-bottom:32px">Pick blocks, customize colors, publish in minutes.</p>',
+      '  <a href="#" class="pb-btn pb-btn-glow" style="background:#f59e0b;color:#0f172a">Open Builder</a>',
+      '</section>'
+    ].join('\n')
+  }
+];
+
+function pbShowNewTemplates() {
+  var existing = document.getElementById('pb-new-template-overlay');
+  if (existing) existing.remove();
+
+  var overlay = document.createElement('div');
+  overlay.className = 'pb-tpl-overlay';
+  overlay.id = 'pb-new-template-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'pb-tpl-modal';
+
+  var h = '<div class="pb-tpl-header">';
+  h += '<div>';
+  h += '<div class="pb-tpl-title" style="display:flex;align-items:center;gap:8px">New Templates <span style="font-size:11px;background:#7c3aed;color:#fff;padding:2px 8px;border-radius:99px;font-weight:600">6 designs</span></div>';
+  h += '<div class="pb-tpl-subtitle">Premium template collection. Click to load into editor.</div>';
+  h += '</div>';
+  h += '<button class="pb-tpl-close" onclick="document.getElementById(\'pb-new-template-overlay\').remove()">';
+  h += '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  h += '</button>';
+  h += '</div>';
+  h += '<div class="pb-tpl-grid">';
+
+  PB_NEW_TEMPLATES.forEach(function(t) {
+    h += '<div class="pb-tpl-card" onclick="pbLoadNewTemplate(\'' + t.id + '\');document.getElementById(\'pb-new-template-overlay\').remove();">';
+    h += '<div class="pb-tpl-preview" style="background:' + t.gradient + ';min-height:100px;display:flex;align-items:center;justify-content:center">';
+    h += '<span style="color:#fff;font-size:13px;font-weight:600;opacity:0.9">' + t.category + '</span>';
+    h += '</div>';
+    h += '<div class="pb-tpl-card-body">';
+    h += '<div class="pb-tpl-card-info">';
+    h += '<div class="pb-tpl-card-name">' + t.name + '</div>';
+    h += '<div class="pb-tpl-card-desc">' + t.desc + '</div>';
+    h += '</div>';
+    h += '</div>';
+    h += '</div>';
+  });
+
+  h += '</div>';
+  modal.innerHTML = h;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function pbLoadNewTemplate(id) {
+  var t = PB_NEW_TEMPLATES.find(function(tpl) { return tpl.id === id; });
+  if (!t || !window.pbEditor) return;
+  var components = window.pbEditor.DomComponents;
+  var wrapper = components.getWrapper();
+  wrapper.components('');
+  window.pbEditor.setComponents(t.html);
+}
+
+// ══════════════════════════════════════════
 //  Published pages: localStorage data layer
 // ══════════════════════════════════════════
 function pbGetPages() {
