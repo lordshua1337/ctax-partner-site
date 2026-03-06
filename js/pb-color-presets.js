@@ -530,17 +530,26 @@ function pbBuildThemeDropdown() {
   var savedAccent = localStorage.getItem('ctax_pb_accent') || '';
   var savedBohoPalette = localStorage.getItem('ctax_pb_boho_palette') || 'desert';
 
-  var h = '<div class="pb-tp-section-label" style="margin-top:0">Style</div>';
-  h += '<div class="pb-tp-themes">';
+  var h = '<div class="pb-tp-section-label" style="margin-top:0">Page Theme</div>';
+  h += '<div class="pb-dd-theme-list">';
   PB_THEMES.forEach(function(theme) {
-    var active = theme.id === savedTheme ? ' pb-tp-card-active' : '';
-    h += '<button class="pb-tp-card' + active + '" onclick="pbSelectTheme(\'' + theme.id + '\')">';
-    h += '<div class="pb-tp-preview" style="background:' + theme.preview.bg + '">';
-    h += '<div class="pb-tp-prev-hero" style="background:' + theme.preview.hero + '"></div>';
-    h += '<div class="pb-tp-prev-accent" style="background:' + theme.preview.accent + '"></div>';
-    h += '</div>';
-    h += '<div class="pb-tp-label">' + theme.label + '</div>';
-    h += '<div class="pb-tp-desc">' + theme.desc + '</div>';
+    var active = theme.id === savedTheme ? ' pb-dd-swatch-active' : '';
+    var t = theme.tokens;
+    var bg = t['--pb-bg-0'] || '#fff';
+    var hero = t['--pb-bg-1'] || bg;
+    var text = t['--pb-text-0'] || '#000';
+    var accent = t['--pb-accent'] || '#333';
+    h += '<button class="pb-dd-swatch-row' + active + '" onclick="pbSelectTheme(\'' + theme.id + '\')">';
+    h += '<span class="pb-dd-swatch-colors">';
+    h += '<span class="pb-dd-swatch-dot" style="background:' + bg + '"></span>';
+    h += '<span class="pb-dd-swatch-dot" style="background:' + hero + '"></span>';
+    h += '<span class="pb-dd-swatch-dot" style="background:' + text + '"></span>';
+    h += '<span class="pb-dd-swatch-dot" style="background:' + accent + '"></span>';
+    h += '</span>';
+    h += '<span class="pb-dd-swatch-info">';
+    h += '<span class="pb-dd-swatch-name">' + theme.label + '</span>';
+    h += '<span class="pb-dd-swatch-desc">' + theme.desc + '</span>';
+    h += '</span>';
     h += '</button>';
   });
   h += '</div>';
