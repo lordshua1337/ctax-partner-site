@@ -365,19 +365,19 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
     return '<div style="font-size:'+fs+';color:'+t.pill+';text-align:'+(align||'left')+'">Referred by '+firm+'</div>';
   };
 
-  if(fmt === ‘16x9’){
-    return wrap(‘26px 32px’,
-      ‘<div style="display:flex;justify-content:space-between;align-items:center">’
-        +’<div style="flex:1;min-width:0">’+partnerLogo(‘28px’,’’,’15px’)+tagEl(‘10px’)+’</div>’
-        +’<div style="flex-shrink:0;display:flex;align-items:center;gap:8px">’+divider(‘20px’)+ctaxLogo(‘22px’)+’</div>’
-      +’</div>’
-      +’<div>’+eyebrow(‘9px’)
-        +’<div style="font-family:DM Serif Display,serif;font-size:38px;line-height:1.08;color:’+t.text+’;letter-spacing:-0.02em">’+hl.wide+’</div>’
-      +’</div>’
-      +’<div>’
-        +’<div style="font-size:13px;color:’+t.sub+’;line-height:1.5;margin-bottom:10px">$2.3B resolved. Confidential consultations. Real relief for real people.</div>’
-        +ctaBlock(‘13px’,’12px’)
-      +’</div>’
+  if(fmt === '16x9'){
+    return wrap('26px 32px',
+      '<div style="display:flex;justify-content:space-between;align-items:center">'
+        +'<div style="flex:1;min-width:0">'+partnerLogo('28px','','15px')+tagEl('10px')+'</div>'
+        +'<div style="flex-shrink:0;display:flex;align-items:center;gap:8px">'+divider('20px')+ctaxLogo('22px')+'</div>'
+      +'</div>'
+      +'<div>'+eyebrow('9px')
+        +'<div style="font-family:DM Serif Display,serif;font-size:38px;line-height:1.08;color:'+t.text+';letter-spacing:-0.02em">'+hl.wide+'</div>'
+      +'</div>'
+      +'<div>'
+        +'<div style="font-size:13px;color:'+t.sub+';line-height:1.5;margin-bottom:10px">$2.3B resolved. Confidential consultations. Real relief for real people.</div>'
+        +ctaBlock('13px','12px')
+      +'</div>'
     );
   }
 
@@ -388,7 +388,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
         +'<div style="flex-shrink:0;display:flex;align-items:center;gap:10px">'+divider('24px')+ctaxLogo('26px')+'</div>'
       +'</div>'
       +'<div>'+eyebrow('11px')
-        +’<div style="font-family:DM Serif Display,serif;font-size:52px;line-height:1.06;color:’+t.text+’;letter-spacing:-0.02em">’+hl.square+’</div>’
+        +'<div style="font-family:DM Serif Display,serif;font-size:52px;line-height:1.06;color:'+t.text+';letter-spacing:-0.02em">'+hl.square+'</div>'
         +'<div style="font-size:16px;color:'+t.sub+';line-height:1.55;margin-top:20px;max-width:80%">120,000+ clients helped. No judgment. Real results.</div>'
       +'</div>'
       +ctaBlock('15px','13px')
@@ -403,7 +403,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
       +'</div>'
       +'<div>'+eyebrow('11px')
         +'<div style="font-family:DM Serif Display,serif;font-size:58px;line-height:1.06;color:'+t.text+';letter-spacing:-0.025em">'+hl.tall+'</div>'
-        +'<div style="font-size:17px;color:'+t.sub+';line-height:1.6;margin-top:24px">We’ve helped 120,000+ clients resolve tax debt — quietly, legally, for less than you think.</div>'
+        +'<div style="font-size:17px;color:'+t.sub+';line-height:1.6;margin-top:24px">We\'ve helped 120,000+ clients resolve tax debt — quietly, legally, for less than you think.</div>'
       +'</div>'
       +ctaBlock('16px','14px')
     );
@@ -417,7 +417,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
       +'</div>'
       +'<div>'+eyebrow('13px')
         +'<div style="font-family:DM Serif Display,serif;font-size:80px;line-height:1.04;color:'+t.text+';letter-spacing:-0.025em">'+hl.tall+'</div>'
-        +'<div style="font-size:20px;color:'+t.sub+';line-height:1.65;margin-top:32px">We’ve helped 120,000+ clients resolve tax debt quietly and legally.</div>'
+        +'<div style="font-size:20px;color:'+t.sub+';line-height:1.65;margin-top:32px">We\'ve helped 120,000+ clients resolve tax debt quietly and legally.</div>'
       +'</div>'
       +ctaBlock('20px','17px')
     );
@@ -430,7 +430,7 @@ function buildStaticCard(firm, platform, brandColor, tagline, logoUrl, tpl, dims
       +'<div style="display:flex;align-items:center;gap:10px">'+divider('22px')+ctaxLogo('24px')+'</div>'
     +'</div>'
     +'<div>'+eyebrow('10px')
-      +’<div style="font-family:DM Serif Display,serif;font-size:52px;line-height:1.07;color:’+t.text+’;letter-spacing:-0.02em">’+hl.wide+’</div>’
+      +'<div style="font-family:DM Serif Display,serif;font-size:52px;line-height:1.07;color:'+t.text+';letter-spacing:-0.02em">'+hl.wide+'</div>'
     +'</div>'
     +'<div>'
       +'<div style="font-size:14px;color:'+t.sub+';line-height:1.5;margin-bottom:10px">$2.3B resolved. Confidential. Real relief for real people.</div>'
