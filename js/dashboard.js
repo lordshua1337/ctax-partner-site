@@ -342,14 +342,126 @@
 
   // ── INIT ON PAGE LOAD ────────────────────────────────────────
 
+  // ── LIVE KPI CARDS ──────────────────────────────────────────────
+
+  function renderKPICards(stats) {
+    var container = document.getElementById('dash-kpi-cards');
+    if (!container) return;
+
+    var cards = [
+      {
+        label: 'Total Earnings',
+        value: '$' + stats.totalEarned.toLocaleString(),
+        sub: stats.earnedThisMonth > 0 ? '+$' + stats.earnedThisMonth.toLocaleString() + ' this month' : 'No payouts this month',
+        highlight: true,
+        subColor: stats.earnedThisMonth > 0 ? 'var(--cyan-text)' : 'var(--slate)'
+      },
+      {
+        label: 'Active Referrals',
+        value: String(stats.activeReferrals),
+        sub: stats.byStage.in_review + ' in review, ' + stats.byStage.in_progress + ' in progress',
+        highlight: false,
+        subColor: 'var(--slate)'
+      },
+      {
+        label: 'Conversion Rate',
+        value: stats.conversionRate + '%',
+        sub: stats.conversionRate >= 80 ? 'Above 80% benchmark' : 'Below 80% benchmark',
+        highlight: false,
+        subColor: stats.conversionRate >= 80 ? 'var(--cyan-text)' : 'var(--slate)'
+      },
+      {
+        label: 'Pipeline Value',
+        value: '$' + stats.pipelineValue.toLocaleString(),
+        sub: stats.totalReferrals + ' total referrals',
+        highlight: false,
+        subColor: 'var(--slate)'
+      }
+    ];
+
+    container.innerHTML = cards.map(function (c, i) {
+      var bg = c.highlight
+        ? 'background:linear-gradient(135deg,rgba(11,95,216,0.06),rgba(75,163,255,0.06));border:1px solid rgba(11,95,216,0.12)'
+        : 'background:var(--off);border:1px solid var(--off2)';
+      var labelColor = c.highlight ? 'color:var(--blue)' : 'color:var(--slate)';
+      return '<div style="' + bg + ';border-radius:12px;padding:20px">' +
+        '<div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;' + labelColor + ';margin-bottom:8px">' + c.label + '</div>' +
+        '<div style="font-family:\'DM Serif Display\',serif;font-size:32px;color:var(--navy)">' + c.value + '</div>' +
+        '<div style="font-size:13px;color:' + c.subColor + ';font-weight:600;margin-top:4px">' + c.sub + '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  // ── LIVE REFERRAL TABLE ────────────────────────────────────────
+
+  function renderReferralTable(referrals) {
+    var container = document.getElementById('dash-referral-rows');
+    if (!container) return;
+
+    var RT = window.ReferralTracker;
+    if (!RT) return;
+
+    // Sort newest first, show last 8
+    var sorted = referrals.slice().sort(function (a, b) {
+      return new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime();
+    }).slice(0, 8);
+
+    container.innerHTML = sorted.map(function (ref, i) {
+      var stageLabel = RT.STAGE_LABELS[ref.stage] || ref.stage;
+      var stageColor = RT.STAGE_COLORS[ref.stage] || '#4BA3FF';
+      var isPaid = ref.stage === 'paid';
+      var isResolved = ref.stage === 'resolved';
+      var shareText = isPaid ? '$' + ref.estimatedFee.toLocaleString() + ' Paid' :
+                      isResolved ? '$' + ref.estimatedFee.toLocaleString() + ' Pending' :
+                      'Pending';
+      var shareColor = isPaid ? 'var(--cyan-text)' : isResolved ? 'var(--blue)' : 'var(--slate)';
+      var borderBottom = i < sorted.length - 1 ? 'border-bottom:1px solid var(--off2);' : '';
+
+      return '<div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 0.9fr 0.8fr;gap:12px;font-size:14px;color:var(--navy);padding:12px 0;' + borderBottom + 'align-items:center">' +
+        '<div style="font-weight:600">' + ref.clientName + '</div>' +
+        '<div style="color:var(--slate)">' + RT.timeAgo(ref.submittedAt) + '</div>' +
+        '<div><span style="display:inline-flex;padding:3px 10px;border-radius:12px;background:' + stageColor + '15;color:' + stageColor + ';font-size:12px;font-weight:600">' + stageLabel + '</span></div>' +
+        '<div>$' + ref.taxDebt.toLocaleString() + '</div>' +
+        '<div style="font-weight:600;color:' + shareColor + '">' + shareText + '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  // ── INIT ───────────────────────────────────────────────────────
+
   function initDashboardHub() {
     var el = document.getElementById('dash-performance-hub');
     if (!el) return;
 
     var velocityData = generateMockVelocity();
     renderVelocityChart(velocityData);
-    renderBonusTracker(3); // 3 of 4 -- creates urgency
-    renderPeerInsights(MOCK_INSIGHTS);
+
+    // Load real referral data
+    var RT = window.ReferralTracker;
+    if (RT) {
+      var referrals = RT.load();
+      var stats = RT.computeStats(referrals);
+      var thisMonthSubmitted = referrals.filter(function (r) {
+        var d = new Date(r.submittedAt);
+        var now = new Date();
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      }).length;
+      renderBonusTracker(Math.min(thisMonthSubmitted, 4));
+      renderKPICards(stats);
+      renderReferralTable(referrals);
+
+      // Update insights with real data
+      var insights = [
+        { text: 'You\'ve earned <strong>$' + stats.totalEarned.toLocaleString() + '</strong> total from ' + stats.totalReferrals + ' referrals', sentiment: 'positive' },
+        { text: 'Average referral value: <strong>$' + stats.avgReferralValue.toLocaleString() + '</strong> in tax debt', sentiment: 'positive' },
+        { text: stats.activeReferrals + ' referrals <strong>currently in the pipeline</strong>', sentiment: stats.activeReferrals > 3 ? 'warning' : 'positive' },
+        { text: thisMonthSubmitted >= 4 ? '<strong>Monthly bonus unlocked!</strong> Keep the momentum' : 'You\'re <strong>' + (4 - thisMonthSubmitted) + ' referral' + (4 - thisMonthSubmitted !== 1 ? 's' : '') + '</strong> away from your monthly bonus', sentiment: thisMonthSubmitted >= 4 ? 'positive' : 'urgent' }
+      ];
+      renderPeerInsights(insights);
+    } else {
+      renderBonusTracker(3);
+      renderPeerInsights(MOCK_INSIGHTS);
+    }
   }
 
   // Run on load
