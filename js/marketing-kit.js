@@ -634,7 +634,7 @@ function mkAdsGenerateCaptions(firm) {
   }).then(function(r) { return r.json(); }).then(function(data) {
     var text = data.content ? data.content[0].text : '';
     var captions = [];
-    try { var match = text.match(/\[[\s\S]*\]/); if (match) captions = JSON.parse(match[0]); } catch(e) {}
+    try { var match = text.match(/\[[\s\S]*\]/); if (match) captions = JSON.parse(match[0]); } catch(e) { console.warn('[marketing-kit] Failed to parse AI captions:', e.message); }
     if (!captions.length) {
       captions = [
         { label: 'Professional', text: 'Tax debt doesn\'t resolve itself. ' + firm + ' has partnered with Community Tax to help clients find real solutions.', hashtags: '#TaxRelief #TaxDebt' },
@@ -845,7 +845,7 @@ function mkGenerateFlyer() {
   }).then(function(r) { return r.json(); }).then(function(data) {
     var text = data.content ? data.content[0].text : '';
     var aiCopy = null;
-    try { var m = text.match(/\{[\s\S]*\}/); if (m) aiCopy = JSON.parse(m[0]); } catch(e) {}
+    try { var m = text.match(/\{[\s\S]*\}/); if (m) aiCopy = JSON.parse(m[0]); } catch(e) { console.warn('[marketing-kit] Failed to parse AI flyer copy:', e.message); }
     if (aiCopy && aiCopy.headline && aiCopy.bullets) {
       MK_FLYER_COPY['_ai'] = aiCopy;
       mkUpdateFlyerPreview('_ai');
@@ -951,7 +951,7 @@ function mkGenerateDeck() {
   }).then(function(r) { return r.json(); }).then(function(data) {
     var text = data.content ? data.content[0].text : '';
     var slides = [];
-    try { var match = text.match(/\[[\s\S]*\]/); if (match) slides = JSON.parse(match[0]); } catch(e) {}
+    try { var match = text.match(/\[[\s\S]*\]/); if (match) slides = JSON.parse(match[0]); } catch(e) { console.warn('[marketing-kit] Failed to parse AI slide data:', e.message); }
     if (!slides.length || slides.length < 5) {
       slides = [
         { title: 'Welcome to the ' + firm + ' Partnership', bullets: ['Introducing the Community Tax referral program', 'Revenue share on every closed case', 'White-label support for your clients'] },
