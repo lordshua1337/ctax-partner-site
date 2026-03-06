@@ -2133,13 +2133,37 @@
         </div>
       </div>
 
+      <!-- Quick Actions -->
+      <div class="mk-quick-actions" id="mk-quick-actions">
+        <button class="mk-qa-btn" onclick="mkShowSocialBuilder()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Generate Social Kit
+        </button>
+        <button class="mk-qa-btn" onclick="mkShowFlyerBuilder()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Build Client Flyer
+        </button>
+        <button class="mk-qa-btn" onclick="mkShowDeckBuilder()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Create Pitch Deck
+        </button>
+      </div>
+
+      <!-- Recently Generated -->
+      <div class="mk-recent" id="mk-recent" style="display:none">
+        <div class="mk-recent-header">
+          <span class="mk-recent-title">Recently Generated</span>
+        </div>
+        <div class="mk-recent-list" id="mk-recent-list"></div>
+      </div>
+
       <!-- Category Tabs -->
       <div class="mk-tabs">
         <button class="mk-tab mk-tab-active" onclick="mkFilter(this,'all')">All Assets</button>
         <button class="mk-tab" onclick="mkFilter(this,'email')">Email Templates</button>
         <button class="mk-tab" onclick="mkFilter(this,'social')">Social Media</button>
         <button class="mk-tab" onclick="mkFilter(this,'print')">Print Materials</button>
-        <button class="mk-tab" onclick="mkFilter(this,'landing')">Landing Pages</button>
+        <button class="mk-tab" onclick="mkFilter(this,'landing')">Presentations</button>
       </div>
 
       <!-- Asset Grid -->
@@ -2185,10 +2209,14 @@
             <div class="mk-card-title">Client Outreach Email</div>
             <div class="mk-card-desc">Warm intro email for clients who may have tax debt. Professional tone, compliance-friendly.</div>
             <div class="mk-card-foot">
-              <span class="mk-format">HTML</span>
+              <span class="mk-format">PDF / HTML</span>
               <div class="mk-dl-group">
                 <div class="mk-dl-count" id="mk-dl-count-client-outreach" style="display:none"></div>
-                <button class="mk-dl-btn" onclick="mkDownload('client-outreach')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
+                <div class="mk-dl-dropdown">
+                  <button class="mk-dl-btn" onclick="mkSmartDownload('outreach')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF</button>
+                  <button class="mk-dl-btn mk-dl-sm" onclick="mkDownload('client-outreach')" title="Download HTML">HTML</button>
+                  <button class="mk-dl-btn mk-dl-sm" onclick="mkCopyEmailText('outreach')" title="Copy text">Copy</button>
+                </div>
               </div>
             </div>
           </div>
@@ -2222,10 +2250,14 @@
             <div class="mk-card-title">Tax Season Reminder</div>
             <div class="mk-card-desc">Seasonal email template for January-April. Highlights IRS deadline urgency and resolution options.</div>
             <div class="mk-card-foot">
-              <span class="mk-format">HTML</span>
+              <span class="mk-format">PDF / HTML</span>
               <div class="mk-dl-group">
                 <div class="mk-dl-count" id="mk-dl-count-tax-season" style="display:none"></div>
-                <button class="mk-dl-btn" onclick="mkDownload('tax-season')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</button>
+                <div class="mk-dl-dropdown">
+                  <button class="mk-dl-btn" onclick="mkSmartDownload('taxseason')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF</button>
+                  <button class="mk-dl-btn mk-dl-sm" onclick="mkDownload('tax-season')" title="Download HTML">HTML</button>
+                  <button class="mk-dl-btn mk-dl-sm" onclick="mkCopyEmailText('taxseason')" title="Copy text">Copy</button>
+                </div>
               </div>
             </div>
           </div>
@@ -2476,7 +2508,218 @@
           <div class="mk-card-body">
             <div class="mk-card-title">Ad Builder Tool <span class="mk-popular-badge">Popular</span></div>
             <div class="mk-card-desc">Create custom ads with your branding in minutes. Upload logo, pick colors, generate ready-to-use creatives.</div>
-            <div class="mk-card-foot"><span class="mk-format">Interactive</span><button class="mk-dl-btn mk-dl-launch" onclick="mkGoToAdBuilder()">Launch Builder</button></div>
+            <div class="mk-card-foot"><span class="mk-format">Interactive</span><button class="mk-dl-btn mk-dl-launch" onclick="mkShowAdsBuilder()">Launch Builder</button></div>
+          </div>
+        </div>
+
+        <!-- Print: Client-Facing Flyer -->
+        <div class="mk-card mk-card-builder" data-mk-cat="print">
+          <div class="mk-preview mk-preview-8">
+            <svg viewBox="0 0 400 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;top:0;left:0">
+              <rect width="400" height="180" fill="#eef2f7"/>
+              <!-- Shadow flyer behind -->
+              <g transform="translate(138,18) rotate(-3,60,70)">
+                <rect width="112" height="146" rx="5" fill="#dce3ec" opacity="0.6"/>
+              </g>
+              <!-- Main flyer -->
+              <rect x="144" y="10" width="112" height="160" rx="5" fill="white" filter="url(#shfl)"/>
+              <!-- Top accent bar -->
+              <rect x="144" y="10" width="112" height="5" rx="5" fill="url(#gflbar)"/>
+              <!-- Alert banner -->
+              <rect x="152" y="22" width="96" height="22" rx="4" fill="#FEF2F2"/>
+              <rect x="152" y="22" width="3" height="22" rx="2" fill="#DC2626"/>
+              <text x="200" y="30" font-size="4.5" fill="#DC2626" text-anchor="middle" font-weight="bold" letter-spacing="0.5">IRS NOTICE RECEIVED?</text>
+              <text x="200" y="39" font-size="3.8" fill="#991B1B" text-anchor="middle">Don't panic. You have options.</text>
+              <!-- Headline -->
+              <text x="200" y="56" font-family="Georgia,serif" font-size="8" fill="#0A1628" text-anchor="middle" font-weight="bold">Resolve Your</text>
+              <text x="200" y="67" font-family="Georgia,serif" font-size="8" fill="#0B5FD8" text-anchor="middle" font-weight="bold">Tax Debt Today</text>
+              <!-- Body lines -->
+              <rect x="158" y="76" width="84" height="3" rx="1.5" fill="#94a3b8" opacity="0.2"/>
+              <rect x="158" y="82" width="68" height="3" rx="1.5" fill="#94a3b8" opacity="0.15"/>
+              <!-- Stats row -->
+              <g transform="translate(156,92)">
+                <rect width="26" height="20" rx="3" fill="#f0f6ff"/>
+                <text x="13" y="10" font-family="Georgia,serif" font-size="5.5" fill="#0B5FD8" text-anchor="middle" font-weight="bold">$2.3B</text>
+                <text x="13" y="17" font-size="3" fill="#6b7c8e" text-anchor="middle">Resolved</text>
+              </g>
+              <g transform="translate(187,92)">
+                <rect width="26" height="20" rx="3" fill="#f0f6ff"/>
+                <text x="13" y="10" font-family="Georgia,serif" font-size="5.5" fill="#0B5FD8" text-anchor="middle" font-weight="bold">120K</text>
+                <text x="13" y="17" font-size="3" fill="#6b7c8e" text-anchor="middle">Clients</text>
+              </g>
+              <g transform="translate(218,92)">
+                <rect width="26" height="20" rx="3" fill="#f0f6ff"/>
+                <text x="13" y="10" font-family="Georgia,serif" font-size="5.5" fill="#0B5FD8" text-anchor="middle" font-weight="bold">A+</text>
+                <text x="13" y="17" font-size="3" fill="#6b7c8e" text-anchor="middle">BBB</text>
+              </g>
+              <!-- CTA button -->
+              <rect x="162" y="120" width="76" height="14" rx="4" fill="#0B5FD8"/>
+              <text x="200" y="130" font-size="5" fill="white" text-anchor="middle" font-weight="bold">Free Tax Review</text>
+              <!-- Footer -->
+              <rect x="152" y="142" width="96" height="0.5" fill="#e2e8f0"/>
+              <text x="200" y="152" font-size="3.5" fill="#94a3b8" text-anchor="middle">Your Firm | Community Tax</text>
+              <text x="200" y="160" font-size="3" fill="#94a3b8" text-anchor="middle">communitytax.com</text>
+              <!-- Format badges -->
+              <rect x="56" y="150" width="30" height="14" rx="4" fill="white" filter="url(#shfl)" opacity="0.9"/>
+              <text x="71" y="160" font-size="5" fill="#0B5FD8" text-anchor="middle" font-weight="bold">PDF</text>
+              <rect x="314" y="150" width="30" height="14" rx="4" fill="white" filter="url(#shfl)" opacity="0.9"/>
+              <text x="329" y="160" font-size="5" fill="#00C8E0" text-anchor="middle" font-weight="bold">PNG</text>
+              <defs>
+                <linearGradient id="gflbar" x1="144" y1="0" x2="256" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#0B5FD8"/><stop offset="0.5" stop-color="#00C8E0"/><stop offset="1" stop-color="#00E5CC"/></linearGradient>
+                <filter id="shfl"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.08"/></filter>
+              </defs>
+            </svg>
+          </div>
+          <div class="mk-card-body">
+            <div class="mk-card-title">Client-Facing Flyer <span class="mk-new-badge">New</span></div>
+            <div class="mk-card-desc">AI-generated flyer with client-facing messaging. "Do you owe the IRS?" style outreach. PDF + PNG export.</div>
+            <div class="mk-card-foot"><span class="mk-format">Interactive</span><button class="mk-dl-btn mk-dl-launch" onclick="mkShowFlyerBuilder()">Launch Builder</button></div>
+          </div>
+        </div>
+
+        <!-- Presentation Deck -->
+        <div class="mk-card mk-card-builder" data-mk-cat="landing">
+          <div class="mk-preview mk-preview-8">
+            <svg viewBox="0 0 400 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;top:0;left:0">
+              <rect width="400" height="180" fill="url(#gdk)"/>
+              <!-- Stacked slide shadows (depth effect) -->
+              <rect x="112" y="22" width="176" height="100" rx="5" fill="rgba(255,255,255,0.03)" transform="rotate(-2,200,72)"/>
+              <rect x="112" y="20" width="176" height="100" rx="5" fill="rgba(255,255,255,0.05)" transform="rotate(-1,200,70)"/>
+              <!-- Main slide (hero) -->
+              <rect x="112" y="16" width="176" height="100" rx="5" fill="white" opacity="0.97" filter="url(#shdk)"/>
+              <!-- Slide header bar -->
+              <rect x="112" y="16" width="176" height="26" rx="5" fill="#0A1628"/>
+              <rect x="112" y="35" width="176" height="2" fill="url(#gdkbar)"/>
+              <!-- Header content -->
+              <text x="200" y="25" font-size="4" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-weight="bold" letter-spacing="1">YOUR FIRM NAME</text>
+              <text x="200" y="33" font-family="Georgia,serif" font-size="6" fill="white" text-anchor="middle">Tax Resolution Partnership</text>
+              <!-- Slide body content -->
+              <text x="128" y="50" font-size="4" fill="#0B5FD8" font-weight="bold" letter-spacing="0.5">THE OPPORTUNITY</text>
+              <rect x="128" y="54" width="56" height="2.5" rx="1" fill="#94a3b8" opacity="0.2"/>
+              <rect x="128" y="59" width="44" height="2.5" rx="1" fill="#94a3b8" opacity="0.15"/>
+              <!-- Mini chart -->
+              <g transform="translate(128,66)">
+                <rect x="0" y="16" width="8" height="20" rx="2" fill="#e0edff"/>
+                <rect x="12" y="10" width="8" height="26" rx="2" fill="#bbd4ff"/>
+                <rect x="24" y="4" width="8" height="32" rx="2" fill="#0B5FD8"/>
+                <rect x="36" y="0" width="8" height="36" rx="2" fill="url(#gdkchart)"/>
+              </g>
+              <!-- Right side stats -->
+              <g transform="translate(196,48)">
+                <rect width="78" height="18" rx="3" fill="#f0f6ff"/>
+                <text x="39" y="8" font-size="3.5" fill="#64748b" text-anchor="middle">Total Resolved</text>
+                <text x="39" y="16" font-family="Georgia,serif" font-size="7" fill="#0B5FD8" text-anchor="middle" font-weight="bold">$2.3B+</text>
+              </g>
+              <g transform="translate(196,70)">
+                <rect width="78" height="18" rx="3" fill="#f0f6ff"/>
+                <text x="39" y="8" font-size="3.5" fill="#64748b" text-anchor="middle">Partner Revenue</text>
+                <text x="39" y="16" font-family="Georgia,serif" font-size="7" fill="#0B5FD8" text-anchor="middle" font-weight="bold">$5K-50K/mo</text>
+              </g>
+              <!-- Slide count indicator -->
+              <g transform="translate(172,96)">
+                <rect x="0" y="0" width="8" height="3" rx="1.5" fill="#0B5FD8"/>
+                <rect x="11" y="0" width="5" height="3" rx="1.5" fill="#cbd5e1"/>
+                <rect x="19" y="0" width="5" height="3" rx="1.5" fill="#cbd5e1"/>
+                <rect x="27" y="0" width="5" height="3" rx="1.5" fill="#cbd5e1"/>
+                <rect x="35" y="0" width="5" height="3" rx="1.5" fill="#cbd5e1"/>
+              </g>
+              <!-- Floating slide thumbnails (bottom) -->
+              <g transform="translate(60,128)">
+                <rect width="48" height="32" rx="3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/>
+                <text x="24" y="14" font-size="4" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-weight="bold">01</text>
+                <text x="24" y="22" font-size="3.5" fill="rgba(255,255,255,0.3)" text-anchor="middle">Intro</text>
+              </g>
+              <g transform="translate(116,128)">
+                <rect width="48" height="32" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+                <text x="24" y="14" font-size="4" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-weight="bold">02</text>
+                <text x="24" y="22" font-size="3.5" fill="rgba(255,255,255,0.25)" text-anchor="middle">Problem</text>
+              </g>
+              <g transform="translate(172,128)">
+                <rect width="48" height="32" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+                <text x="24" y="14" font-size="4" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-weight="bold">03</text>
+                <text x="24" y="22" font-size="3.5" fill="rgba(255,255,255,0.25)" text-anchor="middle">Solution</text>
+              </g>
+              <g transform="translate(228,128)">
+                <rect width="48" height="32" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+                <text x="24" y="14" font-size="4" fill="#00C8E0" text-anchor="middle" font-weight="bold">04</text>
+                <text x="24" y="22" font-size="3.5" fill="rgba(255,255,255,0.25)" text-anchor="middle">Why CTAX</text>
+              </g>
+              <g transform="translate(284,128)">
+                <rect width="48" height="32" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+                <text x="24" y="14" font-size="4" fill="#00C8E0" text-anchor="middle" font-weight="bold">05</text>
+                <text x="24" y="22" font-size="3.5" fill="rgba(255,255,255,0.25)" text-anchor="middle">CTA</text>
+              </g>
+              <defs>
+                <linearGradient id="gdk" x1="0" y1="0" x2="400" y2="180" gradientUnits="userSpaceOnUse"><stop stop-color="#0A1628"/><stop offset="1" stop-color="#1a2a44"/></linearGradient>
+                <linearGradient id="gdkbar" x1="112" y1="0" x2="288" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#00E5CC"/><stop offset="0.5" stop-color="#00C8E0"/><stop offset="1" stop-color="#0B5FD8"/></linearGradient>
+                <linearGradient id="gdkchart" x1="0" y1="1" x2="0" y2="0"><stop stop-color="#0B5FD8"/><stop offset="1" stop-color="#00C8E0"/></linearGradient>
+                <filter id="shdk"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/></filter>
+              </defs>
+            </svg>
+          </div>
+          <div class="mk-card-body">
+            <div class="mk-card-title">Presentation Deck <span class="mk-new-badge">New</span></div>
+            <div class="mk-card-desc">AI-generated 5-slide pitch deck. Intro, problem, solution, why CTAX, CTA. Branded PDF export.</div>
+            <div class="mk-card-foot"><span class="mk-format">Interactive</span><button class="mk-dl-btn mk-dl-launch" onclick="mkShowDeckBuilder()">Launch Builder</button></div>
+          </div>
+        </div>
+
+        <!-- Email: Thank-You Card -->
+        <div class="mk-card mk-card-builder" data-mk-cat="email">
+          <div class="mk-preview mk-preview-8">
+            <svg viewBox="0 0 400 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;top:0;left:0">
+              <rect width="400" height="180" fill="#f0f7f0"/>
+              <!-- Decorative confetti dots -->
+              <circle cx="60" cy="30" r="3" fill="#00C8E0" opacity="0.2"/>
+              <circle cx="340" cy="25" r="4" fill="#0B5FD8" opacity="0.15"/>
+              <circle cx="48" cy="90" r="2.5" fill="#00E5CC" opacity="0.2"/>
+              <circle cx="352" cy="80" r="3" fill="#0B5FD8" opacity="0.12"/>
+              <circle cx="75" cy="150" r="2" fill="#00C8E0" opacity="0.15"/>
+              <circle cx="325" cy="145" r="2.5" fill="#00E5CC" opacity="0.18"/>
+              <!-- Main card -->
+              <rect x="100" y="14" width="200" height="152" rx="8" fill="white" filter="url(#shty)"/>
+              <!-- Top accent gradient -->
+              <rect x="100" y="14" width="200" height="4" rx="4" fill="url(#gtybar)"/>
+              <!-- Check badge -->
+              <circle cx="200" cy="40" r="14" fill="#ECFDF5"/>
+              <circle cx="200" cy="40" r="10" fill="#10B981"/>
+              <path d="M194 40 L198 44 L206 36" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <!-- Headline -->
+              <text x="200" y="66" font-family="Georgia,serif" font-size="9" fill="#0A1628" text-anchor="middle" font-weight="bold">Thank You</text>
+              <text x="200" y="78" font-size="5" fill="#64748b" text-anchor="middle">Your referral has been resolved successfully</text>
+              <!-- Divider -->
+              <rect x="170" y="84" width="60" height="1" rx="0.5" fill="#e2e8f0"/>
+              <!-- Resolution details -->
+              <rect x="120" y="92" width="160" height="36" rx="6" fill="#f0f6ff"/>
+              <text x="200" y="104" font-size="4" fill="#64748b" text-anchor="middle" letter-spacing="0.5">CASE RESOLUTION</text>
+              <g transform="translate(130,110)">
+                <text x="20" y="8" font-family="Georgia,serif" font-size="7" fill="#0B5FD8" text-anchor="middle" font-weight="bold">$47K</text>
+                <text x="20" y="15" font-size="3" fill="#64748b" text-anchor="middle">Resolved</text>
+              </g>
+              <rect x="170" y="108" width="0.5" height="16" fill="#cbd5e1"/>
+              <g transform="translate(190,110)">
+                <text x="20" y="8" font-family="Georgia,serif" font-size="7" fill="#10B981" text-anchor="middle" font-weight="bold">82%</text>
+                <text x="20" y="15" font-size="3" fill="#64748b" text-anchor="middle">Savings</text>
+              </g>
+              <rect x="230" y="108" width="0.5" height="16" fill="#cbd5e1"/>
+              <g transform="translate(245,110)">
+                <text x="20" y="8" font-family="Georgia,serif" font-size="7" fill="#0A1628" text-anchor="middle" font-weight="bold">OIC</text>
+                <text x="20" y="15" font-size="3" fill="#64748b" text-anchor="middle">Program</text>
+              </g>
+              <!-- Footer -->
+              <rect x="120" y="136" width="160" height="0.5" fill="#e2e8f0"/>
+              <text x="200" y="148" font-size="4" fill="#94a3b8" text-anchor="middle">Your Firm | Community Tax</text>
+              <text x="200" y="158" font-size="3.5" fill="#0B5FD8" text-anchor="middle">We appreciate your partnership</text>
+              <defs>
+                <linearGradient id="gtybar" x1="100" y1="0" x2="300" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#10B981"/><stop offset="0.5" stop-color="#00C8E0"/><stop offset="1" stop-color="#0B5FD8"/></linearGradient>
+                <filter id="shty"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.08"/></filter>
+              </defs>
+            </svg>
+          </div>
+          <div class="mk-card-body">
+            <div class="mk-card-title">Referral Thank-You Card <span class="mk-new-badge">New</span></div>
+            <div class="mk-card-desc">Personalized thank-you email for converted referrals. Includes case details and resolution stats.</div>
+            <div class="mk-card-foot"><span class="mk-format">Interactive</span><button class="mk-dl-btn mk-dl-launch" onclick="mkShowThankYouBuilder()">Launch Builder</button></div>
           </div>
         </div>
       </div>
@@ -2567,7 +2810,7 @@
               <span id="mk-social-logo-label">Click to upload</span>
             </label>
             <button class="mk-builder-export-btn" onclick="mkDownloadSocialPng()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PNG</button>
-            <div class="mk-builder-link" onclick="mkGoToAdBuilder()">Need more control? Launch the full Ad Builder</div>
+            <div class="mk-builder-link" onclick="mkHideSocialBuilder();mkShowAdsBuilder()">Need more control? Open the full Ad Builder</div>
           </div>
           <div class="mk-builder-preview">
             <div class="mk-builder-label">Live Preview</div>
@@ -2602,11 +2845,236 @@
               <input type="file" accept="image/*" onchange="mkOnePagerLogoUpload(this)" style="display:none">
               <span id="mk-op-logo-label">Click to upload</span>
             </label>
-            <button class="mk-builder-export-btn" onclick="mkDownloadOnePager()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PNG</button>
+            <button class="mk-builder-export-btn" onclick="mkDownloadOnePagerPdf()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Download PDF</button>
+            <button class="mk-dl-btn" onclick="mkDownloadOnePager()" style="margin-top:8px;width:100%;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PNG</button>
           </div>
           <div class="mk-builder-preview">
             <div class="mk-builder-label">Live Preview (8.5 x 11)</div>
             <div id="mk-op-preview" class="mk-op-preview-wrap"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ADS BUILDER PANEL ── -->
+      <div id="mk-ads-builder" class="mk-builder-panel" style="display:none">
+        <div class="mk-builder-header">
+          <div>
+            <div class="mk-builder-title">Ad Builder Tool</div>
+            <div class="mk-builder-subtitle">Create co-branded ads with AI headlines and captions</div>
+          </div>
+          <button class="mk-builder-close" onclick="mkHideAdsBuilder()">&times;</button>
+        </div>
+        <div class="mk-builder-layout">
+          <div class="mk-builder-controls">
+            <div class="mk-builder-label">Template</div>
+            <div class="mk-ads-tpl-picker" id="mk-ads-tpl-picker">
+              <div class="mk-social-tpl-opt mk-tpl-selected" onclick="mkAdsSelectTpl(this,1)">
+                <div class="mk-tpl-swatch" style="background:linear-gradient(135deg,#0A1628,#1a3160)"></div>
+                <div class="mk-tpl-name">Dark Navy</div>
+              </div>
+              <div class="mk-social-tpl-opt" onclick="mkAdsSelectTpl(this,2)">
+                <div class="mk-tpl-swatch" style="background:linear-gradient(135deg,#0B5FD8,#0099CC)"></div>
+                <div class="mk-tpl-name">Ocean Blue</div>
+              </div>
+              <div class="mk-social-tpl-opt" onclick="mkAdsSelectTpl(this,3)">
+                <div class="mk-tpl-swatch" style="background:#fff;border:1px solid #e0e0e0"></div>
+                <div class="mk-tpl-name">Clean White</div>
+              </div>
+              <div class="mk-social-tpl-opt" onclick="mkAdsSelectTpl(this,4)">
+                <div class="mk-tpl-swatch" style="background:linear-gradient(135deg,#0A1628,#0B5FD8,#00C8E0)"></div>
+                <div class="mk-tpl-name">Gradient</div>
+              </div>
+              <div class="mk-social-tpl-opt" onclick="mkAdsSelectTpl(this,5)">
+                <div class="mk-tpl-swatch" style="background:#0A1628"></div>
+                <div class="mk-tpl-name">Bold Type</div>
+              </div>
+              <div class="mk-social-tpl-opt" onclick="mkAdsSelectTpl(this,6)">
+                <div class="mk-tpl-swatch" style="background:#f8fafc;border:1px solid #e0e0e0"></div>
+                <div class="mk-tpl-name">Minimal</div>
+              </div>
+            </div>
+            <div class="mk-builder-label">Size</div>
+            <div class="mk-social-sizes">
+              <button class="mk-social-size-btn mk-size-active" onclick="mkAdsSelectSize(this,'16:9',1200,628)">FB/LinkedIn</button>
+              <button class="mk-social-size-btn" onclick="mkAdsSelectSize(this,'1:1',1080,1080)">IG Feed</button>
+              <button class="mk-social-size-btn" onclick="mkAdsSelectSize(this,'9:16',1080,1920)">Story</button>
+              <button class="mk-social-size-btn" onclick="mkAdsSelectSize(this,'4:5',1080,1350)">Portrait</button>
+              <button class="mk-social-size-btn" onclick="mkAdsSelectSize(this,'5:4',1350,1080)">Landscape</button>
+            </div>
+            <div id="mk-ads-size-label" class="mk-size-label">1200 x 628px</div>
+            <div class="mk-builder-label">Firm Name</div>
+            <input type="text" id="mk-ads-firm" class="mk-builder-input" placeholder="Your Firm Name" oninput="mkAdsUpdatePreview()">
+            <div class="mk-builder-label">Platform</div>
+            <select id="mk-ads-platform" class="mk-builder-input" onchange="mkAdsUpdatePreview()">
+              <option value="Facebook">Facebook</option>
+              <option value="Instagram">Instagram</option>
+              <option value="LinkedIn">LinkedIn</option>
+            </select>
+            <div class="mk-builder-label">Brand Color</div>
+            <input type="color" id="mk-ads-color" class="mk-builder-color" value="#0B5FD8" oninput="mkAdsUpdatePreview()">
+            <div class="mk-builder-label">Tagline (optional)</div>
+            <input type="text" id="mk-ads-tagline" class="mk-builder-input" placeholder="Your trusted tax advisor" oninput="mkAdsUpdatePreview()">
+            <div class="mk-builder-label">Logo (optional)</div>
+            <label class="mk-builder-upload">
+              <input type="file" accept="image/*" onchange="mkAdsLogoUpload(this)" style="display:none">
+              <span id="mk-ads-logo-label">Click to upload</span>
+            </label>
+            <button class="mk-builder-export-btn" onclick="mkAdsGenerate()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Generate Ad
+            </button>
+          </div>
+          <div class="mk-builder-preview">
+            <div class="mk-builder-label">Live Preview</div>
+            <div id="mk-ads-canvas" class="mk-social-preview-canvas" style="align-self:center"></div>
+            <!-- AI Results (shown after Generate) -->
+            <div id="mk-ads-results" style="display:none">
+              <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+                <button class="mk-dl-btn mk-dl-launch" onclick="mkAdsDownloadPng()" style="font-size:12px;padding:8px 16px">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Download PNG
+                </button>
+                <button class="mk-dl-btn" onclick="mkAdsDownloadAll()" id="mk-ads-batch-btn" style="font-size:12px;padding:8px 16px">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Download All Sizes
+                </button>
+              </div>
+              <div id="mk-ads-headlines" style="margin-bottom:12px"></div>
+              <div id="mk-ads-captions"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FLYER BUILDER PANEL ── -->
+      <div id="mk-flyer-builder" class="mk-builder-panel" style="display:none">
+        <div class="mk-builder-header">
+          <div>
+            <div class="mk-builder-title">Client-Facing Flyer Builder</div>
+            <div class="mk-builder-subtitle">AI-generated flyers targeting potential tax resolution clients</div>
+          </div>
+          <button class="mk-builder-close" onclick="mkHideFlyerBuilder()">&times;</button>
+        </div>
+        <div class="mk-builder-layout">
+          <div class="mk-builder-controls">
+            <div class="mk-builder-label">Firm Name</div>
+            <input type="text" id="mk-flyer-firm" class="mk-builder-input" placeholder="Your Firm Name" oninput="mkUpdateFlyerPreview()">
+            <div class="mk-builder-label">Phone</div>
+            <input type="text" id="mk-flyer-phone" class="mk-builder-input" placeholder="(555) 123-4567" oninput="mkUpdateFlyerPreview()">
+            <div class="mk-builder-label">Practice Area</div>
+            <select id="mk-flyer-area" class="mk-builder-input" onchange="mkUpdateFlyerPreview()">
+              <option value="general">General Tax Resolution</option>
+              <option value="back-taxes">Back Taxes / Unfiled Returns</option>
+              <option value="business">Business Tax Debt</option>
+              <option value="garnishment">Wage Garnishment Relief</option>
+              <option value="lien">Tax Lien / Levy Removal</option>
+            </select>
+            <div class="mk-builder-label">Brand Color</div>
+            <input type="color" id="mk-flyer-color" class="mk-builder-color" value="#0B5FD8" oninput="mkUpdateFlyerPreview()">
+            <div class="mk-builder-label">Logo (optional)</div>
+            <label class="mk-builder-upload">
+              <input type="file" accept="image/*" onchange="mkFlyerLogoUpload(this)" style="display:none">
+              <span id="mk-flyer-logo-label">Click to upload</span>
+            </label>
+            <button class="mk-builder-export-btn" onclick="mkGenerateFlyer()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Generate Flyer
+            </button>
+            <button class="mk-dl-btn" onclick="mkDownloadFlyerPng()" id="mk-flyer-png-btn" style="display:none;margin-top:8px;width:100%;justify-content:center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download as PNG
+            </button>
+          </div>
+          <div class="mk-builder-preview">
+            <div class="mk-builder-label">Live Preview</div>
+            <div id="mk-flyer-preview" class="mk-op-preview-wrap"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DECK BUILDER PANEL ── -->
+      <div id="mk-deck-builder" class="mk-builder-panel" style="display:none">
+        <div class="mk-builder-header">
+          <div>
+            <div class="mk-builder-title">Presentation Deck Builder</div>
+            <div class="mk-builder-subtitle">AI-generated 5-slide pitch deck as branded PDF</div>
+          </div>
+          <button class="mk-builder-close" onclick="mkHideDeckBuilder()">&times;</button>
+        </div>
+        <div class="mk-builder-layout">
+          <div class="mk-builder-controls">
+            <div class="mk-builder-label">Firm Name</div>
+            <input type="text" id="mk-deck-firm" class="mk-builder-input" placeholder="Your Firm Name">
+            <div class="mk-builder-label">Target Audience</div>
+            <select id="mk-deck-audience" class="mk-builder-input">
+              <option value="cpas">CPAs / Tax Professionals</option>
+              <option value="attorneys">Attorneys</option>
+              <option value="financial-advisors">Financial Advisors</option>
+              <option value="insurance">Insurance Agents</option>
+              <option value="general">General Partners</option>
+            </select>
+            <div class="mk-builder-label">Key Stats (optional)</div>
+            <input type="text" id="mk-deck-stats" class="mk-builder-input" placeholder="e.g. 50+ referrals, $1M+ resolved">
+            <div class="mk-builder-label">Your Value Prop (optional)</div>
+            <textarea id="mk-deck-value" class="mk-builder-input" rows="3" placeholder="What makes your firm unique? AI will incorporate this."></textarea>
+            <button class="mk-builder-export-btn" onclick="mkGenerateDeck()" id="mk-deck-gen-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Generate Pitch Deck PDF
+            </button>
+          </div>
+          <div class="mk-builder-preview" style="display:flex;align-items:center;justify-content:center">
+            <div id="mk-deck-status" style="text-align:center;padding:40px;color:var(--slate)">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.3;margin-bottom:12px"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              <div style="font-size:14px">Fill in your details and click Generate to create a branded 5-slide pitch deck.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── THANK-YOU CARD BUILDER PANEL ── -->
+      <div id="mk-thankyou-builder" class="mk-builder-panel" style="display:none">
+        <div class="mk-builder-header">
+          <div>
+            <div class="mk-builder-title">Referral Thank-You Card</div>
+            <div class="mk-builder-subtitle">Personalized thank-you emails for converted referrals</div>
+          </div>
+          <button class="mk-builder-close" onclick="mkHideThankYouBuilder()">&times;</button>
+        </div>
+        <div class="mk-builder-layout">
+          <div class="mk-builder-controls">
+            <div class="mk-builder-label">Your Firm Name</div>
+            <input type="text" id="mk-ty-firm" class="mk-builder-input" placeholder="Your Firm Name" oninput="mkUpdateThankYouPreview()">
+            <div class="mk-builder-label">Client Name</div>
+            <input type="text" id="mk-ty-client" class="mk-builder-input" placeholder="John Smith" oninput="mkUpdateThankYouPreview()">
+            <div class="mk-builder-label">Case Type</div>
+            <select id="mk-ty-case" class="mk-builder-input" onchange="mkUpdateThankYouPreview()">
+              <option value="Offer in Compromise">Offer in Compromise</option>
+              <option value="Installment Agreement">Installment Agreement</option>
+              <option value="Penalty Abatement">Penalty Abatement</option>
+              <option value="Wage Garnishment Relief">Wage Garnishment Relief</option>
+              <option value="Tax Lien Resolution">Tax Lien Resolution</option>
+              <option value="Tax Resolution">Tax Resolution (General)</option>
+            </select>
+            <div class="mk-builder-label">Resolution Amount (optional)</div>
+            <input type="text" id="mk-ty-amount" class="mk-builder-input" placeholder="e.g. $45,000 reduced to $8,500" oninput="mkUpdateThankYouPreview()">
+            <button class="mk-builder-export-btn" onclick="mkGenerateThankYou()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Generate Thank-You
+            </button>
+          </div>
+          <div class="mk-builder-preview">
+            <div class="mk-builder-label">Live Preview</div>
+            <iframe id="mk-ty-preview" class="mk-email-preview-frame" sandbox="allow-same-origin"></iframe>
+            <div id="mk-ty-actions" style="display:none;display:flex;gap:8px;margin-top:8px">
+              <button class="mk-dl-btn" onclick="mkCopyThankYou()" style="flex:1;justify-content:center;font-size:12px">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                Copy HTML
+              </button>
+              <button class="mk-dl-btn mk-dl-launch" onclick="mkDownloadThankYouPdf()" style="flex:1;justify-content:center;font-size:12px">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download PDF
+              </button>
+            </div>
           </div>
         </div>
       </div>
