@@ -591,7 +591,8 @@ function mkAdsGenerateHeadlines(firm) {
   if (!container) return;
   if (typeof CTAX_API_URL === 'undefined' || !CTAX_API_KEY) { container.style.display = 'none'; return; }
   container.innerHTML = '<div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--slate);margin-bottom:8px">AI HEADLINE SUGGESTIONS</div><div style="font-size:13px;color:var(--slate)">Generating...</div>';
-  var prompt = 'Generate exactly 3 short, punchy ad headlines (max 8 words each) for a co-branded social ad between "' + firm + '" and Community Tax (IRS tax resolution). Format: one per line, numbered 1-3. No quotes, no explanation.';
+  var prompt = 'Write 3 ad headlines (max 8 words each) for a co-branded social ad between "' + firm + '" and Community Tax (IRS tax resolution, $2.3B resolved).\n\n'
+    + 'RULES: Lead with the reader\'s problem or desired outcome. NOT the brand name. "That IRS Letter? We Handle It." > "Community Tax Can Help You". One per line, numbered 1-3. No quotes, no explanation.';
   fetch(CTAX_API_URL, {
     method: 'POST',
     headers: getApiHeaders(),
@@ -616,10 +617,16 @@ function mkAdsGenerateCaptions(firm) {
   var platform = (document.getElementById('mk-ads-platform') || {}).value || 'Facebook';
   var tagline = (document.getElementById('mk-ads-tagline') || {}).value || '';
   container.innerHTML = '<div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--slate);margin-bottom:8px">PLATFORM CAPTIONS</div><div style="font-size:13px;color:var(--slate)">Generating captions for ' + platform + '...</div>';
-  var prompt = 'Generate 3 ready-to-post social media captions for a co-branded ad between "' + firm + '" and Community Tax (IRS tax resolution). '
-    + (tagline ? 'Tagline: "' + tagline + '". ' : '')
-    + 'Platform: ' + platform + '. Each caption should match ' + platform + ' tone, include a CTA, mention the partnership. '
-    + 'Return JSON array: [{"label":"Style","text":"Caption","hashtags":"#tags"}]';
+  var prompt = 'Write 3 ready-to-post ' + platform + ' captions for a co-branded ad between "' + firm + '" and Community Tax ($2.3B resolved, 120K clients, BBB A+).\n\n'
+    + (tagline ? 'Brand tagline: "' + tagline + '"\n' : '')
+    + 'Return JSON array: [{"label":"Style name","text":"Full caption text","hashtags":"#relevant #tags"}]\n\n'
+    + 'RULES:\n'
+    + '- Each caption should be a DIFFERENT approach: one empathetic/story-driven, one stat-driven/authoritative, one direct/action-oriented\n'
+    + '- Match ' + platform + ' voice and length norms (' + (platform === 'LinkedIn' ? '150-200 words, professional' : platform === 'Instagram' ? '100-150 words, visual-first' : '80-120 words, conversational') + ')\n'
+    + '- Write like a real person posted it, not a brand. No "We are proud to announce..."\n'
+    + '- Include 1 specific stat or fact per caption\n'
+    + '- CTA should feel natural to the platform (LinkedIn: "DM me", Facebook: "Drop a comment", Instagram: "Link in bio")\n'
+    + '- 3-4 hashtags per caption, real ones that people actually search';
   fetch(CTAX_API_URL, {
     method: 'POST',
     headers: getApiHeaders(),
@@ -793,10 +800,10 @@ function mkBuildFlyer(firm, phone, area, color, logoUrl) {
   + '</div>';
 }
 
-function mkUpdateFlyerPreview() {
+function mkUpdateFlyerPreview(areaOverride) {
   var firm = (document.getElementById('mk-flyer-firm') || {}).value || '';
   var phone = (document.getElementById('mk-flyer-phone') || {}).value || '';
-  var area = (document.getElementById('mk-flyer-area') || {}).value || 'general';
+  var area = areaOverride || (document.getElementById('mk-flyer-area') || {}).value || 'general';
   var color = (document.getElementById('mk-flyer-color') || {}).value || '#0B5FD8';
   var html = mkBuildFlyer(firm, phone, area, color, mkFlyerLogoUrl);
   var preview = document.getElementById('mk-flyer-preview');
@@ -817,6 +824,43 @@ function mkGenerateFlyer() {
   var phone = (document.getElementById('mk-flyer-phone') || {}).value || '';
   var area = (document.getElementById('mk-flyer-area') || {}).value || 'general';
   var color = (document.getElementById('mk-flyer-color') || {}).value || '#0B5FD8';
+  var genBtn = document.querySelector('#mk-flyer-builder .mk-builder-export-btn');
+  if (genBtn) { genBtn.disabled = true; genBtn.innerHTML = '<span class="ai-embed-spinner"></span> AI is writing your flyer...'; }
+
+  var areaLabels = { general: 'general tax resolution', 'back-taxes': 'unfiled returns and back taxes', business: 'business tax debt', garnishment: 'wage garnishment', lien: 'tax liens and levies' };
+  var prompt = 'You are a direct-response copywriter specializing in tax resolution marketing for Community Tax (15 years, $2.3B resolved, 120K+ clients, BBB A+).\n\n'
+    + 'Write flyer copy for "' + firm + '" targeting consumers with ' + (areaLabels[area] || 'tax debt') + ' issues.\n\n'
+    + 'Return JSON: {"headline":"...","subhead":"...","bullets":["...","...","...","..."]}\n\n'
+    + 'RULES:\n'
+    + '- Headline: 6-10 words, emotional trigger, speaks directly to the reader\'s pain. NOT generic "Do You Owe the IRS?" -- be specific to the practice area.\n'
+    + '- Subhead: 1-2 sentences, empathetic, offers hope without being salesy. Acknowledge their stress.\n'
+    + '- Bullets: 4 specific benefits (not features). What changes in their life? Use concrete language like "Stop wage garnishment within 48 hours" not vague "Wage garnishment relief".\n'
+    + '- Tone: Urgent but compassionate. Like a trusted friend who happens to be an expert.\n'
+    + '- NEVER use: "Don\'t panic", "You have options", "Take control". These are overused in tax marketing.';
+
+  fetch(CTAX_API_URL, {
+    method: 'POST',
+    headers: getApiHeaders(),
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 400, messages: [{ role: 'user', content: prompt }] })
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    var text = data.content ? data.content[0].text : '';
+    var aiCopy = null;
+    try { var m = text.match(/\{[\s\S]*\}/); if (m) aiCopy = JSON.parse(m[0]); } catch(e) {}
+    if (aiCopy && aiCopy.headline && aiCopy.bullets) {
+      MK_FLYER_COPY['_ai'] = aiCopy;
+      mkUpdateFlyerPreview('_ai');
+      mkExportFlyerPdf(firm, phone, '_ai', color);
+    } else {
+      mkExportFlyerPdf(firm, phone, area, color);
+    }
+    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Generate Flyer'; }
+  }).catch(function() {
+    mkExportFlyerPdf(firm, phone, area, color);
+    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Generate Flyer'; }
+  });
+}
+
+function mkExportFlyerPdf(firm, phone, area, color) {
   var flyerHtml = mkBuildFlyer(firm, phone, area, color, mkFlyerLogoUrl);
   var doc = CTAX_PDF.createDoc();
   var wrapper = document.createElement('div');
@@ -825,10 +869,9 @@ function mkGenerateFlyer() {
   var filename = firm.trim().replace(/\s+/g, '-').toLowerCase() + '-client-flyer.pdf';
   CTAX_PDF.renderPdf(doc, filename);
   mkSaveRecent('flyer', firm + ' client flyer');
-  // Show PNG download button
   var pngBtn = document.getElementById('mk-flyer-png-btn');
   if (pngBtn) pngBtn.style.display = 'flex';
-  if (typeof showToast === 'function') showToast('Generating flyer PDF...', 'success');
+  if (typeof showToast === 'function') showToast('Flyer generated with AI copy!', 'success');
 }
 
 function mkDownloadFlyerPng() {
@@ -879,11 +922,27 @@ function mkGenerateDeck() {
   if (status) status.innerHTML = '<div class="spin" style="width:24px;height:24px;border:2px solid var(--off2);border-top-color:var(--blue);border-radius:50%;animation:spin .6s linear infinite;margin:0 auto 12px"></div><div style="font-size:14px">AI is generating your 5-slide pitch deck...</div>';
 
   var audienceLabels = { cpas: 'CPAs and Tax Professionals', attorneys: 'Attorneys', 'financial-advisors': 'Financial Advisors', insurance: 'Insurance Agents', general: 'General Partners' };
-  var prompt = 'Create a 5-slide pitch deck outline for "' + firm + '" to pitch the Community Tax partner program to ' + (audienceLabels[audience] || audience) + '. '
-    + (stats ? 'Key stats: ' + stats + '. ' : '')
-    + (value ? 'Value proposition: ' + value + '. ' : '')
-    + 'Return JSON array of 5 objects: [{"title":"Slide title","bullets":["point 1","point 2","point 3"],"note":"Speaker note"}]. '
-    + 'Slides should be: 1) Intro/Welcome, 2) The Problem (tax debt landscape), 3) The Solution (Community Tax partnership), 4) Why Community Tax (stats/credibility), 5) Next Steps/CTA.';
+  var audienceHooks = {
+    cpas: 'CPAs see tax debt daily but can\'t resolve it themselves. This partnership lets them serve clients they\'d otherwise lose. Lead with "your clients already have this problem."',
+    attorneys: 'Attorneys encounter tax issues in divorce, estate, and business cases. Position this as a referral resource that strengthens their practice, not a side hustle.',
+    'financial-advisors': 'FAs need clean tax situations before they can invest. Tax debt is a blocker to AUM growth. Frame it as removing a barrier to their core business.',
+    insurance: 'Insurance agents have deep client relationships and see financial stress firsthand. Position as another way to help their clients and earn.',
+    general: 'Focus on the simplicity: identify, refer, earn. No tax expertise needed.'
+  };
+  var prompt = 'You are a presentation strategist creating a partner recruitment deck for "' + firm + '" targeting ' + (audienceLabels[audience] || audience) + '.\n\n'
+    + 'AUDIENCE INSIGHT: ' + (audienceHooks[audience] || audienceHooks.general) + '\n\n'
+    + (stats ? 'Partner\'s stats to weave in: ' + stats + '\n' : '')
+    + (value ? 'Partner\'s unique value: ' + value + '\n' : '')
+    + '\nCommunity Tax facts: $2.3B resolved, 120K+ clients, 15 years, BBB A+, $1,500-$4,000 partner commission per case, free client consultation, dedicated case managers.\n\n'
+    + 'Return JSON array of 5 objects: [{"title":"Slide title","bullets":["point 1","point 2","point 3"],"note":"What to say while showing this slide"}]\n\n'
+    + 'RULES:\n'
+    + '- Slide 1 (Intro): Hook with a stat or question specific to the audience. NOT "Welcome to our presentation."\n'
+    + '- Slide 2 (Problem): Real numbers about the tax debt problem. Make the audience realize their clients ALREADY have this issue.\n'
+    + '- Slide 3 (Solution): How the partnership works in 3 clear steps. Emphasize simplicity.\n'
+    + '- Slide 4 (Credibility): Social proof, stats, why Community Tax specifically. Address the "why should I trust them?" question.\n'
+    + '- Slide 5 (CTA): Specific next step, not "contact us." Commission details, onboarding timeline, what happens after they say yes.\n'
+    + '- Speaker notes: conversational talking points, not a script. What the presenter should emphasize.\n'
+    + '- Bullets: 3 per slide max. Concrete and specific, not vague. Numbers > adjectives.';
 
   fetch(CTAX_API_URL, {
     method: 'POST',
@@ -989,20 +1048,98 @@ function mkUpdateThankYouPreview() {
 }
 
 function mkGenerateThankYou() {
-  mkUpdateThankYouPreview();
-  var actions = document.getElementById('mk-ty-actions');
-  if (actions) actions.style.display = 'flex';
-  var firm = (document.getElementById('mk-ty-firm') || {}).value || 'Your Firm';
-  mkSaveRecent('thankyou', firm + ' thank-you card');
-  if (typeof showToast === 'function') showToast('Thank-you card generated', 'success');
-}
-
-function mkCopyThankYou() {
   var firm = (document.getElementById('mk-ty-firm') || {}).value || '';
   var client = (document.getElementById('mk-ty-client') || {}).value || '';
   var caseType = (document.getElementById('mk-ty-case') || {}).value || '';
   var amount = (document.getElementById('mk-ty-amount') || {}).value || '';
-  var html = mkBuildThankYouHtml(firm, client, caseType, amount);
+
+  if (!firm.trim()) { if (typeof showToast === 'function') showToast('Please enter your firm name', 'warning'); return; }
+
+  var genBtn = document.querySelector('#mk-thankyou-builder .mk-builder-export-btn');
+  if (genBtn) { genBtn.disabled = true; genBtn.innerHTML = '<span class="ai-embed-spinner"></span> Writing personalized message...'; }
+
+  var prompt = 'You are writing a professional thank-you email from "' + firm + '" to a referral partner whose client case was just resolved through Community Tax.\n\n'
+    + 'Details:\n- Partner/recipient name: ' + (client || 'the partner') + '\n'
+    + '- Case type: ' + caseType + '\n'
+    + (amount ? '- Resolution: ' + amount + '\n' : '')
+    + '\nWrite ONLY the email body paragraphs (no subject, no greeting, no signature -- those are handled separately). 3-4 paragraphs:\n'
+    + '1. Warm, genuine thank you. Reference the specific case type. Don\'t be generic.\n'
+    + '2. Brief highlight of what was achieved (the resolution). Make it feel like a real win.\n'
+    + '3. Forward-looking: mention you value the partnership, subtle reference to future referrals without being pushy.\n'
+    + '4. Short, warm close.\n\n'
+    + 'TONE: Professional but warm. Like a real person wrote it, not AI. No corporate jargon. No "we are pleased to inform you" or "your trust means the world." Sound like a human colleague, not a form letter.\n'
+    + 'LENGTH: 120-180 words total. Concise and meaningful.';
+
+  fetch(CTAX_API_URL, {
+    method: 'POST',
+    headers: getApiHeaders(),
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 400, messages: [{ role: 'user', content: prompt }] })
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    var aiBody = data.content ? data.content[0].text.trim() : '';
+    if (aiBody) {
+      mkLastThankYouAiBody = aiBody;
+      mkRenderThankYouWithAi(firm, client, caseType, amount, aiBody);
+    } else {
+      mkUpdateThankYouPreview();
+    }
+    var actions = document.getElementById('mk-ty-actions');
+    if (actions) actions.style.display = 'flex';
+    mkSaveRecent('thankyou', firm + ' thank-you card');
+    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Generate Thank-You'; }
+    if (typeof showToast === 'function') showToast('AI-personalized thank-you generated!', 'success');
+  }).catch(function() {
+    mkUpdateThankYouPreview();
+    var actions = document.getElementById('mk-ty-actions');
+    if (actions) actions.style.display = 'flex';
+    if (genBtn) { genBtn.disabled = false; genBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Generate Thank-You'; }
+    if (typeof showToast === 'function') showToast('Thank-you card generated (using template)', 'success');
+  });
+}
+
+var mkLastThankYouAiBody = '';
+
+function mkRenderThankYouWithAi(firm, client, caseType, amount, aiBody) {
+  var bodyParas = '';
+  aiBody.split('\n').forEach(function(line) {
+    var trimmed = line.trim();
+    if (!trimmed) return;
+    bodyParas += '<p style="font-size:15px;color:#3d4f5f;line-height:1.65;margin:0 0 16px">' + trimmed.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p>';
+  });
+
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>'
+    + '<body style="margin:0;padding:0;background:#f4f6f9;font-family:Arial,Helvetica,sans-serif">'
+    + '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f9;padding:32px 16px"><tr><td align="center">'
+    + '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(10,22,40,0.06)">'
+    + '<tr><td style="background:linear-gradient(135deg,#0A1628,#112244);padding:32px 40px;text-align:center">'
+      + '<div style="font-size:11px;font-weight:bold;letter-spacing:0.14em;text-transform:uppercase;color:#00C8E0;margin-bottom:8px">Thank You</div>'
+      + '<div style="font-family:Georgia,serif;font-size:26px;color:#fff;line-height:1.2">For Your Referral</div>'
+    + '</td></tr>'
+    + '<tr><td style="height:3px;background:linear-gradient(90deg,#00E5CC,#00C8E0,#0B5FD8,#4BA3FF)"></td></tr>'
+    + '<tr><td style="padding:36px 40px 28px">'
+      + '<p style="font-size:16px;color:#0A1628;margin:0 0 20px;font-weight:bold">Dear ' + (client || 'Valued Partner') + ',</p>'
+      + bodyParas
+      + (amount ? '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;background:rgba(11,95,216,0.04);border-left:4px solid #0B5FD8;border-radius:0 8px 8px 0"><tr><td style="padding:16px 20px"><div style="font-size:12px;font-weight:bold;color:#0B5FD8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px">Resolution Details</div><div style="font-size:15px;color:#0A1628;font-weight:600">' + caseType + '</div><div style="font-size:14px;color:#3d4f5f;margin-top:4px">' + amount + '</div></td></tr></table>' : '')
+      + '<p style="font-size:15px;color:#3d4f5f;line-height:1.65;margin:24px 0 0">With gratitude,<br><strong style="color:#0A1628">' + (firm || 'Your Firm Name') + '</strong><br><span style="font-size:13px;color:#6b7c8e">In partnership with Community Tax</span></p>'
+    + '</td></tr>'
+    + '<tr><td style="background:#f8fafc;padding:20px 40px;border-top:1px solid #e8ecf0;text-align:center"><p style="font-size:11px;color:#9ca3af;margin:0">Sent from ' + (firm || 'Your Firm') + ' via Community Tax Partner Program</p></td></tr>'
+    + '</table></td></tr></table></body></html>';
+
+  var frame = document.getElementById('mk-ty-preview');
+  if (frame) frame.srcdoc = html;
+  mkLastThankYouHtml = html;
+}
+
+var mkLastThankYouHtml = '';
+
+function mkCopyThankYou() {
+  var html = mkLastThankYouHtml;
+  if (!html) {
+    var firm = (document.getElementById('mk-ty-firm') || {}).value || '';
+    var client = (document.getElementById('mk-ty-client') || {}).value || '';
+    var caseType = (document.getElementById('mk-ty-case') || {}).value || '';
+    var amount = (document.getElementById('mk-ty-amount') || {}).value || '';
+    html = mkBuildThankYouHtml(firm, client, caseType, amount);
+  }
   navigator.clipboard.writeText(html).then(function() {
     if (typeof showToast === 'function') showToast('HTML copied to clipboard', 'copied');
   });
@@ -1027,11 +1164,19 @@ function mkDownloadThankYouPdf() {
   CTAX_PDF.addHeader(page, 'Referral Thank You');
   var content = document.createElement('div');
   content.style.padding = '20px 0';
+  var bodyHtml = '';
+  if (mkLastThankYouAiBody) {
+    mkLastThankYouAiBody.split('\n').forEach(function(line) {
+      if (line.trim()) bodyHtml += '<div class="ctpdf-p">' + CTAX_PDF.esc(line.trim()) + '</div>';
+    });
+  } else {
+    bodyHtml = '<div class="ctpdf-p">Thank you for trusting us with your referral. The case has been <b>successfully resolved</b> through our partnership with Community Tax.</div>'
+      + '<div class="ctpdf-p">We appreciate your partnership and look forward to helping more of your clients find relief from their tax burdens.</div>';
+  }
   content.innerHTML = '<div class="ctpdf-section-title">Thank You for Your Referral</div>'
     + '<div class="ctpdf-p">Dear ' + CTAX_PDF.esc(client) + ',</div>'
-    + '<div class="ctpdf-p">Thank you for trusting us with your referral. The case has been <b>successfully resolved</b> through our partnership with Community Tax.</div>'
+    + bodyHtml
     + (amount ? '<div class="ctpdf-callout"><div class="ctpdf-callout-title">Resolution Details</div><div class="ctpdf-callout-body"><b>' + CTAX_PDF.esc(caseType) + '</b><br>' + CTAX_PDF.esc(amount) + '</div></div>' : '')
-    + '<div class="ctpdf-p">We appreciate your partnership and look forward to helping more of your clients find relief from their tax burdens.</div>'
     + '<div class="ctpdf-p" style="margin-top:24px">With gratitude,<br><b>' + CTAX_PDF.esc(firm) + '</b><br><span style="color:#64748b">In partnership with Community Tax</span></div>';
   page.appendChild(content);
   CTAX_PDF.addFooter(page);

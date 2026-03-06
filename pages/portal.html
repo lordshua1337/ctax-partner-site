@@ -2572,7 +2572,7 @@
           </div>
           <div class="mk-card-body">
             <div class="mk-card-title">Client-Facing Flyer <span class="mk-new-badge">New</span></div>
-            <div class="mk-card-desc">AI-generated flyer with client-facing messaging. "Do you owe the IRS?" style outreach. PDF + PNG export.</div>
+            <div class="mk-card-desc">AI writes targeted client outreach copy for your practice area. Branded flyer with your logo. PDF + PNG export.</div>
             <div class="mk-card-foot"><span class="mk-format">Interactive</span><button class="mk-dl-btn mk-dl-launch" onclick="mkShowFlyerBuilder()">Launch Builder</button></div>
           </div>
         </div>
@@ -2718,7 +2718,7 @@
           </div>
           <div class="mk-card-body">
             <div class="mk-card-title">Referral Thank-You Card <span class="mk-new-badge">New</span></div>
-            <div class="mk-card-desc">Personalized thank-you email for converted referrals. Includes case details and resolution stats.</div>
+            <div class="mk-card-desc">AI writes a personalized thank-you when referrals convert. Case details, branded email HTML + PDF export.</div>
             <div class="mk-card-foot"><span class="mk-format">Interactive</span><button class="mk-dl-btn mk-dl-launch" onclick="mkShowThankYouBuilder()">Launch Builder</button></div>
           </div>
         </div>
@@ -3023,9 +3023,16 @@
             </button>
           </div>
           <div class="mk-builder-preview" style="display:flex;align-items:center;justify-content:center">
-            <div id="mk-deck-status" style="text-align:center;padding:40px;color:var(--slate)">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.3;margin-bottom:12px"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-              <div style="font-size:14px">Fill in your details and click Generate to create a branded 5-slide pitch deck.</div>
+            <div id="mk-deck-status" style="text-align:center;padding:32px;color:var(--slate)">
+              <div style="display:flex;gap:6px;justify-content:center;margin-bottom:16px;opacity:0.4">
+                <div style="width:40px;height:28px;background:var(--off2);border-radius:4px;font-size:8px;display:flex;align-items:center;justify-content:center;color:var(--slate);font-weight:700">01</div>
+                <div style="width:40px;height:28px;background:var(--off2);border-radius:4px;font-size:8px;display:flex;align-items:center;justify-content:center;color:var(--slate);font-weight:700">02</div>
+                <div style="width:40px;height:28px;background:var(--off2);border-radius:4px;font-size:8px;display:flex;align-items:center;justify-content:center;color:var(--slate);font-weight:700">03</div>
+                <div style="width:40px;height:28px;background:var(--off2);border-radius:4px;font-size:8px;display:flex;align-items:center;justify-content:center;color:var(--slate);font-weight:700">04</div>
+                <div style="width:40px;height:28px;background:var(--off2);border-radius:4px;font-size:8px;display:flex;align-items:center;justify-content:center;color:var(--slate);font-weight:700">05</div>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px">5-Slide Pitch Deck</div>
+              <div style="font-size:13px;color:var(--slate);line-height:1.5">AI writes slide content tailored to your audience.<br>Downloads as a branded multi-page PDF.</div>
             </div>
           </div>
         </div>
@@ -3065,7 +3072,7 @@
           <div class="mk-builder-preview">
             <div class="mk-builder-label">Live Preview</div>
             <iframe id="mk-ty-preview" class="mk-email-preview-frame" sandbox="allow-same-origin"></iframe>
-            <div id="mk-ty-actions" style="display:none;display:flex;gap:8px;margin-top:8px">
+            <div id="mk-ty-actions" style="display:none;gap:8px;margin-top:8px">
               <button class="mk-dl-btn" onclick="mkCopyThankYou()" style="flex:1;justify-content:center;font-size:12px">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                 Copy HTML

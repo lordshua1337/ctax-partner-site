@@ -141,28 +141,55 @@ function aiEmbedGenerateScript(btn, panelId) {
 
   aiEmbedSetLoading(btn, 'Generating ' + scriptType + '...');
 
+  // ICP context if available
+  var icpBlock = '';
+  if (typeof ICPContext !== 'undefined' && ICPContext.hasProfile()) {
+    icpBlock = ICPContext.getPromptContext() + '\nUse this ICP profile to tailor the output to this partner\'s specific client persona.\n\n';
+  }
+
+  var programContext = 'COMMUNITY TAX PROGRAM FACTS (use these naturally, don\'t list them all):\n'
+    + '- 15 years in business, BBB A+ rated\n'
+    + '- $2.3B+ in tax debt resolved for 120,000+ clients\n'
+    + '- Resolution options: Offer in Compromise, Installment Agreements, Currently Not Collectible, Penalty Abatement, Innocent Spouse Relief\n'
+    + '- Minimum debt threshold: $7,000+\n'
+    + '- Partner commission: $1,500-$4,000 per closed case\n'
+    + '- Free initial consultation for referred clients, no obligation\n'
+    + '- Dedicated case manager assigned to every client\n'
+    + '- Average resolution time: 6-12 months\n\n';
+
   var prompt = '';
   if (scriptType === 'conversation') {
-    prompt = 'You are an expert referral coach for Community Tax (IRS tax resolution firm, $2.3B resolved, 120K+ clients). Generate a natural, word-for-word conversation script for this situation:\n\n'
+    prompt = icpBlock + programContext
+      + 'You are an expert referral coach who has trained 500+ partners to refer clients to Community Tax. Write a word-for-word conversation script.\n\n'
       + 'Relationship: ' + (relationship || 'Professional contact') + '\n'
       + 'Tone: ' + (tone || 'Warm and empathetic') + '\n'
       + 'Situation: ' + situation + '\n\n'
-      + 'Write a natural script with stage directions in [brackets]. Include opening, bridge to the referral, handling likely resistance, and close. 200-250 words. No labels or headers -- just the script.';
+      + 'Write a NATURAL conversation -- how a real human would actually talk. Include:\n'
+      + '- Opening that feels organic to the relationship (not "I want to tell you about...")\n'
+      + '- Bridge that connects THEIR situation to why you\'re bringing this up\n'
+      + '- The actual referral mention (brief, specific to their problem)\n'
+      + '- Handling the most likely pushback for this specific situation\n'
+      + '- Close with a concrete next step\n\n'
+      + 'Use [brackets] for stage directions. 200-250 words. Sound like a real person, not a sales script. No headers or labels.';
   } else if (scriptType === 'email') {
-    prompt = 'You are an expert referral coach for Community Tax (IRS tax resolution firm). Write a complete, ready-to-send email.\n\n'
+    prompt = icpBlock + programContext
+      + 'You are an email copywriter who specializes in professional referral emails. Write a complete, ready-to-send email.\n\n'
       + 'Type: ' + (tone || 'Client outreach') + '\n'
       + 'Context: ' + (situation || 'Partner reaching out about tax debt resolution') + '\n\n'
-      + 'Format EXACTLY as:\nSubject: [subject line]\n\n[full email body]\n\nKeep it professional, warm, and under 200 words. Mention Community Tax\'s $2.3B resolved and 120K+ clients. Include a clear CTA.';
+      + 'Format EXACTLY as:\nSubject: [compelling subject line -- not generic, specific to context]\n\n[full email body]\n\n'
+      + 'RULES:\n- Under 200 words. Every sentence must earn its place.\n- Open with something relevant to THEM, not about Community Tax.\n- Reference 1-2 program facts naturally (don\'t dump stats).\n- CTA: specific action, not "let me know if you\'re interested."\n- Tone: professional peer, not salesperson. No exclamation marks. No "exciting opportunity."';
   } else if (scriptType === 'objection handler') {
-    prompt = 'You are an expert referral coach for Community Tax (IRS tax resolution firm). Generate 3 objection/response pairs for this common objection from clients:\n\n'
+    prompt = icpBlock + programContext
+      + 'You are an objection handling expert for tax resolution referrals. Generate 3 objection/response pairs.\n\n'
       + 'Objection theme: ' + (objection || 'General resistance') + '\n\n'
-      + 'Format each EXACTLY as:\n**Objection:** "[client says this]"\n**Response:** "[partner says this]"\n\n'
-      + 'Make responses empathetic, evidence-based (use $2.3B resolved, 120K clients, 15 years), and non-salesy. 2-3 sentences each.';
+      + 'Format each EXACTLY as:\n**Objection:** "[what the client actually says -- make it sound real, not textbook]"\n**Response:** "[what the partner says back]"\n\n'
+      + 'RULES:\n- Objections should sound like real humans talk (informal, emotional, skeptical)\n- Responses: acknowledge the concern first, then address it with evidence\n- Use specific program facts where relevant (resolution amounts, success rates, free consultation)\n- 2-3 sentences per response. Never dismissive. Never "I understand, but..."';
   } else {
-    prompt = 'You are an expert referral coach for Community Tax (IRS tax resolution firm). Write a follow-up message for a partner who previously discussed tax resolution with a client.\n\n'
+    prompt = icpBlock + programContext
+      + 'You are a follow-up specialist for professional referral conversations. Write a follow-up message.\n\n'
       + 'Timing: ' + (tone || 'One week later') + '\n'
       + 'Previous interaction: ' + (prevInteraction || 'Initial conversation about tax debt') + '\n\n'
-      + 'Write a natural follow-up message (150-200 words). Be warm, not pushy. Reference the previous conversation, provide a reason to reconnect, and include a soft CTA.';
+      + 'RULES:\n- 100-150 words. Short and human.\n- Reference something specific from the previous conversation (make it feel remembered, not automated)\n- Provide a reason to reconnect (new info, deadline, season, etc.)\n- Soft CTA -- not "are you ready?" but something that lowers friction ("I can have them call you for 10 minutes, no strings")\n- No "just checking in" or "circling back" -- these are instant-delete phrases.';
   }
 
   fetch(CTAX_API_URL, {
@@ -287,14 +314,19 @@ function aiEmbedGenerateAd(btn) {
 
   aiEmbedSetLoading(btn, 'Creating ad...');
 
-  var prompt = 'You are a social media ad copywriter for Community Tax (IRS tax resolution, $2.3B resolved, 120K+ clients, 15 years). Create ad copy for the following:\n\n'
-    + 'Template: ' + template + '\n'
+  var prompt = 'You are a performance ad copywriter who has run $10M+ in tax resolution ad spend. Create ad copy that actually converts.\n\n'
+    + 'Campaign theme: ' + template + '\n'
     + 'Platform: ' + platform + '\n'
     + (headline ? 'Headline direction: ' + headline + '\n' : '')
     + (cta ? 'CTA: ' + cta + '\n' : '')
-    + '\nReturn JSON: {"headline":"...","body":"...","cta":"...","hashtags":"...","specs":"...'
-    + platform + ' optimal image size and char limits"}\n'
-    + 'Make the headline punchy (under 8 words), body compelling (2-3 sentences), CTA action-oriented.';
+    + '\nReturn JSON: {"headline":"...","body":"...","cta":"...","hashtags":"...","specs":"' + platform + ' optimal size and limits"}\n\n'
+    + 'RULES:\n'
+    + '- Headline: 5-8 words. Lead with the pain point or desired outcome, not the brand. "Your IRS Letter Doesn\'t Have to Ruin You" > "Community Tax Can Help"\n'
+    + '- Body: 2-3 sentences. ' + platform + ' native voice. Speak to someone scrolling -- interrupt their pattern with empathy or a surprising stat.\n'
+    + '- CTA: Action-specific. "Get Your Free Tax Analysis" > "Learn More". Match the urgency of the headline.\n'
+    + '- Hashtags: 3-5, mix of high-volume (#taxes) and niche (#IRSdebt). No made-up hashtags.\n'
+    + '- Community Tax facts to weave in: $2.3B resolved, 120K clients, 15 years, BBB A+, free consultation.\n'
+    + '- NEVER use: "Don\'t let tax debt control your life" (overused), generic "we can help" language, or all-caps urgency.';
 
   fetch(CTAX_API_URL, {
     method: 'POST',
@@ -370,16 +402,28 @@ function aiEmbedQualifyClient(btn) {
 
   aiEmbedSetLoading(btn, 'Analyzing client...');
 
-  var prompt = 'You are a senior intake analyst at Community Tax (IRS tax resolution firm, 15 years, $2.3B resolved, 120K+ clients).\n\n'
+  // ICP context if available
+  var icpBlock = '';
+  if (typeof ICPContext !== 'undefined' && ICPContext.hasProfile()) {
+    icpBlock = ICPContext.getPromptContext() + '\nUse the ICP profile to tailor talking points to this partner\'s communication style and client type.\n\n';
+  }
+
+  var prompt = icpBlock + 'You are a senior intake analyst at Community Tax with 10+ years evaluating tax resolution cases. You know exactly which cases close and which don\'t.\n\n'
     + 'Evaluate this potential referral:\n'
     + '- Estimated debt: ' + debt + '\n'
     + '- Issue type: ' + issue + '\n'
     + '- Years affected: ' + (years || 'Unknown') + '\n'
     + '- IRS notices: ' + (notices || 'Unknown') + '\n'
     + (context ? '- Additional context: ' + context + '\n' : '')
-    + '\nReturn JSON: {"verdict":"Strong|Moderate|Weak","score":85,"resolution_path":"...","estimated_value":"$X - $Y",'
-    + '"partner_commission":"$X - $Y","urgency":"High|Medium|Low","talking_points":["point1","point2","point3"],"analysis":"2-3 sentence analysis"}\n'
-    + 'Base on real program data: min $7K debt, investigation fee $295, partner rev $1,500-$4,000/case, resolution options: OIC, IA, CNC, Penalty Abatement.';
+    + '\nReturn JSON: {"verdict":"Strong|Moderate|Weak","score":0-100,"resolution_path":"Most likely resolution program","estimated_value":"$X - $Y case value",'
+    + '"partner_commission":"$X - $Y your earnings","urgency":"High|Medium|Low","talking_points":["point1","point2","point3"],"analysis":"2-3 sentence analysis"}\n\n'
+    + 'QUALIFICATION RULES:\n'
+    + '- Minimum debt: $7,000. Below = Weak verdict automatically.\n'
+    + '- Partner revenue: $1,500-$4,000 per closed case (scale with debt amount).\n'
+    + '- Resolution options to consider: OIC (best for >$20K, financial hardship), IA (steady income, <$50K), CNC (genuine hardship, low income), Penalty Abatement (first-time or reasonable cause), Innocent Spouse.\n'
+    + '- Urgency factors: active garnishment = High, CP504/final notice = High, no notices = Low, audit letter = Medium.\n'
+    + '- Talking points: give the partner specific things to SAY to the client, not abstract observations. "Tell them the free consultation takes 15 minutes" > "Client meets threshold."\n'
+    + '- Analysis: be direct about strengths and risks. "Strong case because..." not "This presents an opportunity."';
 
   fetch(CTAX_API_URL, {
     method: 'POST',
