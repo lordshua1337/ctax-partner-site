@@ -37,7 +37,7 @@ var TOUR_STEPS = [
 ];
 
 var TOUR_STORAGE_KEY = 'portal_tour_v3';
-var TOUR_MAX_VISITS = 5;
+var TOUR_MAX_VISITS = 1;
 
 function tourGetState() {
   try {
@@ -208,5 +208,14 @@ function tourReset() {
 window.addEventListener('resize', function() {
   if (document.getElementById('tour-overlay') && window._tourStep != null) {
     tourRenderStep(window._tourStep);
+  }
+});
+
+// Auto-dismiss tour when user navigates to any portal section
+// The tour should never block someone trying to use a tool
+document.addEventListener('click', function(e) {
+  var navItem = e.target.closest('.portal-nav-item');
+  if (navItem && document.getElementById('tour-overlay')) {
+    tourDismiss();
   }
 });
