@@ -35,16 +35,40 @@ function aiEmbedGetResult(btn) {
   return result;
 }
 
+var AI_TIMEOUT_MS = 45000; // 45s max per generation
+
 function aiEmbedSetLoading(btn, label) {
   btn.disabled = true;
   btn.innerHTML = '<span class="ai-embed-spinner"></span> ' + (label || 'Generating...');
+  // Show skeleton loading in result area
+  var result = aiEmbedGetResult(btn);
+  if (result) {
+    result.className = 'ai-embed-result';
+    result.style.display = 'block';
+    result.innerHTML = '<div class="ai-loading-skeleton">'
+      + '<div class="ai-skel-line"></div><div class="ai-skel-line"></div>'
+      + '<div class="ai-skel-line"></div><div class="ai-skel-line"></div>'
+      + '<div class="ai-skel-line"></div></div>';
+    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function aiEmbedShowResult(result) {
+  if (!result) return;
+  result.className = 'ai-embed-result ai-result-visible';
+  result.style.display = 'block';
+  setTimeout(function() {
+    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 50);
 }
 
 function aiEmbedSetDone(btn, defaultLabel) {
   btn.disabled = false;
-  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Done!';
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Done!';
+  btn.style.background = 'linear-gradient(135deg, #059669, #10B981)';
   setTimeout(function() {
     btn.disabled = false;
+    btn.style.background = '';
     btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> ' + defaultLabel;
   }, 2000);
 }
@@ -53,15 +77,44 @@ function aiEmbedSetError(btn, result, defaultLabel, msg) {
   btn.disabled = false;
   btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> ' + defaultLabel;
   if (result) {
+    result.className = 'ai-embed-result ai-result-visible';
+    result.style.display = 'block';
     result.innerHTML = '<div class="ai-result-card" style="border-color:rgba(220,38,38,0.2);background:rgba(220,38,38,0.04)">'
       + '<div class="ai-result-label" style="color:#DC2626">Error</div>'
       + '<p>' + (msg || 'Something went wrong. Please try again.') + '</p></div>';
-    result.style.display = 'block';
+    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }
 
+// Fetch with timeout protection -- restarts button if API hangs
+function aiEmbedFetch(url, options) {
+  return new Promise(function(resolve, reject) {
+    var timer = setTimeout(function() {
+      reject(new Error('Request timed out. The AI service may be busy -- please try again.'));
+    }, AI_TIMEOUT_MS);
+    fetch(url, options).then(function(r) {
+      clearTimeout(timer);
+      resolve(r);
+    }).catch(function(e) {
+      clearTimeout(timer);
+      reject(e);
+    });
+  });
+}
+
 function aiEmbedCopyBtn(text, label) {
-  return '<button class="ai-embed-copy-btn" onclick="navigator.clipboard.writeText(this.getAttribute(\'data-copy\'));this.textContent=\'Copied!\';var b=this;setTimeout(function(){b.textContent=\'' + (label || 'Copy') + '\'},1500)" data-copy="' + text.replace(/"/g, '&quot;').replace(/'/g, '&#39;') + '">' + (label || 'Copy') + '</button>';
+  return '<button class="ai-embed-copy-btn" onclick="aiEmbedCopy(this)" data-copy="' + text.replace(/"/g, '&quot;').replace(/'/g, '&#39;') + '">' + (label || 'Copy') + '</button>';
+}
+
+function aiEmbedCopy(btn) {
+  navigator.clipboard.writeText(btn.getAttribute('data-copy'));
+  var orig = btn.textContent;
+  btn.textContent = 'Copied!';
+  btn.classList.add('ai-copy-success');
+  setTimeout(function() {
+    btn.textContent = orig;
+    btn.classList.remove('ai-copy-success');
+  }, 1500);
 }
 
 function aiEmbedEsc(t) {
@@ -105,7 +158,7 @@ function aiDemoGenerate(btn) {
     var result = aiEmbedGetResult(btn);
     if (result) {
       result.innerHTML = '<div class="ai-result-card"><p>AI generation not available for this tool yet.</p></div>';
-      result.style.display = 'block';
+      aiEmbedShowResult(result);
     }
   }
 }
@@ -192,7 +245,7 @@ function aiEmbedGenerateScript(btn, panelId) {
       + 'RULES:\n- 100-150 words. Short and human.\n- Reference something specific from the previous conversation (make it feel remembered, not automated)\n- Provide a reason to reconnect (new info, deadline, season, etc.)\n- Soft CTA -- not "are you ready?" but something that lowers friction ("I can have them call you for 10 minutes, no strings")\n- No "just checking in" or "circling back" -- these are instant-delete phrases.';
   }
 
-  fetch(CTAX_API_URL, {
+  aiEmbedFetch(CTAX_API_URL, {
     method: 'POST',
     headers: getApiHeaders(),
     body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1200, messages: [{ role: 'user', content: prompt }] })
@@ -218,7 +271,7 @@ function aiEmbedGenerateScript(btn, panelId) {
 
     html += '</div>';
     result.innerHTML = html;
-    result.style.display = 'block';
+    aiEmbedShowResult(result);
     aiEmbedSetDone(btn, 'Generate ' + scriptType.charAt(0).toUpperCase() + scriptType.slice(1));
 
     if (typeof saveToolResult === 'function') {
@@ -328,7 +381,7 @@ function aiEmbedGenerateAd(btn) {
     + '- Community Tax facts to weave in: $2.3B resolved, 120K clients, 15 years, BBB A+, free consultation.\n'
     + '- NEVER use: "Don\'t let tax debt control your life" (overused), generic "we can help" language, or all-caps urgency.';
 
-  fetch(CTAX_API_URL, {
+  aiEmbedFetch(CTAX_API_URL, {
     method: 'POST',
     headers: getApiHeaders(),
     body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 600, messages: [{ role: 'user', content: prompt }] })
@@ -367,7 +420,7 @@ function aiEmbedGenerateAd(btn) {
     html += '</div>';
 
     result.innerHTML = html;
-    result.style.display = 'block';
+    aiEmbedShowResult(result);
     aiEmbedSetDone(btn, 'Generate Ad');
 
     if (typeof saveToolResult === 'function') saveToolResult('ad-maker', template + ' - ' + platform, JSON.stringify(ad));
@@ -425,7 +478,7 @@ function aiEmbedQualifyClient(btn) {
     + '- Talking points: give the partner specific things to SAY to the client, not abstract observations. "Tell them the free consultation takes 15 minutes" > "Client meets threshold."\n'
     + '- Analysis: be direct about strengths and risks. "Strong case because..." not "This presents an opportunity."';
 
-  fetch(CTAX_API_URL, {
+  aiEmbedFetch(CTAX_API_URL, {
     method: 'POST',
     headers: getApiHeaders(),
     body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 800, messages: [{ role: 'user', content: prompt }] })
@@ -485,7 +538,7 @@ function aiEmbedQualifyClient(btn) {
 
     html += '</div>';
     result.innerHTML = html;
-    result.style.display = 'block';
+    aiEmbedShowResult(result);
     aiEmbedSetDone(btn, 'Qualify This Client');
 
     if (typeof saveToolResult === 'function') saveToolResult('client-qualifier', debt + ' - ' + issue, JSON.stringify(q));
@@ -519,7 +572,7 @@ function aiEmbedAskKB(btn) {
   // Use the real KB system prompt if available
   var systemPrompt = (typeof KB_SYSTEM !== 'undefined') ? KB_SYSTEM : 'You are the Community Tax Partner Program knowledge base. Answer questions accurately about the partner program, revenue share, referral process, and IRS programs.';
 
-  fetch(CTAX_API_URL, {
+  aiEmbedFetch(CTAX_API_URL, {
     method: 'POST',
     headers: getApiHeaders(),
     body: JSON.stringify({
@@ -563,7 +616,7 @@ function aiEmbedAskKB(btn) {
     html += '</div>';
 
     result.innerHTML = html;
-    result.style.display = 'block';
+    aiEmbedShowResult(result);
     aiEmbedSetDone(btn, 'Search Knowledge Base');
 
     if (typeof saveToolResult === 'function') saveToolResult('knowledge-base', question, text);
