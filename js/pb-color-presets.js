@@ -395,7 +395,7 @@ function pbGetActiveBohoPalette() {
 function pbSelectBohoPalette(paletteId) {
   localStorage.setItem('ctax_pb_boho_palette', paletteId);
   pbApplyThemeToCanvas();
-  pbBuildThemePanel();
+  pbBuildThemeDropdown();
 }
 
 
@@ -491,40 +491,46 @@ function pbBohoCardBorderSvg(accentColor) {
 // ================================================================
 //  Theme panel UI
 // ================================================================
-function pbToggleThemePanel() {
-  var panel = document.getElementById('pb-theme-panel');
-  if (!panel) return;
-  var isOpen = panel.classList.contains('pb-theme-panel-open');
-  if (isOpen) {
-    panel.classList.remove('pb-theme-panel-open');
-    return;
-  }
-  pbBuildThemePanel();
-  panel.classList.add('pb-theme-panel-open');
+// Close all dropdowns
+function pbCloseAllDropdowns() {
+  document.querySelectorAll('.pb-dropdown').forEach(function(dd) {
+    dd.classList.remove('pb-dropdown-open');
+  });
 }
 
-function pbCloseThemePanel() {
-  var panel = document.getElementById('pb-theme-panel');
-  if (panel) panel.classList.remove('pb-theme-panel-open');
+// Toggle a specific dropdown, close others
+function pbToggleDropdown(id) {
+  var dd = document.getElementById(id);
+  if (!dd) return;
+  var wasOpen = dd.classList.contains('pb-dropdown-open');
+  pbCloseAllDropdowns();
+  if (wasOpen) return;
+  // Build content before showing
+  if (id === 'pb-dd-theme') pbBuildThemeDropdown();
+  else if (id === 'pb-dd-fonts') pbBuildFontsDropdown();
+  else if (id === 'pb-dd-bg') pbBuildBgDropdown();
+  dd.classList.add('pb-dropdown-open');
 }
 
-function pbBuildThemePanel() {
-  var panel = document.getElementById('pb-theme-panel');
-  if (!panel) return;
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.pb-dropdown-wrap')) pbCloseAllDropdowns();
+});
+
+// Legacy compat
+function pbToggleThemePanel() { pbToggleDropdown('pb-dd-theme'); }
+function pbCloseThemePanel() { pbCloseAllDropdowns(); }
+
+// -- Theme dropdown (style + accent/palette) --
+function pbBuildThemeDropdown() {
+  var dd = document.getElementById('pb-dd-theme');
+  if (!dd) return;
 
   var savedTheme = localStorage.getItem('ctax_pb_theme') || 'clean';
   var savedAccent = localStorage.getItem('ctax_pb_accent') || '';
   var savedBohoPalette = localStorage.getItem('ctax_pb_boho_palette') || 'desert';
 
-  var h = '<div class="pb-tp-header">';
-  h += '<span class="pb-tp-title">Page Theme</span>';
-  h += '<button class="pb-tp-close" onclick="pbCloseThemePanel()">';
-  h += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-  h += '</button>';
-  h += '</div>';
-
-  // Theme cards
-  h += '<div class="pb-tp-section-label">Style</div>';
+  var h = '<div class="pb-tp-section-label" style="margin-top:0">Style</div>';
   h += '<div class="pb-tp-themes">';
   PB_THEMES.forEach(function(theme) {
     var active = theme.id === savedTheme ? ' pb-tp-card-active' : '';
@@ -539,7 +545,6 @@ function pbBuildThemePanel() {
   });
   h += '</div>';
 
-  // Accent colors -- only for Clean Light
   if (savedTheme === 'clean') {
     h += '<div class="pb-tp-section-label">Accent Color</div>';
     h += '<div class="pb-tp-accents">';
@@ -550,7 +555,6 @@ function pbBuildThemePanel() {
     h += '</div>';
   }
 
-  // Boho palettes -- only for warm theme
   if (savedTheme === 'warm') {
     h += '<div class="pb-tp-section-label">Palette</div>';
     h += '<div class="pb-boho-palettes">';
@@ -569,9 +573,15 @@ function pbBuildThemePanel() {
     h += '</div>';
   }
 
-  // Font picker
+  dd.innerHTML = h;
+}
+
+// -- Fonts dropdown --
+function pbBuildFontsDropdown() {
+  var dd = document.getElementById('pb-dd-fonts');
+  if (!dd) return;
   var savedFont = localStorage.getItem('ctax_pb_font') || 'classic';
-  h += '<div class="pb-tp-section-label">Font Pairing</div>';
+  var h = '<div class="pb-tp-section-label" style="margin-top:0">Font Pairing</div>';
   h += '<div class="pb-tp-fonts">';
   PB_FONT_PAIRINGS.forEach(function(fp) {
     var active = fp.id === savedFont ? ' pb-tp-font-active' : '';
@@ -584,10 +594,13 @@ function pbBuildThemePanel() {
     h += '</button>';
   });
   h += '</div>';
+  dd.innerHTML = h;
+}
 
-  // Section background picker
-  h += '<div class="pb-tp-section-label">Section Backgrounds</div>';
-  h += '<div class="pb-tp-bg-options">';
+// -- Backgrounds dropdown --
+function pbBuildBgDropdown() {
+  var dd = document.getElementById('pb-dd-bg');
+  if (!dd) return;
   var bgOptions = [
     { cls: '', label: 'Default' },
     { cls: 'pb-bg-gradient-warm', label: 'Warm' },
@@ -598,6 +611,8 @@ function pbBuildThemePanel() {
     { cls: 'pb-bg-pattern-grid', label: 'Grid' },
     { cls: 'pb-bg-pattern-diagonal', label: 'Diagonal' }
   ];
+  var h = '<div class="pb-tp-section-label" style="margin-top:0">Section Backgrounds</div>';
+  h += '<div class="pb-tp-bg-options">';
   bgOptions.forEach(function(opt) {
     h += '<button class="pb-tp-bg-btn" onclick="pbApplySectionBg(\'' + opt.cls + '\')" title="' + opt.label + '">';
     h += '<span class="pb-tp-bg-preview ' + opt.cls + '"></span>';
@@ -605,9 +620,13 @@ function pbBuildThemePanel() {
     h += '</button>';
   });
   h += '</div>';
-  h += '<p class="pb-tp-bg-hint">Select a section in the editor, then click a background to apply it.</p>';
+  h += '<p class="pb-tp-bg-hint">Select a section first, then pick a background.</p>';
+  dd.innerHTML = h;
+}
 
-  panel.innerHTML = h;
+// Legacy function kept for onboarding panel compatibility
+function pbBuildThemePanel() {
+  pbBuildThemeDropdown();
 }
 
 
@@ -627,13 +646,13 @@ function pbSelectTheme(themeId) {
     localStorage.removeItem('ctax_pb_accent');
   }
   pbApplyThemeToCanvas();
-  pbBuildThemePanel();
+  pbBuildThemeDropdown();
 }
 
 function pbSelectAccent(accentId) {
   localStorage.setItem('ctax_pb_accent', accentId);
   pbApplyThemeToCanvas();
-  pbBuildThemePanel();
+  pbBuildThemeDropdown();
 }
 
 function pbSelectCustomAccent(hex) {
@@ -647,13 +666,13 @@ function pbSelectCustomAccent(hex) {
 function pbResetAccent() {
   localStorage.removeItem('ctax_pb_accent');
   pbApplyThemeToCanvas();
-  pbBuildThemePanel();
+  pbBuildThemeDropdown();
 }
 
 function pbSelectFont(fontId) {
   localStorage.setItem('ctax_pb_font', fontId);
   pbApplyFontToCanvas();
-  pbBuildThemePanel();
+  pbBuildFontsDropdown();
 }
 
 function pbApplyFontToCanvas() {

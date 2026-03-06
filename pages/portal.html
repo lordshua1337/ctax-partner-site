@@ -4485,12 +4485,26 @@
             <span class="pb-sep"></span>
             <span class="pb-count" id="pb-block-count">0 sections</span>
             <span class="pb-sep"></span>
-            <div class="pb-theme-wrap">
-              <button class="pb-tool-btn pb-theme-trigger" onclick="pbToggleThemePanel()" title="Page theme and colors">
+            <div class="pb-dropdown-wrap">
+              <button class="pb-tool-btn" onclick="pbToggleDropdown('pb-dd-theme')" title="Page theme and colors">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15 15 0 010 20 15 15 0 000-20z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
                 Theme
               </button>
-              <div class="pb-theme-panel" id="pb-theme-panel"></div>
+              <div class="pb-dropdown" id="pb-dd-theme"></div>
+            </div>
+            <div class="pb-dropdown-wrap">
+              <button class="pb-tool-btn" onclick="pbToggleDropdown('pb-dd-fonts')" title="Font pairing">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9.5" y1="4" x2="9.5" y2="20"/><line x1="14.5" y1="4" x2="14.5" y2="20"/><line x1="7" y1="20" x2="17" y2="20"/></svg>
+                Fonts
+              </button>
+              <div class="pb-dropdown" id="pb-dd-fonts"></div>
+            </div>
+            <div class="pb-dropdown-wrap">
+              <button class="pb-tool-btn" onclick="pbToggleDropdown('pb-dd-bg')" title="Section backgrounds">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/></svg>
+                Backgrounds
+              </button>
+              <div class="pb-dropdown" id="pb-dd-bg"></div>
             </div>
           </div>
           <div class="pb-toolbar-right">
