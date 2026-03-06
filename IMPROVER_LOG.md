@@ -1,5 +1,47 @@
 # IMPROVER LOG — ctax-partner-site
 
+## Improvement Run — 2026-03-06 04:00 CST (Afterburner)
+
+### Run Profile
+- Cleanup: 1 | Structural: 2 | Feature: 1
+- Codebase state: messy (portal.js down to 2867 from 3105, still 16 large files)
+- Next run should focus on: Extract keyboard shortcuts overlay (kbdHelp*) and onboarding wizard from portal.js. Start migrating more files to safe-storage. Consider extracting leaderboard and case detail drawer.
+- Research notes: Continued from Run 1 recommendations. Focused on portal.js decomposition (the two modules flagged last run: command bar + help chat). Also started propagating safe-storage pattern to extracted modules.
+
+### Changes Made
+
+1. **Extract command bar (Cmd+K) to portal-cmdk.js** (js/portal-cmdk.js, js/portal.js, index.html) [STRUCTURAL]
+   - What: Moved CMDK_COMMANDS data, CMDK_ICONS map, and 5 functions (cmdkOpen, cmdkClose, cmdkFilter, cmdkHover, cmdkExecute) to a new 125-line module
+   - Why: portal.js was 3105 lines; extraction brings it to 2981 and makes the command bar independently maintainable
+
+2. **Extract AI help chat to portal-help-chat.js** (js/portal-help-chat.js, js/portal.js, index.html) [STRUCTURAL]
+   - What: Moved HELP_CHAT_KEY, state var, and 6 functions (helpChatToggle, getHelpChatHistory, renderHelpChatHistory, helpChatQuick, helpChatSend, helpChatClear) to a new 115-line module
+   - Why: Further reduces portal.js to 2867 lines; chat widget is a self-contained feature with its own API calls and storage
+
+3. **Fix bare catch blocks in marketing-kit.js** (js/marketing-kit.js) [CLEANUP]
+   - What: Added console.warn logging to 3 bare catch blocks that swallow JSON parse errors for AI-generated captions, flyer copy, and slide data
+   - Why: Silent parse failures make it impossible to diagnose AI response format issues; now failures are visible in dev console
+
+4. **Wire help chat to safe-storage utility** (js/portal-help-chat.js) [FEATURE]
+   - What: Replaced 4 raw localStorage calls (2 setItem, 1 getItem+JSON.parse, 1 removeItem) with safeStorageGet/Set/Remove from the utility created in Run 1
+   - Why: First module to adopt the safe-storage pattern; provides consistent error logging and quota protection for chat history persistence
+
+### Skipped / Deferred
+- portal.js keyboard shortcuts overlay (kbdHelp*, ~30 lines) — next structural target
+- portal.js onboarding wizard (~80 lines) — next structural target
+- portal.js leaderboard data + render (~60 lines) — potential extraction
+- Storage key centralization (68 keys across 15+ files) — still too large for single improvement
+- pages.css split (9727 lines) — major undertaking, needs dedicated run
+- business-planner.js bare catches (18+ instances) — needs dedicated migration to safe-storage
+
+### Project Health Snapshot
+- Largest file: portal.js (2867 lines, down from 3105)
+- Files over 400 lines: 16 JS files + pages.css (9727)
+- Test status: no tests
+- Build status: no build system (static files)
+
+---
+
 ## Improvement Run — 2026-03-04 04:00 CST (Afterburner)
 
 ### Run Profile
