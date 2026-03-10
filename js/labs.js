@@ -14,6 +14,7 @@
     'portal-sec-ai-kb',
     'portal-sec-ai-dashboard',
     'portal-sec-page-builder',
+    'portal-sec-authority-builder',
     'portal-sec-my-pages',
     'portal-sec-page-metrics'
   ];

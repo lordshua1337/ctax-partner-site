@@ -204,6 +204,10 @@ function portalNav(el, secId) {
       pbRenderMyPages();
     }
   }
+  // Render Authority Builder gallery
+  if (secId === 'portal-sec-authority-builder') {
+    if (typeof abRenderGallery === 'function') abRenderGallery();
+  }
   // Render Page Metrics dashboard
   if (secId === 'portal-sec-page-metrics') {
     if (typeof pmRenderDashboard === 'function') pmRenderDashboard();

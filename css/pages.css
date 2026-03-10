@@ -8724,6 +8724,98 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 }
 
 /* ═══════════════════════════════════════════════
+   AUTHORITY BUILDER
+   Template gallery from Partner Portal Templates
+   ═══════════════════════════════════════════════ */
+
+/* Filter bar */
+.ab-filters{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.ab-filter-btn{padding:8px 18px;border-radius:8px;border:1px solid #e2e5ea;background:#fff;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;transition:all .2s}
+.ab-filter-btn:hover{border-color:#94a3b8;color:#334155}
+.ab-filter-active{background:#1e293b;color:#fff;border-color:#1e293b}
+.ab-filter-active:hover{background:#334155;color:#fff;border-color:#334155}
+
+/* Template grid */
+.ab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+.ab-empty{text-align:center;color:#94a3b8;padding:60px 20px;font-size:14px}
+
+/* Template card */
+.ab-card{border-radius:14px;overflow:hidden;border:1px solid #e2e5ea;background:#fff;transition:all .25s}
+.ab-card:hover{border-color:#cbd5e1;box-shadow:0 8px 30px rgba(0,0,0,.08);transform:translateY(-2px)}
+
+/* Card preview iframe */
+.ab-card-preview{position:relative;aspect-ratio:16/10;overflow:hidden;background:#f1f5f9}
+.ab-card-preview iframe{width:400%;height:400%;transform:scale(.25);transform-origin:top left;pointer-events:none;border:none}
+.ab-card-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(15,23,42,.6);opacity:0;transition:opacity .25s}
+.ab-card:hover .ab-card-overlay{opacity:1}
+
+/* Card body */
+.ab-card-body{padding:16px 18px 18px}
+.ab-card-cat{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.ab-card[data-id^="edu"] .ab-card-cat,.ab-card-cat:first-child{background:#ecfdf5;color:#059669}
+.ab-card[data-id^="tpl"] .ab-card-cat{background:#eff6ff;color:#2563eb}
+.ab-card-title{font-size:16px;font-weight:700;color:#1e293b;margin:0 0 6px}
+.ab-card-desc{font-size:13px;color:#64748b;margin:0 0 10px;line-height:1.5}
+.ab-card-tags{display:flex;flex-wrap:wrap;gap:6px}
+.ab-tag{font-size:11px;padding:3px 8px;border-radius:6px;background:#f1f5f9;color:#64748b;font-weight:500}
+
+/* Buttons */
+.ab-btn{padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all .2s}
+.ab-btn-preview{background:#fff;color:#1e293b}
+.ab-btn-preview:hover{background:#f1f5f9}
+.ab-btn-publish{background:#0d9488;color:#fff}
+.ab-btn-publish:hover{background:#0f766e}
+.ab-btn-cancel{background:#f1f5f9;color:#64748b}
+.ab-btn-cancel:hover{background:#e2e8f0}
+
+/* Full-screen preview modal */
+.ab-preview-modal{position:fixed;inset:0;z-index:9999;display:none;flex-direction:column;background:#fff}
+.ab-preview-modal.ab-preview-open{display:flex}
+.ab-preview-bar{display:flex;align-items:center;gap:16px;padding:12px 20px;background:#1e293b;color:#fff;flex-shrink:0}
+.ab-preview-back{display:flex;align-items:center;gap:6px;background:none;border:none;color:#94a3b8;font-size:13px;font-weight:600;cursor:pointer;transition:color .2s}
+.ab-preview-back:hover{color:#fff}
+.ab-preview-name{font-size:14px;font-weight:600;flex:1}
+.ab-preview-actions{display:flex;gap:8px}
+.ab-preview-iframe{flex:1;width:100%;border:none}
+
+/* Publish modal */
+.ab-publish-modal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center}
+.ab-publish-modal.ab-publish-open{display:flex}
+.ab-publish-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.5)}
+.ab-publish-dialog{position:relative;background:#fff;border-radius:16px;padding:32px;width:100%;max-width:460px;box-shadow:0 24px 60px rgba(0,0,0,.2)}
+.ab-publish-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;color:#94a3b8;cursor:pointer;line-height:1}
+.ab-publish-close:hover{color:#1e293b}
+.ab-publish-title{font-size:20px;font-weight:700;color:#1e293b;margin:0 0 6px}
+.ab-publish-desc{font-size:13px;color:#64748b;margin:0 0 20px;line-height:1.5}
+.ab-publish-desc code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px}
+.ab-publish-field{margin-bottom:16px}
+.ab-publish-field label{display:block;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.ab-publish-field input{width:100%;padding:10px 14px;border:1px solid #e2e5ea;border-radius:8px;font-size:14px;color:#1e293b;outline:none;box-sizing:border-box}
+.ab-publish-field input:focus{border-color:#0d9488;box-shadow:0 0 0 3px rgba(13,148,136,.1)}
+.ab-slug-wrap{display:flex;align-items:center;border:1px solid #e2e5ea;border-radius:8px;overflow:hidden}
+.ab-slug-wrap:focus-within{border-color:#0d9488;box-shadow:0 0 0 3px rgba(13,148,136,.1)}
+.ab-slug-prefix{padding:10px 0 10px 14px;font-size:13px;color:#94a3b8;font-weight:500;white-space:nowrap;flex-shrink:0}
+.ab-slug-wrap input{border:none;padding:10px 14px 10px 4px;flex:1}
+.ab-slug-wrap input:focus{box-shadow:none}
+.ab-publish-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}
+
+/* Toast */
+.ab-toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;z-index:10001;pointer-events:none;box-shadow:0 8px 30px rgba(0,0,0,.2)}
+.ab-toast-show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Category badges via data attribute */
+.ab-grid .ab-card[data-id^="edu"] .ab-card-cat{background:#ecfdf5;color:#059669}
+.ab-grid .ab-card[data-id^="tpl"] .ab-card-cat{background:#eff6ff;color:#2563eb}
+
+/* Responsive */
+@media(max-width:768px){
+  .ab-grid{grid-template-columns:1fr}
+  .ab-filters{gap:6px}
+  .ab-filter-btn{padding:6px 12px;font-size:12px}
+  .ab-publish-dialog{margin:16px;padding:24px}
+}
+
+/* ═══════════════════════════════════════════════
    LANDING PAGE BUILDER (GrapesJS)
    Neutral dark chrome, white canvas, subtle accents
    ═══════════════════════════════════════════════ */
