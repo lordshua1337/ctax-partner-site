@@ -325,7 +325,7 @@ function aicExportCampaign() {
   var campaign = campaigns[0];
 
   var doc = document.createElement('div');
-  doc.style.cssText = 'width:750px;font-family:DM Sans,sans-serif;color:#1a2b3c;padding:40px';
+  doc.style.cssText = 'width:816px;font-family:DM Sans,sans-serif;color:#1a2b3c;padding:40px;box-sizing:border-box';
 
   doc.innerHTML = '<div style="text-align:center;padding:48px 24px;background:linear-gradient(155deg,#0A1628,#0B5FD8);color:white;border-radius:12px;margin-bottom:32px">'
     + '<div style="font-size:12px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:8px">Marketing Campaign</div>'

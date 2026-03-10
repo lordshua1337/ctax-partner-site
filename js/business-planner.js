@@ -1749,7 +1749,7 @@ function bpExportSlides() {
 
   var doc = document.createElement('div');
   doc.className = 'bp-slides-doc';
-  doc.style.cssText = 'position:fixed;left:-9999px;top:0;width:1024px;font-family:"DM Sans",system-ui,sans-serif';
+  doc.style.cssText = 'width:1024px;font-family:"DM Sans",system-ui,sans-serif';
 
   // Slide 1: Title
   var html = '<div class="bp-slide" style="width:1024px;height:576px;background:linear-gradient(135deg,#0b1e3d,#162d5a);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#fff;page-break-after:always">';
@@ -1792,24 +1792,30 @@ function bpExportSlides() {
   html += '</div>';
   html += '</div>';
 
-  // Slide 3+: One slide per month
+  // Slide 3+: One slide per month (max 7 tasks per slide, overflow to continuation slide)
   roadmap.months.forEach(function(month, mi) {
-    html += '<div class="bp-slide" style="width:1024px;height:576px;background:#fff;padding:48px 64px;page-break-after:always">';
-    html += '<div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#0B5FD8;margin-bottom:8px">' + month.label + '</div>';
-    html += '<div style="font-family:\'DM Serif Display\',serif;font-size:28px;color:#0b1e3d;margin-bottom:20px">' + month.subtitle + ' Action Plan</div>';
-    html += '<div style="display:flex;flex-direction:column;gap:10px">';
-    month.tasks.forEach(function(task) {
-      var prioColor = task.priority === 'high' ? '#ef4444' : '#f59e0b';
-      html += '<div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:#f8f9fa;border-radius:8px;border-left:3px solid ' + prioColor + '">';
-      html += '<div style="flex:1">';
-      html += '<div style="font-size:13px;font-weight:700;color:#0b1e3d">' + task.title + '</div>';
-      html += '<div style="font-size:11px;color:#666;line-height:1.4;margin-top:2px">' + task.desc.substring(0, 120) + (task.desc.length > 120 ? '...' : '') + '</div>';
+    var maxPerSlide = 7;
+    var tasks = month.tasks || [];
+    for (var chunk = 0; chunk < tasks.length; chunk += maxPerSlide) {
+      var batch = tasks.slice(chunk, chunk + maxPerSlide);
+      var isContd = chunk > 0;
+      html += '<div class="bp-slide" style="width:1024px;height:576px;background:#fff;padding:48px 64px;overflow:hidden;page-break-after:always">';
+      html += '<div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#0B5FD8;margin-bottom:8px">' + month.label + (isContd ? ' (continued)' : '') + '</div>';
+      html += '<div style="font-family:\'DM Serif Display\',serif;font-size:28px;color:#0b1e3d;margin-bottom:20px">' + month.subtitle + ' Action Plan</div>';
+      html += '<div style="display:flex;flex-direction:column;gap:10px">';
+      batch.forEach(function(task) {
+        var prioColor = task.priority === 'high' ? '#ef4444' : '#f59e0b';
+        html += '<div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:#f8f9fa;border-radius:8px;border-left:3px solid ' + prioColor + '">';
+        html += '<div style="flex:1">';
+        html += '<div style="font-size:13px;font-weight:700;color:#0b1e3d">' + task.title + '</div>';
+        html += '<div style="font-size:11px;color:#666;line-height:1.4;margin-top:2px">' + task.desc.substring(0, 120) + (task.desc.length > 120 ? '...' : '') + '</div>';
+        html += '</div>';
+        html += '<span style="font-size:9px;font-weight:700;text-transform:uppercase;color:' + prioColor + ';flex-shrink:0">' + task.priority + '</span>';
+        html += '</div>';
+      });
       html += '</div>';
-      html += '<span style="font-size:9px;font-weight:700;text-transform:uppercase;color:' + prioColor + ';flex-shrink:0">' + task.priority + '</span>';
       html += '</div>';
-    });
-    html += '</div>';
-    html += '</div>';
+    }
   });
 
   // Final slide: Next Steps

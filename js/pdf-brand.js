@@ -228,7 +228,7 @@ var CTAX_PDF = (function() {
     el.style.position = 'relative';
     el.style.display = 'block';
     el.style.margin = '0';
-    el.style.maxWidth = '816px';
+    el.style.width = '816px';
 
     var opt = {
       margin: extraOpts && extraOpts.margin != null ? extraOpts.margin : 0.5,

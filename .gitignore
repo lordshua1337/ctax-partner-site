@@ -1,2 +1,8 @@
 node_modules/
 .vercel
+.next/
+test-results/
+.planning/
+IMPROVER_LOG.md
+improver-state.json
+ROADMAP.md

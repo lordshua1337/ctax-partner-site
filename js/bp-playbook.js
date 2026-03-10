@@ -248,7 +248,7 @@ function bppExportPdf() {
 
   // Build PDF-friendly document
   var doc = document.createElement('div');
-  doc.style.cssText = 'width:750px;font-family:DM Sans,sans-serif;color:#1a2b3c;padding:40px';
+  doc.style.cssText = 'width:816px;font-family:DM Sans,sans-serif;color:#1a2b3c;padding:40px;box-sizing:border-box';
 
   var inputs = bppGetInputs();
   var practiceLabel = (typeof BP_PRACTICE_TYPES !== 'undefined') ? BP_PRACTICE_TYPES[inputs.practiceType] || 'Your Practice' : 'Your Practice';
