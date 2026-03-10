@@ -220,17 +220,17 @@
     }
     var pdfDoc = buildPdfDoc();
 
-    // Create a full-viewport overlay so html2canvas captures cleanly
-    // without interference from the existing page content
+    // Create a fixed-width overlay matching the PDF doc width (816px).
+    // This isolates the capture from the page and prevents left-offset issues.
     var overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#fff;overflow:auto;margin:0;padding:0;';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:816px;height:100vh;z-index:999999;background:#fff;overflow-y:auto;overflow-x:hidden;margin:0;padding:0;';
     overlay.appendChild(pdfDoc);
     document.body.appendChild(overlay);
 
-    // Force the doc to block display at a known position
     pdfDoc.style.position = 'relative';
     pdfDoc.style.display = 'block';
-    pdfDoc.style.margin = '0 auto';
+    pdfDoc.style.margin = '0';
+    pdfDoc.style.width = '816px';
 
     var opt = {
       margin: 0,
@@ -242,7 +242,6 @@
         letterRendering: true,
         scrollX: 0,
         scrollY: 0,
-        windowWidth: 816,
         backgroundColor: '#ffffff'
       },
       jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' },

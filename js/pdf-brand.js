@@ -156,16 +156,18 @@ var CTAX_PDF = (function() {
   }
 
   function renderPdf(doc, filename) {
-    // Create a full-viewport overlay so html2canvas captures cleanly
+    // Create a fixed-width overlay matching the doc width (816px = letter page at 96dpi).
+    // This isolates the PDF from the page and ensures html2canvas captures
+    // only the doc content without offset or centering issues.
     var overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#fff;overflow:auto;margin:0;padding:0;';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:816px;height:100vh;z-index:999999;background:#fff;overflow-y:auto;overflow-x:hidden;margin:0;padding:0;';
     overlay.appendChild(doc);
     document.body.appendChild(overlay);
 
-    // Force the doc to block display at a known position
     doc.style.position = 'relative';
     doc.style.display = 'block';
-    doc.style.margin = '0 auto';
+    doc.style.margin = '0';
+    doc.style.width = '816px';
 
     var opt = {
       margin: 0,
@@ -177,7 +179,6 @@ var CTAX_PDF = (function() {
         letterRendering: true,
         scrollX: 0,
         scrollY: 0,
-        windowWidth: 816,
         backgroundColor: '#ffffff'
       },
       jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' },
@@ -220,12 +221,14 @@ var CTAX_PDF = (function() {
     }
 
     var overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#fff;overflow:auto;margin:0;padding:0;';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:816px;height:100vh;z-index:999999;background:#fff;overflow-y:auto;overflow-x:hidden;margin:0;padding:0;';
     overlay.appendChild(el);
     document.body.appendChild(overlay);
 
     el.style.position = 'relative';
     el.style.display = 'block';
+    el.style.margin = '0';
+    el.style.maxWidth = '816px';
 
     var opt = {
       margin: extraOpts && extraOpts.margin != null ? extraOpts.margin : 0.5,

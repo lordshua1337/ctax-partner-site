@@ -1748,13 +1748,14 @@ function bpExportSlides() {
 
   doc.innerHTML = html;
 
-  // Use overlay approach for clean capture
+  // Use overlay approach for clean capture (1024px for landscape slides)
   var overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#0A1628;overflow:auto;margin:0;padding:0;';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:1024px;height:100vh;z-index:999999;background:#0A1628;overflow-y:auto;overflow-x:hidden;margin:0;padding:0;';
   overlay.appendChild(doc);
   document.body.appendChild(overlay);
   doc.style.position = 'relative';
   doc.style.display = 'block';
+  doc.style.margin = '0';
 
   function doExport() {
     var opt = {
