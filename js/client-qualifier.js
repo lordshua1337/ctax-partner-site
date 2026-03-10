@@ -210,6 +210,12 @@ async function qualifyClient() {
     // M2P2C2: Show smart suggestions
     setTimeout(function() { if (typeof showSmartSuggestions === 'function') showSmartSuggestions('client-qualifier'); }, 500);
 
+    // What's Next CTA
+    if (typeof WhatsNext !== 'undefined') {
+      var cqOut = document.getElementById('cq-output');
+      if (cqOut) WhatsNext.render(cqOut, 'client-qualifier');
+    }
+
   } catch(err) {
     clearInterval(mint);
     document.getElementById('cq-loading').style.display = 'none';

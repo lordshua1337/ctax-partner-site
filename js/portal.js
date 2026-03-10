@@ -179,6 +179,14 @@ function portalNav(el, secId) {
   if (secId === 'portal-sec-challenge') {
     if (typeof chInit === 'function') chInit();
   }
+  // Pre-fill Business Planner from ICP when entering
+  if (secId === 'portal-sec-planner') {
+    if (typeof bpPreFillFromICP === 'function') bpPreFillFromICP();
+  }
+  // Auto-fill Marketing Kit from saved brand
+  if (secId === 'portal-sec-marketing') {
+    if (typeof mkAutoFillBrand === 'function') mkAutoFillBrand();
+  }
   // Destroy page builder editor when navigating away, init when entering
   // Toggle immersive mode for page builder
   if (secId === 'portal-sec-page-builder') {
@@ -215,6 +223,9 @@ function portalNav(el, secId) {
 
   // Update topbar quick tips
   if (typeof updateQuickTips === 'function') updateQuickTips(secId);
+
+  // Refresh journey bar on every nav
+  if (typeof JourneyBar !== 'undefined') JourneyBar.refresh();
 }
 
 function portalAnimateEntrance(sec) {
@@ -624,8 +635,127 @@ function renderWelcomeBanner(containerId) {
     + '</div>';
 }
 
+// --- Journey Hero (context-aware dashboard landing) ---
+function renderJourneyHero(containerId) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  if (typeof PartnerProgress === 'undefined') return;
+
+  var phase = PartnerProgress.currentPhase();
+  var progress = PartnerProgress.read();
+  var html = '';
+
+  if (phase === 1) {
+    // No ICP yet -- guide them to build their client profile
+    html = '<div class="jh-card jh-card-setup">'
+      + '<div class="jh-content">'
+      + '<div class="jh-eyebrow">STEP 1 OF 4</div>'
+      + '<h2 class="jh-title">Let\'s figure out who your ideal client is</h2>'
+      + '<p class="jh-desc">Answer 6 quick questions and we\'ll build your Ideal Client Profile. This powers everything else -- your scripts, your ads, your outreach strategy.</p>'
+      + '<button class="jh-cta" onclick="showPage(\'ai-tools\')">'
+      + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/></svg>'
+      + 'Build Your Client Profile'
+      + '<span class="jh-cta-time">~10 minutes</span>'
+      + '</button>'
+      + '</div>'
+      + '<div class="jh-visual">'
+      + '<div class="jh-step-ring"><span>1</span></div>'
+      + '</div>'
+      + '</div>';
+  } else if (phase === 2) {
+    // Has ICP, no roadmap -- guide to Business Planner
+    var icpTitle = '';
+    try {
+      if (typeof ICPContext !== 'undefined' && ICPContext.hasProfile()) {
+        var profile = ICPContext.load();
+        icpTitle = profile.profession_type || profile.title || '';
+      }
+    } catch (e) {}
+
+    html = '<div class="jh-card jh-card-plan">'
+      + '<div class="jh-content">'
+      + '<div class="jh-eyebrow">STEP 2 OF 4</div>'
+      + '<h2 class="jh-title">Great -- you know your client. Now let\'s build your plan.</h2>'
+      + (icpTitle ? '<div class="jh-icp-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ICP: ' + icpTitle + '</div>' : '')
+      + '<p class="jh-desc">Your ICP is set. Now generate a 90-day growth roadmap tailored to your practice. Pre-filled with your client profile data.</p>'
+      + '<button class="jh-cta" onclick="portalNav(document.querySelector(\'[onclick*=portal-sec-planner]\'),\'portal-sec-planner\')">'
+      + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>'
+      + 'Build Your 90-Day Roadmap'
+      + '<span class="jh-cta-time">~15 minutes</span>'
+      + '</button>'
+      + '</div>'
+      + '<div class="jh-visual">'
+      + '<div class="jh-step-ring jh-step-plan"><span>2</span></div>'
+      + '</div>'
+      + '</div>';
+  } else if (phase === 3 && !progress.challengeStarted) {
+    // Has plan but hasn't started Challenge
+    html = '<div class="jh-card jh-card-start">'
+      + '<div class="jh-content">'
+      + '<div class="jh-eyebrow">STEP 3 OF 4</div>'
+      + '<h2 class="jh-title">Your roadmap is ready. Time to execute.</h2>'
+      + '<p class="jh-desc">Start your 30-Day Challenge. Each day gives you one focused task with the right tool pre-loaded. Build momentum, earn your playbook.</p>'
+      + '<button class="jh-cta" onclick="portalNav(document.querySelector(\'[onclick*=portal-sec-challenge]\'),\'portal-sec-challenge\')">'
+      + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>'
+      + 'Start Your 30-Day Challenge'
+      + '</button>'
+      + '</div>'
+      + '<div class="jh-visual">'
+      + '<div class="jh-step-ring jh-step-execute"><span>3</span></div>'
+      + '</div>'
+      + '</div>';
+  } else if (phase === 3 && progress.challengeStarted) {
+    // Challenge in progress -- show today's task
+    var dayNum = progress.challengeDay;
+    var pct = Math.round((progress.challengeCompletedDays / 30) * 100);
+    var circumference = 2 * Math.PI * 36;
+    var offset = circumference - (pct / 100) * circumference;
+
+    html = '<div class="jh-card jh-card-active">'
+      + '<div class="jh-content">'
+      + '<div class="jh-eyebrow">30-DAY CHALLENGE</div>'
+      + '<h2 class="jh-title">Day ' + dayNum + ' of 30</h2>'
+      + '<div class="jh-stats">'
+      + '<div class="jh-stat"><div class="jh-stat-val">' + progress.challengeCompletedDays + '</div><div class="jh-stat-label">Tasks done</div></div>'
+      + '<div class="jh-stat"><div class="jh-stat-val">' + progress.challengeStreak + '</div><div class="jh-stat-label">Day streak</div></div>'
+      + '<div class="jh-stat"><div class="jh-stat-val">' + progress.scriptsCreated + '</div><div class="jh-stat-label">Scripts</div></div>'
+      + '</div>'
+      + '<button class="jh-cta" onclick="portalNav(document.querySelector(\'[onclick*=portal-sec-challenge]\'),\'portal-sec-challenge\')">'
+      + 'Continue Challenge'
+      + '</button>'
+      + '</div>'
+      + '<div class="jh-visual">'
+      + '<svg class="jh-progress-ring" width="90" height="90" viewBox="0 0 90 90">'
+      + '<circle cx="45" cy="45" r="36" fill="none" stroke="var(--off2)" stroke-width="5"/>'
+      + '<circle cx="45" cy="45" r="36" fill="none" stroke="#8b5cf6" stroke-width="5" stroke-linecap="round" stroke-dasharray="' + circumference.toFixed(1) + '" stroke-dashoffset="' + offset.toFixed(1) + '" transform="rotate(-90 45 45)" style="transition:stroke-dashoffset 1s ease"/>'
+      + '</svg>'
+      + '<div class="jh-ring-text">' + pct + '%</div>'
+      + '</div>'
+      + '</div>';
+  } else if (phase === 4) {
+    // Challenge complete -- graduation
+    html = '<div class="jh-card jh-card-grad">'
+      + '<div class="jh-content">'
+      + '<div class="jh-eyebrow">CHALLENGE COMPLETE</div>'
+      + '<h2 class="jh-title">You did it. Here\'s what you built in 30 days.</h2>'
+      + '<div class="jh-stats">'
+      + '<div class="jh-stat"><div class="jh-stat-val">' + progress.scriptsCreated + '</div><div class="jh-stat-label">Scripts</div></div>'
+      + '<div class="jh-stat"><div class="jh-stat-val">' + progress.clientsQualified + '</div><div class="jh-stat-label">Clients qualified</div></div>'
+      + '<div class="jh-stat"><div class="jh-stat-val">' + progress.adsCreated + '</div><div class="jh-stat-label">Ads created</div></div>'
+      + '</div>'
+      + '<button class="jh-cta" onclick="portalNav(document.querySelector(\'[onclick*=portal-sec-playbook]\'),\'portal-sec-playbook\')">'
+      + 'Generate Your Personalized Playbook'
+      + '</button>'
+      + '</div>'
+      + '</div>';
+  }
+
+  el.innerHTML = html;
+}
+
 // --- Initialize all dashboard upgrades ---
 function initDashboardCommandCenter() {
+  renderJourneyHero('dash-journey-hero');
   renderWelcomeBanner('dash-welcome-banner');
   renderQuickActions('dash-quick-actions');
   renderPartnerScore('dash-partner-score');

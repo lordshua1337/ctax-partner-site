@@ -630,6 +630,12 @@ async function generateScript() {
     // M2P2C2: Show smart suggestions
     setTimeout(function() { if (typeof showSmartSuggestions === 'function') showSmartSuggestions('script-builder'); }, 500);
 
+    // What's Next CTA
+    if (typeof WhatsNext !== 'undefined') {
+      var sbOut = document.getElementById('sb-output');
+      if (sbOut) WhatsNext.render(sbOut, 'script-builder');
+    }
+
     switchSbTab('conversation');
 
   } catch(err) {

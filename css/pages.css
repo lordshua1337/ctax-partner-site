@@ -9923,3 +9923,126 @@ body.ait-immersive-active .page{padding-top:0 !important}
   .ait-iq-ctas{flex-direction:column;align-items:stretch}
   .ait-iq-btn-primary,.ait-iq-btn-secondary{justify-content:center}
 }
+
+/* ── JOURNEY BAR ─────────────────────────────────── */
+
+.jb-container{padding:12px 28px 0;background:#fafbfd;border-bottom:1px solid var(--off2)}
+[data-theme="dark"] .jb-container{background:#0f1724;border-bottom-color:rgba(255,255,255,0.06)}
+
+.jb-wrap{display:flex;align-items:center;gap:0;padding:10px 0 14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.jb-phase{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:8px;border:none;background:transparent;cursor:pointer;white-space:nowrap;transition:background 0.2s}
+.jb-phase:hover{background:rgba(11,95,216,0.06)}
+
+.jb-phase-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;transition:all 0.2s}
+
+.jb-phase-active .jb-phase-num{background:#0B5FD8;color:#fff}
+.jb-phase-complete .jb-phase-num{background:#22c55e;color:#fff}
+.jb-phase-locked .jb-phase-num{background:var(--off2);color:var(--slate)}
+
+.jb-phase-text{text-align:left}
+.jb-phase-label{font-size:12px;font-weight:600;color:var(--navy);line-height:1.3}
+[data-theme="dark"] .jb-phase-label{color:#e2e8f0}
+.jb-phase-status{font-size:11px;color:var(--slate);line-height:1.3}
+
+.jb-phase-active .jb-phase-label{color:#0B5FD8}
+.jb-phase-complete .jb-phase-label{color:#22c55e}
+.jb-phase-locked .jb-phase-label{color:var(--slate)}
+.jb-phase-locked{cursor:default;opacity:0.5}
+.jb-phase-locked:hover{background:transparent}
+
+.jb-connector{width:32px;height:2px;flex-shrink:0;background:var(--off2);border-radius:1px}
+.jb-connector-complete{background:#22c55e}
+
+@media(max-width:768px){
+  .jb-container{padding:8px 16px 0}
+  .jb-phase{padding:6px 10px;gap:8px}
+  .jb-phase-num{width:24px;height:24px;font-size:11px}
+  .jb-phase-label{font-size:11px}
+  .jb-phase-status{font-size:10px}
+  .jb-connector{width:20px}
+}
+
+/* ── JOURNEY HERO (dashboard context card) ─────────── */
+
+.jh-card{display:flex;align-items:center;justify-content:space-between;padding:32px 36px;border-radius:12px;gap:32px}
+.jh-card-setup{background:linear-gradient(135deg,#0A1628 0%,#1a2d50 100%);color:#fff}
+.jh-card-plan{background:linear-gradient(135deg,#0B5FD8 0%,#1a3d8f 100%);color:#fff}
+.jh-card-start{background:linear-gradient(135deg,#7c3aed 0%,#4c1d95 100%);color:#fff}
+.jh-card-active{background:var(--white);border:1px solid var(--off2);color:var(--navy)}
+.jh-card-grad{background:linear-gradient(135deg,#059669 0%,#065f46 100%);color:#fff}
+[data-theme="dark"] .jh-card-active{background:#151f2e;border-color:rgba(255,255,255,0.08)}
+
+.jh-content{flex:1;min-width:0}
+.jh-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;opacity:0.7;margin-bottom:8px}
+.jh-card-active .jh-eyebrow{color:var(--blue);opacity:1}
+
+.jh-title{font-family:"DM Serif Display",serif;font-size:24px;line-height:1.3;margin:0 0 12px;letter-spacing:-0.02em}
+.jh-card-active .jh-title{color:var(--navy)}
+[data-theme="dark"] .jh-card-active .jh-title{color:#e2e8f0}
+
+.jh-desc{font-size:14px;line-height:1.6;opacity:0.85;margin:0 0 20px;max-width:520px}
+.jh-card-active .jh-desc{color:var(--slate)}
+
+.jh-icp-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,0.15);font-size:12px;font-weight:600;margin-bottom:12px}
+
+.jh-cta{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:8px;border:none;font-size:14px;font-weight:600;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s}
+.jh-card-setup .jh-cta,.jh-card-plan .jh-cta,.jh-card-start .jh-cta,.jh-card-grad .jh-cta{background:#fff;color:#0A1628}
+.jh-card-active .jh-cta{background:#0B5FD8;color:#fff}
+.jh-cta:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+
+.jh-cta-time{font-size:12px;opacity:0.6;margin-left:4px}
+
+.jh-visual{flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center}
+
+.jh-step-ring{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;border:3px solid rgba(255,255,255,0.25)}
+.jh-step-ring span{opacity:0.9}
+.jh-step-plan{border-color:rgba(255,255,255,0.3)}
+.jh-step-execute{border-color:rgba(255,255,255,0.3)}
+
+.jh-progress-ring{display:block}
+.jh-ring-text{position:absolute;font-size:18px;font-weight:700;color:var(--navy)}
+[data-theme="dark"] .jh-ring-text{color:#e2e8f0}
+
+.jh-stats{display:flex;gap:24px;margin-bottom:20px}
+.jh-stat-val{font-size:22px;font-weight:700;line-height:1}
+.jh-stat-label{font-size:11px;opacity:0.6;margin-top:4px;text-transform:uppercase;letter-spacing:0.05em}
+.jh-card-active .jh-stat-val{color:var(--navy)}
+[data-theme="dark"] .jh-card-active .jh-stat-val{color:#e2e8f0}
+
+@media(max-width:768px){
+  .jh-card{flex-direction:column;padding:24px 20px;gap:20px;text-align:center}
+  .jh-title{font-size:20px}
+  .jh-desc{font-size:13px;margin-left:auto;margin-right:auto}
+  .jh-stats{justify-content:center}
+  .jh-cta{width:100%;justify-content:center}
+}
+
+/* ── BP ICP NOTICE ─────────────────────────────────── */
+
+.bp-icp-banner{display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;margin-bottom:16px;font-size:13px;color:#166534}
+.bp-icp-banner svg{flex-shrink:0;color:#22c55e}
+[data-theme="dark"] .bp-icp-banner{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.15);color:#86efac}
+
+/* ── WHAT'S NEXT CTA ─────────────────────────────────── */
+
+.wn-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;margin-top:20px;background:rgba(11,95,216,0.04);border:1px solid rgba(11,95,216,0.12);border-radius:10px}
+[data-theme="dark"] .wn-card{background:rgba(11,95,216,0.08);border-color:rgba(11,95,216,0.2)}
+
+.wn-content{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.wn-icon{flex-shrink:0;color:#22c55e}
+.wn-text{font-size:13px;color:var(--body);line-height:1.5}
+
+.wn-actions{display:flex;gap:8px;flex-shrink:0}
+
+.wn-btn{padding:8px 16px;border-radius:6px;border:none;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:transform 0.15s,box-shadow 0.15s;white-space:nowrap}
+.wn-btn:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+
+.wn-btn-challenge{background:#8b5cf6;color:#fff}
+.wn-btn-next{background:#0B5FD8;color:#fff}
+
+@media(max-width:768px){
+  .wn-card{flex-direction:column;align-items:stretch;text-align:center}
+  .wn-content{justify-content:center}
+  .wn-actions{justify-content:center}
+}

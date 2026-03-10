@@ -38,6 +38,62 @@ function mkInitDownloadCounts() {
 }
 
 
+// -- AUTO-FILL FROM PARTNER BRAND --
+// Pre-fills all builder inputs from saved PartnerBrand data.
+// Called when the marketing kit section is entered.
+function mkAutoFillBrand() {
+  if (typeof PartnerBrand === 'undefined' || !PartnerBrand.hasProfile()) return;
+  var brand = PartnerBrand.load();
+
+  // Map of input IDs to brand fields
+  var firmInputs = ['mk-email-firm', 'mk-social-firm', 'mk-ads-firm', 'mk-onepager-firm', 'mk-flyer-firm', 'mk-deck-firm', 'mk-thankyou-firm'];
+  var phoneInputs = ['mk-email-phone', 'mk-onepager-phone', 'mk-flyer-phone'];
+  var emailInputs = ['mk-email-email', 'mk-onepager-email'];
+  var websiteInputs = ['mk-onepager-website'];
+  var taglineInputs = ['mk-email-tagline', 'mk-social-tagline', 'mk-ads-tagline', 'mk-onepager-tagline'];
+  var colorInputs = ['mk-social-color', 'mk-ads-color', 'mk-flyer-color'];
+
+  function fillInputs(ids, value) {
+    if (!value) return;
+    ids.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && !el.value) el.value = value;
+    });
+  }
+
+  fillInputs(firmInputs, brand.firmName);
+  fillInputs(phoneInputs, brand.phone);
+  fillInputs(emailInputs, brand.email);
+  fillInputs(websiteInputs, brand.website);
+  fillInputs(taglineInputs, brand.tagline);
+  fillInputs(colorInputs, brand.brandColor);
+
+  // Pre-load logo into builders if saved
+  if (brand.logoDataUrl) {
+    // Set global logo vars used by builders
+    window.mkSocialLogoUrl = window.mkSocialLogoUrl || brand.logoDataUrl;
+    window.mkOnePagerLogoUrl = window.mkOnePagerLogoUrl || brand.logoDataUrl;
+    window.mkAdsLogoUrl = window.mkAdsLogoUrl || brand.logoDataUrl;
+    window.mkFlyerLogoUrl = window.mkFlyerLogoUrl || brand.logoDataUrl;
+  }
+}
+
+// Save brand data when user fills in Marketing Kit fields
+function mkSaveBrandFromInputs() {
+  if (typeof PartnerBrand === 'undefined') return;
+  var data = {};
+  var firmEl = document.getElementById('mk-email-firm') || document.getElementById('mk-ads-firm') || document.getElementById('mk-social-firm');
+  if (firmEl && firmEl.value.trim()) data.firmName = firmEl.value.trim();
+  var phoneEl = document.getElementById('mk-email-phone') || document.getElementById('mk-flyer-phone');
+  if (phoneEl && phoneEl.value.trim()) data.phone = phoneEl.value.trim();
+  var emailEl = document.getElementById('mk-email-email');
+  if (emailEl && emailEl.value.trim()) data.email = emailEl.value.trim();
+  var colorEl = document.getElementById('mk-ads-color') || document.getElementById('mk-social-color');
+  if (colorEl && colorEl.value) data.brandColor = colorEl.value;
+
+  if (Object.keys(data).length > 0) PartnerBrand.save(data);
+}
+
 // -- CLOSE ALL BUILDERS --
 function mkCloseAllBuilders() {
   var ids = ['mk-email-builder', 'mk-social-builder', 'mk-onepager-builder',
@@ -68,6 +124,8 @@ function mkSaveRecent(type, label) {
   if (items.length > 10) items = items.slice(0, 10);
   localStorage.setItem(MK_RECENT_KEY, JSON.stringify(items));
   mkRenderRecent();
+  // Persist brand data from current inputs
+  if (typeof mkSaveBrandFromInputs === 'function') mkSaveBrandFromInputs();
 }
 
 function mkRenderRecent() {

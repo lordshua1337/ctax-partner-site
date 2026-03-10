@@ -139,8 +139,80 @@ function bpLoadInputs() {
   }
 }
 
+// Pre-fill from ICP profile if available (runs before restore)
+function bpPreFillFromICP() {
+  if (typeof ICPContext === 'undefined' || !ICPContext.hasProfile()) return false;
+  // Don't pre-fill if they already have saved inputs
+  if (bpLoadInputs()) return false;
+
+  try {
+    var icp = ICPContext.load();
+    var answers = icp.answers || {};
+
+    // Map ICP profession type to BP practice type
+    var profMap = {
+      'CPA / Tax Preparer': 'tax-prep',
+      'Bookkeeper / Accountant': 'accounting',
+      'Financial Advisor / Wealth Manager': 'financial-advisory',
+      'Attorney (Tax, Estate, or Bankruptcy)': 'legal',
+      'Insurance Agent or Broker': 'insurance',
+      'Mortgage / Real Estate Professional': 'mortgage'
+    };
+    var practiceVal = profMap[answers.q1] || '';
+    if (practiceVal) {
+      var opt = document.querySelector('#bpc-practice-opts .bpc-opt[data-val="' + practiceVal + '"]');
+      if (opt) {
+        opt.parentElement.querySelectorAll('.bpc-opt').forEach(function(s) { s.classList.remove('bpc-opt-selected'); });
+        opt.classList.add('bpc-opt-selected');
+      }
+    }
+
+    // Map ICP client base to BP audience
+    var audMap = {
+      'Individual W-2 employees and families': 'individuals',
+      'Self-employed individuals and freelancers': 'self-employed',
+      'Small business owners (under $5M revenue)': 'small-biz',
+      'High-net-worth individuals ($1M+ assets)': 'high-net-worth',
+      'A mix of individuals and small businesses': 'mixed'
+    };
+    var audVal = audMap[answers.q2] || '';
+    if (audVal) {
+      var audOpt = document.querySelector('#bpc-audience-opts .bpc-opt[data-val="' + audVal + '"]');
+      if (audOpt) {
+        audOpt.parentElement.querySelectorAll('.bpc-opt').forEach(function(s) { s.classList.remove('bpc-opt-selected'); });
+        audOpt.classList.add('bpc-opt-selected');
+      }
+    }
+
+    // Map ICP geography
+    if (answers.q5) {
+      var geoEl = document.getElementById('bp-geo');
+      if (geoEl && !geoEl.value) geoEl.value = answers.q5;
+    }
+
+    // Show notice
+    var notice = document.getElementById('bp-icp-notice');
+    if (!notice) {
+      var carousel = document.querySelector('.bpc-carousel');
+      if (carousel) {
+        notice = document.createElement('div');
+        notice.id = 'bp-icp-notice';
+        notice.className = 'bp-icp-banner';
+        notice.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'
+          + '<span>Pre-filled from your ICP: <strong>' + (icp.profession_type || icp.title || 'Your Profile') + '</strong>. Review and adjust if needed.</span>';
+        carousel.parentElement.insertBefore(notice, carousel);
+      }
+    }
+
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 // Restore a previously saved roadmap on page load
 function bpTryRestore() {
+  bpPreFillFromICP();
   var inputs = bpLoadInputs();
   if (!inputs || !inputs.practiceType) return;
 
@@ -681,6 +753,11 @@ function bpRenderRoadmap(roadmap) {
 
   // Restore AI insights if available
   bpTryRestoreAI();
+
+  // What's Next CTA
+  if (typeof WhatsNext !== 'undefined' && result) {
+    WhatsNext.render(result, 'business-planner');
+  }
 }
 
 // Save/load task progress from localStorage
