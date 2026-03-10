@@ -1644,43 +1644,16 @@ function chPrintProgress() {
     return;
   }
 
-  var origBodyMargin = document.body.style.margin;
-  var origBodyPadding = document.body.style.padding;
-  document.body.style.margin = '0';
-  document.body.style.padding = '0';
-  document.body.appendChild(pdfDoc);
-  window.scrollTo(0, 0);
-
-  var opt = {
-    margin: 0,
-    filename: '30-Day-Challenge-Progress.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: {
-      scale: 2,
-      useCORS: true,
-      letterRendering: true,
-      scrollY: -window.scrollY
-    },
-    jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' },
-    pagebreak: { mode: ['css'] }
-  };
-
   if (typeof showToast === 'function') {
     showToast('Generating progress report...', 'info');
   }
 
-  html2pdf().set(opt).from(pdfDoc).save().then(function() {
-    if (pdfDoc.parentNode) document.body.removeChild(pdfDoc);
-    document.body.style.margin = origBodyMargin;
-    document.body.style.padding = origBodyPadding;
+  CTAX_PDF.renderPdf(pdfDoc, '30-Day-Challenge-Progress.pdf').then(function() {
     if (typeof showToast === 'function') {
       showToast('Progress report downloaded!', 'success');
     }
   }).catch(function(err) {
     console.error('Challenge PDF error:', err);
-    if (pdfDoc.parentNode) document.body.removeChild(pdfDoc);
-    document.body.style.margin = origBodyMargin;
-    document.body.style.padding = origBodyPadding;
     if (typeof showToast === 'function') {
       showToast('PDF export failed -- try again.', 'error');
     }

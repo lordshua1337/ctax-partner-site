@@ -494,18 +494,7 @@ function awrExportPdf() {
   '</div>' +
   '<div style="line-height:1.8;font-size:15px;white-space:pre-wrap">' + awrEsc(output.value) + '</div>';
 
-  document.body.appendChild(el);
-
-  if (typeof html2pdf !== 'undefined') {
-    html2pdf().set({ margin: 0.5, filename: 'ctax-' + type + '.pdf', html2canvas: { scale: 2 }, jsPDF: { format: 'letter' } })
-      .from(el).save().then(function() { el.remove(); });
-  } else {
-    var win = window.open('', '_blank');
-    win.document.write('<html><head><title>' + label + '</title></head><body>' + el.outerHTML + '</body></html>');
-    win.document.close();
-    win.print();
-    el.remove();
-  }
+  CTAX_PDF.exportElement(el, 'ctax-' + type + '.pdf');
 }
 
 // ── DRAFT & VERSION SYSTEM ─────────────────────────

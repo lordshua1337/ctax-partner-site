@@ -417,19 +417,7 @@ function arpExportSingle(fmtId) {
   '</div>' +
   '<div style="line-height:1.8;font-size:15px">' + arpFormatContent(content) + '</div>';
 
-  document.body.appendChild(el);
-
-  if (typeof html2pdf !== 'undefined') {
-    html2pdf().set({ margin: 0.5, filename: 'ctax-' + fmtId + '.pdf', html2canvas: { scale: 2 }, jsPDF: { format: 'letter' } })
-      .from(el).save().then(function() { el.remove(); });
-  } else {
-    // Fallback: open print dialog
-    var win = window.open('', '_blank');
-    win.document.write('<html><head><title>' + label + '</title></head><body>' + el.outerHTML + '</body></html>');
-    win.document.close();
-    win.print();
-    el.remove();
-  }
+  CTAX_PDF.exportElement(el, 'ctax-' + fmtId + '.pdf');
 }
 
 function arpExportAll() {
@@ -458,18 +446,7 @@ function arpExportAll() {
     '</div>';
   }
 
-  document.body.appendChild(el);
-
-  if (typeof html2pdf !== 'undefined') {
-    html2pdf().set({ margin: 0.5, filename: 'ctax-content-pack.pdf', html2canvas: { scale: 2 }, jsPDF: { format: 'letter' }, pagebreak: { mode: 'css' } })
-      .from(el).save().then(function() { el.remove(); });
-  } else {
-    var win = window.open('', '_blank');
-    win.document.write('<html><head><title>Content Pack</title></head><body>' + el.outerHTML + '</body></html>');
-    win.document.close();
-    win.print();
-    el.remove();
-  }
+  CTAX_PDF.exportElement(el, 'ctax-content-pack.pdf');
 }
 
 // ── FALLBACK TEMPLATES ────────────────────────────

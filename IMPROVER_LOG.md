@@ -1,5 +1,47 @@
 # IMPROVER LOG — ctax-partner-site
 
+## Improvement Run — 2026-03-07 04:00 CST (Afterburner)
+
+### Run Profile
+- Cleanup: 0 | Structural: 3 | Feature: 0
+- Codebase state: improving (portal.js down to 2221 from 2867, continuing decomposition)
+- Next run should focus on: Extract keyboard shortcuts overlay (kbdHelp*, ~35 lines), collapsible nav + breadcrumb (~80 lines), referral link builder (rlg* + srl*, ~100 lines), smart insights banner (dib*, ~40 lines). After portal.js is under 1500 lines, shift to page-builder.js (3572 lines) or business-planner.js (2020 lines).
+- Research notes: Continued portal.js decomposition from Run 2. Three major extractions this run — gamification, onboarding wizard, earnings/calculator. All independently loadable modules with clear boundaries.
+
+### Changes Made
+
+1. **Extract gamification system to portal-gamification.js** (js/portal-gamification.js, js/portal.js, index.html) [STRUCTURAL]
+   - What: Moved GAMIFICATION_KEY, 8 functions (getGamificationData, saveGamificationData, calcPartnerLevel, getLevelThreshold, initGamification, updateStreak, checkAchievements, showAchievementToast) and fireConfetti to a new 163-line module
+   - Why: Gamification is a self-contained feature with its own state management; extraction reduces portal.js coupling
+
+2. **Extract onboarding wizard to portal-onboarding.js** (js/portal-onboarding.js, js/portal.js, index.html) [STRUCTURAL]
+   - What: Moved OB_WIZARD_KEY, OB_STEPS data, _obStep var, and 7 functions (obWizardShouldShow, obWizardStart, obWizardClose, obWizardDismiss, obWizardComplete, createObWizard, obWizardGoTo) to a new 144-line module
+   - Why: Onboarding wizard has no dependencies on other portal code; independently testable and maintainable
+
+3. **Extract earnings & revenue calculator to portal-earnings.js** (js/portal-earnings.js, js/portal.js, index.html) [STRUCTURAL]
+   - What: Moved _portalTier, _portalTierConfig, EARN_DATA (4 period datasets), and 7 functions (setCalcTier, calcProjection, animateCalcValue, setEarnPeriod, exportEarningsCSV, initEarningsAnimation, initPayCountdown, payYearFilter) to a new 348-line module
+   - Why: Largest extraction this run (348 lines). Calculator and earnings are the most complex pure-UI features — isolation makes them debuggable and reduces portal.js to 2221 lines
+
+### Skipped / Deferred
+- Keyboard shortcuts overlay (kbdHelp*, ~35 lines) — next structural target
+- Collapsible nav + breadcrumb system (~80 lines) — next structural target
+- Referral link builder (rlg* + srl* functions, ~100 lines) — next structural target
+- Smart insights banner (dib*, ~40 lines) — small but clean extraction
+- Storage key centralization (68 keys across 15+ files) — still too large for single improvement
+- pages.css split (9727 lines) — major undertaking, needs dedicated run
+- page-builder.js (3572 lines) — next monolith to decompose after portal.js is under 1500
+- business-planner.js (2020 lines) — third monolith target
+
+### Project Health Snapshot
+- Largest file: page-builder.js (3572 lines)
+- portal.js: 2221 lines (down from 2867, cumulative -884 from original 3105)
+- Extracted modules: 7 (api, notifications, cmdk, help-chat, gamification, onboarding, earnings)
+- Files over 400 lines: 16 JS files + pages.css (9727)
+- Test status: no tests
+- Build status: no build system (static files)
+
+---
+
 ## Improvement Run — 2026-03-06 04:00 CST (Afterburner)
 
 ### Run Profile

@@ -1056,40 +1056,12 @@ function bpPrintRoadmap() {
     return;
   }
 
-  // Temporarily zero out body margin so it doesn't affect the capture.
-  var origBodyMargin = document.body.style.margin;
-  var origBodyPadding = document.body.style.padding;
-  document.body.style.margin = '0';
-  document.body.style.padding = '0';
-  document.body.appendChild(pdfDoc);
-  window.scrollTo(0, 0);
-
-  var opt = {
-    margin: 0,
-    filename: '90-Day-Growth-Roadmap.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: {
-      scale: 2,
-      useCORS: true,
-      letterRendering: true,
-      scrollY: -window.scrollY
-    },
-    jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' },
-    pagebreak: { mode: ['css'] }
-  };
-
   showToast('Generating PDF -- this may take a moment...', 'info');
 
-  html2pdf().set(opt).from(pdfDoc).save().then(function() {
-    if (pdfDoc.parentNode) document.body.removeChild(pdfDoc);
-    document.body.style.margin = origBodyMargin;
-    document.body.style.padding = origBodyPadding;
+  CTAX_PDF.renderPdf(pdfDoc, '90-Day-Growth-Roadmap.pdf').then(function() {
     showToast('PDF downloaded!', 'success');
   }).catch(function(err) {
     console.error('PDF export error:', err);
-    if (pdfDoc.parentNode) document.body.removeChild(pdfDoc);
-    document.body.style.margin = origBodyMargin;
-    document.body.style.padding = origBodyPadding;
     showToast('PDF export failed -- try again.', 'error');
   });
 }
@@ -1775,36 +1747,45 @@ function bpExportSlides() {
   html += '</div>';
 
   doc.innerHTML = html;
-  document.body.appendChild(doc);
 
-  // Export with html2pdf
+  // Use overlay approach for clean capture
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#0A1628;overflow:auto;margin:0;padding:0;';
+  overlay.appendChild(doc);
+  document.body.appendChild(overlay);
+  doc.style.position = 'relative';
+  doc.style.display = 'block';
+
+  function doExport() {
+    var opt = {
+      margin: 0,
+      filename: 'Growth-Roadmap-Presentation.pdf',
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: { scale: 2, useCORS: true, scrollX: 0, scrollY: 0, width: 1024 },
+      jsPDF: { unit: 'px', format: [1024, 576], orientation: 'landscape', hotfixes: ['px_scaling'] },
+      pagebreak: { mode: 'css' }
+    };
+    requestAnimationFrame(function() {
+      setTimeout(function() {
+        html2pdf().set(opt).from(doc).save().then(function() {
+          if (overlay.parentNode) document.body.removeChild(overlay);
+          if (typeof showToast === 'function') showToast('Presentation PDF saved!', 'success');
+        }).catch(function() {
+          if (overlay.parentNode) document.body.removeChild(overlay);
+          if (typeof showToast === 'function') showToast('PDF export failed. Try again.', 'error');
+        });
+      }, 200);
+    });
+  }
+
   if (typeof html2pdf === 'undefined') {
-    // Load html2pdf if not already loaded
     var script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-    script.onload = function() { _bpDoSlideExport(doc); };
+    script.onload = doExport;
     document.head.appendChild(script);
   } else {
-    _bpDoSlideExport(doc);
+    doExport();
   }
-}
-
-function _bpDoSlideExport(doc) {
-  var opt = {
-    margin: 0,
-    filename: 'Growth-Roadmap-Presentation.pdf',
-    image: { type: 'jpeg', quality: 0.95 },
-    html2canvas: { scale: 2, useCORS: true, width: 1024 },
-    jsPDF: { unit: 'px', format: [1024, 576], orientation: 'landscape', hotfixes: ['px_scaling'] },
-    pagebreak: { mode: 'css' }
-  };
-  html2pdf().set(opt).from(doc).save().then(function() {
-    document.body.removeChild(doc);
-    if (typeof showToast === 'function') showToast('Presentation PDF saved!', 'success');
-  }).catch(function() {
-    document.body.removeChild(doc);
-    if (typeof showToast === 'function') showToast('PDF export failed. Try again.', 'error');
-  });
 }
 
 // ═══ M5P1C1: REAL INTELLIGENCE -- AI-POWERED ROADMAP ═══

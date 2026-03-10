@@ -219,12 +219,18 @@
       return;
     }
     var pdfDoc = buildPdfDoc();
-    var origMargin = document.body.style.margin;
-    var origPadding = document.body.style.padding;
-    document.body.style.margin = '0';
-    document.body.style.padding = '0';
-    document.body.appendChild(pdfDoc);
-    window.scrollTo(0, 0);
+
+    // Create a full-viewport overlay so html2canvas captures cleanly
+    // without interference from the existing page content
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#fff;overflow:auto;margin:0;padding:0;';
+    overlay.appendChild(pdfDoc);
+    document.body.appendChild(overlay);
+
+    // Force the doc to block display at a known position
+    pdfDoc.style.position = 'relative';
+    pdfDoc.style.display = 'block';
+    pdfDoc.style.margin = '0 auto';
 
     var opt = {
       margin: 0,
@@ -234,23 +240,26 @@
         scale: 2,
         useCORS: true,
         letterRendering: true,
-        scrollY: -window.scrollY,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: 816,
         backgroundColor: '#ffffff'
       },
       jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' },
       pagebreak: { mode: ['css'] }
     };
 
-    html2pdf().set(opt).from(pdfDoc).save().then(function() {
-      document.body.removeChild(pdfDoc);
-      document.body.style.margin = origMargin;
-      document.body.style.padding = origPadding;
-    }).catch(function(err) {
-      console.error('PDF error:', err);
-      if (pdfDoc.parentNode) document.body.removeChild(pdfDoc);
-      document.body.style.margin = origMargin;
-      document.body.style.padding = origPadding;
-      showError('PDF generation failed. Please try again.');
+    // Wait for styles/fonts/images to compute before capturing
+    requestAnimationFrame(function() {
+      setTimeout(function() {
+        html2pdf().set(opt).from(pdfDoc).save().then(function() {
+          if (overlay.parentNode) document.body.removeChild(overlay);
+        }).catch(function(err) {
+          console.error('PDF error:', err);
+          if (overlay.parentNode) document.body.removeChild(overlay);
+          showError('PDF generation failed. Please try again.');
+        });
+      }, 200);
     });
   };
 

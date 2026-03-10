@@ -340,26 +340,7 @@ function aicExportCampaign() {
       + '</div>';
   });
 
-  document.body.appendChild(doc);
-
-  if (typeof html2pdf !== 'undefined') {
-    html2pdf().set({
-      margin: [10, 10],
-      filename: 'Campaign_' + (campaign.name || 'export').replace(/\s+/g, '_') + '.pdf',
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    }).from(doc).save().then(function() {
-      document.body.removeChild(doc);
-    });
-  } else {
-    var win = window.open('', '_blank');
-    win.document.write('<html><head><title>Campaign</title><style>body{font-family:sans-serif;padding:40px;color:#333}h3{color:#0A1628;margin-top:24px}p{line-height:1.7}</style></head><body>');
-    win.document.write(doc.innerHTML);
-    win.document.write('</body></html>');
-    win.document.close();
-    win.print();
-    document.body.removeChild(doc);
-  }
+  CTAX_PDF.exportElement(doc, 'Campaign_' + (campaign.name || 'export').replace(/\s+/g, '_') + '.pdf', { margin: 10, unit: 'mm', format: 'a4' });
 }
 
 // ── STORAGE ──────────────────────────────

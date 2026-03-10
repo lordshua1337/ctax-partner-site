@@ -22,7 +22,7 @@ var CTAX_PDF = (function() {
     if (STYLE_TAG) return;
     STYLE_TAG = document.createElement('style');
     STYLE_TAG.textContent = [
-      '.ctpdf-doc { width:816px; margin:0; padding:0; display:inline-block; font-family:"DM Sans",system-ui,sans-serif; line-height:1.6; color:' + BODY_COLOR + '; }',
+      '.ctpdf-doc { width:816px; margin:0; padding:0; display:block; font-family:"DM Sans",system-ui,sans-serif; line-height:1.6; color:' + BODY_COLOR + '; }',
       '.ctpdf-cover { width:100%; height:1056px; background:linear-gradient(135deg,' + NAVY + ' 0%,#112244 60%,#1a3160 100%); display:flex; align-items:center; justify-content:center; padding:0; margin:0; position:relative; overflow:hidden; }',
       '.ctpdf-cover-inner { text-align:center; padding:60px; position:relative; z-index:1; }',
       '.ctpdf-cover-logo { height:36px; width:auto; margin-bottom:40px; }',
@@ -156,12 +156,16 @@ var CTAX_PDF = (function() {
   }
 
   function renderPdf(doc, filename) {
-    var origMargin = document.body.style.margin;
-    var origPadding = document.body.style.padding;
-    document.body.style.margin = '0';
-    document.body.style.padding = '0';
-    document.body.appendChild(doc);
-    window.scrollTo(0, 0);
+    // Create a full-viewport overlay so html2canvas captures cleanly
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#fff;overflow:auto;margin:0;padding:0;';
+    overlay.appendChild(doc);
+    document.body.appendChild(overlay);
+
+    // Force the doc to block display at a known position
+    doc.style.position = 'relative';
+    doc.style.display = 'block';
+    doc.style.margin = '0 auto';
 
     var opt = {
       margin: 0,
@@ -171,28 +175,90 @@ var CTAX_PDF = (function() {
         scale: 2,
         useCORS: true,
         letterRendering: true,
-        scrollY: -window.scrollY,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: 816,
         backgroundColor: '#ffffff'
       },
       jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' },
       pagebreak: { mode: ['css'] }
     };
 
-    return html2pdf().set(opt).from(doc).save().then(function() {
-      document.body.removeChild(doc);
-      document.body.style.margin = origMargin;
-      document.body.style.padding = origPadding;
+    // Wait for styles/fonts/images to compute before capturing
+    return new Promise(function(resolve) {
+      requestAnimationFrame(function() {
+        setTimeout(resolve, 200);
+      });
+    }).then(function() {
+      return html2pdf().set(opt).from(doc).save();
+    }).then(function() {
+      if (overlay.parentNode) document.body.removeChild(overlay);
     }).catch(function(err) {
       console.error('PDF error:', err);
-      if (doc.parentNode) document.body.removeChild(doc);
-      document.body.style.margin = origMargin;
-      document.body.style.padding = origPadding;
+      if (overlay.parentNode) document.body.removeChild(overlay);
     });
   }
 
   function esc(t) {
     if (!t) return '';
     return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // General-purpose PDF export for any DOM element.
+  // Used by tools that build their own HTML (ai-campaign, ai-writer, etc.)
+  // instead of using the CTAX_PDF brand system.
+  function exportElement(el, filename, extraOpts) {
+    if (typeof html2pdf === 'undefined') {
+      // Fallback: open in new window for printing
+      var win = window.open('', '_blank');
+      if (win) {
+        win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + esc(filename) + '</title></head><body>' + el.outerHTML + '</body></html>');
+        win.document.close();
+        win.print();
+      }
+      return Promise.resolve();
+    }
+
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#fff;overflow:auto;margin:0;padding:0;';
+    overlay.appendChild(el);
+    document.body.appendChild(overlay);
+
+    el.style.position = 'relative';
+    el.style.display = 'block';
+
+    var opt = {
+      margin: extraOpts && extraOpts.margin != null ? extraOpts.margin : 0.5,
+      filename: filename,
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        letterRendering: true,
+        scrollX: 0,
+        scrollY: 0,
+        backgroundColor: '#ffffff'
+      },
+      jsPDF: {
+        unit: extraOpts && extraOpts.unit || 'in',
+        format: extraOpts && extraOpts.format || 'letter',
+        orientation: 'portrait'
+      },
+      pagebreak: { mode: ['css'] }
+    };
+
+    return new Promise(function(resolve) {
+      requestAnimationFrame(function() {
+        setTimeout(resolve, 200);
+      });
+    }).then(function() {
+      return html2pdf().set(opt).from(el).save();
+    }).then(function() {
+      if (overlay.parentNode) document.body.removeChild(overlay);
+    }).catch(function(err) {
+      console.error('PDF export error:', err);
+      if (overlay.parentNode) document.body.removeChild(overlay);
+    });
   }
 
   return {
@@ -202,6 +268,7 @@ var CTAX_PDF = (function() {
     addHeader: addHeader,
     addFooter: addFooter,
     renderPdf: renderPdf,
+    exportElement: exportElement,
     esc: esc,
     NAVY: NAVY,
     BLUE: BLUE,

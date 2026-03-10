@@ -264,28 +264,7 @@ function bppExportPdf() {
   // Add chapters
   doc.innerHTML += el.innerHTML;
 
-  document.body.appendChild(doc);
-
-  if (typeof html2pdf !== 'undefined') {
-    html2pdf().set({
-      margin: [10, 10],
-      filename: 'Growth_Playbook_' + (inputs.practiceType || 'partner') + '.pdf',
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-    }).from(doc).save().then(function() {
-      document.body.removeChild(doc);
-    });
-  } else {
-    // Fallback: print
-    var win = window.open('', '_blank');
-    win.document.write('<html><head><title>Growth Playbook</title><style>body{font-family:sans-serif;padding:40px;color:#333}h3{color:#0A1628;margin-top:32px}p{line-height:1.7;margin-bottom:12px}</style></head><body>');
-    win.document.write(doc.innerHTML);
-    win.document.write('</body></html>');
-    win.document.close();
-    win.print();
-    document.body.removeChild(doc);
-  }
+  CTAX_PDF.exportElement(doc, 'Growth_Playbook_' + (inputs.practiceType || 'partner') + '.pdf', { margin: 10, unit: 'mm', format: 'a4' });
 }
 
 // ── FALLBACK CONTENT ──────────────────────────────
