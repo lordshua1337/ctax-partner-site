@@ -125,11 +125,11 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
           Revenue Calculator
         </a>
-        <a class="portal-nav-item" data-labs onclick="portalNav(this,'portal-sec-page-metrics')">
+        <a class="portal-nav-item" data-labs onclick="portalNav(this,'portal-sec-page-metrics')" style="display:none">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           Page Metrics
         </a>
-        <a class="portal-nav-item" data-labs onclick="portalNav(this,'portal-sec-ai-dashboard')">
+        <a class="portal-nav-item" data-labs onclick="portalNav(this,'portal-sec-ai-dashboard')" style="display:none">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
           AI Dashboard
         </a>
@@ -518,6 +518,25 @@
         </div>
       </div>
 
+      <!-- Dashboard Tab Bar -->
+      <div class="dash-tab-bar">
+        <button class="dash-tab dash-tab-active" onclick="dashSwitchTab(this,'dash-tab-overview')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Overview
+        </button>
+        <button class="dash-tab" onclick="dashSwitchTab(this,'dash-tab-analytics')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Page Analytics
+        </button>
+        <button class="dash-tab" onclick="dashSwitchTab(this,'dash-tab-ai')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          AI Tools
+        </button>
+      </div>
+
+      <!-- Tab: Overview -->
+      <div class="dash-tab-panel dash-tab-panel-active" id="dash-tab-overview">
+
       <!-- Client Pipeline -->
       <div class="dash-pipeline">
         <div class="dash-pipeline-header">
@@ -705,6 +724,24 @@
           </a>
         </div>
       </div>
+
+      </div><!-- /dash-tab-overview -->
+
+      <!-- Tab: Page Analytics -->
+      <div class="dash-tab-panel" id="dash-tab-analytics" style="display:none">
+        <div id="pa-container"></div>
+      </div>
+
+      <!-- Tab: AI Tools -->
+      <div class="dash-tab-panel" id="dash-tab-ai" style="display:none">
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+          <button class="btn btn-p btn-sm" onclick="aicShowBuilder()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Campaign Builder</button>
+          <button class="btn btn-p btn-sm" onclick="arpShowRepurposer()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg> Repurpose Content</button>
+          <button class="btn btn-p btn-sm" onclick="awrShowWriter()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> AI Writer</button>
+        </div>
+        <div id="dash-ai-content"></div>
+      </div>
+
     </div>
 
     <!-- ═══ REFERRALS SECTION ═══ -->

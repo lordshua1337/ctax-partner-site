@@ -132,6 +132,30 @@ function refBulkExport() {
 }
 
 // --- Portal navigation ---
+// ── DASHBOARD TAB SWITCHING ────────────────────────────
+function dashSwitchTab(btn, panelId) {
+  document.querySelectorAll('.dash-tab').forEach(function(t) { t.classList.remove('dash-tab-active'); });
+  document.querySelectorAll('.dash-tab-panel').forEach(function(p) { p.style.display = 'none'; p.classList.remove('dash-tab-panel-active'); });
+  btn.classList.add('dash-tab-active');
+  var panel = document.getElementById(panelId);
+  if (panel) { panel.style.display = 'block'; panel.classList.add('dash-tab-panel-active'); }
+
+  // Lazy-render tab content
+  if (panelId === 'dash-tab-analytics' && typeof paRender === 'function') paRender();
+  if (panelId === 'dash-tab-ai') {
+    // Move AI Dashboard content into the dashboard tab on first activation
+    var target = document.getElementById('dash-ai-content');
+    var source = document.getElementById('portal-sec-ai-dashboard');
+    if (target && source && !target._aiMoved) {
+      // Move inner content (tabs + panels) into the dashboard tab
+      var children = source.querySelectorAll('.aid-tabs, .aid-panel');
+      children.forEach(function(child) { target.appendChild(child); });
+      target._aiMoved = true;
+    }
+    if (typeof aidRenderOverview === 'function') aidRenderOverview();
+  }
+}
+
 function portalNav(el, secId) {
   document.querySelectorAll('.portal-nav-item').forEach(function(a) { a.classList.remove('pni-active'); });
   el.classList.add('pni-active');

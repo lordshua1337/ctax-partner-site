@@ -10161,3 +10161,100 @@ body.ait-immersive-active .page{padding-top:0 !important}
   .wn-content{justify-content:center}
   .wn-actions{justify-content:center}
 }
+
+/* ══════════════════════════════════════════
+   DASHBOARD TABS
+   ══════════════════════════════════════════ */
+
+.dash-tab-bar{display:flex;gap:4px;margin-bottom:24px;background:var(--off);border-radius:10px;padding:4px;border:1px solid var(--off2)}
+.dash-tab{display:flex;align-items:center;gap:6px;padding:10px 20px;border:none;background:transparent;border-radius:8px;font-size:13px;font-weight:600;color:var(--slate);cursor:pointer;transition:all .2s;font-family:inherit}
+.dash-tab:hover{color:var(--navy);background:rgba(11,95,216,0.04)}
+.dash-tab-active{background:var(--white);color:var(--blue);box-shadow:0 1px 4px rgba(10,22,40,0.08)}
+.dash-tab svg{opacity:0.6;transition:opacity .2s}
+.dash-tab-active svg{opacity:1}
+
+.dash-tab-panel{animation:dashTabFade .25s ease}
+@keyframes dashTabFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══════════════════════════════════════════
+   PAGE ANALYTICS
+   ══════════════════════════════════════════ */
+
+.pa-empty{text-align:center;padding:60px 20px;color:var(--slate)}
+.pa-empty svg{opacity:0.3;margin-bottom:12px}
+.pa-empty h3{font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy);margin:0 0 8px}
+.pa-empty p{font-size:14px;margin:0}
+
+.pa-summary-cards{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:28px}
+.pa-scard{background:var(--white);border:1px solid var(--off2);border-radius:10px;padding:16px;text-align:center}
+.pa-scard-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;margin-bottom:8px}
+.pa-scard-value{font-family:'DM Serif Display',serif;font-size:22px;color:var(--navy);line-height:1.2}
+.pa-scard-label{font-size:11px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:0.04em;margin-top:4px}
+
+.pa-section-title{font-family:'DM Serif Display',serif;font-size:18px;color:var(--navy);margin-bottom:16px}
+
+.pa-page-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+
+.pa-page-card{background:var(--white);border:1px solid var(--off2);border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(10,22,40,0.04)}
+.pa-page-header{margin-bottom:14px}
+.pa-page-title{font-family:'DM Serif Display',serif;font-size:16px;color:var(--navy);margin-bottom:2px}
+.pa-page-slug{font-size:12px;color:var(--slate);font-weight:500}
+
+.pa-mini-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
+.pa-mini{text-align:center}
+.pa-mini-val{font-size:16px;font-weight:700;line-height:1.2}
+.pa-mini-lbl{font-size:10px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:0.04em;margin-top:2px}
+
+.pa-sparkline{margin-bottom:14px;border-radius:8px;overflow:hidden;background:var(--off);padding:4px}
+.pa-spark-svg{width:100%;height:50px;display:block}
+
+.pa-referrers{margin-bottom:14px}
+.pa-ref-title{font-size:11px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px}
+.pa-ref-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.pa-ref-source{font-size:12px;font-weight:600;color:var(--navy);min-width:90px}
+.pa-ref-bar-wrap{flex:1;height:6px;background:var(--off2);border-radius:3px;overflow:hidden}
+.pa-ref-bar{height:100%;background:var(--blue);border-radius:3px;transition:width .4s ease}
+.pa-ref-pct{font-size:12px;font-weight:600;color:var(--slate);min-width:30px;text-align:right}
+
+.pa-detail-btn{width:100%;padding:10px;background:var(--off);border:1px solid var(--off2);border-radius:8px;font-size:13px;font-weight:600;color:var(--blue);cursor:pointer;transition:all .2s;font-family:inherit}
+.pa-detail-btn:hover{background:rgba(11,95,216,0.06);border-color:var(--blue)}
+
+/* Page Analytics Modal */
+.pa-modal-overlay{position:fixed;inset:0;background:rgba(10,22,40,0.5);backdrop-filter:blur(4px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.pa-modal{background:var(--white);border-radius:14px;max-width:700px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(10,22,40,0.25)}
+.pa-modal-header{display:flex;justify-content:space-between;align-items:flex-start;padding:20px 24px;border-bottom:1px solid var(--off2)}
+.pa-modal-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy)}
+.pa-modal-slug{font-size:12px;color:var(--slate);margin-top:2px}
+.pa-modal-close{background:none;border:none;font-size:24px;color:var(--slate);cursor:pointer;line-height:1;padding:4px 8px}
+.pa-modal-close:hover{color:var(--navy)}
+.pa-modal-body{padding:24px}
+
+.pa-detail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.pa-dstat{text-align:center;padding:14px;background:var(--off);border-radius:10px}
+.pa-dstat-val{font-size:22px;font-weight:700;line-height:1.2}
+.pa-dstat-lbl{font-size:11px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:0.04em;margin-top:4px}
+
+.pa-detail-chart-section{margin-bottom:24px}
+.pa-detail-chart-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px}
+.pa-detail-chart{background:var(--off);border-radius:10px;padding:12px;overflow:hidden}
+.pa-bar-svg,.pa-trend-svg{width:100%;height:auto;display:block}
+
+.pa-detail-sources{padding:4px 0}
+.pa-source-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.pa-source-name{font-size:13px;font-weight:600;color:var(--navy);min-width:110px}
+.pa-source-bar-wrap{flex:1;height:8px;background:var(--off2);border-radius:4px;overflow:hidden}
+.pa-source-bar{height:100%;background:var(--blue);border-radius:4px;transition:width .4s ease}
+.pa-source-pct{font-size:13px;font-weight:600;color:var(--slate);min-width:35px;text-align:right}
+
+/* Responsive */
+@media(max-width:900px){
+  .pa-summary-cards{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:600px){
+  .pa-summary-cards{grid-template-columns:repeat(2,1fr)}
+  .pa-page-grid{grid-template-columns:1fr}
+  .pa-mini-stats{grid-template-columns:repeat(3,1fr)}
+  .pa-detail-stats{grid-template-columns:repeat(2,1fr)}
+  .dash-tab-bar{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .dash-tab{white-space:nowrap;min-width:0;padding:8px 14px;font-size:12px}
+}
