@@ -7,6 +7,17 @@
 
   // All available templates from the Partner Portal Templates project
   var AB_TEMPLATES = [
+    // Master Authority Home Page
+    {
+      id: 'master-authority-home',
+      name: 'Authority Home Page',
+      category: 'master',
+      desc: 'Your branded landing page hub -- links to all educational guides with consultation form and referral tracking.',
+      tags: ['home page', 'consultation form', 'referral tracking', 'all services'],
+      url: BASE_URL + '/authority-home',
+      featured: true,
+    },
+
     // Educational Authority Pages (Tax Resolution Guides)
     {
       id: 'edu-irs-wage-garnishment',
@@ -194,6 +205,9 @@
     if (brand.phone) params.push('phone=' + encodeURIComponent(brand.phone));
     if (brand.email) params.push('email=' + encodeURIComponent(brand.email));
     if (brand.website) params.push('website=' + encodeURIComponent(brand.website));
+    // Add ref param for referral tracking (slug from firm name)
+    var ref = brand.firmName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    if (ref) params.push('ref=' + encodeURIComponent(ref));
 
     return params.length ? '?' + params.join('&') : '';
   }
@@ -279,7 +293,7 @@
           '</div>' +
         '</div>' +
         '<div class="ab-card-body">' +
-          '<div class="ab-card-cat">' + (t.category === 'educational' ? 'Educational' : 'Conversion') + '</div>' +
+          '<div class="ab-card-cat">' + (t.category === 'master' ? 'Master Page' : t.category === 'educational' ? 'Educational' : 'Conversion') + '</div>' +
           '<h3 class="ab-card-title">' + t.name + '</h3>' +
           '<p class="ab-card-desc">' + t.desc + '</p>' +
           '<div class="ab-card-tags">' +

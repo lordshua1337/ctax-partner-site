@@ -8826,6 +8826,9 @@ body:not(.portal-mode) > .jazz-bar{display:none!important}
 /* Category badges via data attribute */
 .ab-grid .ab-card[data-id^="edu"] .ab-card-cat{background:#ecfdf5;color:#059669}
 .ab-grid .ab-card[data-id^="tpl"] .ab-card-cat{background:#eff6ff;color:#2563eb}
+.ab-grid .ab-card[data-id="master-authority-home"]{grid-column:1/-1;border:2px solid #0d9488}
+.ab-grid .ab-card[data-id="master-authority-home"] .ab-card-cat{background:#f0fdfa;color:#0d9488;font-size:12px}
+.ab-grid .ab-card[data-id="master-authority-home"] .ab-card-preview{aspect-ratio:21/9}
 
 /* Responsive */
 @media(max-width:768px){
