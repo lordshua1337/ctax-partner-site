@@ -4724,10 +4724,16 @@
         <p class="portal-sec-desc">Publish professional authority pages and conversion templates. Browse, preview, and deploy with one click.</p>
       </div>
 
-      <div class="ab-filters">
-        <button class="ab-filter-btn ab-filter-active" onclick="abFilter('all', this)">All Templates</button>
-        <button class="ab-filter-btn" onclick="abFilter('educational', this)">Educational Pages</button>
-        <button class="ab-filter-btn" onclick="abFilter('conversion', this)">Conversion Templates</button>
+      <div class="ab-toolbar">
+        <div class="ab-filters">
+          <button class="ab-filter-btn ab-filter-active" onclick="abFilter('all', this)">All Templates</button>
+          <button class="ab-filter-btn" onclick="abFilter('educational', this)">Educational Pages</button>
+          <button class="ab-filter-btn" onclick="abFilter('conversion', this)">Conversion Templates</button>
+        </div>
+        <div class="ab-demo-controls" id="ab-demo-controls">
+          <button class="ab-btn ab-btn-demo" onclick="abLoadDemoProfile()">Load Demo Profile</button>
+          <button class="ab-btn ab-btn-demo-clear" onclick="abClearDemoProfile()" style="display:none" id="ab-demo-clear">Clear Demo</button>
+        </div>
       </div>
 
       <div class="ab-grid" id="ab-grid"></div>

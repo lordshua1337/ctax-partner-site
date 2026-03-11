@@ -183,6 +183,75 @@
   var activeFilter = 'all';
   var previewingTemplate = null;
 
+  // ── Brand query params helper ──
+  // Reads ctax_partner_brand from localStorage and builds a query string
+  function getBrandQueryString() {
+    var brand = (typeof PartnerBrand !== 'undefined' && PartnerBrand.load) ? PartnerBrand.load() : null;
+    if (!brand || !brand.firmName) return '';
+
+    var params = [];
+    if (brand.firmName) params.push('brand=' + encodeURIComponent(brand.firmName));
+    if (brand.phone) params.push('phone=' + encodeURIComponent(brand.phone));
+    if (brand.email) params.push('email=' + encodeURIComponent(brand.email));
+    if (brand.website) params.push('website=' + encodeURIComponent(brand.website));
+
+    return params.length ? '?' + params.join('&') : '';
+  }
+
+  // Build a branded URL for a template
+  function brandedUrl(baseUrl) {
+    return baseUrl + getBrandQueryString();
+  }
+
+  // ── Demo Mode -- fills brand data with mock profile ──
+  window.abLoadDemoProfile = function () {
+    if (typeof PartnerBrand === 'undefined') return;
+
+    PartnerBrand.save({
+      firmName: 'Meridian Tax Partners',
+      phone: '(312) 555-0199',
+      email: 'info@meridiantax.com',
+      website: 'meridiantax.com',
+      tagline: 'Resolution starts here.',
+      brandColor: '#1E3A5F',
+    });
+
+    // Update the brand preview in the sidebar
+    var preview = document.getElementById('portal-brand-preview');
+    var text = document.getElementById('portal-brand-text');
+    if (text) text.textContent = 'Meridian Tax Partners';
+    if (preview) {
+      preview.style.background = '#1E3A5F';
+      preview.innerHTML = '<span style="color:#fff;font-weight:700;font-size:14px">MTP</span>';
+    }
+
+    // Toggle demo buttons
+    var clearBtn = document.getElementById('ab-demo-clear');
+    if (clearBtn) clearBtn.style.display = '';
+
+    abShowToast('Demo profile loaded: Meridian Tax Partners');
+    abRenderGallery();
+  };
+
+  window.abClearDemoProfile = function () {
+    if (typeof PartnerBrand === 'undefined') return;
+    PartnerBrand.clear();
+
+    var preview = document.getElementById('portal-brand-preview');
+    var text = document.getElementById('portal-brand-text');
+    if (text) text.textContent = 'Upload your logo';
+    if (preview) {
+      preview.style.background = '';
+      preview.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
+    }
+
+    var clearBtn = document.getElementById('ab-demo-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+
+    abShowToast('Demo profile cleared');
+    abRenderGallery();
+  };
+
   // ── Render the template gallery ──
   window.abRenderGallery = function () {
     var grid = document.getElementById('ab-grid');
@@ -197,10 +266,13 @@
       return;
     }
 
+    // Check if brand profile exists for the badge
+    var hasBrand = (typeof PartnerBrand !== 'undefined' && PartnerBrand.hasProfile && PartnerBrand.hasProfile());
+
     grid.innerHTML = filtered.map(function (t) {
       return '<div class="ab-card" data-id="' + t.id + '">' +
         '<div class="ab-card-preview">' +
-          '<iframe src="' + t.url + '" loading="lazy" sandbox="allow-scripts allow-same-origin" tabindex="-1"></iframe>' +
+          '<iframe src="' + brandedUrl(t.url) + '" loading="lazy" sandbox="allow-scripts allow-same-origin" tabindex="-1"></iframe>' +
           '<div class="ab-card-overlay">' +
             '<button class="ab-btn ab-btn-preview" onclick="abPreview(\'' + t.id + '\')">Preview</button>' +
             '<button class="ab-btn ab-btn-publish" onclick="abOpenPublish(\'' + t.id + '\')">Publish</button>' +
@@ -212,6 +284,7 @@
           '<p class="ab-card-desc">' + t.desc + '</p>' +
           '<div class="ab-card-tags">' +
             t.tags.map(function (tag) { return '<span class="ab-tag">' + tag + '</span>'; }).join('') +
+            (hasBrand ? '<span class="ab-tag ab-tag-branded">Branded</span>' : '') +
           '</div>' +
         '</div>' +
       '</div>';
@@ -221,7 +294,6 @@
   // ── Filter buttons ──
   window.abFilter = function (cat, btn) {
     activeFilter = cat;
-    // Update active button
     var btns = document.querySelectorAll('.ab-filter-btn');
     btns.forEach(function (b) { b.classList.remove('ab-filter-active'); });
     if (btn) btn.classList.add('ab-filter-active');
@@ -248,7 +320,7 @@
           '<button class="ab-btn ab-btn-publish" onclick="abOpenPublish(\'' + t.id + '\')">Publish This Page</button>' +
         '</div>' +
       '</div>' +
-      '<iframe class="ab-preview-iframe" src="' + t.url + '" sandbox="allow-scripts allow-same-origin"></iframe>';
+      '<iframe class="ab-preview-iframe" src="' + brandedUrl(t.url) + '" sandbox="allow-scripts allow-same-origin"></iframe>';
 
     modal.classList.add('ab-preview-open');
     document.body.style.overflow = 'hidden';
@@ -269,13 +341,16 @@
     var t = AB_TEMPLATES.find(function (tpl) { return tpl.id === id; });
     if (!t) return;
 
-    // Close preview if open
     abClosePreview();
 
     var modal = document.getElementById('ab-publish-modal');
     if (!modal) return;
 
     var defaultSlug = t.id.replace(/^(edu|tpl)-/, '');
+
+    // Pre-fill from brand data
+    var brand = (typeof PartnerBrand !== 'undefined' && PartnerBrand.load) ? PartnerBrand.load() : {};
+    var hasBrand = !!(brand.firmName);
 
     modal.innerHTML =
       '<div class="ab-publish-backdrop" onclick="abClosePublish()"></div>' +
@@ -294,6 +369,20 @@
             '<input type="text" id="ab-pub-slug" value="' + defaultSlug + '" placeholder="my-page">' +
           '</div>' +
         '</div>' +
+        (hasBrand
+          ? '<div class="ab-brand-preview">' +
+              '<div class="ab-brand-preview-label">Your branding will appear in the footer:</div>' +
+              '<div class="ab-brand-preview-info">' +
+                '<strong>' + brand.firmName + '</strong>' +
+                (brand.phone ? ' &middot; ' + brand.phone : '') +
+                (brand.email ? ' &middot; ' + brand.email : '') +
+              '</div>' +
+            '</div>'
+          : '<div class="ab-brand-preview ab-brand-preview-empty">' +
+              '<div class="ab-brand-preview-label">No brand profile set. Pages will publish without branding.</div>' +
+              '<button class="ab-btn ab-btn-demo" onclick="abLoadDemoProfile();abClosePublish();setTimeout(function(){abOpenPublish(\'' + t.id + '\')},300)">Load Demo Profile</button>' +
+            '</div>'
+        ) +
         '<div class="ab-publish-actions">' +
           '<button class="ab-btn ab-btn-cancel" onclick="abClosePublish()">Cancel</button>' +
           '<button class="ab-btn ab-btn-publish" onclick="abDoPublish(\'' + t.id + '\')">Publish Page</button>' +
@@ -311,7 +400,7 @@
     }
   };
 
-  // ── Actually publish -- saves to ctax_pb_pages (same store as Page Builder) ──
+  // ── Actually publish -- saves to ctax_pb_pages with brand params baked into URL ──
   window.abDoPublish = function (id) {
     var t = AB_TEMPLATES.find(function (tpl) { return tpl.id === id; });
     if (!t) return;
@@ -321,13 +410,14 @@
     var title = (titleInput && titleInput.value.trim()) || t.name;
     var slug = (slugInput && slugInput.value.trim()) || t.id.replace(/^(edu|tpl)-/, '');
 
-    // Sanitize slug
     slug = slug.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
     if (!slug) slug = t.id;
 
-    // Build the page object -- uses an iframe embed of the real template
+    // Build branded URL with partner data baked in
+    var finalUrl = brandedUrl(t.url);
+
     var iframeHtml = '<div style="position:fixed;inset:0;width:100%;height:100%;overflow:hidden">' +
-      '<iframe src="' + t.url + '" style="width:100%;height:100%;border:none" ' +
+      '<iframe src="' + finalUrl + '" style="width:100%;height:100%;border:none" ' +
       'sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe></div>';
 
     var page = {
@@ -339,16 +429,14 @@
       published: Date.now(),
       source: 'authority-builder',
       sourceTemplate: t.id,
-      sourceUrl: t.url,
+      sourceUrl: finalUrl,
       views: 0,
       conversions: 0,
     };
 
-    // Save to the same localStorage as Page Builder's pages
     var pages = [];
     try { pages = JSON.parse(localStorage.getItem('ctax_pb_pages') || '[]'); } catch (e) { pages = []; }
 
-    // Check for duplicate slug
     var existing = pages.findIndex(function (p) { return p.slug === slug; });
     if (existing !== -1) {
       if (!confirm('A page with slug "' + slug + '" already exists. Overwrite it?')) return;
@@ -359,11 +447,9 @@
 
     localStorage.setItem('ctax_pb_pages', JSON.stringify(pages));
 
-    // Close modal and show success
     abClosePublish();
     abShowToast('Published! View at #lp/' + slug);
 
-    // Refresh My Pages if visible
     if (typeof pbRenderMyPages === 'function') pbRenderMyPages();
   };
 
