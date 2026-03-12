@@ -6,3 +6,8 @@ test-results/
 IMPROVER_LOG.md
 improver-state.json
 ROADMAP.md
+
+# Environment variables
+.env*
+.env.local
+.env.production
